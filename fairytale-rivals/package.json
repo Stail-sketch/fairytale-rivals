@@ -1,0 +1,16 @@
+{
+  "name": "fairytale-rivals",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": ["apps/*", "packages/*"],
+  "engines": {"node": ">=22"},
+  "scripts": {
+    "prebuild": "node scripts/sync-card-search-names.js",
+    "build": "node scripts/build.js",
+    "prestart": "node scripts/sync-card-search-names.js",
+    "start": "node scripts/dev-server.js",
+    "test": "node --test tests/*.test.js",
+    "test:e2e": "node --test tests/*.e2e.js"
+  }
+}
