@@ -1,6 +1,9 @@
+import { connectPeerRoom, enterPeerRoom } from './peer-room.js'
+
 const base = '/api/rooms'
 const sessionKey = id => 'fairytale-room.' + id
-export const onlineAvailable = () => ['http:', 'https:'].includes(location.protocol)
+const directRoom = () => location.hostname.endsWith('.github.io') || new URLSearchParams(location.search).get('transport') === 'peer'
+export const onlineAvailable = () => ['http:', 'https:'].includes(location.protocol) && (!directRoom() || Boolean(globalThis.RTCPeerConnection))
 
 export function invitedRoom() {
   const id = new URLSearchParams(location.search).get('room')
@@ -8,27 +11,34 @@ export function invitedRoom() {
 }
 
 export function inviteUrl(id) {
-  const url = new URL('/', location.href)
+  const url = new URL(location.pathname, location.origin)
   url.searchParams.set('room', id)
+  if (directRoom()) url.searchParams.set('transport', 'peer')
   return url.href
 }
 
 export function savedRoom(id) {
   if (!id) return null
   try {
-    const token = sessionStorage.getItem(sessionKey(id))
-    return token ? { id, token } : null
+    const stored = sessionStorage.getItem(sessionKey(id))
+    if (!stored) return null
+    const session = stored.startsWith('{') ? { ...JSON.parse(stored), id } : { id, token: stored }
+    return directRoom() && session.transport !== 'peer' ? null : session
   } catch { return null }
 }
 
-export function rememberRoom({ id, token }) {
-  try { sessionStorage.setItem(sessionKey(id), token) } catch { /* The current tab can still play. */ }
+export function rememberRoom({ id, ...session }) {
+  try { sessionStorage.setItem(sessionKey(id), JSON.stringify(session)) } catch { /* The current tab can still play. */ }
   history.replaceState(null, '', inviteUrl(id))
 }
 
 export function forgetRoom(id) {
   try { sessionStorage.removeItem(sessionKey(id)) } catch { /* Storage is optional. */ }
-  if (invitedRoom()) history.replaceState(null, '', location.pathname)
+  if (invitedRoom()) {
+    const url = new URL(location.href)
+    url.searchParams.delete('room')
+    history.replaceState(null, '', url)
+  }
 }
 
 async function request(path, { method = 'GET', body, token, signal, timeout = 12_000 } = {}) {
@@ -49,10 +59,12 @@ async function request(path, { method = 'GET', body, token, signal, timeout = 12
 }
 
 export function enterRoom(id, lineup) {
+  if (directRoom()) return enterPeerRoom(id, lineup)
   return request(id ? `${base}/${id}/join` : base, { method: 'POST', body: lineup })
 }
 
 export function connectRoom(session, update, connection) {
+  if (session.transport === 'peer') return connectPeerRoom(session, update, connection)
   const path = base + '/' + session.id
   const controller = new AbortController()
   const { signal } = controller

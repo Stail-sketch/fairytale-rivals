@@ -4,17 +4,17 @@ import { chooseCpuAction } from '../../packages/cpu/index.js'
 import { leaderTarget, samePosition, sameTarget, unitTarget } from '../../packages/engine/index.js'
 import { terrainKey, terrainName, terrainText } from '../../packages/engine/terrain.js'
 import { createLocalMatch } from '../../packages/local-match/index.js'
-import { changeLibraryFilter, library, refreshLibrary, selectLibraryCard, switchLibraryTab } from './library.js'
+import { changeLibraryFilter, library, refreshLibrary, selectLibraryCard, sourceLabels, switchLibraryTab } from './library.js'
 import { createDeckEditor } from './deck-editor.js'
-import { installRivalsExample } from './rivals-example.js'
+import { initialDecks } from '../../packages/cards/initial-decks.js'
+import { retireRivalsExample } from './rivals-example.js'
 import { createBattleAudio } from './battle-audio.js'
 import { planBattlePresentation, positionPresentation, presentationLayer, reducedMotion, toggleBattleMotion } from './battle-presentation.js'
 import { connectRoom, enterRoom, forgetRoom, inviteUrl, invitedRoom, onlineAvailable, rememberRoom, savedRoom } from './online.js'
 
 const app = document.querySelector('#app')
 const announcer = document.querySelector('#announcer')
-const assets = '/apps/web/assets/'
-const art = id => globalThis.fairytaleImages?.[id + '.webp'] ?? assets + id + '.webp'
+const art = id => globalThis.fairytaleImages?.[id + '.webp'] ?? new URL('./assets/' + id + '.webp', import.meta.url).href
 const seatName = seat => seat === 0 ? '先攻' : '後攻'
 const rowName = row => row === 'front' ? names.FRONT_ROW : names.BACK_ROW
 const classIds = ['warrior', 'mage', 'fighter', 'priest', 'merchant', 'seer', 'swordsman']
@@ -28,7 +28,9 @@ const deckStorage = {
   removeItem: key => localStorage.removeItem(key),
 }
 const deckCollection = createDeckCollection(deckStorage)
-const exampleDeckId = installRivalsExample(deckCollection, deckStorage)
+retireRivalsExample(deckCollection, deckStorage)
+deckCollection.initialize(initialDecks)
+const initialDeckIds = new Set(initialDecks.map(deck => deck.id))
 const deckEditor = createDeckEditor(deckCollection)
 const battleAudio = createBattleAudio()
 
@@ -92,7 +94,7 @@ function availableDecks(seat) {
 }
 
 function chosenDeck(seat, decks = availableDecks(seat)) {
-  return selectedDecks[seat] === null ? decks.find(deck => deck.id !== exampleDeckId) : decks.find(deck => deck.id === selectedDecks[seat])
+  return selectedDecks[seat] === null ? decks.find(deck => !initialDeckIds.has(deck.id)) : decks.find(deck => deck.id === selectedDecks[seat])
 }
 
 function battleLineup(seat) {
@@ -297,13 +299,50 @@ function hand(player) {
     </div>`
 }
 
-function cardDetail(card, cost) {
-  return `<div class="large-card ${card.kind}">${cardFace(card, true, cost)}</div>`
+const keywordDetails = {
+  CHARGE: '登場したターンから攻撃できます。',
+  GUARD: '前衛にいる間、敵の通常攻撃の対象を、この能力を持つ前衛に限定します。',
+  AIM: '前衛防護・守りの陣・騎士の誓いを無視して攻撃できます。',
+  PIERCE: '前衛を攻撃すると、正面の後衛にも同じ攻撃力でダメージを与えます。',
+  DOUBLE_ATTACK: '1ターンに2回攻撃できます。',
+  STEALTH: '攻撃するまで敵の単体効果や通常攻撃の対象になりません。',
+  METAL_BODY: '1～3ダメージを受けるとき、1ダメージになります。',
+  CHEER: '手札から使うと、味方リーダーの熱量が1上がります。',
+  FINISHER: '味方リーダーの熱量が最大のときに使えます。使用すると熱量をすべて消費します。',
+  VULNERABLE: '受けるダメージが2倍になります。',
+  UNTARGETABLE: '単体効果の対象として選べません。',
+  DARK_CLOAK: '受けるダメージを防ぎます。',
+  RESIST_SPELL: '特技からのダメージを防ぎます。',
+  SUPER_PIERCE: 'ユニットを攻撃すると、同じ列の敵と敵リーダーにもダメージを与えます。',
+}
+
+function cardDetail(card, cost = card.cost, node) {
+  const type = { unit: 'ユニット', spell: '特技', weapon: '武器' }[card.kind]
+  const stats = card.kind === 'spell' ? '' : `<span class="inspector-stat">攻撃力 ${card.attack}</span><span class="inspector-stat">${card.kind === 'unit' ? 'HP' : '耐久'} ${card.hp}</span>`
+  const unitId = Number(node?.dataset.unit)
+  const unit = node?.dataset.unit && view.players.flatMap(player => player.units).find(unit => unit.id === unitId)
+  const keys = [...new Set([...card.keywords, ...(unit?.grants ?? [])])]
+  const current = node ? liveCardDetails(node) : []
+  return `<article class="inspector-card">
+    <div class="inspector-art"><img src="${art(card.artId)}" alt=""></div>
+    <div class="inspector-copy">
+      <h2>${escape(card.name)}</h2>
+      <small>${card.classId === 'neutral' ? '共通' : leaders[card.classId].job} · ${type}${card.species ? ' · ' + escape(card.species) : ''} · ${escape(sourceLabels[card.packId] ?? '')}</small>
+      <div class="inspector-stats"><span class="inspector-stat inspector-cost">${cost} MP</span>${stats}</div>
+      <p class="inspector-effect">${escape(card.description || '効果なし')}</p>
+      ${keys.map(id => keywordDetails[id] ? `<div class="inspector-keyword"><strong>${names[id]}</strong><span>${keywordDetails[id]}</span></div>` : '').join('')}
+      ${current.length ? `<ul class="inspector-current">${current.map(line => '<li>' + escape(line) + '</li>').join('')}</ul>` : ''}
+    </div>
+  </article>`
+}
+
+function defaultDetail() {
+  const card = cards[selected?.card]
+  return card ? cardDetail(card, selected.cost) : '<p class="inspector-hint">カードにカーソルを合わせると、効果と能力を表示します。</p>'
 }
 
 function detailPanel() {
-  const card = cards[selected?.card]
-  return `<section class="detail-panel" id="detail" aria-label="カードの詳細">${card ? cardDetail(card, selected.cost) : ''}</section>`
+  return `<aside class="detail-panel" id="detail" aria-label="カードの詳細">${defaultDetail()}</aside>`
 }
 
 const logCard = event => event && cards[event.card ?? event.source?.card]
@@ -527,6 +566,7 @@ function battlefield() {
   const latestAction = view.events.findLast(event => event.seq > eventFloor
     && event.privateTo === undefined && !['handAdded', 'mulligan', 'turn'].includes(event.type))
   return `<main class="battle${reducedMotion() ? ' short-motion' : ''}" style="--ally-light:${leaders[view.players[own].leader].accent};--enemy-light:${leaders[view.players[enemy].leader].accent}" tabindex="-1">
+    <div class="battle-layout"><div class="battle-core">
     <div class="battle-heading"><span>綴りの大競技会</span><span class="turn-label">第 ${view.turn} ターン</span><div class="battle-tools"><button class="icon-button" data-op="motion" aria-pressed="${reducedMotion()}" ${matchMedia('(prefers-reduced-motion: reduce)').matches ? 'disabled title="端末の設定に合わせて短縮しています"' : ''}>短い演出</button>${battleLog()}</div></div>
     <div class="battle-grid" data-active-side="${view.active === own ? 'ally' : 'enemy'}" aria-label="対戦盤面"${locked ? ' inert' : ''}>
       ${leaderPanel(own, false)}
@@ -542,9 +582,9 @@ function battlefield() {
       <div class="hand-zone">${selectionBar()}${hand(view.players[own])}</div>
       <div class="turn-controls">
         <button class="primary end" data-op="end" ${cpuTurn() || locked || (room && view.pending) ? 'disabled' : ''}>ターン終了 <span aria-hidden="true">›</span></button>
-        ${detailPanel()}
       </div>
     </section>
+    </div>${detailPanel()}</div>
   </main>`
 }
 
@@ -1088,25 +1128,40 @@ function inspect(event) {
   if (target && target.contains(event.relatedTarget)) return
   if (view?.phase === 'battle') showAttackPreview(target)
   const panel = app.querySelector('#detail')
-  const node = event.target.closest('[data-card]')
-  if (panel && node) panel.innerHTML = cardDetail(cards[node.dataset.card], node.dataset.cost === undefined ? undefined : Number(node.dataset.cost))
+  const node = event.target.closest('[data-hand], [data-unit]')
+  if (!panel || node?.contains(event.relatedTarget)) return
+  const card = cards[node?.dataset.card]
+  const terrain = target?.dataset.terrain
+  if (card) panel.innerHTML = cardDetail(card, node.dataset.cost === undefined ? undefined : Number(node.dataset.cost), node)
+  else if (terrain) panel.innerHTML = `<div class="inspector-copy"><h2>${escape(terrainName(terrain))}</h2>
+    <p class="inspector-effect">${escape(terrainText[terrain] ?? '6色の種晶で特殊勝利')}</p></div>`
+  else return
+  panel.dataset.inspecting = 'true'
 }
 
 app.addEventListener('pointerover', inspect)
 app.addEventListener('focusin', inspect)
+function leaveInspector(event) {
+  const inspected = event.target.closest('[data-hand], [data-unit], [data-terrain]')
+  if (!inspected || inspected.contains(event.relatedTarget) || matchMedia('(min-width: 1160px)').matches) return
+  const panel = app.querySelector('#detail')
+  if (panel) {
+    delete panel.dataset.inspecting
+    panel.innerHTML = defaultDetail()
+  }
+}
+
 app.addEventListener('focusout', event => {
   if (event.target.closest('[data-log-event]')) highlightLogEvent()
   if (event.target.closest('[data-slot], [data-leader]')) clearAttackPreview()
+  leaveInspector(event)
 })
 app.addEventListener('pointerout', event => {
   const entry = event.target.closest('[data-log-event]')
   if (entry && !entry.contains(event.relatedTarget)) highlightLogEvent()
   const target = event.target.closest('[data-slot], [data-leader]')
   if (target && !target.contains(event.relatedTarget)) clearAttackPreview()
-  const card = event.target.closest('[data-card]')
-  if (!card || card.contains(event.relatedTarget)) return
-  const panel = app.querySelector('#detail')
-  if (panel) panel.innerHTML = selected?.card ? cardDetail(cards[selected.card], selected.cost) : ''
+  leaveInspector(event)
 })
 
 function cancelCardPress() {

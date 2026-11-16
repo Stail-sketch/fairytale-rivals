@@ -112,6 +112,24 @@ export function createDeckCollection(storage) {
 
   return {
     get, list,
+    initialize(initialDecks) {
+      for (const { id, leader, name, deck } of initialDecks) {
+        if (!/^[a-f0-9]{32}$/.test(id) || !validDeck(deck, leader)) continue
+        const installed = 'fairytale-rivals.initial-deck.' + id
+        try {
+          if (storage.getItem(installed) !== null) continue
+          const existing = list(leader)
+          const sorted = [...deck].sort()
+          const duplicate = existing.some(record => record.name === name &&
+            [...record.deck].sort().every((card, index) => card === sorted[index]))
+          if (!duplicate && !get(id)) {
+            const created = Math.max(Date.now(), (existing.at(-1)?.created ?? 0) + 1)
+            storage.setItem(savedDeckPrefix + id, JSON.stringify({ leader, name, deck, created }))
+          }
+          storage.setItem(installed, '1')
+        } catch { /* A writable browser store can retry on the next load. */ }
+      }
+    },
     save({ id, leader, name, deck }) {
       name = typeof name === 'string' ? name.trim() : ''
       if (!name) return { ok: false, issue: 'デッキ名を入力してください。' }

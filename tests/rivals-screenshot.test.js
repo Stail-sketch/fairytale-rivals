@@ -2,7 +2,8 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 import { deckIssue } from '../packages/engine/index.js'
 import { createDeckCollection } from '../packages/cards/decks.js'
-import { exampleRivalsDeck, installRivalsExample } from '../apps/web/rivals-example.js'
+import { initialDecks } from '../packages/cards/initial-decks.js'
+import { exampleRivalsDeck, retireRivalsExample } from '../apps/web/rivals-example.js'
 import { fingerprintColors, fingerprintIds, gridSize } from '../apps/web/rivals-card-fingerprints.js'
 import { readDeckScreenshot } from '../apps/web/rivals-screenshot.js'
 
@@ -41,8 +42,10 @@ test('スクショ照合は各枠を数え、同じカードの2枚目と空き�
   assert.equal(readDeckScreenshot({ width, height, data: new Uint8ClampedArray(data.length) }), null)
 })
 
-test('添付デッキは占い師の合法な30枚で、削除後は再登録されない', () => {
-  assert.equal(deckIssue(exampleRivalsDeck.deck, 'seer'), null)
+test('全7職業の初期デッキを1回ずつ追加し、既存の同名・同内容デッキと個人の編集を保つ', () => {
+  assert.equal(initialDecks.length, 9)
+  assert.equal(new Set(initialDecks.map(deck => deck.leader)).size, 7)
+  for (const { deck, leader } of initialDecks) assert.equal(deckIssue(deck, leader), null)
   const persisted = new Map()
   const storage = {
     keys: () => persisted.keys(),
@@ -51,12 +54,23 @@ test('添付デッキは占い師の合法な30枚で、削除後は再登録さ
     removeItem: key => persisted.delete(key),
   }
   const collection = createDeckCollection(storage)
-  const id = installRivalsExample(collection, storage)
-  assert.deepEqual(collection.get(id).deck, exampleRivalsDeck.deck)
-  assert.equal(installRivalsExample(collection, storage), id)
-  assert.equal(collection.list().length, 1)
-  collection.remove(id)
-  installRivalsExample(collection, storage)
-  assert.deepEqual(collection.list(), [])
+  const own = collection.save(initialDecks.map(({ leader, name, deck }) => ({ leader, name, deck }))[0]).deck
+  const example = collection.save(exampleRivalsDeck).deck
+  const key = 'fairytale-rivals.rivals-example-deck.v1'
+  storage.setItem(key, example.id)
+  retireRivalsExample(collection, storage)
+  assert.equal(collection.get(example.id), null)
+  collection.initialize(initialDecks)
+  collection.initialize(initialDecks)
+  assert.equal(collection.list().length, 9)
+  assert(collection.get(own.id))
+  const next = initialDecks[1]
+  collection.remove(next.id)
+  collection.initialize(initialDecks)
+  assert.equal(collection.get(next.id), null)
+  const edited = collection.save({ ...exampleRivalsDeck, name: '個人用に編集したデッキ' }).deck
+  storage.setItem(key, edited.id)
+  retireRivalsExample(collection, storage)
+  assert(collection.get(edited.id))
 })
 

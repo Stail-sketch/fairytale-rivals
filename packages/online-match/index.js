@@ -1,6 +1,7 @@
 import { randomBytes, randomInt } from 'node:crypto'
 import { deckIssue, rules } from '../engine/index.js'
 import { createLocalMatch } from '../local-match/index.js'
+import { roomSnapshot } from './room-snapshot.js'
 
 const route = /^\/api\/rooms(?:\/([a-f0-9]{32})(?:\/(join|actions))?)?$/
 const limit = 12 * 1024
@@ -57,24 +58,6 @@ function lineup(data) {
   return { leader, deck }
 }
 
-function snapshot(room, player) {
-  if (!room.match) return { version: room.version, phase: room.closed ? 'closed' : 'waiting' }
-  const view = room.match.view(player.seat)
-  const lastPlay = view.events.findLast(event => event.played)
-  view.events = view.events.slice(-100)
-  if (lastPlay && !view.events.includes(lastPlay)) view.events.unshift(lastPlay)
-  if (room.resigned !== undefined) {
-    view.phase = 'finished'
-    view.winner = 1 - room.resigned
-    view.pending = view.legal = null
-    for (const side of view.players) side.hand = []
-  }
-  return {
-    version: room.version, phase: 'playing', seat: player.seat, view,
-    last: room.last, resigned: room.resigned,
-  }
-}
-
 function publish(room, last) {
   room.version++
   room.last = last
@@ -87,7 +70,7 @@ function wait(room, player, res) {
   const waiter = {
     send() {
       release()
-      reply(res, 200, snapshot(room, player))
+      reply(res, 200, roomSnapshot(room, player))
     },
     expire() {
       release()
@@ -150,7 +133,7 @@ export function createRoomApi() {
     if (!player) throw new RequestError(403, 'この部屋の対戦権限がありません。')
     if (!operation && req.method === 'GET') {
       if (Number(url.searchParams.get('since') ?? -1) === room.version && !room.finished) return wait(room, player, res)
-      return reply(res, 200, snapshot(room, player))
+      return reply(res, 200, roomSnapshot(room, player))
     }
     if (!operation && req.method === 'DELETE') {
       if (!room.match) room.closed = true
@@ -170,7 +153,7 @@ export function createRoomApi() {
       if (!result.ok) throw new RequestError(422, result.issue)
       room.finished = result.events.some(event => event.type === 'finish')
       publish(room, { seat: player.seat, type: action.type, events: result.events })
-      return reply(res, 200, snapshot(room, player))
+      return reply(res, 200, roomSnapshot(room, player))
     }
     throw new RequestError(405, 'この操作は利用できません。')
   }

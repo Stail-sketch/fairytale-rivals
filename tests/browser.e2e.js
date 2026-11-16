@@ -210,6 +210,13 @@ async function driveBattle() {
     expect(query('.battle-log').open, '対戦記録を開く')
     click('.battle-log summary')
     const summon = '[data-hand][data-card=ember-whelp]'
+    query(summon).dispatchEvent(new PointerEvent('pointerover', { bubbles: true }))
+    expect(query('#detail .inspector-copy h2')?.textContent === cards['ember-whelp'].name &&
+      query('#detail .inspector-effect')?.textContent === cards['ember-whelp'].description &&
+      query('#detail .inspector-keyword')?.textContent.includes('奇襲'), 'マウスオーバーで効果と能力の説明を表示')
+    const middle = query('.board').getBoundingClientRect()
+    expect(Math.abs(middle.x + middle.width / 2 - document.documentElement.clientWidth / 2) < 2,
+      '詳細欄を出しても戦場の中央を維持')
     const square = '[data-slot="0:front:0"]'
     const whelpArt = query(summon + ' img').src
     expect(whelpArt === globalThis.fairytaleImages['card-ember-whelp.webp'], '手札に火花の仔竜の専用画像')
@@ -370,8 +377,15 @@ async function driveBattle() {
     const legacy = starterLineup('mage').deck
     localStorage.setItem(deckStorageKey + '.mage', JSON.stringify(legacy))
     click('[data-op=decks]')
-    const example = collection.list('seer').find(deck => deck.name === 'おおぞらはおまえのもの')
-    expect(example?.deck.length === 30, '添付画像に対応する占い師のテストデッキを登録する')
+    const { initialDecks } = await import('@bundle/packages/cards/initial-decks.js')
+    expect(initialDecks.length === 9 && initialDecks.every(deck => collection.get(deck.id)?.name === deck.name),
+      '名前を変えずに全7職業の初期デッキを登録する')
+    expect(!collection.list().some(deck => deck.name === 'おおぞらはおまえのもの'), '旧テストデッキを再登録しない')
+    for (const deck of initialDecks) collection.remove(deck.id)
+    const { exampleRivalsDeck } = await import('@bundle/apps/web/rivals-example.js')
+    const example = collection.save(exampleRivalsDeck).deck
+    click('[data-op=close-decks]')
+    click('[data-op=decks]')
     const exampleOverview = '[data-deck-overview="' + example.id + '"]'
     click(exampleOverview)
     const overview = query('.deck-overview[open]')
@@ -776,6 +790,64 @@ test('別々のChromiumセッションで招待URLから参加し、対戦と再
   assert.equal(await spectator.evaluate('Boolean(document.querySelector(".enemy-formation [data-hand]"))'), false)
 })
 
+
+test('静的公開版で招待を作り、別のブラウザーセッションが対戦と再接続をする', {
+  skip: !process.env.FAIRYTALE_PEER_E2E, timeout: 60000,
+}, async t => {
+  const temp = await realpath(tmpdir())
+  const profile = await mkdtemp(join(temp, 'fairytale-peer-'))
+  let url = process.env.FAIRYTALE_PEER_PAGE
+  if (!url) {
+    const server = createDevServer()
+    server.listen(0, '127.0.0.1')
+    await once(server, 'listening')
+    t.after(() => {
+      server.closeAllConnections()
+      return new Promise(resolve => server.close(resolve))
+    })
+    url = 'http://127.0.0.1:' + server.address().port + '/?transport=peer'
+  }
+  const open = await browserControl(t, profile)
+  t.after(async () => {
+    const resolved = await realpath(profile)
+    if (dirname(resolved) !== temp) throw new Error('テスト用ディレクトリの場所が不正です')
+    await rm(resolved, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 })
+  })
+  const [host, guest] = await Promise.all([open(), open()])
+  const waitForRoom = async (page, selector) => {
+    try { await page.wait(selector) }
+    catch (issue) {
+      const status = await page.evaluate('document.querySelector(".room-status")?.textContent')
+      throw new Error(issue.message + ' / ' + status, { cause: issue })
+    }
+  }
+  await host.navigate(url)
+  await host.click('[data-mode=friend]')
+  await host.click('[data-op=start]:enabled')
+  await waitForRoom(host, '#invite-url')
+  const invite = await host.evaluate('document.querySelector("#invite-url").value')
+  assert.equal(new URL(invite).pathname, new URL(url).pathname)
+  assert.equal(new URL(invite).searchParams.get('transport'), 'peer')
+
+  await guest.navigate(invite)
+  await guest.click('[data-op=start]:enabled')
+  await Promise.all([waitForRoom(host, '.mulligan'), waitForRoom(guest, '.mulligan')])
+  const keep = '[data-op=mulligan]:enabled'
+  const [first, second] = await host.evaluate(`Boolean(document.querySelector('${keep}'))`) ? [host, guest] : [guest, host]
+  await first.click(keep)
+  await second.click(keep)
+  const end = '[data-op=end]:enabled'
+  await first.click(end)
+  await second.wait(end)
+  assert.equal(await second.evaluate('Boolean(document.querySelector(".enemy-formation [data-hand]"))'), false)
+
+  await guest.evaluate('window.beforeReload = true')
+  await guest.navigate(invite)
+  await eventually(async () => !(await guest.evaluate('window.beforeReload')), 'ゲスト画面の再読み込み')
+  await guest.wait('.battle')
+  await second.click(end)
+  await first.wait(end)
+})
 
 test('添付のライバルズ画像を貼り付けて30枚を照合し、修正して保存する', {
   skip: !process.env.FAIRYTALE_RIVALS_SCREENSHOT, timeout: 35000,

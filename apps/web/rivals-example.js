@@ -8,26 +8,18 @@ export const exampleRivalsDeck = Object.freeze({
   ]),
 })
 
-export function installRivalsExample(collection, storage) {
+export function retireRivalsExample(collection, storage) {
   const key = 'fairytale-rivals.rivals-example-deck.v1'
   const { leader, name, deck } = exampleRivalsDeck
   try {
-    const installed = storage.getItem(key)
-    if (installed !== null) return installed
-    const list = [...deck].sort()
-    const existing = collection.list(leader).find(saved => {
-      if (saved.name !== name) return false
-      return [...saved.deck].sort().every((id, index) => id === list[index])
-    })
-    // An existing matching deck belongs to the player and keeps its normal selection behavior.
-    if (existing) {
-      storage.setItem(key, '')
-      return ''
+    const id = storage.getItem(key)
+    if (!id) return
+    const saved = collection.get(id)
+    if (saved?.leader === leader && saved.name === name) {
+      const original = [...deck].sort()
+      if ([...saved.deck].sort().every((card, index) => card === original[index]) && !collection.remove(id).ok) return
     }
-    const result = collection.save(exampleRivalsDeck)
-    if (!result.ok) return ''
-    storage.setItem(key, result.deck.id)
-    return result.deck.id
-  } catch { return '' }
+    storage.removeItem(key)
+  } catch { /* A writable browser store can retry on the next load. */ }
 }
 
