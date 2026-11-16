@@ -535,15 +535,18 @@ export function dispatch(game, actor, rawAction) {
         player.nextSpellDiscount = 0
         player.copyNextSpell = false
         player.spellBonus = 0
+        delete player.temporaryPower
         if (player.weapon?.temporaryAttack) {
           player.weapon.attack -= player.weapon.temporaryAttack
           player.weapon.temporaryAttack = 0
         }
+        if (player.weapon) delete player.weapon.temporaryPower
         player.bothFortunesThisTurn = false
         player.turnSpells = 0
         for (const side of next.players) for (const unit of side.units) {
           unit.attack -= unit.temporaryAttack ?? 0
           unit.temporaryAttack = 0
+          delete unit.temporaryPower
         }
         resolver.returnBorrowed(actor)
         for (const unit of player.units) {

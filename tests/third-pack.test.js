@@ -5,6 +5,7 @@ import { cpuLineup, starterLineup } from '../packages/cards/decks.js'
 import { chooseCpuAction } from '../packages/cpu/index.js'
 import { attackValue, createGame, deckIssue, dispatch, leaderPower, leaderTarget, legalAttack, legalPlay, unitTarget } from '../packages/engine/index.js'
 import { createInstance, resolution } from '../packages/engine/effects.js'
+import { definitionPowerRows, targetDamagePreview } from '../packages/engine/power-preview.js'
 import { orbCards, terrainKey } from '../packages/engine/terrain.js'
 import { project } from '../packages/local-match/index.js'
 
@@ -95,6 +96,36 @@ test('魔法陣と祝福の地を盤面の値へ反映する', () => {
   assert.deepEqual(game.players[0].terrain, { 'front:1': 'blessing', 'back:1': 'blessing' })
   resolution(game).damage(unitTarget(own), 1)
   assert.equal(attackValue(game, unit(game, own)), unit(game, own).hp)
+})
+
+test('特技の魔法陣と覚醒を別々に表示して、選んだ対象への見込みを実ダメージに一致させる', () => {
+  let game = fixture('mage')
+  game.players[0].skillUses = 1
+  game.players[0].terrain = { 'front:0': 'circle', 'front:1': 'circle' }
+  put(game, 'moon-hare', 0, front(0))
+  const secondCircle = put(game, 'moon-hare', 0, front(1))
+  put(game, 'FT-0135', 0, back(0))
+  const enemy = put(game, 'night-dragon', 1, front(0))
+  const target = unitTarget(enemy)
+  unit(game, enemy).hp = 20
+  const spell = cards['FT-0040']
+  const [power] = definitionPowerRows(project(game, 0), 0, spell)
+  assert.deepEqual({ base: power.base, value: power.value, modifiers: power.modifiers }, {
+    base: 2, value: 7, modifiers: [{ label: '覚醒', amount: 1 }, { label: cards['FT-0135'].name, amount: 2 },
+      { label: '魔法陣', amount: 2 }],
+  })
+  const [skillPower] = definitionPowerRows(project(game, 0), 0, leaders.mage.skill, { skill: true })
+  assert.equal(skillPower.value, 3)
+  unit(game, enemy).grants = ['RESIST_SPELL']
+  assert.deepEqual(targetDamagePreview(project(game, 0), 0, spell, target), { value: 0, hp: 20 })
+  unit(game, enemy).grants = []
+  assert.deepEqual(targetDamagePreview(project(game, 0), 0, spell, target), { value: 7, hp: 13 })
+  game = play(game, spell.id, { target })
+  assert.equal(unit(game, enemy).hp, 13)
+  defeat(game, secondCircle)
+  assert.equal(definitionPowerRows(project(game, 0), 0, spell)[0].value, 6)
+  const hits = definitionPowerRows(project(game, 0), 0, cards['FT-0060'])
+  assert.deepEqual(hits.map(row => [row.label, row.base, row.value]), [['連撃の回数', 3, 4], ['1回のダメージ', 1, 4]])
 })
 
 test('滑走路が転位を誘発し、危険床を重ねると再びダメージになる', () => {

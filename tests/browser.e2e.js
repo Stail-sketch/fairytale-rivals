@@ -266,9 +266,13 @@ async function driveBattle() {
     expect(x('[data-leader="1"]') < x('[data-leader="0"]'), '交代すると操作側が左に回る')
     expect(document.querySelectorAll('[data-hand]').length === 5, 'ドローした手札をすぐ使える')
     expect(query('.battle-message').textContent === '', '画面に手番交代の文言を重ねない')
+    expect(query('#skill-description').textContent === leaders.mage.skill.description &&
+      y('#skill-description') > y('[data-op=skill]'), '能力文を奥義ボタンの下に常時表示')
     click('[data-op=focus]')
     expect(document.querySelectorAll('.leader-panel:not(.opponent) .filled').length === 3, '熱量が上昇')
     click('[data-op=skill]')
+    query(square).dispatchEvent(new PointerEvent('pointerover', { bubbles: true }))
+    expect(query('#attack-preview').textContent.includes('ダメージ見込み 3'), '対象に奥義が与えるダメージを予告')
     click(square, false)
     expect(query('[data-beat=reveal] .skill-reveal strong')?.textContent === leaders.mage.skill.name, '奥義名を中央に表示')
     advanceTimer()
@@ -357,6 +361,8 @@ async function driveBattle() {
     click('[data-op=skill]')
     expect(query('[data-leader="0"].ready'), '奥義でリーダー攻撃が可能になる')
     click('[data-leader="0"]')
+    expect(query('#detail .power-details').textContent.includes('0 ＋3 ＝ 3') &&
+      query('#detail .power-sources').textContent.includes('語り手の奥義'), '基本攻撃力と奥義で増えた攻撃力を別々に表示')
     expect(query('[data-leader="1"].targetable'), 'リーダー攻撃の対象を表示')
     click('[data-leader="1"]')
     expect(query('[data-leader="1"] .leader-hp').textContent === '22', 'リーダー攻撃で3ダメージ')

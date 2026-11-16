@@ -1,6 +1,7 @@
 import { cards } from '../cards/index.js'
 import { leaderTarget, other, positions, samePosition, unitTarget } from './rules.js'
-import { occupiedTerrainCount, terrainAt } from './terrain.js'
+import { occupiedTerrainCount, terrainAt, terrainName } from './terrain.js'
+import { addModifier, awakeningBonus, breakdown, powerChanges } from './power.js'
 
 export const allUnits = game => game.players.flatMap(player => player.units)
 export const at = (game, seat, position) =>
@@ -15,34 +16,69 @@ export const openPositions = (game, seat) => positions.filter(position => !at(ga
 export const opposingApathy = (game, seat) => game.players[other(seat)].units.some(unit =>
   unit.hp > 0 && canUseAbilities(unit) && cards[unit.card].apathy)
 
-export function leaderPower(game, seat) {
+export function leaderPower(game, seat, bonuses) {
   const player = game.players[seat]
-  const auras = player.units.filter(canUseAbilities).map(unit => cards[unit.card])
-  const bonus = auras.reduce((total, card) => total +
-    (player.weapon ? card.weaponAttack ?? 0 : 0) +
-    (game.active === seat && card.leaderAttackAura ?
-      (player.hp <= 15 ? card.leaderAttackAura.low : card.leaderAttackAura.normal) : 0), 0)
-  return Math.max(0, player.leaderAttack + (player.weapon
-    ? player.weapon.attack + occupiedTerrainCount(game, seat, 'sword') : 0) + bonus)
+  let value = player.leaderAttack
+  if (player.weapon) {
+    const insignia = occupiedTerrainCount(game, seat, 'sword')
+    addModifier(bonuses, terrainName('sword'), insignia)
+    value += player.weapon.attack + insignia
+  }
+  for (const unit of player.units.filter(canUseAbilities)) {
+    const card = cards[unit.card]
+    const amount = (player.weapon ? card.weaponAttack ?? 0 : 0) +
+      (game.active === seat && card.leaderAttackAura ?
+        (player.hp <= 15 ? card.leaderAttackAura.low : card.leaderAttackAura.normal) : 0)
+    addModifier(bonuses, card.name, amount)
+    value += amount
+  }
+  return Math.max(0, value)
 }
 
-export function attackValue(game, unit) {
+export function attackValue(game, unit, bonuses) {
   const card = cards[unit.card]
   let value = unit.attack
   if (canUseAbilities(unit)) {
-    if (card.healthyAim && game.players[unit.owner].hp >= 20) value += 2
+    let amount = card.healthyAim && game.players[unit.owner].hp >= 20 ? 2 : 0
     if (card.attackInRow?.row === unit.position.row &&
         (card.attackInRow.column === undefined || card.attackInRow.column === unit.position.column)) {
-      value += card.attackInRow.amount
+      amount += card.attackInRow.amount
     }
-    if (card.scaledAttack) value += (game.players[unit.owner][card.scaledAttack] ?? 0)
+    if (card.scaledAttack) amount += game.players[unit.owner][card.scaledAttack] ?? 0
+    if (card.fallenFamily) amount += game.players[unit.owner].fallen.filter(id => cards[id].family === card.fallenFamily).length
+    addModifier(bonuses, card.name, amount)
+    value += amount
   }
-  if (card.fallenFamily && canUseAbilities(unit)) value += game.players[unit.owner].fallen
-    .filter(id => cards[id].family === card.fallenFamily).length
   for (const { aura, provider } of aurasFor(game, unit, 'attackAura')) {
-    value = aura.fromHp ? unit.hp : value + (aura.amount ?? 0) + (aura.boost ?? 0) * game.players[provider.owner].skillUses
+    const amount = aura.fromHp ? unit.hp - value : (aura.amount ?? 0) + awakeningBonus(aura.boost, game.players[provider.owner].skillUses)
+    addModifier(bonuses, cards[provider.card].name, amount)
+    value += amount
   }
-  return terrainAt(game, unit.owner, unit.position) === 'blessing' ? Math.max(0, unit.hp) : Math.max(0, value)
+  if (terrainAt(game, unit.owner, unit.position) === 'blessing') {
+    addModifier(bonuses, terrainName('blessing'), unit.hp - value)
+    value = unit.hp
+  }
+  return Math.max(0, value)
+}
+
+export function attackBreakdown(game, unit) {
+  const card = cards[unit.card]
+  const bonuses = powerChanges(unit, 'attack')
+  addModifier(bonuses, '強化・弱体化', unit.attack - card.attack - Object.values(bonuses).reduce((a, b) => a + b, 0))
+  return breakdown(card.attack, attackValue(game, unit, bonuses), bonuses, '下限補正')
+}
+
+export function leaderAttackBreakdown(game, seat) {
+  const player = game.players[seat]
+  const weapon = player.weapon
+  const base = weapon ? cards[weapon.card].attack : 0
+  const bonuses = powerChanges(player, 'leaderAttack')
+  if (weapon) {
+    for (const [label, amount] of Object.entries(powerChanges(weapon, 'attack'))) addModifier(bonuses, label, amount)
+  }
+  addModifier(bonuses, '強化・弱体化', player.leaderAttack + (weapon?.attack ?? 0) - base -
+    Object.values(bonuses).reduce((a, b) => a + b, 0))
+  return breakdown(base, leaderPower(game, seat, bonuses), bonuses, '下限補正')
 }
 
 export function aurasFor(game, unit, type) {

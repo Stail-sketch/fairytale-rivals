@@ -18,7 +18,7 @@ export function project(game, viewer) {
       temporaryArmor: player.temporaryArmor, blockAttackThrough: player.blockAttackThrough,
       blockSkillThrough: player.blockSkillThrough, nextMpLoss: player.nextMpLoss,
       nextSpellDiscount: player.nextSpellDiscount, nextUnitDiscount: player.nextUnitDiscount,
-      spellBonus: player.spellBonus, turnDiscount: player.turnDiscount,
+      spellBonus: player.spellBonus, temporaryPower: player.temporaryPower, turnDiscount: player.turnDiscount,
       fortune: player.fortune, nextFortune: player.nextFortune, copyNextSpell: player.copyNextSpell,
       bothFortunesThisTurn: player.bothFortunesThisTurn, forceLeaderAttackThrough: player.forceLeaderAttackThrough,
       blockBackThrough: player.blockBackThrough, spellTaxThrough: player.spellTaxThrough, spellTax: player.spellTax,

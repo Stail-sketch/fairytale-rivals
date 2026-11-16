@@ -2,6 +2,8 @@ import { cardCost, cards, leaders, names } from '../../packages/cards/index.js'
 import { cpuLineup, createDeckCollection, starterDecks, starterLineup } from '../../packages/cards/decks.js'
 import { chooseCpuAction } from '../../packages/cpu/index.js'
 import { leaderTarget, samePosition, sameTarget, unitTarget } from '../../packages/engine/index.js'
+import { definitionPowerRows, targetDamagePreview } from '../../packages/engine/power-preview.js'
+import { leaderAttackBreakdown } from '../../packages/engine/targeting.js'
 import { terrainKey, terrainName, terrainText } from '../../packages/engine/terrain.js'
 import { createLocalMatch } from '../../packages/local-match/index.js'
 import { changeLibraryFilter, library, refreshLibrary, selectLibraryCard, sourceLabels, switchLibraryTab } from './library.js'
@@ -37,6 +39,7 @@ const battleAudio = createBattleAudio()
 let match = null
 let view = null
 let selected = null
+let lastInspection = null
 let replacements = new Set()
 let feedback = ''
 let showRules = false
@@ -299,6 +302,46 @@ function hand(player) {
     </div>`
 }
 
+const battleSeat = () => room ? roomSeat : solo() ? 0 : view.active
+const signedModifier = amount => (amount < 0 ? '－' : '＋') + Math.abs(amount)
+
+function powerFormula({ base, modifiers, value, suffix = '' }) {
+  return (modifiers.length ? base + modifiers.map(modifier => ' ' + signedModifier(modifier.amount)).join('') +
+    ' ＝ ' + value : String(value)) + suffix
+}
+
+function powerDetails(rows) {
+  return rows.length ? `<ul class="power-details">${rows.map(row => `<li>
+    ${row.group ? `<small class="power-group">${escape(row.group)}</small>` : ''}
+    <span>${escape(row.label)}</span> <strong>${powerFormula(row)}</strong>
+    ${row.modifiers.length ? `<small class="power-sources">${row.modifiers.map(modifier =>
+      escape(modifier.label) + ' ' + signedModifier(modifier.amount)).join(' ／ ')}</small>` : ''}
+  </li>`).join('')}</ul>` : ''
+}
+
+function cardPower(card, { node, cost, action } = {}) {
+  const unitId = Number(node?.dataset.unit ?? (action?.type === 'attack' ? action.id : undefined))
+  const source = view.players.flatMap(player => player.units).find(unit => unit.id === unitId)
+  const handInstance = Number(node?.dataset.hand ?? node?.dataset.replace ?? (action?.type === 'play' ? action.id : undefined))
+  const choice = action ?? (selected?.id === handInstance ? selected : undefined)
+  return definitionPowerRows(view, source?.owner ?? battleSeat(), card, {
+    source, cost, handInstance, choice: choice?.choice, chosen: choice?.target,
+  })
+}
+
+function skillDetail(seat, target) {
+  const player = view.players[seat]
+  const skill = player.skill ?? leaders[player.leader].skill
+  const options = selected?.type === 'skill' && seat === battleSeat() ? selected : null
+  const numbers = definitionPowerRows(view, seat, skill, { skill: true, chosen: target ?? options?.target, choice: options?.choice })
+  if (player.leaderPower) numbers.push({ label: 'リーダーの攻撃力', ...leaderAttackBreakdown(view, seat) })
+  return `<div class="inspector-copy">
+    <small>${escape(leaders[player.leader].name)} · ${names.TENSION_SKILL}</small>
+    <h2>${escape(skill.name)}</h2><p class="inspector-effect">${escape(skill.description)}</p>
+    ${powerDetails(numbers)}
+  </div>`
+}
+
 const keywordDetails = {
   CHARGE: '登場したターンから攻撃できます。',
   GUARD: '前衛にいる間、敵の通常攻撃の対象を、この能力を持つ前衛に限定します。',
@@ -316,13 +359,14 @@ const keywordDetails = {
   SUPER_PIERCE: 'ユニットを攻撃すると、同じ列の敵と敵リーダーにもダメージを与えます。',
 }
 
-function cardDetail(card, cost = card.cost, node) {
+function cardDetail(card, cost = card.cost, node, action) {
   const type = { unit: 'ユニット', spell: '特技', weapon: '武器' }[card.kind]
   const stats = card.kind === 'spell' ? '' : `<span class="inspector-stat">攻撃力 ${card.attack}</span><span class="inspector-stat">${card.kind === 'unit' ? 'HP' : '耐久'} ${card.hp}</span>`
   const unitId = Number(node?.dataset.unit)
   const unit = node?.dataset.unit && view.players.flatMap(player => player.units).find(unit => unit.id === unitId)
   const keys = [...new Set([...card.keywords, ...(unit?.grants ?? [])])]
   const current = node ? liveCardDetails(node) : []
+  const power = cardPower(card, { node, cost, action })
   return `<article class="inspector-card">
     <div class="inspector-art"><img src="${art(card.artId)}" alt=""></div>
     <div class="inspector-copy">
@@ -330,19 +374,22 @@ function cardDetail(card, cost = card.cost, node) {
       <small>${card.classId === 'neutral' ? '共通' : leaders[card.classId].job} · ${type}${card.species ? ' · ' + escape(card.species) : ''} · ${escape(sourceLabels[card.packId] ?? '')}</small>
       <div class="inspector-stats"><span class="inspector-stat inspector-cost">${cost} MP</span>${stats}</div>
       <p class="inspector-effect">${escape(card.description || '効果なし')}</p>
+      ${powerDetails(power)}
       ${keys.map(id => keywordDetails[id] ? `<div class="inspector-keyword"><strong>${names[id]}</strong><span>${keywordDetails[id]}</span></div>` : '').join('')}
       ${current.length ? `<ul class="inspector-current">${current.map(line => '<li>' + escape(line) + '</li>').join('')}</ul>` : ''}
     </div>
   </article>`
 }
 
-function defaultDetail() {
+function defaultDetail(target) {
   const card = cards[selected?.card]
-  return card ? cardDetail(card, selected.cost) : '<p class="inspector-hint">カードにカーソルを合わせると、効果と能力を表示します。</p>'
+  if (selected?.type === 'skill' || selected?.type === 'leaderAttack') return skillDetail(battleSeat(), target)
+  return card ? cardDetail(card, selected.cost, undefined, target ? { ...selected, target } : selected) :
+    '<p class="inspector-hint">カードにカーソルを合わせると、効果と能力を表示します。</p>'
 }
 
 function detailPanel() {
-  return `<aside class="detail-panel" id="detail" aria-label="カードの詳細">${defaultDetail()}</aside>`
+  return `<aside class="detail-panel" id="detail" aria-label="カードと奥義の詳細"${selected ? ' data-inspecting="true"' : ''}>${defaultDetail()}</aside>`
 }
 
 const logCard = event => event && cards[event.card ?? event.source?.card]
@@ -363,7 +410,7 @@ function battleLog() {
   </details>`
 }
 
-function openCardDetail(card, cost, focusBack, details = []) {
+function openCardDetail(card, cost, focusBack, details = [], power = []) {
   if (document.querySelector('.battle-card-dialog[open]')) return
   const dialog = document.createElement('dialog')
   dialog.className = 'battle-card-dialog'
@@ -373,6 +420,7 @@ function openCardDetail(card, cost, focusBack, details = []) {
     <div class="log-card-description"><h2 id="battle-card-title">${escape(card.name)}</h2>
       <span>MP ${cost ?? card.cost}</span>
       <p>${escape(card.description)}</p>
+      ${powerDetails(power)}
       ${details.length ? '<ul class="card-current-stats">' + details.map(line => '<li>' + escape(line) + '</li>').join('') + '</ul>' : ''}</div>
     <form method="dialog"><button class="secondary" autofocus>閉じる</button></form>
   </div>`
@@ -439,19 +487,43 @@ function inspectLiveCard(node) {
   const { hand, replace, unit, cost } = node.dataset
   const selector = hand !== undefined ? `[data-hand="${hand}"]` : replace !== undefined ?
     `[data-replace="${replace}"]` : `[data-unit="${unit}"]`
-  openCardDetail(card, cost, () => app.querySelector(selector) ?? app.querySelector('.battle'), liveCardDetails(node))
+  openCardDetail(card, cost, () => app.querySelector(selector) ?? app.querySelector('.battle'),
+    liveCardDetails(node), cardPower(card, { node, cost: cost === undefined ? undefined : Number(cost) }))
 }
 
 function clearAttackPreview() {
   const preview = app.querySelector('#attack-preview')
-  if (preview) preview.textContent = ''
+  if (preview) {
+    if (preview.dataset.targetPower) {
+      delete preview.dataset.targetPower
+      app.querySelector('#detail').innerHTML = defaultDetail()
+    }
+    preview.textContent = ''
+  }
   for (const node of app.querySelectorAll('.preview-protector')) node.classList.remove('preview-protector')
   app.querySelector('.battle')?.classList.remove('previewing')
 }
 
-function showAttackPreview(node) {
-  if (!selected?.legal.forecasts || !node || presentation) return clearAttackPreview()
+function showActionPreview(node) {
+  if (!selected || !node || presentation) return clearAttackPreview()
   const unitId = node.dataset.unit === undefined ? undefined : Number(node.dataset.unit)
+  if (selected.type === 'skill' || selected.type === 'play') {
+    const target = unitId !== undefined ? unitTarget(unitId) :
+      node.dataset.leader !== undefined ? leaderTarget(Number(node.dataset.leader)) : null
+    if (!target || !targetEnabled(target)) return clearAttackPreview()
+    const output = app.querySelector('#attack-preview')
+    const key = target.kind === 'unit' ? 'unit-' + target.id : 'leader-' + target.seat
+    if (output.dataset.targetPower === key) return
+    output.dataset.targetPower = key
+    app.querySelector('#detail').innerHTML = defaultDetail(target)
+    const skill = selected.type === 'skill'
+    const definition = skill ? view.players[battleSeat()].skill : cards[selected.card]
+    const preview = targetDamagePreview(view, battleSeat(), definition, target, { choice: selected.choice, cost: selected.cost, skill })
+    output.textContent = preview ? `ダメージ見込み ${preview.value} · 対象の残りHP ${preview.hp}` : ''
+    app.querySelector('.battle')?.classList.toggle('previewing', Boolean(preview))
+    return
+  }
+  if (!selected.legal.forecasts) return clearAttackPreview()
   const enemy = node.dataset.leader === String(1 - view.active) || node.dataset.slot?.startsWith((1 - view.active) + ':')
   if (!enemy || unitId === undefined && node.dataset.leader === undefined) return clearAttackPreview()
   const target = unitId === undefined ? leaderTarget(1 - view.active) : unitTarget(unitId)
@@ -520,7 +592,9 @@ function skillControls(own) {
   const focusCost = view.legal?.focus.cost ?? 1
   return `<div class="skill-controls">
       <button class="secondary" data-op="focus" ${view.legal?.focus.enabled ? '' : 'disabled'} title="${view.legal?.focus.reason ?? focusCost + 'MPを支払う'}">熱量をためる <small>${focusCost} MP</small></button>
-      <button class="secondary skill-button" data-op="skill" ${view.legal?.skill.enabled ? '' : 'disabled'} title="${skill.description}"><small>${names.TENSION_SKILL}</small>${skill.name}</button>
+      <button class="secondary skill-button" data-op="skill" ${view.legal?.skill.enabled ? '' : 'disabled'}
+        aria-describedby="skill-description"><small>${names.TENSION_SKILL}</small>${escape(skill.name)}</button>
+      <p class="skill-description" id="skill-description">${escape(skill.description)}</p>
   </div>`
 }
 
@@ -560,7 +634,7 @@ function selectionBar() {
 }
 
 function battlefield() {
-  const own = room ? roomSeat : solo() ? 0 : view.active
+  const own = battleSeat()
   const enemy = 1 - own
   const locked = presentation || roomLocked()
   const latestAction = view.events.findLast(event => event.seq > eventFloor
@@ -653,6 +727,10 @@ function render(focusOn = null) {
     : !view ? roomLobby() : view.phase === 'finished' && !presentation ? results() :
     view.phase === 'mulligan' ? mulligan() : battlefield()
   app.innerHTML = titlebar() + surface + rulesModal()
+  if (lastInspection && !selected && matchMedia('(min-width: 1160px)').matches) {
+    const node = app.querySelector(lastInspection)
+    if (node) inspectNode(node)
+  }
   if (presentation) positionPresentation(app, presentation)
   playResourceMotion()
   const events = app.querySelector('.events')
@@ -940,6 +1018,7 @@ function returnHome() {
   room?.stop()
   if (invite) forgetRoom(invite)
   match = view = selected = room = invite = roomSeat = resigned = null
+  lastInspection = null
   animatedView = null
   roomVersion = -1
   roomAction = null
@@ -1121,32 +1200,46 @@ function showMulliganReturns(destination) {
   if (replacements.size) battleAudio.play('draw')
 }
 
+const inspectSelector = '[data-hand], [data-unit], [data-terrain], [data-leader], [data-op="skill"], #skill-description'
+
+function inspectNode(node) {
+  const panel = app.querySelector('#detail')
+  if (!panel || !node) return
+  const card = cards[node?.dataset.card]
+  const { hand, unit, slot, leader, terrain } = node.dataset
+  if (card) {
+    panel.innerHTML = cardDetail(card, node.dataset.cost === undefined ? undefined : Number(node.dataset.cost), node)
+    lastInspection = hand !== undefined ? `[data-hand="${hand}"]` : `[data-unit="${unit}"]`
+  } else if (terrain) {
+    panel.innerHTML = `<div class="inspector-copy"><h2>${escape(terrainName(terrain))}</h2>
+      <p class="inspector-effect">${escape(terrainText[terrain] ?? '6色の種晶で特殊勝利')}</p></div>`
+    lastInspection = `[data-slot="${slot}"][data-terrain]`
+  } else {
+    panel.innerHTML = skillDetail(leader === undefined ? battleSeat() : Number(leader))
+    lastInspection = leader === undefined ? '#skill-description' : `[data-leader="${leader}"]`
+  }
+  panel.dataset.inspecting = 'true'
+}
+
 function inspect(event) {
   const entry = event.target.closest('[data-log-event]')
   if (entry && !entry.contains(event.relatedTarget)) highlightLogEvent(Number(entry.dataset.logEvent))
   const target = event.target.closest('[data-slot], [data-leader]')
-  if (target && target.contains(event.relatedTarget)) return
-  if (view?.phase === 'battle') showAttackPreview(target)
-  const panel = app.querySelector('#detail')
-  const node = event.target.closest('[data-hand], [data-unit]')
-  if (!panel || node?.contains(event.relatedTarget)) return
-  const card = cards[node?.dataset.card]
-  const terrain = target?.dataset.terrain
-  if (card) panel.innerHTML = cardDetail(card, node.dataset.cost === undefined ? undefined : Number(node.dataset.cost), node)
-  else if (terrain) panel.innerHTML = `<div class="inspector-copy"><h2>${escape(terrainName(terrain))}</h2>
-    <p class="inspector-effect">${escape(terrainText[terrain] ?? '6色の種晶で特殊勝利')}</p></div>`
-  else return
-  panel.dataset.inspecting = 'true'
+  if (target?.contains(event.relatedTarget)) return
+  if (view?.phase === 'battle') showActionPreview(target)
+  if (target?.classList.contains('targetable') && ['play', 'skill'].includes(selected?.type)) return
+  const node = event.target.closest(inspectSelector)
+  if (node && !node.contains(event.relatedTarget)) inspectNode(node)
 }
 
 app.addEventListener('pointerover', inspect)
 app.addEventListener('focusin', inspect)
 function leaveInspector(event) {
-  const inspected = event.target.closest('[data-hand], [data-unit], [data-terrain]')
+  const inspected = event.target.closest(inspectSelector)
   if (!inspected || inspected.contains(event.relatedTarget) || matchMedia('(min-width: 1160px)').matches) return
   const panel = app.querySelector('#detail')
   if (panel) {
-    delete panel.dataset.inspecting
+    if (!selected) delete panel.dataset.inspecting
     panel.innerHTML = defaultDetail()
   }
 }
@@ -1220,7 +1313,7 @@ app.addEventListener('dragstart', event => {
 app.addEventListener('dragover', event => {
   if (!selected) return
   if (event.target.closest('.targetable')) event.preventDefault()
-  showAttackPreview(event.target.closest('[data-slot], [data-leader]'))
+  showActionPreview(event.target.closest('[data-slot], [data-leader]'))
 })
 
 app.addEventListener('drop', event => {

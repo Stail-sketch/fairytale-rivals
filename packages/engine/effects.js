@@ -2,7 +2,8 @@ import { cardCost, cards, catalog, names } from '../cards/index.js'
 import { leaderTarget, other, positions, rules, samePosition, unitTarget } from './rules.js'
 import { allUnits, at, attackValue, aurasFor, canUseAbilities, has, leaderPower, openPositions, opposingApathy } from './targeting.js'
 import { stageEffects } from './stage-effects.js'
-import { occupiedTerrainCount, orbCards, terrainAt, terrainCount } from './terrain.js'
+import { occupiedTerrainCount, orbCards, terrainAt, terrainCount, terrainName } from './terrain.js'
+import { addModifier, awakeningBonus, breakdown, entryModifiers, entryPower, powerChanges, recordPower } from './power.js'
 
 const triggerLabels = { ON_ALLY_SPELL: '特技への反応', ON_ALLY_HEAL: '回復への反応' }
 
@@ -12,6 +13,34 @@ export function emit(game, type, text, fields = {}) {
 
 export const displayName = unit => cards[unit.card].name
 export const findUnit = (game, id) => allUnits(game).find(unit => unit.id === id)
+
+export function damagePower(game, effect, skillUses, { seat, spell, scaling } = {}) {
+  const bonuses = {}
+  const base = effect.amount
+  addModifier(bonuses, names.SKILL_BOOST, awakeningBonus(effect.boost, skillUses))
+  if (scaling) addModifier(bonuses, scaling.label, scaling.amount)
+  if (spell) {
+    const player = game.players[seat]
+    const turnBonuses = powerChanges(player, 'spellBonus')
+    for (const [label, amount] of Object.entries(turnBonuses)) addModifier(bonuses, label, amount)
+    addModifier(bonuses, 'このターンの特技強化', (player.spellBonus ?? 0) -
+      Object.values(turnBonuses).reduce((sum, amount) => sum + amount, 0))
+    for (const unit of player.units) {
+      if (canUseAbilities(unit)) addModifier(bonuses, cards[unit.card].name, cards[unit.card].spellDamage ?? 0)
+    }
+    addModifier(bonuses, terrainName('circle'), occupiedTerrainCount(game, seat, 'circle'))
+  }
+  return breakdown(base, base + Object.values(bonuses).reduce((sum, amount) => sum + amount, 0), bonuses)
+}
+
+export function damageAllowed(game, victim, spell) {
+  return !spell || (!victim.position || !has(victim, 'RESIST_SPELL')) && game.turn > (victim.spellGuardThrough ?? -1)
+}
+
+function powerSource(context) {
+  return names[context.trigger] ?? (context.effectSource?.kind === 'leader' ? names.TENSION_SKILL :
+    cards[context.source?.card ?? context.effectSource?.card ?? context.spell]?.name)
+}
 
 function unitAnchor(unit) {
   return { kind: 'unit', id: unit.id, seat: unit.owner, position: { ...unit.position }, card: unit.card }
@@ -113,6 +142,67 @@ export function shuffle(game, list) {
   }
 }
 
+export function effectCondition(game, kind, value, context) {
+  const { seat, source, chosen } = context
+  const player = game.players[seat]
+  const opponent = game.players[other(seat)]
+  switch (kind) {
+    case 'ownHpAtLeast': return player.hp >= value
+    case 'ownHpAtMost': return player.hp <= value
+    case 'enemyUnitsAtLeast': return opponent.units.length >= value
+    case 'enemyHandAtLeast': return opponent.hand.length >= value
+    case 'enemyHandAtMost': return opponent.hand.length <= value
+    case 'ownHandAtLeast': return player.hand.length >= value
+    case 'sourceRow': return source?.position?.row === value
+    case 'sourceColumn': return source?.position?.column === value
+    case 'backCenter': return source?.position?.row === 'back' && source.position.column === 1
+    case 'afterTension': return context.tension === value
+    case 'leaderTarget': return chosen?.kind === 'leader'
+    case 'unitTarget': return chosen?.kind === 'unit'
+    case 'costAtMost': return context.cost <= value
+    case 'noOtherAllies': return player.units.every(unit => unit.id === source?.id)
+    case 'enemyIce': return opponent.units.some(unit => unit.card === 'token-frost-block')
+    case 'summonedTerrain': return value === true ? Boolean(context.summonedTerrain) : context.summonedTerrain === value
+    case 'sourceTerrain': return source && terrainAt(game, source.owner, source.position) === value
+    case 'sourceWounded': return source?.hp < source?.maxHp
+    case 'leaderPowerAtLeast': return leaderPower(game, seat) >= value
+    case 'topCostAtLeast': return player.deck.length && cardCost(player.deck[0], player.skillUses) >= value
+    case 'topCostBelow': return player.deck.length && cardCost(player.deck[0], player.skillUses) < value
+    case 'practiceTurn': return source?.summonedTurn === game.turn && source.createdByAction !== context.actionId
+    case 'sameColumn': return findUnit(game, chosen?.id)?.position.column === source?.position?.column
+    case 'topParity': return player.deck.length && cards[player.deck[0].card].cost % 2 === value
+    case 'lastDrawOdd': return Boolean(context.lastDrew && cards[context.lastDrew].cost % 2)
+    case 'chosenWounded': {
+      const unit = findUnit(game, chosen?.id)
+      return unit && unit.hp < unit.maxHp
+    }
+    default: throw new Error('未知の効果条件: ' + kind)
+  }
+}
+
+export function amountFrom(game, key, context) {
+  const player = game.players[context.seat]
+  switch (key) {
+    case 'tension': return player.tension
+    case 'enemyUnits': return game.players[other(context.seat)].units.length
+    case 'otherAllies': return player.units.filter(unit => unit.id !== context.source?.id).length
+    case 'sourceAttack': return context.source ? attackValue(game, context.source) : 0
+    case 'damageDealt': return context.dealt ?? 0
+    case 'leaderAttack': return leaderPower(game, context.seat)
+    case 'leaderAttackTotal': return player.leaderAttackTotal ?? 0
+    case 'dragons': return [...player.units, ...player.hand].filter(unit =>
+      unit.id !== (context.source?.id ?? context.handInstance) && cards[unit.card].family === 'dragon').length
+    case 'overflow': return context.overflow ?? 0
+    case 'summonedCost': return cards[findUnit(game, context.chosen?.id)?.card]?.cost ?? 0
+    case 'spellsUsed': return player.spellsUsed ?? 0
+    case 'priorSpellsThisTurn': return Math.max(0, (player.turnSpells ?? 0) - (context.beforePlay && context.spell ? 0 : 1))
+    case 'terrainCount': return terrainCount(game, context.seat)
+    case 'allyUnits': return player.units.length
+    case 'unitsMoved': return player.unitsMoved ?? 0
+    default: throw new Error('未知の参照値: ' + key)
+  }
+}
+
 export function resolution(game) {
   const queue = game.effectBacklog ?? []
   delete game.effectBacklog
@@ -132,7 +222,7 @@ export function resolution(game) {
           if (fired.includes(event)) continue
           fired.push(event)
         }
-        enqueue(ability.effects, { seat: unit.owner, source: unit, chosen, ...data }, displayName(unit) + 'の' +
+        enqueue(ability.effects, { seat: unit.owner, source: unit, chosen, trigger: event, ...data }, displayName(unit) + 'の' +
           (names[event] ?? triggerLabels[event] ?? '能力'))
       }
     }
@@ -153,7 +243,7 @@ export function resolution(game) {
     for (const unit of allUnits(game)) {
       if (unit.hp <= 0) continue
       const auraHp = aurasFor(game, unit, 'hpAura').reduce((total, { aura, provider }) =>
-        total + aura.amount + (aura.boost ?? 0) * game.players[provider.owner].skillUses, 0)
+        total + aura.amount + awakeningBonus(aura.boost, game.players[provider.owner].skillUses), 0)
       const difference = auraHp - (unit.auraHp ?? 0)
       unit.hp += difference
       unit.maxHp += difference
@@ -179,14 +269,17 @@ export function resolution(game) {
   function summon(seat, instance, position, chosen, choice, triggersSummon = false, effectPosition, cost, stats) {
     const definition = cards[instance.card]
     const player = game.players[seat]
-    const skillUses = player.skillUses ?? 0
-    const knight = instance.card === 'token-rose-knight' ? player.knightBuff ?? 0 : 0
-    const attack = stats?.attack ?? definition.attack + (definition.boost?.attack ?? 0) * skillUses + knight
-    const hp = stats?.hp ?? definition.hp + (definition.boost?.hp ?? 0) * skillUses + knight
+    const attack = stats?.attack ?? entryPower(definition, player, 'attack').value
+    const hp = stats?.hp ?? entryPower(definition, player, 'hp').value
     const unit = {
       ...instance, owner: seat, position, attack, hp, maxHp: hp, summonedTurn: game.turn,
       attacks: definition.keywords.includes('CHARGE') ? 0 : 2, revealed: false, statuses: [],
       decoyId: instance.decoyId ?? (definition.decoyGroup ? instance.id : undefined),
+    }
+    for (const [stat, base] of [['attack', 'attack'], ['maxHp', 'hp']]) {
+      if (stats?.[base] == null) {
+        for (const [label, amount] of Object.entries(entryModifiers(definition, player, base))) recordPower(unit, stat, label, amount)
+      }
     }
     if (stats?.grants) unit.grants = [...stats.grants]
     if (stats?.extraAbilities) unit.extraAbilities = structuredClone(stats.extraAbilities)
@@ -230,8 +323,9 @@ export function resolution(game) {
     const player = game.players[seat]
     const card = cards[instance.card]
     wearWeapon(seat, player.weapon?.durability ?? 0)
-    const attack = card.attack + (card.boost?.attack ?? 0) * player.skillUses
+    const attack = entryPower(card, player, 'attack').value
     player.weapon = { ...instance, owner: seat, attack, durability: card.hp }
+    for (const [label, amount] of Object.entries(entryModifiers(card, player, 'attack'))) recordPower(player.weapon, 'attack', label, amount)
     emit(game, 'equip', card.name + 'を装備', { seat, card: card.id, id: instance.id,
       ...(context.played ? { played: true, cost: context.cost } : {}),
     })
@@ -366,18 +460,14 @@ export function resolution(game) {
     const unit = target.kind === 'unit' ? findUnit(game, target.id) : null
     const victim = unit ?? (target.kind === 'leader' ? game.players[target.seat] : null)
     if (!victim) return
-    const boost = (effect.boost ?? 0) * skillUses
+    const boost = awakeningBonus(effect.boost, skillUses)
 
     switch (effect.id) {
       case 'damage': {
-        const attacker = game.players[context.seat]
-        const spellBonus = context.spell ? (attacker.spellBonus ?? 0) + attacker.units.reduce((total, unit) =>
-          total + (canUseAbilities(unit) ? cards[unit.card].spellDamage ?? 0 : 0), 0)
-          + occupiedTerrainCount(game, context.seat, 'circle') : 0
-        if (!context.spell || (!unit || !has(unit, 'RESIST_SPELL')) && game.turn > (victim.spellGuardThrough ?? -1)) {
-          const dealt = dealDamage(target, effect.amount + boost + spellBonus)
+        if (damageAllowed(game, victim, context.spell)) {
+          const dealt = dealDamage(target, damagePower(game, effect, skillUses, context).value)
           if (dealt && unit && unit.hp <= 0 && context.spell) {
-            for (const ally of attacker.units) trigger(ally, 'ON_SPELL_KILL', target)
+            for (const ally of game.players[context.seat].units) trigger(ally, 'ON_SPELL_KILL', target)
           }
           return dealt
         }
@@ -410,6 +500,9 @@ export function resolution(game) {
           unit.attack += effect.attack + boost
           unit.maxHp += effect.hp
           unit.hp += effect.hp
+          recordPower(unit, 'attack', powerSource(context), effect.attack, effect.temporary)
+          recordPower(unit, 'attack', names.SKILL_BOOST, boost, effect.temporary)
+          recordPower(unit, 'maxHp', powerSource(context), effect.hp)
           if (effect.temporary) unit.temporaryAttack = (unit.temporaryAttack ?? 0) + effect.attack + boost
           emit(game, 'ability', displayName(unit) + 'を強化', { target })
         }
@@ -418,15 +511,25 @@ export function resolution(game) {
         if (unit) {
           unit.attack = effect.fromHp ? unit.hp : effect.amount
           unit.temporaryAttack = 0
+          if (unit.powerChanges) delete unit.powerChanges.attack
+          if (unit.temporaryPower) delete unit.temporaryPower.attack
+          recordPower(unit, 'attack', powerSource(context), unit.attack - cards[unit.card].attack)
         }
         break
       case 'setHp':
-        if (unit) unit.hp = unit.maxHp = effect.amount
+        if (unit) {
+          unit.hp = unit.maxHp = effect.amount
+          if (unit.powerChanges) delete unit.powerChanges.maxHp
+        }
         break
       case 'multiplyAttack':
         if (unit) {
+          const temporary = unit.temporaryAttack ?? 0
+          const increase = effect.amount - 1
+          recordPower(unit, 'attack', powerSource(context), (unit.attack - temporary) * increase)
+          recordPower(unit, 'attack', powerSource(context), temporary * increase, true)
           unit.attack *= effect.amount
-          unit.temporaryAttack = (unit.temporaryAttack ?? 0) * effect.amount
+          unit.temporaryAttack = temporary * effect.amount
         }
         break
       case 'grant':
@@ -549,78 +652,17 @@ export function resolution(game) {
 
   const pick = pool => pool.length ? pool[random(game, pool.length)] : undefined
 
-  function condition(kind, value, context) {
-    const { seat, source, chosen } = context
-    const player = game.players[seat]
-    const opponent = game.players[other(seat)]
-    switch (kind) {
-      case 'ownHpAtLeast': return player.hp >= value
-      case 'ownHpAtMost': return player.hp <= value
-      case 'enemyUnitsAtLeast': return opponent.units.length >= value
-      case 'enemyHandAtLeast': return opponent.hand.length >= value
-      case 'enemyHandAtMost': return opponent.hand.length <= value
-      case 'ownHandAtLeast': return player.hand.length >= value
-      case 'sourceRow': return source?.position?.row === value
-      case 'sourceColumn': return source?.position?.column === value
-      case 'backCenter': return source?.position?.row === 'back' && source.position.column === 1
-      case 'afterTension': return context.tension === value
-      case 'leaderTarget': return chosen?.kind === 'leader'
-      case 'unitTarget': return chosen?.kind === 'unit'
-      case 'costAtMost': return context.cost <= value
-      case 'noOtherAllies': return player.units.every(unit => unit.id === source?.id)
-      case 'enemyIce': return opponent.units.some(unit => unit.card === 'token-frost-block')
-      case 'summonedTerrain': return value === true ? Boolean(context.summonedTerrain) : context.summonedTerrain === value
-      case 'sourceTerrain': return source && terrainAt(game, source.owner, source.position) === value
-      case 'sourceWounded': return source?.hp < source?.maxHp
-      case 'leaderPowerAtLeast': return leaderPower(game, seat) >= value
-      case 'topCostAtLeast': return player.deck.length && cardCost(player.deck[0], player.skillUses) >= value
-      case 'topCostBelow': return player.deck.length && cardCost(player.deck[0], player.skillUses) < value
-      case 'practiceTurn': return source?.summonedTurn === game.turn && source.createdByAction !== context.actionId
-      case 'sameColumn': return findUnit(game, chosen?.id)?.position.column === source?.position?.column
-      case 'topParity': return player.deck.length && cards[player.deck[0].card].cost % 2 === value
-      case 'lastDrawOdd': return Boolean(context.lastDrew && cards[context.lastDrew].cost % 2)
-      case 'chosenWounded': {
-        const unit = findUnit(game, chosen?.id)
-        return unit && unit.hp < unit.maxHp
-      }
-      default: throw new Error('未知の効果条件: ' + kind)
-    }
-  }
-
-  function amountFrom(key, context) {
-    const player = game.players[context.seat]
-    switch (key) {
-      case 'tension': return player.tension
-      case 'enemyUnits': return game.players[other(context.seat)].units.length
-      case 'otherAllies': return player.units.filter(unit => unit.id !== context.source?.id).length
-      case 'sourceAttack': return context.source ? attackValue(game, context.source) : 0
-      case 'damageDealt': return context.dealt ?? 0
-      case 'leaderAttack': return leaderPower(game, context.seat)
-      case 'leaderAttackTotal': return player.leaderAttackTotal ?? 0
-      case 'dragons': return [...player.units, ...player.hand].filter(unit =>
-        unit.id !== context.source?.id && cards[unit.card].family === 'dragon').length
-      case 'overflow': return context.overflow ?? 0
-      case 'summonedCost': return cards[findUnit(game, context.chosen?.id)?.card]?.cost ?? 0
-      case 'spellsUsed': return player.spellsUsed ?? 0
-      case 'priorSpellsThisTurn': return Math.max(0, (player.turnSpells ?? 0) - 1)
-      case 'terrainCount': return terrainCount(game, context.seat)
-      case 'allyUnits': return player.units.length
-      case 'unitsMoved': return player.unitsMoved ?? 0
-      default: throw new Error('未知の参照値: ' + key)
-    }
-  }
-
   function applyEffect(effect, context) {
     const { seat, source } = context
     const player = game.players[seat]
     const enemy = other(seat)
     const skillUses = player.skillUses ?? 0
-    if (effect.when && !condition(...effect.when, context)) {
+    if (effect.when && !effectCondition(game, ...effect.when, context)) {
       for (const alternate of effect.otherwise ?? []) applyEffect(alternate, context)
       return
     }
     if (effect.from) {
-      const value = amountFrom(effect.from, context) * (effect.multiplier ?? 1)
+      const value = amountFrom(game, effect.from, context) * (effect.multiplier ?? 1)
       effect = { ...effect, amount: (effect.amount ?? 0) + value }
       if (effect.id === 'buff') {
         effect.attack += effect.scaleHpOnly ? 0 : value
@@ -715,7 +757,7 @@ export function resolution(game) {
       }
       case 'summonPool': {
         const filter = { ...effect.filter }
-        if (effect.boost) filter.cost += effect.boost * skillUses
+        if (effect.boost) filter.cost += awakeningBonus(effect.boost, skillUses)
         const definition = pick(catalog.filter(card => collectible(card) && matchesCard(card, filter)))
         const position = openPositions(game, seat)[0]
         if (definition && position) summon(seat, createInstance(game, definition.id), position)
@@ -807,7 +849,7 @@ export function resolution(game) {
       }
       case 'generateMatching': {
         const pool = catalog.filter(card => collectible(card) && matchesCard(card, effect.filter))
-        for (let count = 0; count < effect.amount + (effect.boost ?? 0) * skillUses && pool.length; count++) {
+        for (let count = 0; count < effect.amount + awakeningBonus(effect.boost, skillUses) && pool.length; count++) {
           addCard(effect.enemy ? enemy : seat, pick(pool).id)
         }
         break
@@ -818,7 +860,7 @@ export function resolution(game) {
           const cost = Math.max(...pool.map(id => cards[id].cost))
           pool = pool.filter(id => cards[id].cost === cost)
         }
-        for (let count = 0; count < (effect.amount ?? 1) + (effect.boost ?? 0) * skillUses; count++) {
+        for (let count = 0; count < (effect.amount ?? 1) + awakeningBonus(effect.boost, skillUses); count++) {
           const position = context.position && count === 0 ? context.position : openPositions(game, seat)[0]
           const id = pick(pool)
           if (!position || !id) break
@@ -852,6 +894,7 @@ export function resolution(game) {
         if (player.weapon) {
           player.weapon.attack += effect.attack
           player.weapon.durability += effect.hp
+          recordPower(player.weapon, 'attack', powerSource(context), effect.attack, effect.temporary)
           if (effect.temporary) player.weapon.temporaryAttack = (player.weapon.temporaryAttack ?? 0) + effect.attack
         }
         break
@@ -886,7 +929,10 @@ export function resolution(game) {
         }
         break
       case 'copyNextSpell': player.copyNextSpell = true; break
-      case 'spellBonus': player.spellBonus = (player.spellBonus ?? 0) + effect.amount; break
+      case 'spellBonus':
+        player.spellBonus = (player.spellBonus ?? 0) + effect.amount
+        recordPower(player, 'spellBonus', powerSource(context), effect.amount, true)
+        break
       case 'setFortune':
         if (effect.mode === 'temporaryBoth') {
           if ((player.bothFortunesThisTurn || player.fortune === 'both') && effect.repeatTension) {
@@ -905,7 +951,7 @@ export function resolution(game) {
       }
       case 'randomHits': {
         const enemy = other(seat)
-        const hits = effect.amount + (effect.boost ?? 0) * skillUses
+        const hits = effect.amount + awakeningBonus(effect.boost, skillUses)
         for (let count = 0; count < hits && game.players[enemy].hp > 0; count++) {
           const targets = [leaderTarget(enemy), ...game.players[enemy].units.filter(unit => unit.hp > 0).map(unit => unitTarget(unit.id))]
           applyTo({ id: 'damage', amount: 1 }, pick(targets), skillUses, context)
@@ -957,12 +1003,13 @@ export function resolution(game) {
       case 'tension': gainTension(seat, effect.amount); break
       case 'leaderPower':
         player.leaderAttack += effect.amount
+        recordPower(player, 'leaderAttack', powerSource(context), effect.amount, true)
         player.leaderPierce ||= effect.pierce
         player.leaderNeighbors ||= effect.neighbors
         emit(game, 'ability', '味方リーダーの攻撃力+' + effect.amount, { seat })
         break
       case 'leaderArmor': {
-        const amount = effect.amount + (effect.boost ?? 0) * skillUses
+        const amount = effect.amount + awakeningBonus(effect.boost, skillUses)
         const key = effect.temporary ? 'temporaryArmor' : 'leaderArmor'
         player[key] = (player[key] ?? 0) + amount
         emit(game, 'ability', '味方リーダーの被ダメージ-' + amount, { seat, value: amount })
@@ -1003,7 +1050,7 @@ export function resolution(game) {
           spaces = preferred ? [preferred, ...free.filter(pos => pos !== preferred)] : free
         }
         if (effect.random) shuffle(game, spaces)
-        const count = (effect.amount ?? 1) + (effect.boost ?? 0) * skillUses
+        const count = (effect.amount ?? 1) + awakeningBonus(effect.boost, skillUses)
         for (const position of spaces.slice(0, count)) {
           if (effect.card === 'self' && !source) break
           const instance = createInstance(game, effect.card === 'self' ? source.card : effect.card)

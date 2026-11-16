@@ -4,6 +4,7 @@ import { cardCost, catalog, leaders, names, prototypeDeck } from '../packages/ca
 import { createGame, deckIssue, dispatch, leaderTarget as leader, legalAttack, legalLeaderAttack, legalPlay, legalSkill,
   replay, unitTarget as target } from '../packages/engine/index.js'
 import { createInstance, resolution } from '../packages/engine/effects.js'
+import { attackBreakdown, leaderAttackBreakdown } from '../packages/engine/targeting.js'
 import { project } from '../packages/local-match/index.js'
 
 const front = (column = 0) => ({ row: 'front', column })
@@ -234,11 +235,17 @@ test('MPと熱量上限、共鳴と物語の共鳴が別々に発動', () => {
   game = play(game, 'cheer')
   game = play(game, 'cheer')
   assert.equal(game.players[0].tension, 3)
-  assert.equal(game.players[0].units.find(unit => unit.id === bell.id).attack, 4)
+  const buffed = game.players[0].units.find(unit => unit.id === bell.id)
+  assert.deepEqual(attackBreakdown(project(game, 0), buffed), {
+    base: 1, modifiers: [{ label: '共鳴', amount: 3 }], value: 4,
+  })
   assert.equal(game.players[0].hp, 15)
   game = act(game, { type: 'skill' })
   assert.equal(game.players[0].hp, 17)
   assert.equal(game.players[0].tension, 0)
+  assert.deepEqual(leaderAttackBreakdown(project(game, 0), 0), {
+    base: 0, modifiers: [{ label: '語り手の奥義', amount: 3 }], value: 3,
+  })
   game = act(game, { type: 'leaderAttack', target: leader(1) })
   assert.equal(game.players[1].hp, 22)
   assert.equal(game.players[0].units[0].attack, 4)

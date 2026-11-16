@@ -207,6 +207,10 @@ small { font-size: 11px; }
 .secondary small { color: var(--gold); margin-left: 3px; }
 .skill-button { display: grid; justify-items: center; gap: 2px; }
 .skill-button small { font-size: 9px; margin: 0; }
+.skill-description {
+  grid-column: 1 / -1; margin: 0; padding-inline: 3px;
+  font-size: 11px; line-height: 1.5; color: #d5dfeb; overflow-wrap: anywhere;
+}
 .end { width: 100%; padding-inline: 7px; gap: 6px; font-size: 14px; }
 .tray { align-items: start; }
 .turn-controls { position: relative; padding-top: 26px; }
@@ -876,6 +880,14 @@ body:has(.deck-overview[open]) { overflow: hidden; }
 .inspector-keyword span, .inspector-current { color: #d5dfeb; font-size: 12px; line-height: 1.5; }
 .inspector-current { padding: 6px 0 0; margin: 6px 0 0; list-style: none; border-top: 1px solid #8ea5bc47; }
 .inspector-current li + li { margin-top: 3px; }
+.power-details { display: grid; gap: 4px; padding: 0; margin: 7px 0; list-style: none; }
+.power-details li {
+  border: 1px solid #8498b54a; border-radius: 4px; padding: 5px 7px;
+  color: #d9e6f6; background: #101c2e; font-size: 12px; line-height: 1.45; overflow-wrap: anywhere;
+}
+.power-details strong { color: #ffe1a0; font-size: 13px; font-variant-numeric: tabular-nums; }
+.power-details small { display: block; color: #becfe4; font-size: 11px; }
+.power-details .power-group { color: #eacc98; }
 @media (min-width: 1160px) {
   .battle { --wing: clamp(90px, 10.5vw, 151px); padding-inline: clamp(10px, 1.35vw, 26px); }
   .battle-layout {
