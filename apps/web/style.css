@@ -286,8 +286,26 @@ small { font-size: 11px; }
 .skill-controls { display: grid; gap: 6px; align-content: start; padding-top: 26px; }
 .secondary { padding: 7px 8px; border: 1px solid #887752; background: #1a2938; border-radius: 4px; font-size: 12px; }
 .secondary small { color: var(--gold); margin-left: 3px; }
-.skill-button { display: grid; justify-items: center; gap: 2px; }
-.skill-button small { font-size: 9px; margin: 0; }
+.battle-action {
+  --action-icon: clamp(35px, 4.5vw, 52px);
+  display: grid; grid-template-columns: var(--action-icon) minmax(0, 1fr); align-items: center; gap: 8px;
+  min-height: calc(var(--action-icon) + 12px); min-width: 0; padding: 5px; border-radius: 7px;
+  border-color: color-mix(in srgb, var(--action-accent) 60%, #344453);
+  background: linear-gradient(120deg, color-mix(in srgb, var(--action-accent) 20%, #162233), #121d2b);
+  text-align: left; line-height: 1.3;
+}
+.focus-button { --action-accent: #efad63; }
+.skill-button { --action-accent: var(--ally-light); }
+.battle-action :is(strong, small) { display: block; margin: 0; }
+.battle-action strong { color: #ffeed1; font-size: clamp(11px, 1.1vw, 14px); overflow-wrap: anywhere; }
+.battle-action small { color: var(--action-accent); font-size: 10px; }
+.battle-action img {
+  width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 5px;
+  outline: 1px solid color-mix(in srgb, var(--action-accent) 55%, transparent); outline-offset: -1px;
+}
+.battle-action:enabled:hover { border-color: var(--action-accent); }
+.battle-action:disabled { opacity: .7; }
+.battle-action:disabled img { filter: saturate(.58) brightness(.86); }
 .skill-description {
   grid-column: 1 / -1; margin: 0; padding-inline: 3px;
   font-size: 11px; line-height: 1.5; color: #d5dfeb; overflow-wrap: anywhere;
@@ -395,6 +413,12 @@ dialog::backdrop { background: #050c17d7; }
 dialog h2 { font-family: var(--serif); margin-top: 0; color: var(--gold); }
 dialog ul { margin: 16px 0; padding-left: 23px; }
 dialog li, dialog p { font-size: 14px; line-height: 1.7; color: #d8e0e1; margin-bottom: 7px; }
+.end-turn-dialog { width: min(425px, calc(100vw - 30px)); padding: 20px; }
+.end-turn-dialog h2 { margin-bottom: 8px; }
+#end-turn-options { margin: 0; color: var(--gold); }
+.end-turn-dialog form { display: flex; justify-content: flex-end; gap: 10px; margin-top: 17px; }
+.end-turn-dialog form .primary { min-height: 42px; padding: 7px 15px; font-size: 13px; }
+.end-turn-dialog form .secondary { padding-inline: 13px; }
 .library-view {
   min-height: calc(100vh - 60px); padding: 23px max(22px, calc((100vw - 1200px) / 2)) 44px;
   --library-scene: url("assets/arena.webp");
@@ -1002,11 +1026,16 @@ dialog li, dialog p { font-size: 14px; line-height: 1.7; color: #d8e0e1; margin-
   .hand-zone { grid-column: 1 / -1; grid-row: 1; min-width: 0; }
   .hand { justify-content: safe center; overflow-x: auto; padding: 10px 5px 12px; }
   .hand-card { flex: 0 0 clamp(54px, 13vw, 76px); --tilt: 0deg !important; --drop: 0px !important; }
-  .skill-controls { grid-template-columns: 1fr 1fr; }
+  .skill-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .skill-controls, .turn-controls { padding-top: 3px; }
   .mulligan-cards { gap: 5px; }
   .mulligan-cards .large-card { min-width: 0; width: min(132px, 21vw); }
   .mulligan-cards .card-art { height: 60px; }
+}
+@media (max-width: 500px) {
+  .tray { grid-template-columns: minmax(0, 1fr); }
+  .battle-action { --action-icon: 43px; }
+  .turn-controls { justify-self: end; width: min(100%, 178px); }
 }
 @media (max-width: 410px) {
   .battle { --slot-height: clamp(52px, 10vh, 78px); }

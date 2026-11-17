@@ -684,13 +684,41 @@ function renderTurnNotice() {
 function skillControls(own) {
   const player = view.players[own]
   const skill = player.skill ?? leaders[player.leader].skill
+  const skillArt = art('action-skill-' + (player.awakenedLeader ? 'awakened' : player.leader))
   const focusCost = view.legal?.focus.cost ?? 1
+  const locked = cardInspectionOnly()
   return `<div class="skill-controls">
-      <button class="secondary" data-op="focus" ${view.legal?.focus.enabled ? '' : 'disabled'} title="${view.legal?.focus.reason ?? focusCost + 'MPを支払う'}">熱量をためる <small>${focusCost} MP</small></button>
-      <button class="secondary skill-button" data-op="skill" ${view.legal?.skill.enabled ? '' : 'disabled'}
-        aria-describedby="skill-description"><small>${names.TENSION_SKILL}</small>${escape(skill.name)}</button>
+      <button class="secondary battle-action focus-button" data-op="focus" ${!locked && view.legal?.focus.enabled ? '' : 'disabled'} title="${view.legal?.focus.reason ?? focusCost + 'MPを支払う'}">
+        <img src="${art('action-focus')}" alt=""><span><strong>熱量をためる</strong><small>${focusCost} MP</small></span>
+      </button>
+      <button class="secondary battle-action skill-button" data-op="skill" ${!locked && view.legal?.skill.enabled ? '' : 'disabled'} aria-describedby="skill-description">
+        <img src="${skillArt}" alt=""><span><small>${names.TENSION_SKILL}</small><strong>${escape(skill.name)}</strong></span>
+      </button>
       <p class="skill-description" id="skill-description">${escape(skill.description)}</p>
   </div>`
+}
+
+function canEndTurn() {
+  return view?.phase === 'battle' && view.active === battleSeat() && view.legal && view.decisionSeat == null &&
+    !presentation && !roomLocked()
+}
+
+function requestEndTurn() {
+  if (!canEndTurn()) return
+  const { play, attack, leaderAttack, focus, skill } = view.legal
+  const available = [
+    Object.values(play).some(action => action.enabled) && '手札を使う',
+    (leaderAttack.enabled || Object.values(attack).some(action => action.enabled)) && '攻撃',
+    focus.enabled && '熱量をためる',
+    skill.enabled && names.TENSION_SKILL,
+  ].filter(Boolean)
+  if (!available.length) {
+    execute({ type: 'end' })
+    return
+  }
+  const dialog = app.querySelector('#end-turn-dialog')
+  dialog.querySelector('#end-turn-options').textContent = available.join('・')
+  dialog.showModal()
 }
 
 function instruction() {
@@ -731,7 +759,6 @@ function selectionBar() {
 function battlefield() {
   const own = battleSeat()
   const enemy = 1 - own
-  const locked = presentation || roomLocked()
   const latestAction = view.events.findLast(event => event.seq > eventFloor
     && event.privateTo === undefined && !['handAdded', 'mulligan', 'turn'].includes(event.type))
   return `<main class="battle${reducedMotion() ? ' short-motion' : ''}" style="--ally-light:${leaders[view.players[own].leader].accent};--enemy-light:${leaders[view.players[enemy].leader].accent}" tabindex="-1">
@@ -750,10 +777,20 @@ function battlefield() {
       ${skillControls(own)}
       <div class="hand-zone">${selectionBar()}${hand(view.players[own])}</div>
       <div class="turn-controls">
-        <button class="primary end" data-op="end" ${cpuTurn() || locked || (room && view.pending) ? 'disabled' : ''}>ターン終了 <span aria-hidden="true">›</span></button>
+        <button class="primary end" data-op="end" ${canEndTurn() ? '' : 'disabled'}>ターン終了 <span aria-hidden="true">›</span></button>
       </div>
     </section>
     </div>${detailPanel()}</div>
+    <dialog id="end-turn-dialog" class="end-turn-dialog" role="alertdialog" aria-labelledby="end-turn-title"
+      aria-describedby="end-turn-description end-turn-options">
+      <h2 id="end-turn-title">まだ行動できます</h2>
+      <p id="end-turn-options"></p>
+      <p id="end-turn-description">ターンを終了しますか？</p>
+      <form id="end-turn-form" method="dialog">
+        <button class="secondary" value="cancel" autofocus>行動を続ける</button>
+        <button class="primary" value="end">ターン終了</button>
+      </form>
+    </dialog>
   </main>`
 }
 
@@ -1212,6 +1249,12 @@ app.addEventListener('input', event => {
 })
 
 app.addEventListener('submit', event => {
+  if (event.target.id === 'end-turn-form') {
+    event.preventDefault()
+    event.target.closest('dialog').close()
+    if (event.submitter?.value === 'end' && canEndTurn()) execute({ type: 'end' })
+    return
+  }
   if (event.target.id !== 'lobby-join') return
   event.preventDefault()
   lobbyInput = event.target.elements.lobby.value
@@ -1373,7 +1416,7 @@ app.addEventListener('click', event => {
       break
     case 'focus': execute({ type: 'focus' }); break
     case 'skill': select('skill'); break
-    case 'end': execute({ type: 'end' }); break
+    case 'end': requestEndTurn(); break
     case 'cancel': selected = null; feedback = ''; render(); break
     case 'confirm': execute({ type: selected.type, id: selected.id }); break
     case 'replay': exportReplay(); break
@@ -1523,7 +1566,7 @@ app.addEventListener('dragend', () => {
 })
 
 document.addEventListener('keydown', event => {
-  if (event.target.closest('.term-dialog')) return
+  if (event.target.closest('.term-dialog, .end-turn-dialog')) return
   if (event.key === 'Escape' && event.target.closest('.audio-mixer, [data-op="audio-mixer"][aria-expanded="true"]')) {
     event.preventDefault()
     toggleAudioMixer()

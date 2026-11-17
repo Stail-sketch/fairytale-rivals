@@ -75,9 +75,17 @@ async function driveBattle() {
     send('dragend', origin)
     if (settle) completePresentation()
   }
-  const next = () => {
+  const end = '[data-op=end]'
+  const endDialog = '#end-turn-dialog[open]'
+  const endTurn = (expectedConfirmation = null) => {
+    click(end)
+    const confirming = Boolean(query(endDialog))
+    if (expectedConfirmation !== null) expect(confirming === expectedConfirmation, '残っている行動に応じて終了確認を出す')
+    if (confirming) click(endDialog + ' [value=end]')
+  }
+  const next = (expectedConfirmation = null) => {
     const currentHand = [...document.querySelectorAll('[data-hand]')].map(card => card.dataset.hand)
-    click('[data-op=end]')
+    endTurn(expectedConfirmation)
     if (query('.result')) return
     expect(query('.battle') && !query('[data-op=ready]'), 'ターン終了ですぐ次の手番に進む')
     expect(currentHand.every(id => !query('[data-hand="' + id + '"]')), '前のプレイヤーの手札は表示されない')
@@ -217,6 +225,17 @@ async function driveBattle() {
     expect(document.querySelectorAll('[data-slot]').length === 12, '後攻の確定で双方6マスの対戦画面を開く')
     expect(query('[data-mp="0"].mp-refresh') && query('.just-drawn') && query('[data-side="0"].active-side'),
       'MP回復、ドロー、手番表示を同期する')
+    const focusButton = query('[data-op=focus]')
+    expect(focusButton.querySelector('img').src === globalThis.fairytaleImages['action-focus.webp'] &&
+      focusButton.getBoundingClientRect().height >= 50, '熱量をためる操作に大きな専用イラストを表示する')
+    expect(query('[data-op=skill] img').src === globalThis.fairytaleImages['action-skill-seer.webp'],
+      '現在のリーダーの奥義に専用イラストを表示する')
+    click(end)
+    expect(query(endDialog + ' h2')?.textContent === 'まだ行動できます' &&
+      query('#end-turn-options').textContent.includes('熱量をためる'), '残っている行動を確認画面に表示する')
+    expect(document.activeElement === query(endDialog + ' [value=cancel]'), '続ける側に初期フォーカスを置く')
+    click(endDialog + ' [value=cancel]')
+    expect(!query(endDialog) && query('[data-side="0"].active-side'), 'キャンセルすると手番を保つ')
     click('[data-op=motion]')
     expect(query('.battle.short-motion') && query('[data-op=motion][aria-pressed=true]'), '短い演出を選べる')
     click('[data-op=motion]')
@@ -290,6 +309,9 @@ async function driveBattle() {
     expect(query('[data-impact-style=summon]'), 'カードがマスに着地したフレームで召喚の光を出す')
     expect(query(square + ' img').src === whelpArt, '手札と盤面で同じカードの画像を表示')
     expect(/MP\s*0\/1/.test(query('.leader-panel:not(.opponent) .resources').textContent), '召喚でMPを消費')
+    click(end)
+    expect(query(endDialog) && query('#end-turn-options').textContent.includes('攻撃'), 'MPがなくても攻撃できるなら確認する')
+    click(endDialog + ' [value=cancel]')
     click('.battle-log summary')
     click('[data-log-card=ember-whelp]')
     expect(query('.battle-card-dialog[open] h2')?.textContent === cards['ember-whelp'].name &&
@@ -313,13 +335,15 @@ async function driveBattle() {
     expect(query('[data-impact-style=blow]') && query('[data-leader="1"] .delta')?.textContent === '−2' &&
       query('[data-leader="1"] .leader-hp').textContent === '23', '打撃・ダメージ数字・HP減少が同じタイミングで出る')
     expect(!query(square + '.ready'), '攻撃済み')
-    next()
+    next(false)
     expect(x('[data-leader="1"]') < x('[data-leader="0"]'), '交代すると操作側が左に回る')
     expect(document.querySelectorAll('[data-hand]').length === 5, 'ドローした手札をすぐ使える')
     expect(query('.board .turn-notice').textContent === '後攻のターン' && query('.battle-message').textContent === '',
       '手番交代を盤面で知らせ、対戦中のメッセージ欄は占有しない')
     expect(query('#skill-description').textContent === leaders.mage.skill.description &&
       y('#skill-description') > y('[data-op=skill]'), '能力文を奥義ボタンの下に常時表示')
+    expect(query('[data-op=skill] img').src === globalThis.fairytaleImages['action-skill-mage.webp'],
+      '手番交代で奥義イラストも切り替わる')
     click('[data-op=focus]')
     expect(document.querySelectorAll('.leader-panel:not(.opponent) .filled').length === 3, '熱量が上昇')
     click('[data-op=skill]')
@@ -394,7 +418,7 @@ async function driveBattle() {
     let cpuActionSeen = false
     let cpuRevealSeen = false
     for (let i = 0; i < 65 && !query('.result'); i++) {
-      click('[data-op=end]')
+      endTurn()
       if (query('.result')) break
       expect(query('[data-op=end]').disabled && query('.selection-bar span').textContent === 'CPUが行動中', 'CPU中の操作をロック')
       expect(query('.ally-formation [data-slot^="0:"]'), 'CPUターンも自分の盤面が左')
@@ -790,6 +814,13 @@ async function browserControl(t, directory) {
   }
 }
 
+async function finishTurn(page) {
+  await page.click('[data-op=end]:enabled')
+  if (await page.evaluate('Boolean(document.querySelector("#end-turn-dialog[open]"))')) {
+    await page.click('#end-turn-dialog [value=end]')
+  }
+}
+
 test('別々のChromiumセッションで招待URLから参加し、対戦と再接続ができる', { timeout: 45000 }, async t => {
   const temp = await realpath(tmpdir())
   const profile = await mkdtemp(join(temp, 'fairytale-online-'))
@@ -867,6 +898,12 @@ test('別々のChromiumセッションで招待URLから参加し、対戦と再
 
   const end = '[data-op=end]:not(:disabled)'
   await Promise.all([first.wait(end), second.wait('.battle')])
+  await first.click(end)
+  await first.wait('#end-turn-dialog[open]')
+  assert.equal(await second.evaluate('document.querySelector("[data-op=end]").disabled'), true,
+    '終了を確認する間は相手に手番が移らない')
+  await first.click('#end-turn-dialog [value=cancel]')
+  await first.wait(end)
   assert.equal(await second.evaluate(`(() => {
     const hand = document.querySelector('[data-hand]')
     hand.dispatchEvent(new PointerEvent('pointerover', { bubbles: true }))
@@ -898,7 +935,7 @@ test('別々のChromiumセッションで招待URLから参加し、対戦と再
     cardId = await actor.evaluate(`[...document.querySelectorAll("[data-hand]:not(.unaffordable)")]
       .find(node => ${JSON.stringify(units)}.includes(node.dataset.card))?.dataset.card`)
     if (cardId) break
-    await actor.click(end)
+    await finishTurn(actor)
     const previous = actor
     actor = spectator
     spectator = previous
@@ -980,7 +1017,7 @@ test('静的公開版でロビーIDから合流し、別のブラウザーセッ
   await first.click(keep)
   await second.click(keep)
   const end = '[data-op=end]:enabled'
-  await first.click(end)
+  await finishTurn(first)
   await second.wait(end)
   assert.equal(await second.evaluate('Boolean(document.querySelector(".enemy-formation [data-hand]"))'), false)
 
@@ -988,7 +1025,7 @@ test('静的公開版でロビーIDから合流し、別のブラウザーセッ
   await guest.navigate(invite)
   await eventually(async () => !(await guest.evaluate('window.beforeReload')), 'ゲスト画面の再読み込み')
   await guest.wait('.battle')
-  await second.click(end)
+  await finishTurn(second)
   await first.wait(end)
 })
 

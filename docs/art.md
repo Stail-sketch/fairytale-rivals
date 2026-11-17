@@ -85,3 +85,13 @@ ImageGenで4列×3行のアトラスを4枚制作。各セルは独立した正�
 
 全収録作業では原作対応カード513種と生成カード37種の絵を追加した。各イラストを正方形のWebPとして `apps/web/assets/` に保存した。全648種の画像が別々であることをテストで確認する。[追加イラストの生成プロンプト](full-card-art-prompts.md)
 
+## 熱量・奥義の対戦ボタン
+
+組み込みの ImageGen で3×3のアトラスを制作し、`apps/web/assets/action-focus.webp` と `apps/web/assets/action-skill-*.webp` に128×128 pxで格納した。左上は熱量をためる炎。続く7枚は戦士・魔法使い・武闘家・僧侶・商人・占い師・魔剣士の奥義で、右下は覚醒後の奥義。
+
+```text
+Use case: stylized-concept.
+Asset type: a single 3×3 illustration atlas for a Japanese fantasy card game's battle action buttons. Each cell will be individually sliced at the grid boundaries and viewed tiny at 42×42px. Create exactly three columns and three rows, with nine equal perfectly square tiles filling one square canvas edge to edge. No gutters or frames. Make each cell's motif bold, luminous and isolated against a dark navy background. Keep each motif within the central 76 percent of its own square for safe crops. High contrast painterly JRPG card illustration, jewel-like light, elegant medieval fairytale style. Give each square a different color signature. No text, no lettering, no numbers, no characters, no interface, no watermark.
+Top left: unmistakable amber magical flame above a small gold diamond ember, gathering heat. Top center: a single brilliant golden sword pointing diagonally across sparks of gold lightning. Top right: vivid orange fireball inside a broken ring of lavender mirror shards. Middle left: a red hood-shaped arc with crimson autumn leaves and a dynamic slash, martial arts. Middle center: a radiant pale pink-and-white floral crown surrounded by petals and pale warm healing light. Middle right: lime-green magical beanstalk shoots curling around a small golden treasure chest. Bottom left: luminous silver-blue faceted crystal orb and a crescent of frosty light. Bottom center: a single dark steel chess knight armored in thorned purple roses. Bottom right: a single deep red rose bursting into scarlet fire, distinct from the amber flame. Every object centered within its tile, substantial clean silhouettes, composed for downsampling.
+```
+
