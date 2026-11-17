@@ -94,6 +94,36 @@ test('未参加の部屋は閉じられ、デッキが不正なら入室でき�
   assert.equal((await api.join(host.id)).status, 404)
 })
 
+test('ロビーIDで入室し、両者の準備後にホストが対戦を開始できる', async t => {
+  const api = await roomClient(t)
+  const host = (await api.request('', { method: 'POST', body: { lobby: true } })).data
+  assert.match(host.id, /^[a-z2-9]{8}$/)
+  const join = () => api.request('/' + host.id + '/join', { method: 'POST', body: { lobby: true } })
+  const guest = (await join()).data
+  assert.equal((await join()).status, 409)
+  assert.equal((await api.act(guest, 1, { type: 'lobby-start' })).status, 403)
+  assert.equal((await api.act(host, 1, { type: 'lobby-start' })).status, 409)
+  assert.equal((await api.act(guest, 1, { type: 'lobby-ready', ready: true, lineup: {} })).status, 400)
+  assert.equal((await api.leave(guest)).status, 204)
+  assert.equal((await api.state(host)).data.lobby.guest.joined, false)
+  assert.equal((await api.state(guest)).status, 403)
+  const replacement = (await join()).data
+  const ready = leader => ({ type: 'lobby-ready', ready: true, lineup: starterLineup(leader) })
+  const [guestReady, hostReady] = await Promise.all([
+    api.act(replacement, 3, ready('priest')), api.act(host, 3, ready('mage')),
+  ])
+  assert.equal(guestReady.status, 200)
+  assert.equal(hostReady.status, 200)
+  const waiting = guestReady.data
+  assert.equal(waiting.phase, 'lobby')
+  assert.deepEqual(waiting.lobby.guest, { joined: true, ready: true, leader: 'priest' })
+  assert.equal((await api.act(host, 3, ready('mage'))).status, 409)
+  const started = (await api.act(host, 5, { type: 'lobby-start' })).data
+  assert.equal(started.view.phase, 'mulligan')
+  assert.equal(started.view.players[started.seat].leader, 'mage')
+  assert.deepEqual(started.view.players[1 - started.seat].hand, [])
+})
+
 test('第3弾のカードで配置した舞台がフレンド対戦の両画面に反映される', async t => {
   const api = await roomClient(t)
   const safeCards = ['dew', 'cheer', 'storm', 'FT-0084', 'FT-0080', 'FT-0086', 'FT-0378',

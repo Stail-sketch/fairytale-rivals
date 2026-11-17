@@ -1,9 +1,8 @@
 import { randomBytes, randomInt } from 'node:crypto'
-import { deckIssue, rules } from '../engine/index.js'
-import { createLocalMatch } from '../local-match/index.js'
 import { roomSnapshot } from './room-snapshot.js'
+import { lobbyCode, normalizeRoomId, startRoomMatch, updateLobby, validatedLineup } from './lobby.js'
 
-const route = /^\/api\/rooms(?:\/([a-f0-9]{32})(?:\/(join|actions))?)?$/
+const route = /^\/api\/rooms(?:\/([a-z0-9]+)(?:\/(join|actions))?)?$/
 const limit = 12 * 1024
 const minute = 60_000
 const token = () => randomBytes(32).toString('hex')
@@ -47,17 +46,6 @@ async function json(req) {
   }
 }
 
-function lineup(data) {
-  const { leader, deck } = data
-  if (typeof leader !== 'string' || !Array.isArray(deck) || deck.length !== rules.deckSize ||
-      deck.some(card => typeof card !== 'string')) {
-    throw new RequestError(400, '語り手と30枚のデッキを指定してください。')
-  }
-  const issue = deckIssue(deck, leader)
-  if (issue) throw new RequestError(400, issue)
-  return { leader, deck }
-}
-
 function publish(room, last) {
   room.version++
   room.last = last
@@ -96,6 +84,7 @@ export function createRoomApi() {
     const match = route.exec(url.pathname)
     if (!match) throw new RequestError(404, 'この操作は利用できません。')
     const [, id, operation] = match
+    if (id && normalizeRoomId(id) !== id) throw new RequestError(404, missingRoom)
     for (const [key, room] of rooms) {
       const expires = room.match && !room.finished ? 120 * minute : 30 * minute
       if (Date.now() - room.touched <= expires) continue
@@ -103,40 +92,40 @@ export function createRoomApi() {
       rooms.delete(key)
     }
     if (!id && req.method === 'POST') {
-      const deck = lineup(await json(req))
+      const data = await json(req)
+      const lobby = data.lobby === true
+      const deck = lobby ? null : validatedLineup(data)
       if (rooms.size >= 128) throw new RequestError(503, '対戦部屋が混み合っています。')
-      const id = randomBytes(16).toString('hex')
+      let id
+      do { id = lobby ? lobbyCode(randomBytes(8)) : randomBytes(16).toString('hex') } while (rooms.has(id))
       const host = { token: token(), lineup: deck }
-      rooms.set(id, { players: [host], version: 0, waiters: new Set(), touched: Date.now() })
+      rooms.set(id, { lobby, host, guest: null, version: 0, waiters: new Set(), touched: Date.now() })
       return reply(res, 201, { id, token: host.token })
     }
 
     const room = rooms.get(id)
     if (!room || room.closed) throw new RequestError(404, missingRoom)
     if (operation === 'join' && req.method === 'POST') {
-      const deck = lineup(await json(req))
+      const data = await json(req)
+      const deck = room.lobby ? null : validatedLineup(data)
       if (room.closed || !rooms.has(id)) throw new RequestError(404, 'この対戦部屋は終了しました。')
-      if (room.match) throw new RequestError(409, 'この部屋にはすでに2人が参加しています。')
-      const guest = { lineup: deck, token: token(), seat: randomInt(2) }
-      const host = room.players[0]
-      host.seat = 1 - guest.seat
-      room.players.push(guest)
-      room.match = createLocalMatch({
-        seed: randomBytes(4).readUInt32LE(),
-        lineups: room.players.toSorted((a, b) => a.seat - b.seat).map(player => player.lineup),
-      })
+      if (room.guest) throw new RequestError(409, 'この部屋にはすでに2人が参加しています。')
+      const guest = { lineup: deck, token: token() }
+      room.guest = guest
+      if (!room.lobby) startRoomMatch(room, randomInt(2), randomBytes(4).readUInt32LE())
       publish(room)
       return reply(res, 201, { id, token: guest.token })
     }
 
-    const player = room.players.find(entry => req.headers.authorization === 'Bearer ' + entry.token)
+    const player = [room.host, room.guest].find(entry => entry && req.headers.authorization === 'Bearer ' + entry.token)
     if (!player) throw new RequestError(403, 'この部屋の対戦権限がありません。')
     if (!operation && req.method === 'GET') {
       if (Number(url.searchParams.get('since') ?? -1) === room.version && !room.finished) return wait(room, player, res)
       return reply(res, 200, roomSnapshot(room, player))
     }
     if (!operation && req.method === 'DELETE') {
-      if (!room.match) room.closed = true
+      if (!room.match && room.lobby && player === room.guest) room.guest = null
+      else if (!room.match) room.closed = true
       else if (!room.finished) {
         room.resigned = player.seat
         room.finished = true
@@ -146,7 +135,13 @@ export function createRoomApi() {
     }
     if (operation === 'actions' && req.method === 'POST') {
       const { version, action } = await json(req)
-      if (!rooms.has(id)) throw new RequestError(404, missingRoom)
+      if (!rooms.has(id) || room.closed) throw new RequestError(404, missingRoom)
+      if (player !== room.host && player !== room.guest) throw new RequestError(403, 'この部屋の対戦権限がありません。')
+      if (room.lobby && !room.match) {
+        updateLobby(room, player, version, action, () => [randomInt(2), randomBytes(4).readUInt32LE()])
+        publish(room)
+        return reply(res, 200, roomSnapshot(room, player))
+      }
       if (!room.match || room.finished) throw new RequestError(409, '対戦中の部屋で操作してください。')
       if (version !== room.version) throw new RequestError(409, '盤面が更新されました。表示を確認してください。')
       const result = room.match.act(player.seat, action)
@@ -160,7 +155,7 @@ export function createRoomApi() {
 
   return (req, res, url) => handle(req, res, url).catch(error => {
     if (res.destroyed) return
-    if (!(error instanceof RequestError)) console.error(error)
+    if (!error.status) console.error(error)
     reply(res, error.status ?? 500, { issue: error.status ? error.message : '対戦通信に失敗しました。' })
   })
 }

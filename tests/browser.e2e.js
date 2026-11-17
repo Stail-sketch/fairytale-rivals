@@ -228,6 +228,14 @@ async function driveBattle() {
     expect(query('#detail .inspector-copy h2')?.textContent === cards['ember-whelp'].name &&
       query('#detail .inspector-effect')?.textContent === cards['ember-whelp'].description &&
       query('#detail .inspector-keyword')?.textContent.includes('奇襲'), 'マウスオーバーで効果と能力の説明を表示')
+    query(summon).dispatchEvent(new PointerEvent('pointerout', { bubbles: true, relatedTarget: query('#detail') }))
+    click('#detail [data-term=CHARGE]')
+    expect(query('.term-dialog[open] h2')?.textContent === '奇襲', 'カードから詳細欄へ移って用語を確認')
+    click('.term-dialog button')
+    query('[data-inspect-skill="1"]').dispatchEvent(new PointerEvent('pointerover', { bubbles: true }))
+    expect(query('#detail h2')?.textContent === leaders.mage.skill.name &&
+      query('#detail .skill-target-label').textContent.includes('敵ユニット1体') &&
+      query('#detail .power-details').textContent.includes('3'), '相手の奥義の名前・対象・威力を事前に確認')
     const middle = query('.board').getBoundingClientRect()
     expect(Math.abs(middle.x + middle.width / 2 - document.documentElement.clientWidth / 2) < 2,
       '詳細欄を出しても戦場の中央を維持')
@@ -238,7 +246,7 @@ async function driveBattle() {
     advanceTimer()
     expect(query('.battle-card-dialog[open] h2')?.textContent === cards['ember-whelp'].name, '手札の長押しでカード詳細を開ける')
     query(summon).dispatchEvent(new PointerEvent('pointerup', { button: 0, pointerId: 3, isPrimary: true, bubbles: true }))
-    click('.battle-card-dialog button')
+    click('.battle-card-dialog .detail-dialog-actions button')
     drag(summon, square, false)
     const whelpReveal = '[data-beat=reveal] [data-reveal-card=ember-whelp]'
     expect(query(whelpReveal + ' img')?.src === whelpArt && query(whelpReveal + ' figcaption').textContent === cards['ember-whelp'].name,
@@ -261,13 +269,13 @@ async function driveBattle() {
     expect(query('.battle-card-dialog[open] h2')?.textContent === cards['ember-whelp'].name &&
       query('.battle-card-dialog img').src === whelpArt &&
       query('.battle-card-dialog p').textContent === cards['ember-whelp'].description, '対戦記録からカードの絵と能力を見返す')
-    click('.battle-card-dialog button')
+    click('.battle-card-dialog .detail-dialog-actions button')
     expect(!query('.battle-card-dialog[open]') && query('.battle-log').open, 'プレビュー後も対戦記録に戻れる')
     click('.battle-log summary')
     query(square).focus()
     query(square).dispatchEvent(new KeyboardEvent('keydown', { key: 'i', bubbles: true }))
     expect(query('.battle-card-dialog[open] .card-current-stats')?.textContent.includes('HP'), '盤面のカードの現在値と能力を見る')
-    click('.battle-card-dialog button')
+    click('.battle-card-dialog .detail-dialog-actions button')
     click(square)
     query('[data-leader="1"]').dispatchEvent(new PointerEvent('pointerover', { bubbles: true }))
     expect(query('#attack-preview').textContent.includes('2 ダメージ') && query('#attack-preview').textContent.includes('HP 23'),
@@ -427,6 +435,7 @@ async function driveBattle() {
     click('[data-overview-card=FT-0491]')
     expect(query('.deck-overview-detail h3').textContent === cards['FT-0491'].name &&
       query('.deck-overview-detail p').textContent === cards['FT-0491'].description, '全体画面でカードの効果を確認できる')
+    expect(query('.deck-overview-detail .related-cards')?.textContent.includes('朱の種晶'), 'デッキ全体表示で関連カードを見る')
     click('.deck-overview button[type=submit]')
     expect(!query('.deck-overview[open]') && document.activeElement === query(exampleOverview), '閉じると開いたデッキの一覧に戻る')
     click('[data-deck-delete="' + example.id + '"]')
@@ -443,6 +452,11 @@ async function driveBattle() {
     }
     renameDeck('星降る夜')
     click('[data-op=seed-deck]')
+    const deckTerm = query('.deck-card-effect [data-term=CHARGE]')
+    expect(deckTerm, 'デッキ編集中もカードの用語をリンクにする')
+    deckTerm.click()
+    expect(query('.term-dialog[open] h2')?.textContent === '奇襲', 'デッキ編集から用語を確認')
+    click('.term-dialog button')
     expect(query('#deck-size').textContent === '30 / 30枚', 'クラスの構築済みデッキから始められる')
     click('[data-deck-remove=ember-whelp]')
     expect(query('#deck-size').textContent === '29 / 30枚' && query('[data-op=save-deck]').disabled, '30枚で保存できる')
@@ -761,23 +775,36 @@ test('別々のChromiumセッションで招待URLから参加し、対戦と再
   await host.click('[data-op=deck-list]')
   await host.click('[data-op=close-decks]')
   await host.click('[data-mode=friend]')
-  assert.equal(await host.evaluate('document.querySelector("#match-deck-0 option:checked").textContent'), 'フレンド対戦用')
   await host.evaluate(`{
     const send = window.fetch
     window.fetch = (path, options) => {
-      if (path === '/api/rooms' && options.method === 'POST') window.sentDeck = JSON.parse(options.body).deck
+      if (path.endsWith('/actions') && options?.method === 'POST') {
+        const action = JSON.parse(options.body).action
+        if (action.type === 'lobby-ready') window.sentDeck = action.lineup?.deck
+      }
       return send(path, options)
     }
   }`)
   await host.click('[data-op=start]:not(:disabled)')
-  await host.wait('#invite-url')
-  assert.equal(await host.evaluate('window.sentDeck.includes("FT-0039") && !window.sentDeck.includes("ember-whelp")'), true)
+  await host.wait('[data-lobby-member=host]')
+  assert.equal(await host.evaluate('document.querySelector("#match-deck-0 option:checked").textContent'), 'フレンド対戦用')
+  const code = await host.evaluate('document.querySelector("#lobby-id").value')
+  assert.match(code, /^[A-Z2-9]{4}-[A-Z2-9]{4}$/)
   const invite = await host.evaluate('document.querySelector("#invite-url").value')
-  assert.match(invite, /\?room=[a-f0-9]{32}$/)
-  await guest.navigate(invite)
-  await guest.wait('[data-mode=friend][aria-pressed=true]')
-  assert.match(await guest.evaluate('document.querySelector("[data-op=start]").textContent'), /対戦に参加/)
-  await guest.click('[data-op=start]:not(:disabled)')
+  await guest.viewport(390, 844)
+  await guest.navigate(new URL(invite).origin + '/')
+  await guest.click('[data-mode=friend]')
+  await guest.evaluate(`document.querySelector('#lobby-id-input').value = ${JSON.stringify(code.toLowerCase())}`)
+  await guest.click('#lobby-join button')
+  await guest.wait('[data-lobby-member=guest]')
+  assert.equal(await guest.evaluate('document.documentElement.scrollWidth === document.documentElement.clientWidth'), true)
+  assert.equal(await guest.evaluate('Array.from(document.querySelectorAll("#match-deck-0 option")).some(option => option.textContent === "フレンド対戦用")'), false)
+  assert.equal(await host.evaluate('document.querySelector("[data-op=lobby-start]").disabled'), true)
+  await host.click('[data-op=lobby-ready]:enabled')
+  await guest.wait('[data-lobby-member=host][data-ready=true]')
+  assert.equal(await host.evaluate('window.sentDeck.includes("FT-0039") && !window.sentDeck.includes("ember-whelp")'), true)
+  await guest.click('[data-op=lobby-ready]:enabled')
+  await host.click('[data-op=lobby-start]:enabled')
   await Promise.all([host.wait('.mulligan'), guest.wait('.mulligan')])
   const active = '[data-op=mulligan]:not(:disabled)'
   const [first, second] = await host.evaluate(`Boolean(document.querySelector('${active}'))`) ? [host, guest] : [guest, host]
@@ -786,6 +813,11 @@ test('別々のChromiumセッションで招待URLから参加し、対戦と再
 
   const end = '[data-op=end]:not(:disabled)'
   await Promise.all([first.wait(end), second.wait('.battle')])
+  assert.equal(await second.evaluate(`(() => {
+    const hand = document.querySelector('[data-hand]')
+    hand.dispatchEvent(new PointerEvent('pointerover', { bubbles: true }))
+    return hand.getAttribute('aria-label').startsWith(document.querySelector('#detail h2').textContent)
+  })()`), true, '相手の手番中も自分の手札を確認できる')
   await second.viewport(390, 800)
   await second.click('[data-op=audio-mixer]')
   assert.equal(await second.evaluate(`(() => {
@@ -834,7 +866,7 @@ test('別々のChromiumセッションで招待URLから参加し、対戦と再
 })
 
 
-test('静的公開版で招待を作り、別のブラウザーセッションが対戦と再接続をする', {
+test('静的公開版でロビーIDから合流し、別のブラウザーセッションが対戦と再接続をする', {
   skip: !process.env.FAIRYTALE_PEER_E2E, timeout: 60000,
 }, async t => {
   const temp = await realpath(tmpdir())
@@ -872,8 +904,16 @@ test('静的公開版で招待を作り、別のブラウザーセッション�
   assert.equal(new URL(invite).pathname, new URL(url).pathname)
   assert.equal(new URL(invite).searchParams.get('transport'), 'peer')
 
-  await guest.navigate(invite)
-  await guest.click('[data-op=start]:enabled')
+  const code = await host.evaluate('document.querySelector("#lobby-id").value')
+  await guest.navigate(url)
+  await guest.click('[data-mode=friend]')
+  await guest.evaluate(`document.querySelector('#lobby-id-input').value = ${JSON.stringify(code)}`)
+  await guest.click('#lobby-join button')
+  await waitForRoom(guest, '[data-lobby-member=guest]')
+  await host.click('[data-op=lobby-ready]:enabled')
+  await guest.wait('[data-lobby-member=host][data-ready=true]')
+  await guest.click('[data-op=lobby-ready]:enabled')
+  await host.click('[data-op=lobby-start]:enabled')
   await Promise.all([waitForRoom(host, '.mulligan'), waitForRoom(guest, '.mulligan')])
   const keep = '[data-op=mulligan]:enabled'
   const [first, second] = await host.evaluate(`Boolean(document.querySelector('${keep}'))`) ? [host, guest] : [guest, host]

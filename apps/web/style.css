@@ -81,7 +81,18 @@ small { font-size: 11px; }
 .intro .room-status { margin: 14px 0 0; color: var(--muted); font-size: 13px; }
 .intro .room-status + .start { margin-top: 18px; }
 .room-lobby { width: min(600px, 100%); }
-.room-lobby label { display: block; color: var(--gold); font-size: 12px; text-align: left; margin-top: 24px; }
+.lobby-join { width: min(390px, 100%); margin: 14px auto 0; text-align: left; }
+.lobby-join label, .lobby-code + label { display: block; margin-top: 8px; }
+.lobby-code input, .lobby-join input { font-variant-numeric: tabular-nums; letter-spacing: .08em; text-transform: uppercase; }
+.lobby-members { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; margin: 10px 0; }
+.lobby-member { display: grid; gap: 4px; padding: 8px; border: 1px solid #7f9ab05e; border-radius: 5px; background: #0e1c2e; }
+.lobby-member span, .lobby-member small { color: #afc0d5; font-size: 12px; }
+.lobby-member[data-ready="true"] { border-color: #79bca0; }
+.lobby-member[data-ready="true"] span { color: #9af3ce; }
+.room-lobby .lineups { margin: 12px auto; }
+.lobby-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; margin: 8px 0 12px; }
+.lobby-actions .primary { margin: 0; }
+.room-lobby > label { display: block; color: var(--gold); font-size: 12px; text-align: left; margin-top: 12px; }
 .invite-share { display: flex; gap: 8px; margin-top: 6px; }
 .invite-share input { min-width: 0; flex: 1; padding: 8px; border: 1px solid var(--line); border-radius: 4px; color: var(--text); background: #0b1420; font: inherit; font-size: 13px; }
 .invite-share button { flex: none; }
@@ -154,6 +165,21 @@ small { font-size: 11px; }
 .leader-identity { display: grid; justify-items: center; text-align: center; gap: 4px; margin-top: 7px; }
 .leader-identity small { color: var(--trim); }
 .leader-identity strong { font-size: clamp(10px, 1.15vw, 15px); }
+.opponent-skill {
+  display: grid; justify-items: center; gap: 2px; min-width: 0; max-width: 100%;
+  padding: 4px 7px; border: 1px solid color-mix(in srgb, var(--trim) 63%, transparent);
+  border-radius: 5px; background: #101a2ae8; color: #eff6ff; line-height: 1.25; overflow-wrap: anywhere;
+}
+.opponent-skill:hover, .opponent-skill:focus-visible { background: #20334a; border-color: var(--trim); }
+.opponent-skill small { color: var(--trim); font-size: 9px; }
+.opponent-skill strong { font-size: clamp(9px, 1vw, 12px); }
+.fortune-badge {
+  display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 2px 5px;
+  padding: 3px 6px; max-width: 100%; border: 1px solid #779fdb; border-radius: 5px;
+  background: #152b4b; font-size: 11px; line-height: 1.25; color: #e0ebff;
+}
+.fortune-badge:is([data-fortune-state="both"], [data-fortune-state="turn"]) { border-color: #ba92ec; background: #2d2149; }
+.fortune-badge small { font-size: 9px; }
 .resources { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 5px 8px; color: var(--muted); font-size: 11px; }
 .resources strong { font-size: 12px; color: var(--text); }
 .equipped-weapon {
@@ -227,7 +253,6 @@ small { font-size: 11px; }
 .log-card-description h2 { margin-bottom: 6px; }
 .log-card-description span { color: var(--gold); font-size: 12px; }
 .log-card-description p { margin-bottom: 0; overflow-wrap: anywhere; }
-.log-card-preview form { grid-column: 1 / -1; justify-self: end; }
 .battle-message { text-align: center; min-height: 20px; margin: 6px auto 0; font-size: 12px; color: #f3d293; }
 .skill-controls { display: grid; gap: 6px; align-content: start; padding-top: 26px; }
 .secondary { padding: 7px 8px; border: 1px solid #887752; background: #1a2938; border-radius: 4px; font-size: 12px; }
@@ -627,6 +652,7 @@ dialog li, dialog p { font-size: 14px; line-height: 1.7; color: #d8e0e1; margin-
 .previewing #attack-preview { display: block; }
 .previewing .last-action { display: none; }
 .battle-card-dialog { max-width: min(560px, 92vw); }
+.detail-dialog-actions { display: flex; justify-content: end; margin-top: 10px; }
 .card-current-stats { list-style: none; padding: 9px 0 0; margin: 10px 0 0; border-top: 1px solid var(--line); }
 .card-current-stats li { font-size: 12px; }
 .battle-grid:has([data-beat="approach"]) .effect-destination { animation-delay: var(--effect-delay, 0ms); }
@@ -896,7 +922,10 @@ dialog li, dialog p { font-size: 14px; line-height: 1.7; color: #d8e0e1; margin-
 .decisive-play small { color: var(--gold); }
 @media (max-height: 680px) { .battle { --rank-gap: 6px; } }
 @media (max-width: 720px) {
-  body:has(.battle, .mulligan, .result) { min-width: 0; }
+  body:has(.battle, .mulligan, .result, .room-lobby, .friend-home) { min-width: 0; }
+  .friend-home .mode-switch { flex-wrap: wrap; }
+  .friend-home .mode-switch button { min-width: 0; padding-inline: 8px; }
+  body:has(.room-lobby, .friend-home) .topbar .local-label { display: none; }
   body:has(.battle, .mulligan, .result) .topbar { padding-inline: 8px; }
   body:has(.battle, .mulligan, .result) .top-actions { gap: 4px; }
   body:has(.battle, .mulligan, .result) :is(.topbar .brand small, .topbar .local-label) { display: none; }
@@ -1091,7 +1120,7 @@ body:has(.deck-overview[open]) { overflow: hidden; }
   border: 1px solid #a58b60; border-radius: 5px; margin-top: 8px; padding: 6px 8px; background: #102038;
 }
 .deck-overview-detail[hidden] { display: none; }
-.deck-overview-detail img { width: 46px; border-radius: 4px; }
+.deck-overview-detail > img { width: 46px; border-radius: 4px; }
 .deck-overview-detail h3, .deck-overview-detail p { margin: 0; overflow-wrap: anywhere; }
 .deck-overview-detail h3 { color: #fae9be; font-size: 14px; }
 .deck-overview-detail small { color: #b8cbd8; }
@@ -1108,10 +1137,9 @@ body:has(.deck-overview[open]) { overflow: hidden; }
 
 .battle-core { min-width: 0; }
 .detail-panel {
-  display: block; position: fixed; right: 10px; bottom: 10px; z-index: 7; width: min(270px, 48vw);
-  max-height: calc(100dvh - 92px); overflow: hidden; margin: 0;
+  display: block; margin: 10px auto 0; width: min(100%, 560px); overflow: hidden;
   border: 1px solid #8b7958; border-radius: 8px; background: #111e30; color: var(--text);
-  box-shadow: 0 12px 34px #050c18ac; pointer-events: none;
+  box-shadow: 0 12px 34px #050c18ac;
 }
 .detail-panel:not([data-inspecting]) { display: none; }
 .inspector-art { padding: 6px 6px 0; }
@@ -1122,6 +1150,27 @@ body:has(.deck-overview[open]) { overflow: hidden; }
 .inspector-copy { padding: 8px 10px; }
 .inspector-copy h2 { margin: 0 0 3px; color: #fff0ce; font: 750 clamp(15px, 1.5vw, 20px) var(--serif); overflow-wrap: anywhere; }
 .inspector-copy > small { color: #adbed2; font-size: 11px; }
+.inspector-copy .skill-target-label { color: #e5d3a8; display: block; margin: 6px 0; }
+.term-link {
+  padding: 0; border: 0; background: transparent; color: #9bcaff; font: inherit;
+  text-decoration: underline; text-underline-offset: 2px; overflow-wrap: anywhere;
+}
+.term-link:hover, .term-link:focus-visible { color: #cee7ff; }
+.term-dialog { width: min(425px, calc(100vw - 36px)); max-width: none; border: 1px solid #8aa8ce; background: #122035; }
+.term-dialog h2 { color: #b7daff; font-size: 21px; }
+.term-dialog form { display: flex; justify-content: end; }
+.related-cards { display: grid; gap: 5px; margin-top: 8px; }
+.related-card {
+  display: grid; grid-template-columns: minmax(32px, 48px) minmax(0, 1fr); gap: 8px;
+  padding: 6px; align-items: start; border: 1px solid #8298b24d; border-radius: 5px; background: #0d1a2d;
+}
+.related-card img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 3px; }
+.related-card :is(strong, small, .related-label) { display: block; overflow-wrap: anywhere; }
+.related-card strong { font-size: 12px; color: #ffe8bd; }
+.related-card :is(small, .related-label) { font-size: 10px; color: #b6c7df; }
+.related-card p { margin: 3px 0 0; color: #dbe6f4; font-size: 11px; line-height: 1.45; }
+.deck-card > .related-cards { display: none; grid-column: 1 / -1; }
+.deck-card:is(:hover, :focus-within, :has([data-term-open])) > .related-cards { display: grid; }
 .inspector-stats { display: flex; flex-wrap: wrap; gap: 5px; margin: 7px 0; }
 .inspector-stat {
   padding: 2px 5px; border-radius: 3px; border: 1px solid #7e8b9e;

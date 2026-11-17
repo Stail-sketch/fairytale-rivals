@@ -1,6 +1,5 @@
-import { deckIssue } from '../../packages/engine/index.js'
-import { createLocalMatch } from '../../packages/local-match/index.js'
 import { roomSnapshot } from '../../packages/online-match/room-snapshot.js'
+import { lobbyCode, startRoomMatch, updateLobby, validatedLineup } from '../../packages/online-match/lobby.js'
 
 const active = new Map()
 const protocol = 'fairytale-room-v1'
@@ -39,7 +38,8 @@ async function openPeer(id) {
       peer.destroy()
       reject(issue)
     }
-    const onError = () => fail(error('対戦接続サービスに接続できませんでした。', 503))
+    const onError = issue => fail(issue?.type === 'unavailable-id' ?
+      error('同じロビーIDが使われています。', 409) : error('対戦接続サービスに接続できませんでした。', 503))
     const timer = setTimeout(onError, timeoutMs)
     peer.once('error', onError)
     peer.once('open', () => {
@@ -62,16 +62,23 @@ function send(link, data) {
   if (link.open) link.send(JSON.stringify({ protocol, ...data }))
 }
 
-function apply(room, seat, version, action) {
-  if (room.finished || !room.match || room.version !== version) throw error('盤面が更新されました。表示を確認してください。', 409)
-  const result = room.match.act(seat, action)
-  if (!result.ok) throw error(result.issue, 422)
-  room.finished = result.events.some(event => event.type === 'finish')
-  return { seat, type: action.type, events: result.events }
+const randomSeats = () => {
+  const numbers = crypto.getRandomValues(new Uint32Array(2))
+  return [numbers[0] % 2, numbers[1]]
 }
 
-function hostRoom(peer, session, lineup) {
-  const room = { version: 0, host: { lineup }, guest: null, match: null }
+function apply(room, player, version, action) {
+  if (room.lobby && !room.match && !room.closed) return updateLobby(room, player, version, action, randomSeats)
+  if (room.finished || room.closed || room.version !== version) throw error('盤面が更新されました。表示を確認してください。', 409)
+  if (!room.match) throw error('対戦開始を待ってください。', 409)
+  const result = room.match.act(player.seat, action)
+  if (!result.ok) throw error(result.issue, 422)
+  room.finished = result.events.some(event => event.type === 'finish')
+  return { seat: player.seat, type: action.type, events: result.events }
+}
+
+function hostRoom(peer, session, lineup, lobby) {
+  const room = { version: 0, lobby, host: { lineup }, guest: null, match: null }
   const waiting = new Set()
   let link
   let update = () => {}
@@ -84,23 +91,15 @@ function hostRoom(peer, session, lineup) {
     if (link) send(link, { kind: 'state', state: roomSnapshot(room, room.guest) })
   }
 
-  function join(token, guestLineup) {
+  function join(token, guestLineup, joining) {
     if (!idPattern.test(token)) throw error('参加情報が不正です。', 403)
     if (room.guest) {
       if (room.guest.token !== token) throw error('この部屋にはすでに2人が参加しています。', 409)
       return false
     }
-    if (!guestLineup) throw error(unavailable, 404)
-    const { leader, deck } = guestLineup
-    const issue = deckIssue(deck, leader)
-    if (issue) throw error(issue, 400)
-    const numbers = crypto.getRandomValues(new Uint32Array(2))
-    room.guest = { token, lineup: { leader, deck }, seat: numbers[0] % 2 }
-    room.host.seat = 1 - room.guest.seat
-    room.match = createLocalMatch({
-      seed: numbers[1],
-      lineups: [room.host, room.guest].sort((a, b) => a.seat - b.seat).map(player => player.lineup),
-    })
+    if (!joining || room.closed) throw error(unavailable, 404)
+    room.guest = { token, lineup: room.lobby ? null : validatedLineup(guestLineup) }
+    if (!room.lobby) startRoomMatch(room, ...randomSeats())
     return true
   }
 
@@ -131,7 +130,7 @@ function hostRoom(peer, session, lineup) {
       if (!message || !Number.isSafeInteger(message.request)) return
       try {
         if (message.kind === 'join' || message.kind === 'resume') {
-          const started = join(message.token, message.kind === 'join' ? message.lineup : null)
+          const started = join(message.token, message.lineup, message.kind === 'join')
           authorized = true
           waiting.delete(incoming)
           clearTimeout(deadline)
@@ -141,8 +140,16 @@ function hostRoom(peer, session, lineup) {
           status('connected')
           if (started) publish()
         } else if (!authorized || link !== incoming) throw error('この部屋の対戦権限がありません。', 403)
-        else if (message.kind === 'act') publish(apply(room, room.guest.seat, message.version, message.action))
+        else if (message.kind === 'act') publish(apply(room, room.guest, message.version, message.action))
         else if (message.kind === 'leave' && !room.finished) {
+          if (room.lobby && !room.match) {
+            const guest = room.guest
+            room.guest = null
+            link = null
+            publish()
+            send(incoming, { kind: 'reply', request: message.request, state: roomSnapshot(room, guest) })
+            return
+          }
           room.resigned = room.guest.seat
           room.finished = true
           publish()
@@ -162,12 +169,15 @@ function hostRoom(peer, session, lineup) {
       update(roomSnapshot(room, room.host))
     },
     async act(version, action) {
-      publish(apply(room, room.host.seat, version, action))
+      if (action.type === 'lobby-start' && !link?.open) throw error('友達の再接続を待っています。', 409)
+      publish(apply(room, room.host, version, action))
     },
     async leave() {
-      if (!room.match || room.finished) return
-      room.resigned = room.host.seat
-      room.finished = true
+      if (room.finished) return
+      if (room.match) {
+        room.resigned = room.host.seat
+        room.finished = true
+      } else room.closed = true
       publish()
       await new Promise(resolve => setTimeout(resolve, 120))
     },
@@ -179,10 +189,10 @@ function hostRoom(peer, session, lineup) {
   }
 }
 
-async function guestLink(session, lineup, receive, disconnect) {
+async function guestLink(session, lineup, joining = false) {
   const peer = await openPeer(roomPeerId(randomId()))
-  let update = receive
-  let lost = disconnect
+  let update
+  let lost
   return new Promise((resolve, reject) => {
     const link = peer.connect(roomPeerId(session.id), { reliable: true })
     const pending = new Map()
@@ -243,7 +253,7 @@ async function guestLink(session, lineup, receive, disconnect) {
 
     link.on('open', async () => {
       try {
-        await request({ kind: lineup ? 'join' : 'resume', token: session.token, lineup })
+        await request({ kind: joining ? 'join' : 'resume', token: session.token, lineup })
         clearTimeout(deadline)
         ready = true
         resolve({
@@ -263,11 +273,19 @@ async function guestLink(session, lineup, receive, disconnect) {
   })
 }
 
-export async function enterPeerRoom(id, lineup) {
-  const session = { id: id ?? randomId(), token: randomId(), transport: 'peer', role: id ? 'guest' : 'host' }
-  const endpoint = id ? await guestLink(session, lineup) : hostRoom(await openPeer(roomPeerId(session.id)), session, lineup)
-  active.set(session.id, endpoint)
-  return session
+export async function enterPeerRoom(id, lineup, lobby) {
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const roomId = id ?? (lobby ? lobbyCode(crypto.getRandomValues(new Uint8Array(8))) : randomId())
+    const session = { id: roomId, token: randomId(), transport: 'peer', role: id ? 'guest' : 'host' }
+    try {
+      const endpoint = id ? await guestLink(session, lineup, true) :
+        hostRoom(await openPeer(roomPeerId(roomId)), session, lineup, lobby)
+      active.set(roomId, endpoint)
+      return session
+    } catch (issue) {
+      if (id || !lobby || issue.status !== 409 || attempt === 3) throw issue
+    }
+  }
 }
 
 export function connectPeerRoom(session, update, status) {

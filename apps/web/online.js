@@ -1,4 +1,5 @@
 import { connectPeerRoom, enterPeerRoom } from './peer-room.js'
+import { normalizeRoomId } from '../../packages/online-match/lobby.js'
 
 const base = '/api/rooms'
 const sessionKey = id => 'fairytale-room.' + id
@@ -7,7 +8,7 @@ export const onlineAvailable = () => ['http:', 'https:'].includes(location.proto
 
 export function invitedRoom() {
   const id = new URLSearchParams(location.search).get('room')
-  return /^[a-f0-9]{32}$/.test(id ?? '') ? id : null
+  return normalizeRoomId(id)
 }
 
 export function inviteUrl(id) {
@@ -58,9 +59,9 @@ async function request(path, { method = 'GET', body, token, signal, timeout = 12
   return result
 }
 
-export function enterRoom(id, lineup) {
-  if (directRoom()) return enterPeerRoom(id, lineup)
-  return request(id ? `${base}/${id}/join` : base, { method: 'POST', body: lineup })
+export function enterRoom(id, lineup, lobby = false) {
+  if (directRoom()) return enterPeerRoom(id, lineup, lobby)
+  return request(id ? `${base}/${id}/join` : base, { method: 'POST', body: lobby ? { lobby: true } : lineup })
 }
 
 export function connectRoom(session, update, connection) {

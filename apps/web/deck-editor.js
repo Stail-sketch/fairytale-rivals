@@ -5,6 +5,8 @@ import { createCardSearch } from './card-search.js'
 import { rarityOptions, sourceLabels } from './library.js'
 import { createScreenshotImport } from './rivals-import.js'
 import { openDeckOverview } from './deck-overview.js'
+import { termText } from './card-terms.js'
+import { relatedPreview } from './card-related.js'
 
 const pageSize = 9
 const byCost = (a, b) => a.cost - b.cost || a.name.localeCompare(b.name, 'ja')
@@ -18,9 +20,10 @@ function cardRow(card, art, count, add, disabled = false) {
     <div class="deck-card-art"><img src="${art(card.artId)}" loading="lazy" alt=""><span aria-hidden="true" class="cost">${card.cost}</span></div>
     <div class="deck-card-copy"><strong class="deck-card-name">${card.name}</strong>
       <span class="deck-card-stats">${add ? `<span class="sr-only">${card.cost} MP </span>` : card.cost + ' MP · '}${stats}</span>
-      <p class="deck-card-effect">${card.description || '効果なし'}</p></div>
+      <p class="deck-card-effect">${termText(card.description || '効果なし')}</p></div>
     <button type="button" class="icon-button deck-adjust" data-deck-${add ? 'add' : 'remove'}="${card.id}" ${disabled ? 'disabled' : ''}
       aria-label="${card.name}を${add ? '追加' : '取り除く'}">${add ? '+' : '−'} <span>${count}${add ? '/' + limit : ''}</span></button>
+    ${relatedPreview(card, art)}
   </article>`
 }
 

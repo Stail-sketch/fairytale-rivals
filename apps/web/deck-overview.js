@@ -1,6 +1,8 @@
 import { cards, leaders } from '../../packages/cards/index.js'
 import { rules } from '../../packages/engine/index.js'
 import { originalCardNames } from './original-card-names.js'
+import { termText } from './card-terms.js'
+import { relatedPreview } from './card-related.js'
 
 const types = { unit: 'ユニット', spell: '特技', weapon: '武器' }
 const lastCostGroup = 7
@@ -62,10 +64,21 @@ export function openDeckOverview(panel, deck, trigger, art, escape, compareCards
   <aside class="deck-overview-detail" aria-live="polite" hidden></aside>`
   const detail = dialog.querySelector('.deck-overview-detail')
   let chosen
+  function preview(node) {
+    const card = cards[node.dataset.overviewCard]
+    const original = originalCardNames[card.id]?.[0]
+    detail.innerHTML = `<img src="${art(card.artId)}" alt=""><div>
+      <h3>${escape(card.name)}</h3><small>${card.cost} MP · ${types[card.kind]}${original ? ' · 原作 ' + escape(original) : ''}</small>
+      <p>${termText(card.description || '効果なし')}</p>${relatedPreview(card, art)}</div>`
+    detail.hidden = false
+  }
+  dialog.addEventListener('pointerover', event => {
+    const node = event.target.closest('[data-overview-card]')
+    if (node && !node.contains(event.relatedTarget)) preview(node)
+  })
   dialog.addEventListener('click', event => {
     const node = event.target.closest('[data-overview-card]')
     if (!node) return
-    const card = cards[node.dataset.overviewCard]
     chosen?.setAttribute('aria-pressed', 'false')
     const closeDetail = chosen === node
     chosen = closeDetail ? null : node
@@ -75,11 +88,7 @@ export function openDeckOverview(panel, deck, trigger, art, escape, compareCards
       return
     }
     node.setAttribute('aria-pressed', 'true')
-    const original = originalCardNames[card.id]?.[0]
-    detail.innerHTML = `<img src="${art(card.artId)}" alt=""><div>
-      <h3>${escape(card.name)}</h3><small>${card.cost} MP · ${types[card.kind]}${original ? ' · 原作 ' + escape(original) : ''}</small>
-      <p>${escape(card.description || '効果なし')}</p></div>`
-    detail.hidden = false
+    preview(node)
     detail.scrollIntoView({ block: 'nearest' })
   })
   function close() {

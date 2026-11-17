@@ -5,6 +5,7 @@ import { starterLineup } from '../packages/cards/decks.js'
 import { createGame, dispatch, leaderTarget, legalAttack, legalLeaderAttack, legalPlay, legalSkill, unitTarget } from '../packages/engine/index.js'
 import { createInstance, resolution } from '../packages/engine/effects.js'
 import { project } from '../packages/local-match/index.js'
+import { fortuneStatus } from '../apps/web/fortune-status.js'
 
 const front = (column = 0) => ({ row: 'front', column })
 const back = (column = 0) => ({ row: 'back', column })
@@ -138,11 +139,27 @@ test('未来視と未来の統合は運命の分岐の解決方法を変える',
   const sun = add(game, 0, 'FT-0110')
   const enemy = put(game, 1, 'brass-squire', front())
   game = run(game, { type: 'play', id: add(game, 0, 'FT-0113') })
+  assert.equal(fortuneStatus(project(game, 1).players[0]).state, 'choose')
   assert.equal(legalPlay(game, 0, sun).choices.length, 2)
   const orbit = game.players[0].hand.find(instance => instance.card === 'token-orbit')
   game = run(game, { type: 'play', id: orbit.id })
+  assert.equal(fortuneStatus(project(game, 1).players[0]).state, 'turn')
   assert.equal(legalPlay(game, 0, sun).choices, undefined)
   game = run(game, { type: 'play', id: sun })
   assert.equal(game.players[0].hp, 21)
   assert.equal(game.players[1].units.find(unit => unit.id === enemy).hp, 1)
+  game = run(game, { type: 'end' })
+  assert.equal(fortuneStatus(project(game, 1).players[0]).state, 'choose')
+})
+
+test('次の1回の未来視は分岐を使うと消え、継続の未来の統合を区別する', () => {
+  let game = fixture('seer')
+  game = run(game, { type: 'play', id: add(game, 0, 'FT-0437'), position: front() })
+  assert.equal(fortuneStatus(project(game, 1).players[0]).duration, '次の1回')
+  const sun = add(game, 0, 'FT-0110')
+  assert.equal(legalPlay(game, 0, sun).choices.length, 2)
+  game = run(game, { type: 'play', id: sun, choice: 0 })
+  assert.equal(fortuneStatus(project(game, 1).players[0]), null)
+  game = run(game, { type: 'play', id: add(game, 0, 'FT-0264') })
+  assert.equal(fortuneStatus(project(game, 1).players[0]).state, 'both')
 })

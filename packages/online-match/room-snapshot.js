@@ -1,4 +1,7 @@
+import { lobbySnapshot } from './lobby.js'
+
 export function roomSnapshot(room, player) {
+  if (room.lobby && !room.match && !room.closed) return { version: room.version, phase: 'lobby', lobby: lobbySnapshot(room, player) }
   if (!room.match) return { version: room.version, phase: room.closed ? 'closed' : 'waiting' }
   const view = room.match.view(player.seat)
   const lastPlay = view.events.findLast(event => event.played)

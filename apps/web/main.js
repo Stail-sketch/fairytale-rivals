@@ -13,6 +13,10 @@ import { retireRivalsExample } from './rivals-example.js'
 import { createBattleAudio } from './battle-audio.js'
 import { planBattlePresentation, positionBattleImpact, positionPresentation, presentationLayer, reducedMotion, toggleBattleMotion } from './battle-presentation.js'
 import { connectRoom, enterRoom, forgetRoom, inviteUrl, invitedRoom, onlineAvailable, rememberRoom, savedRoom } from './online.js'
+import { escapeText as escape, handleTermLink, termDetails, termLink, termText } from './card-terms.js'
+import { relatedPreview } from './card-related.js'
+import { fortuneStatus } from './fortune-status.js'
+import { isLobbyCode, normalizeRoomId, visibleLobbyCode } from '../../packages/online-match/lobby.js'
 
 const app = document.querySelector('#app')
 const announcer = document.querySelector('#announcer')
@@ -49,6 +53,8 @@ let eventFloor = 0
 let invite = invitedRoom()
 let mode = invite ? 'friend' : 'cpu'
 let room = null
+let roomLobbyState = null
+let lobbyInput = ''
 let roomSeat = null
 let roomVersion = -1
 let roomUpdates = []
@@ -69,10 +75,6 @@ const inMatch = () => match || room
 const cpuTurn = () => solo() && view?.phase === 'battle' && view.active === 1
 const waitingForFriend = () => room && (view?.decisionSeat ?? view?.active) !== roomSeat
 const roomLocked = () => room && (roomBusy || roomConnection !== 'connected' || waitingForFriend())
-
-const escape = value => String(value).replace(/[&<>"']/g, symbol => ({
-  '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
-})[symbol])
 
 function portrait(id) {
   return '<img class="portrait" src="' + art(id) + '" alt="">'
@@ -120,7 +122,7 @@ function battleLineup(seat) {
   return custom ? { leader, deck: custom.deck } : starterLineup(leader, mode !== 'local')
 }
 
-function chooseLeader(seat) {
+function chooseLeader(seat, locked = false) {
   const id = selectedLeaders[seat]
   const leader = leaders[id]
   const deck = mode !== 'local' && starterDecks[id]
@@ -131,11 +133,11 @@ function chooseLeader(seat) {
     <div class="lineup-portrait">${portrait(id)}<span class="crest" aria-hidden="true">${leader.sigil}</span></div>
     <div class="lineup-body">
       <label for="leader-${seat}">${label}の語り手</label>
-      <select id="leader-${seat}" data-seat="${seat}">
+      <select id="leader-${seat}" data-seat="${seat}"${locked ? ' disabled' : ''}>
         ${classIds.map(key => `<option value="${key}" ${id === key ? 'selected' : ''}>${leaders[key].name} · ${leaders[key].job}</option>`).join('')}
       </select>
       ${decks.length ? `<label class="lineup-deck" for="match-deck-${seat}">使用するデッキ</label>
-        <select id="match-deck-${seat}" data-match-deck="${seat}">
+        <select id="match-deck-${seat}" data-match-deck="${seat}"${locked ? ' disabled' : ''}>
           <option value="" ${custom ? '' : 'selected'}>${deck ? '構築済み · ' + deck.name : '基本デッキ'}</option>
           ${decks.map(item => `<option value="${item.id}" ${item.id === custom?.id ? 'selected' : ''}>${escape(item.name)}</option>`).join('')}
         </select>` : `<small title="${deck ? deck.summary : leader.strategy}">${deck ? deck.name + ' · ' + leader.strategy : leader.strategy}</small>`}
@@ -146,8 +148,9 @@ function chooseLeader(seat) {
 function home() {
   const friend = mode === 'friend'
   const ready = !friend || onlineAvailable()
-  const start = friend ? (invite ? '対戦に参加' : '部屋を作る') : solo() ? 'CPUと対戦する' : '対戦を始める'
-  return `<main class="splash">
+  const legacyInvite = invite && !isLobbyCode(invite)
+  const start = friend ? (invite ? (legacyInvite ? '対戦に参加' : 'ロビーに参加') : 'ロビーを作る') : solo() ? 'CPUと対戦する' : '対戦を始める'
+  return `<main class="splash${friend ? ' friend-home' : ''}">
     <section class="intro" aria-labelledby="game-title">
       <div class="title-ornament" aria-hidden="true">◆ <span>✦</span> ◆</div>
       <h1 id="game-title">童話戦記</h1>
@@ -158,11 +161,16 @@ function home() {
         <button class="secondary" data-mode="local" aria-pressed="${mode === 'local'}">同じPCで2人</button>
         <button class="secondary" data-mode="friend" aria-pressed="${friend}">フレンド対戦</button>
       </div>
-      <div class="lineups${friend ? ' single-lineup' : ''}">${chooseLeader(0)}${friend ? '' : `<span class="versus">VS</span>${chooseLeader(1)}`}</div>
+      ${!friend || legacyInvite ? `<div class="lineups${friend ? ' single-lineup' : ''}">${chooseLeader(0)}${friend ? '' : `<span class="versus">VS</span>${chooseLeader(1)}`}</div>` : ''}
       ${friend ? `<p class="room-status" role="status">${escape(feedback || (ready
-        ? invite ? '語り手を選ぶと、招待された部屋に参加します。' : '部屋を作って、招待URLを友達に送れます。'
+        ? invite ? '招待された部屋に参加できます。' : 'ロビーを作るか、友達のロビーIDを入力してください。'
         : 'フレンド対戦は対戦サーバーのURLから開いてください。'))}</p>` : ''}
       <button class="primary start" data-op="start" ${!ready || roomBusy ? 'disabled' : ''}>${roomBusy ? '接続中…' : start} <span aria-hidden="true">›</span></button>
+      ${friend && !invite ? `<form class="lobby-join" id="lobby-join">
+        <label for="lobby-id-input">ロビーID</label>
+        <div class="invite-share"><input id="lobby-id-input" name="lobby" placeholder="XXXX-XXXX" value="${escape(lobbyInput)}" maxlength="40" autocomplete="off" autocapitalize="characters" spellcheck="false" required>
+          <button type="submit" class="secondary" ${!ready || roomBusy ? 'disabled' : ''}>ロビーIDで参加</button></div>
+      </form>` : ''}
       <div class="title-tools">
         <button class="secondary browse-cards" type="button" data-op="library">カードライブラリ</button>
         <button class="secondary browse-cards" type="button" data-op="decks">デッキ編集</button>
@@ -173,16 +181,41 @@ function home() {
 
 function roomLobby() {
   const closed = roomConnection === 'closed'
+  const lobby = !closed && roomLobbyState
+  const host = !lobby || lobby.role === 'host'
+  const mine = lobby && lobby[lobby.role]
+  const locked = roomBusy || roomConnection !== 'connected'
+  const status = !lobby ? '友達の参加を待っています。' :
+    !lobby.guest.joined ? 'ロビーIDを友達に伝えてください。' :
+      lobby.host.ready && lobby.guest.ready ? '二人の準備ができました。' : 'デッキを選び、準備OKを押してください。'
   return `<main class="ceremony"><section class="modal room-lobby">
-    <h1>フレンド対戦</h1>
+    <h1>フレンド対戦ロビー</h1>
     <p class="room-status" role="status">${escape(feedback || (roomConnection === 'connected'
-      ? '友達の参加を待っています。' : '対戦サーバーに接続しています。'))}</p>
-    ${closed ? '' : `<label for="invite-url">招待URL</label>
+      ? status : '対戦サーバーに接続しています。'))}</p>
+    ${closed ? '' : `${isLobbyCode(room.id) ? `<label for="lobby-id">ロビーID</label>
+      <div class="invite-share lobby-code"><input id="lobby-id" value="${visibleLobbyCode(room.id)}" readonly>
+        <button type="button" class="secondary" data-op="copy-lobby-id">IDをコピー</button></div>` : ''}
+      <label for="invite-url">招待URL</label>
       <div class="invite-share"><input id="invite-url" value="${escape(inviteUrl(room.id))}" readonly>
         <button class="secondary" data-op="copy-invite">URLをコピー</button></div>
       ${['localhost', '127.0.0.1', '[::1]'].includes(location.hostname) ? '<p class="local-invite">このPC内で試遊できる招待URLです。</p>' : ''}
       <p class="room-copy-status" role="status"></p>`}
-    <button class="secondary" data-op="home" ${roomBusy ? 'disabled' : ''}>${closed ? 'タイトルへ' : '部屋を閉じる'}</button>
+    ${lobby ? `<div class="lobby-members" aria-label="参加者">
+      ${['host', 'guest'].map(role => {
+        const member = lobby[role]
+        return `<div class="lobby-member" data-lobby-member="${role}" data-ready="${member.ready}">
+          <strong>${role === 'host' ? 'ホスト' : 'ゲスト'}${role === lobby.role ? '（あなた）' : ''}</strong>
+          <span>${member.joined ? member.ready ? '準備OK' : 'デッキ選択中' : '参加待ち'}</span>
+          ${member.leader ? `<small>${escape(leaders[member.leader].name)}</small>` : ''}</div>`
+      }).join('')}
+      </div>
+      <div class="lineups single-lineup">${chooseLeader(0, mine.ready || locked)}</div>
+      <div class="lobby-actions">
+        <button class="secondary" data-op="lobby-ready"${locked ? ' disabled' : ''}>${mine.ready ? '準備を解除' : '準備OK'}</button>
+        ${host ? `<button class="primary" data-op="lobby-start"${locked || !lobby.host.ready || !lobby.guest.ready ? ' disabled' : ''}>対戦開始</button>` :
+          (mine.ready ? '<small>ホストの開始を待っています。</small>' : '')}
+      </div>` : ''}
+    <button class="secondary" data-op="home" ${roomBusy ? 'disabled' : ''}>${closed ? 'タイトルへ' : host ? 'ロビーを閉じる' : 'ロビーを退出'}</button>
   </section></main>`
 }
 
@@ -232,6 +265,8 @@ function leaderPanel(seat, enemy) {
   const target = leaderTarget(seat)
   const flash = flashes(target)
   const ready = !enemy && view.legal?.leaderAttack.enabled
+  const skill = player.skill ?? leader.skill
+  const fortune = fortuneStatus(player)
   return `<aside class="leader-panel ${enemy ? 'opponent' : ''} ${seat === view.active ? 'active-side' : ''}" data-side="${seat}"${colors(leader)}>
     <button class="leader-target ${targetEnabled(target) ? 'targetable' : ''} ${ready ? 'ready' : ''} ${selected?.type === 'leaderAttack' && seat === view.active ? 'chosen' : ''} ${flash.cls}"
       data-leader="${seat}" aria-label="${seatName(seat)}リーダー ${leader.name} HP ${Math.max(0, player.hp)}${weapon ? ' 武器耐久 ' + weapon.durability : ''}${ready ? ' 攻撃可能' : ''}"
@@ -244,6 +279,8 @@ function leaderPanel(seat, enemy) {
       <span class="leader-hp">${Math.max(0, player.hp)}</span>${flash.label}
     </button>
     <div class="leader-identity"><small>${enemy ? (solo() ? 'CPU' : '相手') : 'あなた'} · ${seatName(seat)} · ${leader.job}</small><strong>${leader.name}</strong></div>
+    ${enemy ? `<button class="opponent-skill" type="button" data-inspect-skill="${seat}" aria-haspopup="dialog">
+      <small>奥義</small><strong>${escape(skill.name)}</strong></button>` : ''}
     <div class="resources">
       <span data-mp="${seat}" title="現在のMP（このターン限りの追加分を含む）と最大MP"><b class="mp-icon">MP</b> <strong>${player.mp}/${player.maxMp}</strong></span>
       <span data-draw-pile="${seat}" title="山札の残り"><i aria-hidden="true">▤</i> 山札 <strong>${player.deckCount}</strong></span>
@@ -255,6 +292,8 @@ function leaderPanel(seat, enemy) {
       <span title="${names.TENSION}">熱量</span>
       <div class="diamonds" aria-label="熱量 ${player.tension}/3">${[1, 2, 3].map(i => `<i class="${i <= player.tension ? 'filled' : ''}"></i>`).join('')}</div>
     </div>
+    ${fortune ? `<div class="fortune-badge" data-fortune-state="${fortune.state}">
+      ${termLink(fortune.term)}<small>${fortune.duration}</small></div>` : ''}
   </aside>`
 }
 
@@ -329,10 +368,10 @@ function powerFormula({ base, modifiers, value, suffix = '' }) {
 
 function powerDetails(rows) {
   return rows.length ? `<ul class="power-details">${rows.map(row => `<li>
-    ${row.group ? `<small class="power-group">${escape(row.group)}</small>` : ''}
+    ${row.group ? `<small class="power-group">${termText(row.group)}</small>` : ''}
     <span>${escape(row.label)}</span> <strong>${powerFormula(row)}</strong>
     ${row.modifiers.length ? `<small class="power-sources">${row.modifiers.map(modifier =>
-      escape(modifier.label) + ' ' + signedModifier(modifier.amount)).join(' ／ ')}</small>` : ''}
+      termText(modifier.label) + ' ' + signedModifier(modifier.amount)).join(' ／ ')}</small>` : ''}
   </li>`).join('')}</ul>` : ''
 }
 
@@ -347,7 +386,16 @@ function cardPower(card, { node, cost, action } = {}) {
   })
 }
 
-function skillDetail(seat, target) {
+function skillTarget(skill) {
+  if (skill.place?.side === 'enemy') return '指定した敵の前衛か後衛と、敵リーダー'
+  if (skill.target === 'enemy') return '敵リーダーか敵ユニット1体'
+  if (skill.effects.some(effect => effect.to === 'allies')) return '味方リーダーと味方ユニット全員'
+  if (skill.effects.some(effect => effect.id === 'summon')) return '味方陣の空きマス'
+  if (skill.effects.some(effect => effect.id === 'leaderPower')) return '味方リーダー'
+  return '自分の手札'
+}
+
+function skillDetail(seat, target, labelled = false) {
   const player = view.players[seat]
   const skill = player.skill ?? leaders[player.leader].skill
   const options = selected?.type === 'skill' && seat === battleSeat() ? selected : null
@@ -355,26 +403,11 @@ function skillDetail(seat, target) {
   if (player.leaderPower) numbers.push({ label: 'リーダーの攻撃力', ...leaderAttackBreakdown(view, seat) })
   return `<div class="inspector-copy">
     <small>${escape(leaders[player.leader].name)} · ${names.TENSION_SKILL}</small>
-    <h2>${escape(skill.name)}</h2><p class="inspector-effect">${escape(skill.description)}</p>
+    <h2${labelled ? ' id="battle-card-title"' : ''}>${escape(skill.name)}</h2><p class="inspector-effect">${termText(skill.description)}</p>
+    <small class="skill-target-label">対象 · ${skillTarget(skill)}</small>
     ${powerDetails(numbers)}
+    ${relatedPreview(skill, art)}
   </div>`
-}
-
-const keywordDetails = {
-  CHARGE: '登場したターンから攻撃できます。',
-  GUARD: '前衛にいる間、敵の通常攻撃の対象を、この能力を持つ前衛に限定します。',
-  AIM: '前衛防護・守りの陣・騎士の誓いを無視して攻撃できます。',
-  PIERCE: '前衛を攻撃すると、正面の後衛にも同じ攻撃力でダメージを与えます。',
-  DOUBLE_ATTACK: '1ターンに2回攻撃できます。',
-  STEALTH: '攻撃するまで敵の単体効果や通常攻撃の対象になりません。',
-  METAL_BODY: '1～3ダメージを受けるとき、1ダメージになります。',
-  CHEER: '手札から使うと、味方リーダーの熱量が1上がります。',
-  FINISHER: '味方リーダーの熱量が最大のときに使えます。使用すると熱量をすべて消費します。',
-  VULNERABLE: '受けるダメージが2倍になります。',
-  UNTARGETABLE: '単体効果の対象として選べません。',
-  DARK_CLOAK: '受けるダメージを防ぎます。',
-  RESIST_SPELL: '特技からのダメージを防ぎます。',
-  SUPER_PIERCE: 'ユニットを攻撃すると、同じ列の敵と敵リーダーにもダメージを与えます。',
 }
 
 function cardDetail(card, cost = card.cost, node, action) {
@@ -393,10 +426,11 @@ function cardDetail(card, cost = card.cost, node, action) {
       <h2>${escape(card.name)}</h2>
       <small>${card.classId === 'neutral' ? '共通' : leaders[card.classId].job} · ${type}${card.species ? ' · ' + escape(card.species) : ''} · ${escape(sourceLabels[card.packId] ?? '')}</small>
       <div class="inspector-stats"><span class="inspector-stat inspector-cost">${cost} MP</span>${stats}</div>
-      <p class="inspector-effect">${escape(card.description || '効果なし')}</p>
+      <p class="inspector-effect">${termText(card.description || '効果なし')}</p>
       ${powerDetails(power)}
-      ${keys.map(id => keywordDetails[id] ? `<div class="inspector-keyword"><strong>${names[id]}</strong><span>${keywordDetails[id]}</span></div>` : '').join('')}
-      ${current.length ? `<ul class="inspector-current">${current.map(line => '<li>' + escape(line) + '</li>').join('')}</ul>` : ''}
+      ${keys.map(id => termDetails[id] ? `<div class="inspector-keyword"><strong>${termLink(id)}</strong><span>${termDetails[id]}</span></div>` : '').join('')}
+      ${current.length ? `<ul class="inspector-current">${current.map(line => '<li>' + termText(line) + '</li>').join('')}</ul>` : ''}
+      ${relatedPreview(card, art)}
     </div>
   </article>`
 }
@@ -409,7 +443,7 @@ function defaultDetail(target) {
 }
 
 function detailPanel() {
-  return `<aside class="detail-panel" id="detail" aria-label="カードと奥義の詳細"${selected ? ' data-inspecting="true"' : ''}>${defaultDetail()}</aside>`
+  return `<aside class="detail-panel" id="detail" tabindex="-1" aria-label="カードと奥義の詳細"${selected ? ' data-inspecting="true"' : ''}>${defaultDetail()}</aside>`
 }
 
 const logCard = event => event && cards[event.card ?? event.source?.card]
@@ -431,19 +465,23 @@ function battleLog() {
 }
 
 function openCardDetail(card, cost, focusBack, details = [], power = []) {
+  openBattleDetail(`<div class="log-card-preview">
+    <img src="${art(card.artId)}" alt="">
+    <div class="log-card-description"><h2 id="battle-card-title">${escape(card.name)}</h2>
+      <span>MP ${cost ?? card.cost}</span>
+      <p>${termText(card.description)}</p>
+      ${powerDetails(power)}
+      ${details.length ? '<ul class="card-current-stats">' + details.map(line => '<li>' + termText(line) + '</li>').join('') + '</ul>' : ''}
+      ${relatedPreview(card, art)}</div>
+    </div>`, focusBack)
+}
+
+function openBattleDetail(content, focusBack) {
   if (document.querySelector('.battle-card-dialog[open]')) return
   const dialog = document.createElement('dialog')
   dialog.className = 'battle-card-dialog'
   dialog.setAttribute('aria-labelledby', 'battle-card-title')
-  dialog.innerHTML = `<div class="log-card-preview">
-    <img src="${art(card.artId)}" alt="">
-    <div class="log-card-description"><h2 id="battle-card-title">${escape(card.name)}</h2>
-      <span>MP ${cost ?? card.cost}</span>
-      <p>${escape(card.description)}</p>
-      ${powerDetails(power)}
-      ${details.length ? '<ul class="card-current-stats">' + details.map(line => '<li>' + escape(line) + '</li>').join('') + '</ul>' : ''}</div>
-    <form method="dialog"><button class="secondary" autofocus>閉じる</button></form>
-  </div>`
+  dialog.innerHTML = content + '<form method="dialog" class="detail-dialog-actions"><button class="secondary" autofocus>閉じる</button></form>'
   function close() {
     if (!dialog.isConnected) return
     dialog.remove()
@@ -662,7 +700,7 @@ function battlefield() {
   return `<main class="battle${reducedMotion() ? ' short-motion' : ''}" style="--ally-light:${leaders[view.players[own].leader].accent};--enemy-light:${leaders[view.players[enemy].leader].accent}" tabindex="-1">
     <div class="battle-layout"><div class="battle-core">
     <div class="battle-heading"><span>綴りの大競技会</span><span class="turn-label">第 ${view.turn} ターン</span><div class="battle-tools"><button class="icon-button" data-op="motion" aria-pressed="${reducedMotion()}" ${matchMedia('(prefers-reduced-motion: reduce)').matches ? 'disabled title="端末の設定に合わせて短縮しています"' : ''}>短い演出</button>${battleLog()}</div></div>
-    <div class="battle-grid" data-active-side="${view.active === own ? 'ally' : 'enemy'}" aria-label="対戦盤面"${locked ? ' inert' : ''}>
+    <div class="battle-grid" data-active-side="${view.active === own ? 'ally' : 'enemy'}" aria-label="対戦盤面">
       ${leaderPanel(own, false)}
       <div class="board">
         ${field(own, false)}<div class="board-rule" aria-hidden="true">${[1, 2, 3].map(lane => `<span class="lane-mark">${lane}</span>`).join('')}</div>${field(enemy, true)}
@@ -671,7 +709,7 @@ function battlefield() {
       ${presentationLayer(presentation, art, escape)}
     </div>
     <div class="battle-message"><span class="last-action">${latestAction && !selected && !feedback ? escape(latestAction.text) : ''}</span><output id="attack-preview" aria-live="polite"></output></div>
-    <section class="tray"${locked ? ' inert' : ''}>
+    <section class="tray">
       ${skillControls(own)}
       <div class="hand-zone">${selectionBar()}${hand(view.players[own])}</div>
       <div class="turn-controls">
@@ -759,7 +797,7 @@ function render(focusOn = null) {
     view.phase === 'mulligan' ? mulligan() : battlefield()
   app.innerHTML = titlebar(mixerOpen) + surface + rulesModal()
   syncBattleMusic()
-  if (lastInspection && !selected && matchMedia('(min-width: 1160px)').matches) {
+  if (lastInspection && !selected) {
     const node = app.querySelector(lastInspection)
     if (node) inspectNode(node)
   }
@@ -866,14 +904,21 @@ function receiveRoom(update) {
     return
   }
   const sequential = update.version === roomVersion + 1
-  if (roomAction && update.version > roomAction.version) {
+  if (roomAction && !roomAction.lobby && update.version > roomAction.version) {
     roomAction = null
     roomBusy = false
   }
   roomVersion = update.version
   if (update.phase === 'closed') {
+    roomLobbyState = null
     roomConnection = 'closed'
     feedback = '対戦部屋が閉じられました。'
+    render()
+    return
+  }
+  if (update.phase === 'lobby') {
+    roomLobbyState = update.lobby
+    feedback = ''
     render()
     return
   }
@@ -881,6 +926,7 @@ function receiveRoom(update) {
     render('#invite-url')
     return
   }
+  roomLobbyState = null
   roomSeat = update.seat
   resigned = update.resigned ?? null
   if (view && sequential && update.last) {
@@ -910,25 +956,26 @@ function openRoom(session) {
   room.start()
 }
 
-async function startFriendMatch() {
+async function startFriendMatch(id = invite) {
   if (roomBusy || !onlineAvailable()) return
   roomBusy = true
   feedback = ''
   render()
   try {
-    const session = await enterRoom(invite, battleLineup(0))
+    const lobby = !id || isLobbyCode(id)
+    const session = await enterRoom(id, lobby ? null : battleLineup(0), lobby)
     roomBusy = false
     openRoom(session)
   } catch (error) {
     roomBusy = false
     feedback = error.status ? error.message : '対戦サーバーに接続できません。'
-    render('[data-op="start"]')
+    render(id && !invite ? '#lobby-id-input' : '[data-op="start"]')
   }
 }
 
 async function sendRoomAction(action) {
   const current = room
-  const request = { version: roomVersion }
+  const request = { version: roomVersion, lobby: Boolean(roomLobbyState) }
   roomAction = request
   battleAudio.unlock()
   roomBusy = true
@@ -1038,17 +1085,17 @@ function exportReplay() {
   setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
 
-async function copyInvite() {
-  const input = app.querySelector('#invite-url')
+async function copyRoomField(selector, label) {
+  const input = app.querySelector(selector)
   const status = app.querySelector('.room-copy-status')
   if (!input || !status) return
   try {
     await navigator.clipboard.writeText(input.value)
-    status.textContent = '招待URLをコピーしました。'
+    status.textContent = label + 'をコピーしました。'
   } catch {
     input.focus()
     input.select()
-    status.textContent = '選択したURLをコピーして送ってください。'
+    status.textContent = '選択した' + label + 'をコピーして送ってください。'
   }
 }
 
@@ -1059,6 +1106,8 @@ function returnHome() {
   room?.stop()
   if (invite) forgetRoom(invite)
   match = view = selected = room = invite = roomSeat = resigned = null
+  roomLobbyState = null
+  lobbyInput = ''
   lastInspection = null
   animatedView = null
   roomVersion = -1
@@ -1110,6 +1159,7 @@ app.addEventListener('change', event => {
 })
 
 app.addEventListener('input', event => {
+  if (event.target.id === 'lobby-id-input') lobbyInput = event.target.value
   if (event.target.dataset.volume) {
     const channel = event.target.dataset.volume
     battleAudio.setVolume(channel, Number(event.target.value))
@@ -1122,6 +1172,19 @@ app.addEventListener('input', event => {
   if (showDecks && event.target.id === 'deck-name') deckEditor.rename(app, event.target.value)
 })
 
+app.addEventListener('submit', event => {
+  if (event.target.id !== 'lobby-join') return
+  event.preventDefault()
+  lobbyInput = event.target.elements.lobby.value
+  const id = normalizeRoomId(lobbyInput)
+  if (!id) {
+    feedback = 'ロビーIDを確認してください。'
+    render('#lobby-id-input')
+    return
+  }
+  battleAudio.unlock()
+  startFriendMatch(id)
+})
 function updateVolumeControls() {
   for (const slider of app.querySelectorAll('input[data-volume]')) {
     const value = battleAudio.volume(slider.dataset.volume)
@@ -1161,6 +1224,11 @@ app.addEventListener('drop', event => {
 app.addEventListener('click', event => {
   const node = event.target.closest('button')
   if (!node) return
+  if (node.dataset.inspectSkill !== undefined) {
+    const seat = node.dataset.inspectSkill
+    openBattleDetail(skillDetail(Number(seat), undefined, true), () => app.querySelector(`[data-inspect-skill="${seat}"]`))
+    return
+  }
   if ((presentation || roomLocked()) && node.closest('.battle-grid, .tray, .mulligan')) return
   if (node.dataset.inspectWeapon !== undefined) {
     const weapon = view.players[Number(node.dataset.inspectWeapon)].weapon
@@ -1244,7 +1312,17 @@ app.addEventListener('click', event => {
       render('[data-replace]')
       break
     case 'home': leaveMatch(); break
-    case 'copy-invite': copyInvite(); break
+    case 'copy-invite': copyRoomField('#invite-url', '招待URL'); break
+    case 'copy-lobby-id': copyRoomField('#lobby-id', 'ロビーID'); break
+    case 'lobby-ready': {
+      if (!roomLobbyState || roomBusy || roomConnection !== 'connected') break
+      const ready = !roomLobbyState[roomLobbyState.role].ready
+      sendRoomAction({ type: 'lobby-ready', ready, lineup: ready ? battleLineup(0) : undefined })
+      break
+    }
+    case 'lobby-start':
+      if (roomLobbyState && !roomBusy && roomConnection === 'connected') sendRoomAction({ type: 'lobby-start' })
+      break
     case 'mulligan':
       showMulliganReturns(node)
       execute({ type: 'mulligan', replace: [...replacements] })
@@ -1277,12 +1355,12 @@ function showMulliganReturns(destination) {
   if (replacements.size) battleAudio.play('draw')
 }
 
-const inspectSelector = '[data-hand], [data-unit], [data-terrain], [data-leader], [data-inspect-weapon], [data-op="skill"], #skill-description'
+const inspectSelector = '[data-hand], [data-unit], [data-terrain], [data-leader], [data-inspect-weapon], [data-inspect-skill], [data-op="skill"], #skill-description'
 
 function inspectNode(node) {
   const panel = app.querySelector('#detail')
   if (!panel || !node) return
-  const { hand, unit, slot, leader, terrain, inspectWeapon } = node.dataset
+  const { hand, unit, slot, leader, terrain, inspectWeapon, inspectSkill } = node.dataset
   const weapon = view.players[Number(inspectWeapon)]?.weapon
   const card = cards[weapon?.card ?? node.dataset.card]
   if (card) {
@@ -1293,6 +1371,9 @@ function inspectNode(node) {
     panel.innerHTML = `<div class="inspector-copy"><h2>${escape(terrainName(terrain))}</h2>
       <p class="inspector-effect">${escape(terrainText[terrain] ?? '6色の種晶で特殊勝利')}</p></div>`
     lastInspection = `[data-slot="${slot}"][data-terrain]`
+  } else if (inspectSkill !== undefined) {
+    panel.innerHTML = skillDetail(Number(inspectSkill))
+    lastInspection = `[data-inspect-skill="${inspectSkill}"]`
   } else {
     panel.innerHTML = skillDetail(leader === undefined ? battleSeat() : Number(leader))
     lastInspection = leader === undefined ? '#skill-description' : `[data-leader="${leader}"]`
@@ -1312,27 +1393,17 @@ function inspect(event) {
 
 app.addEventListener('pointerover', inspect)
 app.addEventListener('focusin', inspect)
-function leaveInspector(event) {
-  const inspected = event.target.closest(inspectSelector)
-  if (!inspected || inspected.contains(event.relatedTarget) || matchMedia('(min-width: 1160px)').matches) return
-  const panel = app.querySelector('#detail')
-  if (panel) {
-    if (!selected) delete panel.dataset.inspecting
-    panel.innerHTML = defaultDetail()
-  }
-}
+document.addEventListener('click', handleTermLink, true)
 
 app.addEventListener('focusout', event => {
   if (event.target.closest('[data-log-event]')) highlightLogEvent()
   if (event.target.closest('[data-slot], [data-leader]')) clearAttackPreview()
-  leaveInspector(event)
 })
 app.addEventListener('pointerout', event => {
   const entry = event.target.closest('[data-log-event]')
   if (entry && !entry.contains(event.relatedTarget)) highlightLogEvent()
   const target = event.target.closest('[data-slot], [data-leader]')
   if (target && !target.contains(event.relatedTarget)) clearAttackPreview()
-  leaveInspector(event)
 })
 
 function cancelCardPress() {
@@ -1406,6 +1477,7 @@ app.addEventListener('dragend', () => {
 })
 
 document.addEventListener('keydown', event => {
+  if (event.target.closest('.term-dialog')) return
   if (event.key === 'Escape' && event.target.closest('.audio-mixer, [data-op="audio-mixer"][aria-expanded="true"]')) {
     event.preventDefault()
     toggleAudioMixer()
