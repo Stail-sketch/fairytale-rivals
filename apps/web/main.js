@@ -83,28 +83,26 @@ function colors(leader) {
 }
 
 function audioControls(open) {
-  return `<details class="audio-controls"${open ? ' open' : ''}>
-    <summary class="icon-button" aria-label="BGMと効果音の音量">音量</summary>
-    <div class="audio-mixer" aria-label="音量設定">
-      ${[['bgm', 'BGM'], ['se', '効果音']].map(([channel, label]) => {
-        const value = battleAudio.volume(channel)
-        return `<div class="audio-channel">
-          <label for="volume-${channel}">${label}</label><output for="volume-${channel}" data-volume-value="${channel}">${value}%</output>
-          <input id="volume-${channel}" data-volume="${channel}" type="range" min="0" max="100" value="${value}">
-        </div>`
-      }).join('')}
-    </div>
-  </details>`
+  return `<section class="audio-mixer" id="audio-mixer" aria-label="音量設定"${open ? '' : ' hidden'}>
+    ${[['bgm', 'BGM'], ['se', '効果音']].map(([channel, label]) => {
+      const value = battleAudio.volume(channel)
+      return `<div class="audio-channel">
+        <label for="volume-${channel}">${label}</label><output for="volume-${channel}" data-volume-value="${channel}">${value}%</output>
+        <input id="volume-${channel}" data-volume="${channel}" type="range" min="0" max="100" value="${value}">
+      </div>`
+    }).join('')}
+  </section>`
 }
 
 function titlebar(mixerOpen) {
   return `<header class="topbar"><div class="brand"><span class="brand-mark" aria-hidden="true">✦</span>
     <span>童話戦記<small>PROJECT FAIRYTALE RIVALS</small></span></div>
     <div class="top-actions"><span class="local-label">${{ cpu: 'CPU対戦', local: 'ローカル対戦', friend: 'フレンド対戦' }[mode]}</span>
-      ${view ? `<button type="button" data-op="sound" class="icon-button sound-button" aria-pressed="${battleAudio.enabled}">効果音</button>${audioControls(mixerOpen)}` : ''}
+      ${view ? `<button type="button" data-op="sound" class="icon-button sound-button" aria-pressed="${battleAudio.enabled}">効果音</button>
+        <button type="button" data-op="audio-mixer" class="icon-button" aria-expanded="${Boolean(mixerOpen)}" aria-controls="audio-mixer">音量</button>` : ''}
       <button type="button" data-op="rules" class="icon-button">ルール</button>
       ${inMatch() ? '<button type="button" data-op="home" class="icon-button">タイトル</button>' : ''}
-    </div></header>`
+    </div>${view ? audioControls(mixerOpen) : ''}</header>`
 }
 
 function availableDecks(seat) {
@@ -754,7 +752,7 @@ function syncBattleMusic() {
 
 function render(focusOn = null) {
   const scroll = app.querySelector('.events')?.scrollTop
-  const mixerOpen = app.querySelector('.audio-controls')?.open
+  const mixerOpen = Boolean(app.querySelector('.audio-mixer:not([hidden])'))
   const volumeFocus = document.activeElement?.dataset.volume
   const surface = !inMatch() ? (showDecks ? deckEditor.view(art, escape) : showLibrary ? library(art) : home())
     : !view ? roomLobby() : view.phase === 'finished' && !presentation ? results() :
@@ -1133,6 +1131,19 @@ function updateVolumeControls() {
   app.querySelector('[data-op="sound"]')?.setAttribute('aria-pressed', battleAudio.enabled)
 }
 
+function toggleAudioMixer() {
+  const panel = app.querySelector('#audio-mixer')
+  if (!panel) return
+  const open = panel.hidden
+  const button = app.querySelector('[data-op="audio-mixer"]')
+  panel.hidden = !open
+  button.setAttribute('aria-expanded', String(open))
+  if (open) {
+    battleAudio.unlock()
+    panel.querySelector('input').focus({ preventScroll: true })
+  } else button.focus({ preventScroll: true })
+}
+
 document.addEventListener('paste', event => {
   const image = [...(event.clipboardData?.files ?? [])].find(file => file.type.startsWith('image/'))
   if (showDecks && image && deckEditor.importImage(image, render)) event.preventDefault()
@@ -1148,7 +1159,6 @@ app.addEventListener('drop', event => {
 })
 
 app.addEventListener('click', event => {
-  if (event.target.closest('.audio-controls summary')) battleAudio.unlock()
   const node = event.target.closest('button')
   if (!node) return
   if ((presentation || roomLocked()) && node.closest('.battle-grid, .tray, .mulligan')) return
@@ -1217,6 +1227,7 @@ app.addEventListener('click', event => {
       battleAudio.toggle()
       updateVolumeControls()
       break
+    case 'audio-mixer': toggleAudioMixer(); break
     case 'start':
       battleAudio.unlock()
       if (mode === 'friend') {
@@ -1395,6 +1406,11 @@ app.addEventListener('dragend', () => {
 })
 
 document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && event.target.closest('.audio-mixer, [data-op="audio-mixer"][aria-expanded="true"]')) {
+    event.preventDefault()
+    toggleAudioMixer()
+    return
+  }
   const card = event.key.toLowerCase() === 'i' && !event.altKey && !event.ctrlKey && !event.metaKey && inspectableCard(event.target)
   if (card && !showRules) {
     event.preventDefault()

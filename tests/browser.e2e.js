@@ -196,13 +196,20 @@ async function driveBattle() {
     click('[data-op=motion]')
     click('[data-op=sound]')
     expect(query('[data-op=sound][aria-pressed=false]'), '効果音をオフにできる')
-    click('.audio-controls summary')
+    click('[data-op=audio-mixer]')
     const musicVolume = query('[data-volume=bgm]')
     musicVolume.value = '17'
     musicVolume.dispatchEvent(new Event('input', { bubbles: true }))
     expect(query('[data-volume-value=bgm]').value === '17%' &&
       query('[data-volume=se]').value === '0', 'BGM音量と消音したSEを別々に調整できる')
-    click('.audio-controls summary')
+    const audioBounds = query('#audio-mixer').getBoundingClientRect()
+    expect(audioBounds.right <= query('.top-actions').getBoundingClientRect().left &&
+      audioBounds.bottom <= query('.battle-heading').getBoundingClientRect().top &&
+      audioBounds.bottom <= query('#detail').getBoundingClientRect().top,
+      'PC幅で音量欄が対戦ボタンと右のカード詳細に重ならない')
+    musicVolume.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))
+    expect(query('#audio-mixer').hidden && document.activeElement === query('[data-op=audio-mixer]'),
+      'Escapeキーで音量欄を閉じて音量ボタンに戻れる')
     const x = selector => query(selector).getBoundingClientRect().x
     const y = selector => query(selector).getBoundingClientRect().y
     expect(x('[data-leader="0"]') < x('[data-slot="0:back:0"]')
@@ -780,8 +787,15 @@ test('別々のChromiumセッションで招待URLから参加し、対戦と再
   const end = '[data-op=end]:not(:disabled)'
   await Promise.all([first.wait(end), second.wait('.battle')])
   await second.viewport(390, 800)
+  await second.click('[data-op=audio-mixer]')
+  assert.equal(await second.evaluate(`(() => {
+    const bounds = selector => document.querySelector(selector).getBoundingClientRect()
+    const mixer = bounds('#audio-mixer')
+    return mixer.top >= bounds('.top-actions').bottom && mixer.bottom <= bounds('.battle-heading').top
+  })()`), true, 'スマートフォン幅で音量欄が独立した段に収まる')
   const fits = await second.evaluate('document.documentElement.scrollWidth === document.documentElement.clientWidth')
   assert.equal(fits, true, '狭い画面で対戦画面全体が横にはみ出さない')
+  await second.click('[data-op=audio-mixer]')
   assert.equal(await first.evaluate('document.querySelector(".ally-formation [data-slot]").dataset.slot[0]'), '0')
   assert.equal(await second.evaluate('document.querySelector(".ally-formation [data-slot]").dataset.slot[0]'), '1')
   assert.equal(await second.evaluate('document.querySelector("[data-op=end]").disabled'), true)
