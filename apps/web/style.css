@@ -143,6 +143,16 @@ small { font-size: 11px; }
   border: 1px solid #d4b474; border-radius: 6px; background: linear-gradient(#352b1c, #201c19);
   color: #ffe7b7; box-shadow: 0 3px 14px #0a101aca; font-weight: 800;
   animation: turn-notice ease-out both;
+  animation-duration: var(--turn-notice-duration) !important;
+}
+.turn-notice[data-direction="incoming"] {
+  z-index: 5; inset: 50% auto auto 50%; min-width: 0; width: min(calc(100% - 12px), 560px);
+  transform: translate(-50%, -50%); padding: clamp(8px, 1.8vw, 22px) 6px;
+  border-inline: 0; border-radius: 0; border-block-color: #e5bc7c;
+  background: linear-gradient(90deg, #17162455, #211b25f7 17%, #3a261b 50%, #211b25f7 83%, #17162455);
+  color: #fff0ca; font-family: var(--serif); font-size: clamp(19px, 4.65vw, 55px);
+  letter-spacing: .07em; line-height: 1.2; text-shadow: 0 3px 9px #100e17, 0 0 23px #e8ac5666;
+  box-shadow: 0 6px 28px #080a15bb;
 }
 .turn-notice[data-direction="outgoing"] {
   border-color: #819bb7; background: linear-gradient(#25394d, #172331); color: #dbe9f8;
@@ -473,7 +483,7 @@ dialog li, dialog p { font-size: 14px; line-height: 1.7; color: #d8e0e1; margin-
 .catalog-card img { width: 100%; aspect-ratio: 1.43; object-fit: cover; object-position: center; border-radius: 3px; }
 .catalog-card strong { color: #fff2d8; font-size: 12px; line-height: 1.25; align-self: center; }
 .catalog-card-meta { color: #bac9d3; font-size: 10px; }
-.catalog-detail { position: sticky; top: 12px; border: 1px solid #a88f5c; border-radius: 8px; background: #142233; overflow: hidden; }
+.catalog-detail { position: sticky; top: 12px; max-height: calc(100dvh - 24px); border: 1px solid #a88f5c; border-radius: 8px; background: #142233; overflow: auto; }
 .catalog-detail:empty { display: none; }
 .catalog-detail-art { width: 100%; aspect-ratio: 1.26; object-fit: cover; object-position: center; }
 .catalog-detail-body { padding: 12px 14px 15px; }
@@ -506,8 +516,21 @@ dialog li, dialog p { font-size: 14px; line-height: 1.7; color: #d8e0e1; margin-
   .deck-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 720px) {
+  body:has(.library-view:not(.deck-view)) { min-width: 0; }
   .library-filters:not(.deck-filters) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .library-search { grid-column: 1 / -1; }
+}
+@media (max-width: 540px) {
+  .library-view:not(.deck-view) { padding-inline: 12px; }
+  .library-heading h1 { font-size: clamp(18px, 6vw, 26px); letter-spacing: .035em; }
+  .library-heading button { white-space: nowrap; }
+  .library-content, .catalog-skills { grid-template-columns: minmax(0, 1fr); }
+  .catalog-grid {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    max-height: 37dvh; padding: 2px; overflow: auto;
+  }
+  .catalog-detail { position: static; max-height: none; }
+  .catalog-detail-art { max-height: 220px; }
 }
 @media (max-height: 680px) {
   .battle { padding-top: 12px; }
@@ -952,7 +975,8 @@ dialog li, dialog p { font-size: 14px; line-height: 1.7; color: #d8e0e1; margin-
   .battle-heading { grid-template-columns: minmax(0, 1fr) auto; margin-bottom: 7px; }
   .battle-heading > span:first-child { display: none; }
   .battle-heading .turn-label { justify-self: start; padding: 4px 7px; }
-  .turn-notice { left: 0; transform: none; padding-inline: 9px; }
+  .turn-notice[data-direction="outgoing"] { left: 0; transform: none; padding-inline: 9px; }
+  .turn-notice[data-direction="incoming"] { letter-spacing: .025em; }
   .board { grid-template-columns: minmax(0, 1fr) 15px minmax(0, 1fr); padding: 5px 4px 8px; }
   .formation { gap: 4px; }
   .lane-mark { width: 14px; height: 14px; font-size: 9px; }
@@ -1180,6 +1204,7 @@ body:has(.deck-overview[open]) { overflow: hidden; }
 .term-dialog h2 { color: #b7daff; font-size: 21px; }
 .term-dialog form { display: flex; justify-content: end; }
 .related-cards { display: grid; gap: 5px; margin-top: 8px; }
+.related-cards > .related-heading { margin: 0; color: #ecd09a; font-size: 11px; font-weight: 700; }
 .related-card {
   display: grid; grid-template-columns: minmax(32px, 48px) minmax(0, 1fr); gap: 8px;
   padding: 6px; align-items: start; border: 1px solid #8298b24d; border-radius: 5px; background: #0d1a2d;

@@ -7,8 +7,9 @@ const volumeKey = 'fairytale-audio-volume.'
 const defaults = { bgm: 38, se: 60 }
 const phrases = {
   draw: [[825, 0, .065], [430, .035, .09]],
-  'turn-in': [[440, 0, .13], [659, .06, .16], [880, .125, .22]],
-  'turn-out': [[523, 0, .11], [349, .085, .17]],
+  'turn-in': [[392, 0, .19, .40, 'triangle'], [523, .07, .22, .40, 'triangle'],
+    [659, .14, .24, .37, 'triangle'], [784, .21, .32, .36, 'triangle'], [1047, .21, .30, .16]],
+  'turn-out': [[494, 0, .14, .34, 'triangle'], [330, .095, .21, .38, 'triangle']],
   spell: [[450, 0, .11], [690, .035, .12]],
   terrain: [[245, 0, .09], [490, .03, .13]],
   finish: [[147, 0, .24], [294, .04, .29], [440, .13, .30]],
@@ -135,14 +136,15 @@ export function createBattleAudio() {
         source.start()
         return
       }
-      for (const [frequency, delay, duration] of phrases[cue]) {
+      if (cue === 'turn-in') music?.duck()
+      for (const [frequency, delay, duration, level = .22, wave = 'sine'] of phrases[cue]) {
         const at = context.currentTime + delay
         const tone = context.createOscillator()
         const envelope = context.createGain()
-        tone.type = 'sine'
+        tone.type = wave
         tone.frequency.value = frequency
         envelope.gain.setValueAtTime(.001, at)
-        envelope.gain.exponentialRampToValueAtTime(.22, at + .025)
+        envelope.gain.exponentialRampToValueAtTime(level, at + .025)
         envelope.gain.exponentialRampToValueAtTime(.001, at + duration)
         tone.connect(envelope).connect(output.se)
         tone.start(at)

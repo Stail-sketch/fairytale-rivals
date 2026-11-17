@@ -1,5 +1,7 @@
 import { cards, catalog, leaders, names } from '../../packages/cards/index.js'
 import { createCardSearch, rarityLabels } from './card-search.js'
+import { termText } from './card-terms.js'
+import { relatedPreview } from './card-related.js'
 
 const jobLabel = id => leaders[id]?.job ?? '共通'
 const typeLabel = card => ({ unit: 'ユニット', spell: '特技', weapon: '武器' })[card.kind]
@@ -18,7 +20,7 @@ export const rarityOptions = selected => options([['', 'すべて'], ...Object.e
 
 function cardGrid(cardsToShow, art) {
   return cardsToShow.map(card => `<button class="catalog-card" type="button" data-library-card="${card.id}"
-    aria-pressed="${state.selected === card.id}" style="--card-accent:${leaders[card.classId]?.accent ?? '#d9bb82'}">
+    aria-controls="catalog-detail" aria-pressed="${state.selected === card.id}" style="--card-accent:${leaders[card.classId]?.accent ?? '#d9bb82'}">
     <img src="${art(card.artId)}" alt="" loading="lazy">
     <span class="cost">${card.cost}</span>
     <strong>${card.name}</strong>
@@ -33,13 +35,14 @@ function cardDetails(card, art) {
     <h2>${card.name}</h2>
     <div class="catalog-stats"><span>MP <b>${card.cost}</b></span>
       ${card.kind !== 'spell' ? `<span>攻撃 <b>${card.attack}</b></span><span>${card.kind === 'weapon' ? '耐久' : 'HP'} <b>${card.hp}</b></span>` : ''}</div>
-    <p class="catalog-effect">${card.description}</p>
+    <p class="catalog-effect">${termText(card.description || '効果なし')}</p>
     <dl>
       <dt>収録</dt><dd>${sourceLabels[card.packId]}</dd>
       <dt>レアリティ</dt><dd>${rarityLabels[card.rarity]}</dd>
       ${card.species ? `<dt>種族</dt><dd>${card.species}</dd>` : ''}
       ${card.origin ? `<dt>入手元</dt><dd>${card.origin}</dd>` : ''}
-    </dl></div>`
+    </dl>
+    ${relatedPreview(card, art)}</div>`
 }
 
 function matches() {
@@ -54,7 +57,8 @@ function skills(art) {
     <img src="${art(id)}" alt=""><div>
       <p>${leader.job} · ${leader.name}</p>
       <h2>${leader.skill.name}</h2>
-      <p>${leader.skill.description}</p>
+      <p>${termText(leader.skill.description)}</p>
+      ${relatedPreview(leader.skill, art)}
     </div></article>`).join('')}</div>`
 }
 
@@ -90,7 +94,7 @@ export function refreshLibrary(app, art) {
   if (input.value !== state.query) input.value = state.query
   app.querySelector('#catalog-count').textContent = results.length + '件'
   grid.innerHTML = results.length ? cardGrid(results, art) : '<p class="catalog-empty">該当するカードはありません。</p>'
-  app.querySelector('#catalog-detail').innerHTML = cardDetails(cards[state.selected], art)
+  refreshDetails(app, art)
 }
 
 export function changeLibraryFilter(app, art, field) {
@@ -104,7 +108,13 @@ export function selectLibraryCard(app, art, id) {
   for (const button of app.querySelectorAll('[data-library-card]')) {
     button.setAttribute('aria-pressed', String(button.dataset.libraryCard === id))
   }
-  app.querySelector('#catalog-detail').innerHTML = cardDetails(cards[id], art)
+  refreshDetails(app, art)
+}
+
+function refreshDetails(app, art) {
+  const detail = app.querySelector('#catalog-detail')
+  detail.innerHTML = cardDetails(cards[state.selected], art)
+  detail.scrollTop = 0
 }
 
 export function switchLibraryTab(tab) {

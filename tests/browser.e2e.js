@@ -96,6 +96,12 @@ async function driveBattle() {
       query('[data-library-card="FT-0012"]'), 'キーワードで検索')
     click('[data-library-card="FT-0012"]')
     expect(query('.catalog-effect').textContent.includes('鋼の身'), 'カード詳細に能力を表示')
+    const metalBody = '#catalog-detail [data-term=METAL_BODY]'
+    query(metalBody).focus()
+    click(metalBody)
+    expect(query('.term-dialog[open] h2')?.textContent === '鋼の身', 'ライブラリのカード詳細で用語説明を開く')
+    click('.term-dialog button')
+    expect(document.activeElement === query(metalBody), '用語説明を閉じると元のリンクに戻る')
     search.value = ''
     search.dispatchEvent(new Event('input', { bubbles: true }))
     const filter = (key, value) => {
@@ -150,14 +156,34 @@ async function driveBattle() {
     search.value = 'ラーミア'
     search.dispatchEvent(new Event('input', { bubbles: true }))
     expect(shownCards().map(card => card.id).join() === 'FT-0491', '第3弾を原作名とレアリティで検索')
+    const orbs = [...query('#catalog-detail').querySelectorAll('.related-card')]
+    expect(orbs.length === 6 && orbs.some(node => node.textContent.includes('朱の種晶')),
+      '検索対象の外でも6色の種晶の詳細を表示する')
     filter('source', 'generated')
     filter('rarity', 'superRare')
     filter('kind', 'spell')
     search.value = 'レッドオーブ'
     search.dispatchEvent(new Event('input', { bubbles: true }))
     expect(shownCards().map(card => card.id).join() === 'token-orb-red', '第3弾生成カードを原作名で検索')
+    for (const key of ['source', 'rarity', 'kind', 'job']) filter(key, '')
+    search.value = '箱呼びの縞猫'
+    search.dispatchEvent(new Event('input', { bubbles: true }))
+    expect(query('#catalog-detail .related-card strong')?.textContent === cards['FT-0203'].name,
+      '舞台を使う条件付き召喚の関連カードを表示する')
+    click('#catalog-detail [data-term=treasure]')
+    expect(query('.term-dialog[open] h2')?.textContent === '秘宝箱', '舞台の用語説明を開く')
+    click('.term-dialog button')
+    search.value = '土冠の掘り王'
+    search.dispatchEvent(new Event('input', { bubbles: true }))
+    click('#catalog-detail .related-card [data-term=SKILL_BOOST]')
+    expect(query('.term-dialog[open] h2')?.textContent === '覚醒', '関連カードの効果文からも用語説明を開く')
+    click('.term-dialog button')
     click('[data-library-tab=skills]')
     expect(document.querySelectorAll('.catalog-skill').length === 7, '7人の奥義一覧が表示される')
+    expect(query('.catalog-skill .related-cards')?.textContent.includes('紅葉の一打'), '奥義一覧で生成するカードを確認できる')
+    click('.catalog-skill [data-term=PIERCE]')
+    expect(query('.term-dialog[open] h2')?.textContent === '穿ちの一撃', '奥義一覧からも用語説明を開ける')
+    click('.term-dialog button')
     click('[data-op=close-library]')
     const random = crypto.getRandomValues.bind(crypto)
     const useBattleSeed = seed => {
@@ -290,8 +316,8 @@ async function driveBattle() {
     next()
     expect(x('[data-leader="1"]') < x('[data-leader="0"]'), '交代すると操作側が左に回る')
     expect(document.querySelectorAll('[data-hand]').length === 5, 'ドローした手札をすぐ使える')
-    expect(query('.turn-notice').textContent === '後攻のターン' && query('.battle-message').textContent === '',
-      '手番交代を盤面上部で知らせ、対戦中のメッセージ欄は占有しない')
+    expect(query('.board .turn-notice').textContent === '後攻のターン' && query('.battle-message').textContent === '',
+      '手番交代を盤面で知らせ、対戦中のメッセージ欄は占有しない')
     expect(query('#skill-description').textContent === leaders.mage.skill.description &&
       y('#skill-description') > y('[data-op=skill]'), '能力文を奥義ボタンの下に常時表示')
     click('[data-op=focus]')
@@ -357,7 +383,14 @@ async function driveBattle() {
     expect(query('[data-op=sound][aria-pressed=false]'), '効果音設定を次の対戦でも保持する')
     expect(query('[data-volume=bgm]').value === '17', 'BGM音量を次の対戦でも保持する')
     click('[data-op=sound]')
-    expect(query('.turn-notice[data-direction=incoming]')?.textContent === 'あなたのターン', '対戦開始時に自分の手番を知らせる')
+    const incoming = query('.board .turn-notice[data-direction=incoming]')
+    const board = query('.board').getBoundingClientRect()
+    const notice = incoming?.getBoundingClientRect()
+    expect(incoming?.textContent === 'あなたのターン' &&
+      Math.abs(notice.left + notice.width / 2 - (board.left + board.width / 2)) < 2 &&
+      Math.abs(notice.top + notice.height / 2 - (board.top + board.height / 2)) < 2 &&
+      parseFloat(getComputedStyle(incoming).fontSize) >= 30 && getComputedStyle(incoming).pointerEvents === 'none',
+      '自分の手番を盤面中央に大きく表示し、操作を遮らない')
     let cpuActionSeen = false
     let cpuRevealSeen = false
     for (let i = 0; i < 65 && !query('.result'); i++) {

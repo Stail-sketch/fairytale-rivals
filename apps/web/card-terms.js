@@ -1,4 +1,7 @@
-import { names } from '../../packages/cards/names.js'
+import { names, terrains } from '../../packages/cards/names.js'
+import { terrainText } from '../../packages/engine/terrain.js'
+
+const termNames = { ...names, ...terrains }
 
 export const termDetails = {
   CHARGE: '登場したターンから攻撃できます。',
@@ -37,19 +40,20 @@ export const termDetails = {
   DARK_CLOAK: '受けるダメージを防ぎます。',
   RESIST_SPELL: '特技からのダメージを防ぎます。',
   SUPER_PIERCE: 'ユニットを攻撃すると、同じ列の敵と敵リーダーにもダメージを与えます。',
+  ...terrainText,
 }
 
 export const escapeText = value => String(value).replace(/[&<>"']/g, symbol => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
 })[symbol])
 
-const keysByName = new Map(Object.keys(termDetails).map(id => [names[id], id]))
+const keysByName = new Map(Object.keys(termDetails).map(id => [termNames[id], id]))
 const phrases = [...keysByName.keys()].filter(name => name !== names.CHOICE && name !== names.FRONT_ROW && name !== names.BACK_ROW)
   .sort((a, b) => b.length - a.length).join('|')
 const pattern = new RegExp('(' + phrases + '|「[^」]+」)', 'g')
 
 export function termLink(id, suffix = '') {
-  return `<button type="button" class="term-link" data-term="${id}" aria-haspopup="dialog">${escapeText(names[id])}${escapeText(suffix)}</button>`
+  return `<button type="button" class="term-link" data-term="${id}" aria-haspopup="dialog">${escapeText(termNames[id])}${escapeText(suffix)}</button>`
 }
 
 export function termText(value) {
@@ -71,7 +75,7 @@ export function handleTermLink(event) {
   const dialog = document.createElement('dialog')
   dialog.className = 'term-dialog'
   dialog.setAttribute('aria-labelledby', 'term-dialog-title')
-  dialog.innerHTML = `<h2 id="term-dialog-title">${escapeText(names[link.dataset.term])}</h2>
+  dialog.innerHTML = `<h2 id="term-dialog-title">${escapeText(termNames[link.dataset.term])}</h2>
     <p>${escapeText(termDetails[link.dataset.term])}</p>
     <form method="dialog"><button class="secondary" autofocus>閉じる</button></form>`
   function close() {

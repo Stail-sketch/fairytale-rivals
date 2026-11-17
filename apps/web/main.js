@@ -78,7 +78,7 @@ const waitingForFriend = () => room && (view?.decisionSeat ?? view?.active) !== 
 const roomLocked = () => room && (roomBusy || roomConnection !== 'connected' || waitingForFriend())
 const cardInspectionOnly = () => view?.phase === 'battle' &&
   (presentation || roomLocked() || view.active !== battleSeat() || !view.legal)
-const turnNoticeMs = 1050
+const turnNoticeMs = 1200
 
 function portrait(id) {
   return '<img class="portrait" src="' + art(id) + '" alt="">'
@@ -668,17 +668,17 @@ function renderTurnNotice() {
   if (!turnNotice) return
   const elapsed = performance.now() - turnNotice.startedAt
   if (elapsed >= turnNoticeMs) return
-  const label = app.querySelector('.turn-label')
-  if (!label) return
+  const anchor = app.querySelector(turnNotice.incoming ? '.board' : '.turn-label')
+  if (!anchor) return
   const notice = document.createElement('span')
   notice.className = 'turn-notice'
   notice.dataset.direction = turnNotice.incoming ? 'incoming' : 'outgoing'
   notice.setAttribute('aria-hidden', 'true')
   notice.textContent = turnNotice.text
-  notice.style.animationDuration = turnNoticeMs + 'ms'
+  notice.style.setProperty('--turn-notice-duration', turnNoticeMs + 'ms')
   notice.style.animationDelay = -elapsed + 'ms'
   notice.addEventListener('animationend', () => notice.remove(), { once: true })
-  label.append(notice)
+  anchor.append(notice)
 }
 
 function skillControls(own) {
