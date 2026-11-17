@@ -290,7 +290,8 @@ async function driveBattle() {
     next()
     expect(x('[data-leader="1"]') < x('[data-leader="0"]'), '交代すると操作側が左に回る')
     expect(document.querySelectorAll('[data-hand]').length === 5, 'ドローした手札をすぐ使える')
-    expect(query('.battle-message').textContent === '', '画面に手番交代の文言を重ねない')
+    expect(query('.turn-notice').textContent === '後攻のターン' && query('.battle-message').textContent === '',
+      '手番交代を盤面上部で知らせ、対戦中のメッセージ欄は占有しない')
     expect(query('#skill-description').textContent === leaders.mage.skill.description &&
       y('#skill-description') > y('[data-op=skill]'), '能力文を奥義ボタンの下に常時表示')
     click('[data-op=focus]')
@@ -356,6 +357,7 @@ async function driveBattle() {
     expect(query('[data-op=sound][aria-pressed=false]'), '効果音設定を次の対戦でも保持する')
     expect(query('[data-volume=bgm]').value === '17', 'BGM音量を次の対戦でも保持する')
     click('[data-op=sound]')
+    expect(query('.turn-notice[data-direction=incoming]')?.textContent === 'あなたのターン', '対戦開始時に自分の手番を知らせる')
     let cpuActionSeen = false
     let cpuRevealSeen = false
     for (let i = 0; i < 65 && !query('.result'); i++) {
@@ -363,13 +365,32 @@ async function driveBattle() {
       if (query('.result')) break
       expect(query('[data-op=end]').disabled && query('.selection-bar span').textContent === 'CPUが行動中', 'CPU中の操作をロック')
       expect(query('.ally-formation [data-slot^="0:"]'), 'CPUターンも自分の盤面が左')
+      if (i === 0) {
+        expect(query('.turn-notice[data-direction=outgoing]')?.textContent === '相手のターン', '手番を渡したときに知らせる')
+        const hand = query('[data-hand][aria-haspopup=dialog]')
+        const card = cards[hand.dataset.card]
+        hand.dispatchEvent(new PointerEvent('pointerover', { bubbles: true }))
+        expect(query('#detail .inspector-effect')?.textContent === card.description, 'CPUの手番でもホバーで手札の効果を確認できる')
+        click('[data-hand][aria-haspopup=dialog]')
+        expect(query('.battle-card-dialog[open] p')?.textContent === card.description, 'CPUの手番でもクリックで手札の詳細を開ける')
+        click('.battle-card-dialog .detail-dialog-actions button')
+      }
       let steps = 0
       while (query('[data-op=end]')?.disabled) {
         expect(++steps < 120, 'CPUが自動で手番を返す')
         advanceTimer()
-        if (query('[data-beat=reveal] [data-reveal-card]')) cpuRevealSeen = true
+        if (!cpuRevealSeen && query('[data-beat=reveal] [data-reveal-card]')) {
+          cpuRevealSeen = true
+          const hand = query('[data-hand]')
+          hand.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true }))
+          expect(query('.battle-card-dialog[open] h2')?.textContent === cards[hand.dataset.card].name,
+            'CPUのカード演出中も手札の詳細を開ける')
+          click('.battle-card-dialog .detail-dialog-actions button', false)
+        }
         if (query('.enemy-formation [data-unit]')) cpuActionSeen = true
       }
+      if (i === 0) expect(query('.turn-notice[data-direction=incoming]')?.textContent === 'あなたのターン',
+        'CPUから手番が戻ったときに知らせる')
     }
     expect(cpuActionSeen && cpuRevealSeen, 'CPUも使用カードを見せてからユニットを召喚する')
     expect(query('.result h1')?.textContent === 'CPUの勝利', 'CPUが実際に対戦を終わらせる')
@@ -818,6 +839,9 @@ test('別々のChromiumセッションで招待URLから参加し、対戦と再
     hand.dispatchEvent(new PointerEvent('pointerover', { bubbles: true }))
     return hand.getAttribute('aria-label').startsWith(document.querySelector('#detail h2').textContent)
   })()`), true, '相手の手番中も自分の手札を確認できる')
+  await second.click('[data-hand][aria-haspopup=dialog]')
+  await second.wait('.battle-card-dialog[open] .log-card-description p')
+  await second.click('.battle-card-dialog .detail-dialog-actions button')
   await second.viewport(390, 800)
   await second.click('[data-op=audio-mixer]')
   assert.equal(await second.evaluate(`(() => {
@@ -858,6 +882,9 @@ test('別々のChromiumセッションで招待URLから参加し、対戦と再
   const placed = `.enemy-formation [data-card="${cardId}"]`
   await spectator.wait(placed)
   assert.equal(await spectator.evaluate('window.summonSeen'), true)
+  await spectator.click(placed)
+  assert.equal(await spectator.evaluate('document.querySelector(".battle-card-dialog[open] p")?.textContent'), catalog.find(card => card.id === cardId).description)
+  await spectator.click('.battle-card-dialog .detail-dialog-actions button')
   await spectator.navigate(invite)
   await eventually(async () => (await spectator.evaluate('typeof window.summonSeen')) === 'undefined', '画面の再読み込み')
   await spectator.wait(placed)

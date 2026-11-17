@@ -136,7 +136,26 @@ small { font-size: 11px; }
 .battle:focus { outline: none; }
 .battle-heading, .battle-grid, .tray { max-width: 1240px; margin-inline: auto; }
 .battle-heading { position: relative; z-index: 4; display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; margin-bottom: 14px; align-items: center; color: #f0d6a4; font-size: 12px; letter-spacing: .14em; }
-.turn-label { background: #141d29e8; border: 1px solid #b29663; color: var(--text); border-radius: 4px; padding: 6px 19px; font-size: 12px; letter-spacing: .08em; }
+.turn-label { position: relative; background: #141d29e8; border: 1px solid #b29663; color: var(--text); border-radius: 4px; padding: 6px 19px; font-size: 12px; letter-spacing: .08em; }
+.turn-notice {
+  position: absolute; inset-block: -4px; min-width: 100%; left: 50%; transform: translateX(-50%);
+  display: grid; place-items: center; padding: 0 18px; white-space: nowrap; pointer-events: none;
+  border: 1px solid #d4b474; border-radius: 6px; background: linear-gradient(#352b1c, #201c19);
+  color: #ffe7b7; box-shadow: 0 3px 14px #0a101aca; font-weight: 800;
+  animation: turn-notice ease-out both;
+}
+.turn-notice[data-direction="outgoing"] {
+  border-color: #819bb7; background: linear-gradient(#25394d, #172331); color: #dbe9f8;
+}
+@keyframes turn-notice {
+  0%, 100% { opacity: 0; }
+  10%, 82% { opacity: 1; }
+}
+.short-motion .turn-notice { animation-name: turn-notice-still; animation-timing-function: steps(1, end); }
+@keyframes turn-notice-still {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
 .battle-grid, .tray { display: grid; grid-template-columns: var(--wing) minmax(0, 1fr) var(--wing); gap: var(--gutter); }
 .battle-grid { position: relative; align-items: stretch; isolation: isolate; }
 .leader-panel {
@@ -933,6 +952,7 @@ dialog li, dialog p { font-size: 14px; line-height: 1.7; color: #d8e0e1; margin-
   .battle-heading { grid-template-columns: minmax(0, 1fr) auto; margin-bottom: 7px; }
   .battle-heading > span:first-child { display: none; }
   .battle-heading .turn-label { justify-self: start; padding: 4px 7px; }
+  .turn-notice { left: 0; transform: none; padding-inline: 9px; }
   .board { grid-template-columns: minmax(0, 1fr) 15px minmax(0, 1fr); padding: 5px 4px 8px; }
   .formation { gap: 4px; }
   .lane-mark { width: 14px; height: 14px; font-size: 9px; }

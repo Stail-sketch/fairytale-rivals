@@ -69,12 +69,16 @@ let presentationTimer = null
 let handPress = null
 let ignoreCardClickUntil = 0
 let animatedView = null
+let turnNotice = null
 
 const solo = () => mode === 'cpu'
 const inMatch = () => match || room
 const cpuTurn = () => solo() && view?.phase === 'battle' && view.active === 1
 const waitingForFriend = () => room && (view?.decisionSeat ?? view?.active) !== roomSeat
 const roomLocked = () => room && (roomBusy || roomConnection !== 'connected' || waitingForFriend())
+const cardInspectionOnly = () => view?.phase === 'battle' &&
+  (presentation || roomLocked() || view.active !== battleSeat() || !view.legal)
+const turnNoticeMs = 1050
 
 function portrait(id) {
   return '<img class="portrait" src="' + art(id) + '" alt="">'
@@ -300,7 +304,8 @@ function leaderPanel(seat, enemy) {
 function square(seat, row, column) {
   const position = { row, column }
   const unit = view.players[seat].units.find(value => samePosition(value.position, position))
-  const ready = unit && view.legal?.attack[unit.id]?.enabled
+  const inspectionOnly = cardInspectionOnly()
+  const ready = unit && !inspectionOnly && view.legal?.attack[unit.id]?.enabled
   const chosenPosition = seat === (selected?.position?.seat ?? selected?.legal.positionSeat ?? view.active)
     && samePosition(selected?.position, position)
   const playable = placementAt(seat, position)
@@ -323,7 +328,8 @@ function square(seat, row, column) {
   const tooltip = unit ? card.name + '｜' + card.description : label
   return `<button class="slot ${classes.filter(Boolean).join(' ')}" data-slot="${seat}:${row}:${column}"
     ${stageLabel ? `data-terrain="${stage}"` : ''}
-    ${unit ? `data-unit="${unit.id}" data-card="${unit.card}" draggable="${Boolean(ready)}" aria-keyshortcuts="I"` : ''}
+    ${unit ? `data-unit="${unit.id}" data-card="${unit.card}" draggable="${Boolean(ready)}" aria-keyshortcuts="I"
+      ${inspectionOnly ? 'aria-haspopup="dialog"' : ''}` : ''}
     aria-label="${label}${stageLabel ? ' · ' + stageLabel : ''}" title="${escape(tooltip + (stageLabel ? '｜' + stageLabel + ' · ' + (terrainText[stage] ?? '六色で特殊勝利') : ''))}">
     ${unit ? `<img src="${art(card.artId)}" alt=""><span class="board-name">${card.name}</span>
       ${ready ? '<span class="ready-mark" aria-label="攻撃可能">⚔</span>' : ''}
@@ -344,6 +350,7 @@ function field(seat, enemy) {
 
 function hand(player) {
   const total = player.hand.length
+  const inspectionOnly = cardInspectionOnly()
   return `<div class="hand" aria-label="あなたの手札" style="--total:${total}">
     ${player.hand.map((instance, index) => {
       const card = cards[instance.card]
@@ -352,8 +359,9 @@ function hand(player) {
       const offset = index - (total - 1) / 2
       return `<button class="hand-card ${selected?.id === instance.id ? 'chosen' : ''} ${legal && !legal.enabled ? 'unaffordable' : ''}"
         style="--tilt:${offset * 2.5}deg;--drop:${Math.abs(offset) * 3}px"
-        data-hand="${instance.id}" data-card="${card.id}" data-cost="${cost}" aria-keyshortcuts="I" draggable="${Boolean(legal?.enabled)}" ${legal ? '' : 'aria-disabled="true"'}
-        aria-label="${escape(card.name)} MP ${cost}" title="${escape(legal?.reason ?? card.description)}">${cardFace(card, false, cost)}</button>`
+        data-hand="${instance.id}" data-card="${card.id}" data-cost="${cost}" aria-keyshortcuts="I"
+        draggable="${Boolean(!inspectionOnly && legal?.enabled)}" ${inspectionOnly ? 'aria-haspopup="dialog"' : ''}
+        aria-label="${escape(card.name)} MP ${cost}" title="${escape((!inspectionOnly && legal?.reason) || card.description)}">${cardFace(card, false, cost)}</button>`
     }).join('') || '<span class="hand-empty">手札はありません</span>'}
     </div>`
 }
@@ -538,13 +546,18 @@ function liveCardDetails(node) {
 
 const inspectableCard = node => node?.closest?.('.battle [data-hand], .battle [data-unit], .mulligan [data-replace]')
 
+function liveCardSelector({ dataset: { hand, replace, unit } }) {
+  if (hand !== undefined) return `[data-hand="${hand}"]`
+  if (replace !== undefined) return `[data-replace="${replace}"]`
+  return `[data-unit="${unit}"]`
+}
+
 function inspectLiveCard(node) {
-  if (!node?.isConnected || !view || presentation) return
+  if (!node?.isConnected || !view) return
   const card = cards[node.dataset.card]
   if (!card) return
-  const { hand, replace, unit, cost } = node.dataset
-  const selector = hand !== undefined ? `[data-hand="${hand}"]` : replace !== undefined ?
-    `[data-replace="${replace}"]` : `[data-unit="${unit}"]`
+  const selector = liveCardSelector(node)
+  const { cost } = node.dataset
   openCardDetail(card, cost, () => app.querySelector(selector) ?? app.querySelector('.battle'),
     liveCardDetails(node), cardPower(card, { node, cost: cost === undefined ? undefined : Number(cost) }))
 }
@@ -622,7 +635,13 @@ function playResourceMotion() {
   if (turn) {
     app.querySelector(`[data-mp="${turn.seat}"]`)?.classList.add('mp-refresh')
     app.querySelector(`[data-side="${turn.seat}"]`)?.classList.add('turn-arrival')
-    battleAudio.play('turn')
+    const incoming = turn.seat === battleSeat()
+    turnNotice = {
+      incoming,
+      text: room || solo() ? (incoming ? 'あなたのターン' : '相手のターン') : turn.text,
+      startedAt: performance.now(),
+    }
+    battleAudio.play(incoming ? 'turn-in' : 'turn-out')
   }
   const added = events.filter(event => event.type === 'handAdded')
   if (added.length) {
@@ -642,6 +661,24 @@ function playResourceMotion() {
     }
     if (!turn) battleAudio.play('draw')
   }
+}
+
+function renderTurnNotice() {
+  if (view?.phase !== 'battle') turnNotice = null
+  if (!turnNotice) return
+  const elapsed = performance.now() - turnNotice.startedAt
+  if (elapsed >= turnNoticeMs) return
+  const label = app.querySelector('.turn-label')
+  if (!label) return
+  const notice = document.createElement('span')
+  notice.className = 'turn-notice'
+  notice.dataset.direction = turnNotice.incoming ? 'incoming' : 'outgoing'
+  notice.setAttribute('aria-hidden', 'true')
+  notice.textContent = turnNotice.text
+  notice.style.animationDuration = turnNoticeMs + 'ms'
+  notice.style.animationDelay = -elapsed + 'ms'
+  notice.addEventListener('animationend', () => notice.remove(), { once: true })
+  label.append(notice)
 }
 
 function skillControls(own) {
@@ -803,6 +840,7 @@ function render(focusOn = null) {
   }
   if (presentation) positionPresentation(app, presentation)
   playResourceMotion()
+  renderTurnNotice()
   const events = app.querySelector('.events')
   if (events && scroll) events.scrollTop = scroll
   if (showLibrary) refreshLibrary(app, art)
@@ -935,6 +973,7 @@ function receiveRoom(update) {
     return
   }
   view = update.view
+  turnNotice = null
   eventFloor = view.events.at(-1)?.seq ?? 0
   selected = null
   replacements.clear()
@@ -1224,12 +1263,20 @@ app.addEventListener('drop', event => {
 app.addEventListener('click', event => {
   const node = event.target.closest('button')
   if (!node) return
+  const card = inspectableCard(node)
+  if (event.detail > 0 && card && performance.now() < ignoreCardClickUntil) {
+    ignoreCardClickUntil = 0
+    return
+  }
+  if (card && cardInspectionOnly()) {
+    inspectLiveCard(card)
+    return
+  }
   if (node.dataset.inspectSkill !== undefined) {
     const seat = node.dataset.inspectSkill
     openBattleDetail(skillDetail(Number(seat), undefined, true), () => app.querySelector(`[data-inspect-skill="${seat}"]`))
     return
   }
-  if ((presentation || roomLocked()) && node.closest('.battle-grid, .tray, .mulligan')) return
   if (node.dataset.inspectWeapon !== undefined) {
     const weapon = view.players[Number(node.dataset.inspectWeapon)].weapon
     if (weapon) openCardDetail(cards[weapon.card], undefined,
@@ -1237,10 +1284,7 @@ app.addEventListener('click', event => {
       ['攻撃力 ' + weapon.attack, '残り耐久 ' + weapon.durability])
     return
   }
-  if (event.detail > 0 && inspectableCard(node) && performance.now() < ignoreCardClickUntil) {
-    ignoreCardClickUntil = 0
-    return
-  }
+  if ((presentation || roomLocked()) && node.closest('.battle-grid, .tray, .mulligan')) return
   if (node.dataset.logEvent !== undefined) {
     inspectLogCard(Number(node.dataset.logEvent))
     return
@@ -1412,15 +1456,17 @@ function cancelCardPress() {
 }
 
 app.addEventListener('pointerdown', event => {
-  if (!event.isPrimary || event.button !== 0 || presentation) return
+  if (!event.isPrimary || event.button !== 0) return
   const node = inspectableCard(event.target)
   if (!node) return
   cancelCardPress()
   ignoreCardClickUntil = 0
+  const selector = liveCardSelector(node)
   const timer = setTimeout(() => {
-    if (!node.isConnected) return
+    const current = app.querySelector(selector)
+    if (!current || current.dataset.card !== node.dataset.card) return
     ignoreCardClickUntil = performance.now() + 650
-    inspectLiveCard(node)
+    inspectLiveCard(current)
   }, 440)
   handPress = { timer, pointer: event.pointerId, x: event.clientX, y: event.clientY }
 })
@@ -1434,7 +1480,7 @@ for (const type of ['pointerup', 'pointercancel']) document.addEventListener(typ
 
 app.addEventListener('contextmenu', event => {
   const node = inspectableCard(event.target)
-  if (!node || presentation) return
+  if (!node) return
   event.preventDefault()
   cancelCardPress()
   inspectLiveCard(node)
@@ -1496,6 +1542,8 @@ document.addEventListener('keydown', event => {
 })
 
 const saved = savedRoom(invite)
-if (saved && onlineAvailable()) openRoom(saved)
-else render()
+if (saved && onlineAvailable()) {
+  document.addEventListener('click', battleAudio.unlock, { once: true, capture: true })
+  openRoom(saved)
+} else render()
 
