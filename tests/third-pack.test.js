@@ -53,6 +53,39 @@ function unit(game, id) {
   return game.players.flatMap(player => player.units).find(unit => unit.id === id)
 }
 
+test('花癒やしの祈杖を装備し、共鳴と攻撃で耐久を消費して壊す', () => {
+  let game = fixture('priest')
+  const receiver = put(game, 'night-dragon', 0, front(0))
+  unit(game, receiver).hp -= 3
+  game = play(game, 'FT-0420')
+  assert.deepEqual(game.players[0].units.map(unit => unit.id), [receiver])
+  assert.equal(game.players[0].weapon.durability, 3)
+  const woundedHp = unit(game, receiver).hp
+  game = run(game, { type: 'focus' })
+  assert.equal(unit(game, receiver).hp, woundedHp + 2)
+  assert.equal(game.players[0].weapon.durability, 2)
+  game = run(game, { type: 'leaderAttack', target: leaderTarget(1) })
+  assert.equal(game.players[1].hp, 24)
+  assert.equal(game.players[0].weapon.durability, 1)
+
+  unit(game, receiver).hp = woundedHp
+  const eventCount = game.events.length
+  game = play(game, 'token-sun-pendant')
+  assert.equal(game.players[0].tension, 3)
+  assert.equal(unit(game, receiver).hp, woundedHp + 2, '壊れた杖の共鳴は再発動しない')
+  assert.equal(game.players[0].weapon, null)
+  const events = game.events.slice(eventCount)
+  const breaks = events.filter(event => event.type === 'weaponBreak')
+  assert.equal(breaks.length, 1)
+  assert.equal(breaks[0].card, 'FT-0420')
+  assert.equal(events.filter(event => event.triggered && event.source?.card === 'FT-0420').length, 1)
+
+  game = play(fixture('priest'), 'FT-0420')
+  game = run(game, { type: 'focus' })
+  assert.equal(game.players[0].hp, 25)
+  assert.equal(game.players[0].weapon.durability, 2, '回復対象がいなくても共鳴時に耐久を消費する')
+})
+
 test('剣の紋章はユニットが乗っている間だけ武器を強化し、安息の地を上書きできない', () => {
   let game = fixture('warrior')
   game = play(game, 'FT-0507', { position: front(0) })

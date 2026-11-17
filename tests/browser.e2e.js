@@ -572,12 +572,22 @@ async function driveBattle() {
     expect(query('[data-beat=approach] .reveal-travel') && query('[data-leader="0"].effect-destination'),
       '武器が装備する語り手の肖像に移動')
     completePresentation()
-    expect(query('[data-leader="0"].ready') && query('.leader-panel:not(.opponent) .resources').textContent.includes('武器'),
-      '武器を装備し、耐久力を表示する')
+    const durability = '[data-leader="0"] .leader-durability'
+    const attackBadge = '[data-leader="0"] .leader-power'
+    expect(query('[data-leader="0"].ready') &&
+      query(durability)?.textContent === '耐久 ' + cards['FT-0086'].hp &&
+      y(durability) >= query(attackBadge).getBoundingClientRect().bottom &&
+      query(durability).getBoundingClientRect().right === query(attackBadge).getBoundingClientRect().right,
+      'リーダー右上の攻撃力の真下に装備中の武器の耐久を表示')
+    query(durability).dispatchEvent(new PointerEvent('pointerover', { bubbles: true, relatedTarget: query(attackBadge) }))
+    expect(query('#detail h2')?.textContent === cards['FT-0086'].name &&
+      query('#detail .inspector-stats').textContent.includes('耐久 ' + cards['FT-0086'].hp),
+      '武器の耐久にカーソルを合わせて装備の詳細を確認できる')
     click('[data-leader="0"]')
     click('[data-leader="1"]')
     expect(Number(query('[data-leader="1"] .leader-hp').textContent) === 25 - cards['FT-0086'].attack,
       '装備した武器で敵リーダーを攻撃できる')
+    expect(query(durability)?.textContent === '耐久 ' + (cards['FT-0086'].hp - 1), '攻撃で減った耐久を表示')
     next()
     next()
     click('[data-hand][data-card=FT-0509]')

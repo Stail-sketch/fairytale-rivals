@@ -25238,7 +25238,7 @@
         "attack": 1,
         "hp": 3,
         "classId": "priest",
-        "kind": "unit",
+        "kind": "weapon",
         "rarity": "common",
         "keywords": []
       },
@@ -25263,7 +25263,7 @@
           "attack": 1,
           "hp": 3,
           "classId": "priest",
-          "kind": "unit",
+          "kind": "weapon",
           "rarity": "common",
           "keywords": []
         }

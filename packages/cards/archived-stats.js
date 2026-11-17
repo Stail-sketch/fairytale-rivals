@@ -359,7 +359,7 @@ export const archivedStats = {
   417: [10,0,0,"fighter","spell","superRare","set-2"],
   418: [2,0,0,"priest","spell","rare","set-2"],
   419: [2,4,4,"priest","unit","common","set-2"],
-  420: [2,1,3,"priest","unit","common","set-2"],
+  420: [2,1,3,"priest","weapon","common","set-2"],
   421: [4,0,0,"priest","spell","rare","set-2"],
   422: [4,3,5,"priest","unit","superRare","set-2"],
   423: [6,0,0,"priest","spell","superRare","set-2"],

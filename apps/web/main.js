@@ -215,23 +215,29 @@ function flashes(target, id) {
 function leaderPanel(seat, enemy) {
   const player = view.players[seat]
   const leader = leaders[player.leader]
+  const weapon = player.weapon
+  const weaponName = weapon ? cards[weapon.card].name : ''
   const target = leaderTarget(seat)
   const flash = flashes(target)
   const ready = !enemy && view.legal?.leaderAttack.enabled
   const striking = animatedView !== view && view.events.some(event => event.seq > eventFloor && event.type === 'leaderAttack' && event.seat === seat)
   return `<aside class="leader-panel ${enemy ? 'opponent' : ''} ${seat === view.active ? 'active-side' : ''}" data-side="${seat}"${colors(leader)}>
     <button class="leader-target ${targetEnabled(target) ? 'targetable' : ''} ${ready ? 'ready' : ''} ${selected?.type === 'leaderAttack' && seat === view.active ? 'chosen' : ''} ${striking ? 'strike' : ''} ${flash.cls}"
-      data-leader="${seat}" aria-label="${seatName(seat)}リーダー ${leader.name} HP ${Math.max(0, player.hp)}${ready ? ' 攻撃可能' : ''}"
+      data-leader="${seat}" aria-label="${seatName(seat)}リーダー ${leader.name} HP ${Math.max(0, player.hp)}${weapon ? ' 武器耐久 ' + weapon.durability : ''}${ready ? ' 攻撃可能' : ''}"
       title="${ready ? 'クリックしてリーダーで攻撃' : leader.motif}">
       ${portrait(player.leader)}<span class="crest" aria-hidden="true">${leader.sigil}</span>
-      ${player.leaderPower > 0 ? `<span class="leader-power">⚔ ${player.leaderPower}</span>` : ''}
+      ${player.leaderPower > 0 || weapon ? `<span class="leader-combat-stats">
+        <span class="leader-power">⚔ ${player.leaderPower}</span>
+        ${weapon ? `<span class="leader-durability" data-inspect-weapon="${seat}" title="${escape(weaponName)}">耐久 ${weapon.durability}</span>` : ''}
+      </span>` : ''}
       <span class="leader-hp">${Math.max(0, player.hp)}</span>${flash.label}
     </button>
     <div class="leader-identity"><small>${enemy ? (solo() ? 'CPU' : '相手') : 'あなた'} · ${seatName(seat)} · ${leader.job}</small><strong>${leader.name}</strong></div>
     <div class="resources">
       <span data-mp="${seat}" title="現在のMP（このターン限りの追加分を含む）と最大MP"><b class="mp-icon">MP</b> <strong>${player.mp}/${player.maxMp}</strong></span>
       <span data-draw-pile="${seat}" title="山札の残り"><i aria-hidden="true">▤</i> 山札 <strong>${player.deckCount}</strong></span>
-      ${player.weapon ? `<span title="${cards[player.weapon.card].name}">武器 <strong>${player.weapon.attack}/${player.weapon.durability}</strong></span>` : ''}
+      ${weapon ? `<button type="button" class="equipped-weapon" data-inspect-weapon="${seat}"
+        aria-label="${escape(weaponName)}の詳細">${escape(weaponName)}</button>` : ''}
       ${enemy ? `<span data-hand-count="${seat}" title="相手の手札枚数">手札 <strong>${player.handCount}</strong></span>` : ''}
     </div>
     <div class="tension ${animatedView !== view && view.events.some(event => event.seq > eventFloor && event.type === 'focus' && event.seat === seat) ? 'glow' : ''}">
@@ -321,7 +327,8 @@ function powerDetails(rows) {
 
 function cardPower(card, { node, cost, action } = {}) {
   const unitId = Number(node?.dataset.unit ?? (action?.type === 'attack' ? action.id : undefined))
-  const source = view.players.flatMap(player => player.units).find(unit => unit.id === unitId)
+  const equipped = view.players[Number(node?.dataset.inspectWeapon)]?.weapon
+  const source = equipped ?? view.players.flatMap(player => player.units).find(unit => unit.id === unitId)
   const handInstance = Number(node?.dataset.hand ?? node?.dataset.replace ?? (action?.type === 'play' ? action.id : undefined))
   const choice = action ?? (selected?.id === handInstance ? selected : undefined)
   return definitionPowerRows(view, source?.owner ?? battleSeat(), card, {
@@ -361,7 +368,9 @@ const keywordDetails = {
 
 function cardDetail(card, cost = card.cost, node, action) {
   const type = { unit: 'ユニット', spell: '特技', weapon: '武器' }[card.kind]
-  const stats = card.kind === 'spell' ? '' : `<span class="inspector-stat">攻撃力 ${card.attack}</span><span class="inspector-stat">${card.kind === 'unit' ? 'HP' : '耐久'} ${card.hp}</span>`
+  const weapon = view.players[Number(node?.dataset.inspectWeapon)]?.weapon
+  const stats = card.kind === 'spell' ? '' : `<span class="inspector-stat">攻撃力 ${weapon?.attack ?? card.attack}</span>
+    <span class="inspector-stat">${card.kind === 'unit' ? 'HP' : '耐久'} ${weapon?.durability ?? card.hp}</span>`
   const unitId = Number(node?.dataset.unit)
   const unit = node?.dataset.unit && view.players.flatMap(player => player.units).find(unit => unit.id === unitId)
   const keys = [...new Set([...card.keywords, ...(unit?.grants ?? [])])]
@@ -1093,6 +1102,13 @@ app.addEventListener('click', event => {
   const node = event.target.closest('button')
   if (!node) return
   if ((presentation || roomLocked()) && node.closest('.battle-grid, .tray, .mulligan')) return
+  if (node.dataset.inspectWeapon !== undefined) {
+    const weapon = view.players[Number(node.dataset.inspectWeapon)].weapon
+    if (weapon) openCardDetail(cards[weapon.card], undefined,
+      () => app.querySelector(`button[data-inspect-weapon="${node.dataset.inspectWeapon}"]`),
+      ['攻撃力 ' + weapon.attack, '残り耐久 ' + weapon.durability])
+    return
+  }
   if (event.detail > 0 && inspectableCard(node) && performance.now() < ignoreCardClickUntil) {
     ignoreCardClickUntil = 0
     return
@@ -1200,16 +1216,18 @@ function showMulliganReturns(destination) {
   if (replacements.size) battleAudio.play('draw')
 }
 
-const inspectSelector = '[data-hand], [data-unit], [data-terrain], [data-leader], [data-op="skill"], #skill-description'
+const inspectSelector = '[data-hand], [data-unit], [data-terrain], [data-leader], [data-inspect-weapon], [data-op="skill"], #skill-description'
 
 function inspectNode(node) {
   const panel = app.querySelector('#detail')
   if (!panel || !node) return
-  const card = cards[node?.dataset.card]
-  const { hand, unit, slot, leader, terrain } = node.dataset
+  const { hand, unit, slot, leader, terrain, inspectWeapon } = node.dataset
+  const weapon = view.players[Number(inspectWeapon)]?.weapon
+  const card = cards[weapon?.card ?? node.dataset.card]
   if (card) {
     panel.innerHTML = cardDetail(card, node.dataset.cost === undefined ? undefined : Number(node.dataset.cost), node)
-    lastInspection = hand !== undefined ? `[data-hand="${hand}"]` : `[data-unit="${unit}"]`
+    lastInspection = weapon ? `[data-inspect-weapon="${inspectWeapon}"]` :
+      hand !== undefined ? `[data-hand="${hand}"]` : `[data-unit="${unit}"]`
   } else if (terrain) {
     panel.innerHTML = `<div class="inspector-copy"><h2>${escape(terrainName(terrain))}</h2>
       <p class="inspector-effect">${escape(terrainText[terrain] ?? '6色の種晶で特殊勝利')}</p></div>`
@@ -1225,8 +1243,7 @@ function inspect(event) {
   const entry = event.target.closest('[data-log-event]')
   if (entry && !entry.contains(event.relatedTarget)) highlightLogEvent(Number(entry.dataset.logEvent))
   const target = event.target.closest('[data-slot], [data-leader]')
-  if (target?.contains(event.relatedTarget)) return
-  if (view?.phase === 'battle') showActionPreview(target)
+  if (view?.phase === 'battle' && !target?.contains(event.relatedTarget)) showActionPreview(target)
   if (target?.classList.contains('targetable') && ['play', 'skill'].includes(selected?.type)) return
   const node = event.target.closest(inspectSelector)
   if (node && !node.contains(event.relatedTarget)) inspectNode(node)

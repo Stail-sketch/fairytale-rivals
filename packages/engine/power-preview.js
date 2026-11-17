@@ -150,8 +150,9 @@ export function definitionPowerRows(game, seat, definition, options = {}) {
   const { source, chosen, choice, cost, handInstance, skill = false } = options
   const spell = definition.kind === 'spell'
   const context = { seat, source, chosen, choice, cost, handInstance, spell, beforePlay: !source, skillUses: player.skillUses + Number(skill) }
-  const numbers = source ? boardPowerRows(game, source) : entryRows(definition, player)
-  if (source && !source.position) return numbers
+  const numbers = !source ? entryRows(definition, player) : definition.kind === 'weapon' ?
+    [row('武器の攻撃力', breakdown(definition.attack, source.attack, powerChanges(source, 'attack')))]
+      .filter(stat => stat.modifiers.length) : boardPowerRows(game, source)
   const effects = source ? [] : definition.effects
   const direct = definition.choice ? optionsRows(game, definition.choice, context, names.CHOICE) :
     effects.flatMap(effect => effectRows(game, effect, context, ''))

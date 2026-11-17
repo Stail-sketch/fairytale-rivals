@@ -944,9 +944,10 @@ export function resolution(game) {
         else if (player.fortune !== 'both' || effect.mode === 'both') player.fortune = effect.mode
         break
       case 'healWounded': {
-        const wounded = player.units.filter(unit => unit.hp < unit.maxHp && (!effect.other || unit !== source)).map(unit => unitTarget(unit.id))
-        if (player.hp < rules.leaderHp) wounded.push(leaderTarget(seat))
-        if (wounded.length) applyTo({ id: 'heal', amount: effect.amount }, wounded[random(game, wounded.length)], skillUses)
+        const wounded = player.units.filter(unit => unit.hp > 0 && unit.hp < unit.maxHp && (!effect.other || unit !== source))
+          .map(unit => unitTarget(unit.id))
+        if (player.hp > 0 && player.hp < rules.leaderHp) wounded.push(leaderTarget(seat))
+        if (wounded.length) applyTo({ id: 'heal', amount: effect.amount }, wounded[random(game, wounded.length)], skillUses, context)
         break
       }
       case 'randomHits': {
@@ -1107,6 +1108,8 @@ export function resolution(game) {
     sweep()
     while (cursor < queue.length) {
       const { context, effects, label } = queue[cursor++]
+      if (context.trigger === 'TENSION_LINK' && cards[context.source?.card]?.kind === 'weapon' &&
+          game.players[context.seat].weapon?.id !== context.source.id) continue
       const origin = context.source?.position ? unitAnchor(context.source) : context.source ?
         { kind: 'leader', seat: context.seat, card: context.source.card } : context.effectSource
       if (label) emit(game, 'ability', label, { seat: context.seat, id: context.source?.id, source: origin, triggered: true })
