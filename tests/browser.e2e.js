@@ -196,6 +196,13 @@ async function driveBattle() {
     click('[data-op=motion]')
     click('[data-op=sound]')
     expect(query('[data-op=sound][aria-pressed=false]'), '効果音をオフにできる')
+    click('.audio-controls summary')
+    const musicVolume = query('[data-volume=bgm]')
+    musicVolume.value = '17'
+    musicVolume.dispatchEvent(new Event('input', { bubbles: true }))
+    expect(query('[data-volume-value=bgm]').value === '17%' &&
+      query('[data-volume=se]').value === '0', 'BGM音量と消音したSEを別々に調整できる')
+    click('.audio-controls summary')
     const x = selector => query(selector).getBoundingClientRect().x
     const y = selector => query(selector).getBoundingClientRect().y
     expect(x('[data-leader="0"]') < x('[data-slot="0:back:0"]')
@@ -278,11 +285,12 @@ async function driveBattle() {
     expect(query('#attack-preview').textContent.includes('ダメージ見込み 3'), '対象に奥義が与えるダメージを予告')
     click(square, false)
     expect(query('[data-beat=reveal] .skill-reveal strong')?.textContent === leaders.mage.skill.name, '奥義名を中央に表示')
+    expect(query('[data-skill-motif=mirror] .skill-ornament'), 'アリスの奥義で鏡が出る')
     advanceTimer()
     expect(query('[data-leader="1"].effect-origin') && query(square + '.effect-destination.effect-damage[data-unit]') &&
-      query('.effect-path.effect-damage'), 'ダメージ反映前に奥義の発動元と対象を示す')
+      query('.effect-path.effect-damage') && query('.skill-projectile'), 'ダメージ反映前に鏡から対象へ火球が飛ぶ')
     completePresentation()
-    expect(!query(square + '[data-unit]') && query(square + ' .delta') && query('[data-impact-style=arcane]'),
+    expect(!query(square + '[data-unit]') && query(square + ' .delta') && query('[data-skill-impact=mirror]'),
       '魔法の着弾と奥義のダメージを表示して相手ユニットが退場')
     next()
 
@@ -331,6 +339,7 @@ async function driveBattle() {
     click('[data-op=mulligan]')
     expect(query('.battle') && !query('[data-replace]'), 'CPUの手札交換が自動で進む')
     expect(query('[data-op=sound][aria-pressed=false]'), '効果音設定を次の対戦でも保持する')
+    expect(query('[data-volume=bgm]').value === '17', 'BGM音量を次の対戦でも保持する')
     click('[data-op=sound]')
     let cpuActionSeen = false
     let cpuRevealSeen = false

@@ -1,4 +1,5 @@
-import { cards, leaders } from '../../packages/cards/index.js'
+import { cards } from '../../packages/cards/index.js'
+import { skillPresentation, skillProjectile, skillTheme } from './battle-skill-presentation.js'
 
 const outcomes = new Set(['damage', 'heal', 'ability', 'death', 'summon', 'transform', 'move', 'exile', 'withdraw', 'equip', 'terrain', 'terrainTrigger'])
 const motionKey = 'fairytale-battle-motion'
@@ -52,7 +53,8 @@ export function planBattlePresentation(before, after, events, cpu) {
   const skillEvent = events.find(event => event.type === 'skill')
   const card = play && cards[play.card]
   const landing = play && (play.type === 'summon' || play.type === 'equip') ? destinationFor(play, before, after) : null
-  const skill = skillEvent && { name: skillEvent.name, leader: after.players[skillEvent.seat].leader }
+  const skill = skillEvent && skillTheme(skillEvent, before.players[skillEvent.seat],
+    events.filter(event => event.type === 'handAdded' && event.seat === skillEvent.seat).length)
   const decisive = after.phase === 'finished'
   const phoenix = events.some(event => event.type === 'specialVictory')
   const attack = events.find(event => event.type === 'attack' || event.type === 'leaderAttack')
@@ -80,7 +82,11 @@ export function planBattlePresentation(before, after, events, cpu) {
     const impact = event.type === 'damage' ? (event.value ? style || 'arcane' : 'guard') :
       event.type === 'heal' ? 'heal' : event.type === 'summon' ? 'summon' :
         event.type === 'equip' ? 'equip' : (event.type === 'terrain' || event.type === 'terrainTrigger') && 'terrain'
-    if (impact) impacts.set(key + '/' + impact, { to, style: impact })
+    const fromSkill = skill && from?.kind === 'leader' && from.seat === skill.seat && !from.card
+    if (impact) impacts.set(key + '/' + impact, { to, style: impact, motif: fromSkill ? skill.motif : undefined })
+    else if (fromSkill && skill.motif === 'lightning' && event.type === 'ability') {
+      impacts.set(key + '/equip', { to, style: 'equip', motif: skill.motif })
+    }
   }
   if (attack) {
     const from = attack.type === 'leaderAttack' ? leaderAnchor(attack.seat) : anchorFor({ kind: 'unit', id: attack.id }, before, after)
@@ -104,8 +110,8 @@ export function planBattlePresentation(before, after, events, cpu) {
     bursts, sound, impactCue: sound?.style ?? (card?.kind === 'spell' ? 'spell' : null),
     sources: [...sources.values()], targets: [...targets.values()], links: [...links.values()],
     caption: events.find(event => event.triggered)?.text,
-    revealMs: reduced ? (card || skill ? 145 : 0) : skill ? 430 : card ? (cpu ? 395 : 285) : 0,
-    approachMs: reduced ? 60 : chained ? 230 : landing ? 162 : strike ? 135 : 125,
+    revealMs: reduced ? (card || skill ? 145 : 0) : skill ? 445 : card ? (cpu ? 395 : 285) : 0,
+    approachMs: reduced ? 60 : skill ? 205 : chained ? 230 : landing ? 162 : strike ? 135 : 125,
     finishMs: phoenix ? (reduced ? 440 : 1350) : reduced ? 210 : 540,
   }
 }
@@ -114,13 +120,10 @@ export function presentationLayer(presentation, art, escape) {
   if (!presentation) return ''
   const { scene, beat } = presentation
   const { card, skill, decisive, cost, caption } = scene
-  const leader = skill && leaders[skill.leader]
   const face = card ? `<figure class="battle-reveal" data-reveal-card="${card.id}" data-card-kind="${card.kind}">
     <img src="${art(card.artId)}" alt=""><span class="cost">${cost ?? card.cost}</span>
     <figcaption>${escape(card.name)}</figcaption></figure>` :
-    skill ? `<div class="skill-reveal" data-skill-class="${skill.leader}" style="--skill-light:${leader.accent}">
-      <i class="skill-emblem" aria-hidden="true">${leader.sigil}</i><img src="${art(skill.leader)}" alt=""><strong>${escape(skill.name)}</strong>
-    </div>` : ''
+    skill ? skillPresentation(skill, art, escape, scene.reduced) : ''
   return `<div class="battle-presentation" data-beat="${beat}" aria-hidden="true">
     <div class="effect-paths"></div>
     ${beat !== 'finish' ? face : ''}
@@ -192,6 +195,15 @@ export function positionPresentation(app, presentation) {
   }
 
   if (scene.reduced) return
+  if (scene.skill?.motif === 'mirror') {
+    const impact = scene.bursts.find(burst => burst.motif === 'mirror')
+    if (impact) skillProjectile(app, scene.skill, anchorNode(app, impact.to), scene.approachMs)
+  }
+  if (scene.skill?.handAdded) {
+    const seat = scene.skill.seat
+    const resource = app.querySelector(`[data-hand-count="${seat}"]`) ?? app.querySelector('.hand')
+    skillProjectile(app, scene.skill, resource, scene.approachMs)
+  }
   for (const event of scene.motions) {
     const start = anchorFor({ kind: 'unit', id: event.id }, scene.before, scene.before)
     const source = start && anchorNode(app, start)?.querySelector('img')
@@ -258,13 +270,17 @@ export function positionBattleImpact(app, scene) {
   layer.className = 'battle-impacts'
   layer.setAttribute('aria-hidden', 'true')
   let pan = 0
-  for (const impact of scene.bursts.slice(0, 12)) {
+  for (const [index, impact] of scene.bursts.slice(0, 12).entries()) {
     const target = anchorNode(app, impact.to)
     if (!target) continue
     const { x, y, width } = center(target)
     const burst = document.createElement('div')
     burst.className = 'combat-impact'
     burst.dataset.impactStyle = impact.style
+    if (impact.motif) {
+      burst.dataset.skillImpact = impact.motif
+      burst.style.setProperty('--skill-impact-order', index)
+    }
     burst.style.left = x - origin.left + 'px'
     burst.style.top = y - origin.top + 'px'
     burst.style.setProperty('--impact-size', Math.min(170, Math.max(44, width * 1.23)) + 'px')

@@ -13,11 +13,16 @@ export async function standalone(afterReady = '') {
   const modules = new Map()
   const entry = 'apps/web/main.js'
   const images = {}
+  const music = {}
 
-  for (const image of await readdir(new URL('apps/web/assets/', root))) {
-    if (!image.endsWith('.webp')) continue
-    const bytes = await readFile(new URL('apps/web/assets/' + image, root))
-    images[image] = 'data:image/webp;base64,' + bytes.toString('base64')
+  for (const asset of await readdir(new URL('apps/web/assets/', root))) {
+    if (asset.endsWith('.webp')) {
+      const bytes = await readFile(new URL('apps/web/assets/' + asset, root))
+      images[asset] = 'data:image/webp;base64,' + bytes.toString('base64')
+    } else if (asset.endsWith('.ogg')) {
+      const bytes = await readFile(new URL('apps/web/assets/' + asset, root))
+      music[asset] = 'data:audio/ogg;base64,' + bytes.toString('base64')
+    }
   }
   css = css.replace(/assets\/([\w-]+\.webp)/g, (path, image) => images[image] ?? path)
 
@@ -34,6 +39,7 @@ export async function standalone(afterReady = '') {
 
   await include(entry)
   const bootstrap = `
+    globalThis.fairytaleMusic = ${scriptString(music)};
     globalThis.fairytaleImages = Object.fromEntries(
       Object.entries(${scriptString(images)}).map(([name, data]) => {
         const encoded = data.slice(data.indexOf(',') + 1);

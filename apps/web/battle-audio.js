@@ -1,6 +1,10 @@
 import { impactSamples } from './battle-impact-sounds.js'
+import { createInstruments } from './battle-instruments.js'
+import { createBattleMusic } from './battle-music.js'
 
 const soundKey = 'fairytale-battle-sound'
+const volumeKey = 'fairytale-audio-volume.'
+const defaults = { bgm: 38, se: 60 }
 const phrases = {
   draw: [[825, 0, .065], [430, .035, .09]],
   turn: [[360, 0, .09], [540, .065, .12]],
@@ -8,46 +12,109 @@ const phrases = {
   terrain: [[245, 0, .09], [490, .03, .13]],
   finish: [[147, 0, .24], [294, .04, .29], [440, .13, .30]],
   phoenix: [[196, 0, .40], [294, .10, .36], [392, .22, .36], [523, .38, .40], [784, .52, .42]],
-  warrior: [[196, 0, .21], [294, .06, .22], [392, .13, .22]],
-  mage: [[392, 0, .24], [523, .07, .24], [784, .13, .27]],
-  fighter: [[164, 0, .12], [220, .09, .13], [330, .18, .16]],
-  priest: [[330, 0, .27], [440, .07, .28], [659, .16, .27]],
-  merchant: [[659, 0, .11], [880, .06, .11], [1047, .13, .15]],
-  seer: [[740, 0, .25], [494, .08, .22], [988, .16, .24]],
-  swordsman: [[131, 0, .24], [196, .05, .29], [311, .14, .30]],
 }
+
+const skillPhrases = {
+  warrior: [['drum', 37, 0, .16, .95], ['horn', 50, .035, .25, .9], ['horn', 57, .145, .31, .91], ['bell', 81, .21, .20, .48]],
+  mage: [['bell', 84, 0, .24, .8], ['bell', 89, .078, .22, .65], ['bell', 77, .155, .27, .77], ['flute', 69, .188, .26, .9]],
+  fighter: [['drum', 34, 0, .10, 1], ['frame', 56, .085, .09, .88], ['frame', 62, .169, .085, .8], ['drum', 41, .24, .18, .95]],
+  priest: [['harp', 65, 0, .28, .7], ['harp', 69, .069, .31, .73], ['harp', 74, .14, .4, .72], ['bell', 81, .231, .49, .56]],
+  merchant: [['bell', 74, 0, .20, .72], ['bell', 78, .090, .21, .72], ['bell', 83, .18, .23, .71], ['harp', 66, .242, .35, .76]],
+  seer: [['flute', 81, 0, .29, .65], ['harp', 74, .1, .25, .61], ['bell', 88, .201, .39, .69], ['bell', 81, .26, .43, .43]],
+  swordsman: [['drum', 30, 0, .17, .82], ['viola', 43, .01, .49, .85], ['horn', 49, .088, .41, .64], ['bell', 70, .21, .47, .46]],
+  rosefire: [['drum', 28, 0, .16, .94], ['viola', 38, .015, .49, .87], ['horn', 45, .11, .48, .96], ['horn', 50, .25, .41, .86]],
+}
+
+const gains = { bgm: .27, se: .22 }
+const clampVolume = value => Math.min(100, Math.max(0, Math.round(value)))
 
 export function createBattleAudio() {
   let context
-  let output
+  let music
+  let skillNote
+  let scene = 'off'
+  const output = {}
   const buffers = new Map()
-  let enabled = true
-  try { enabled = localStorage.getItem(soundKey) !== 'off' } catch { /* Storage is optional. */ }
+  const volume = { ...defaults }
+  let muted = false
+  try {
+    muted = localStorage.getItem(soundKey) === 'off'
+    for (const channel of Object.keys(volume)) {
+      const value = localStorage.getItem(volumeKey + channel)
+      if (value !== null && Number.isFinite(Number(value))) volume[channel] = clampVolume(Number(value))
+    }
+  } catch { /* Storage is optional. */ }
+
+  function updateVolume(channel) {
+    if (!output[channel]) return
+    const value = channel === 'se' && muted ? 0 : volume[channel]
+    output[channel].gain.setTargetAtTime(gains[channel] * value / 100, context.currentTime, .025)
+  }
+
+  function persist() {
+    try {
+      localStorage.setItem(soundKey, muted ? 'off' : 'on')
+      for (const [channel, value] of Object.entries(volume)) localStorage.setItem(volumeKey + channel, value)
+    } catch { /* Storage is optional. */ }
+  }
 
   function unlock() {
-    if (!enabled || !globalThis.AudioContext) return
+    if (!globalThis.AudioContext) return
     try {
       if (!context) {
         context = new AudioContext()
-        output = context.createGain()
-        output.gain.value = .13
-        output.connect(context.destination)
+        for (const channel of Object.keys(gains)) {
+          output[channel] = context.createGain()
+          output[channel].gain.value = gains[channel] * (channel === 'se' && muted ? 0 : volume[channel]) / 100
+          output[channel].connect(context.destination)
+        }
+        music = createBattleMusic(context, output.bgm)
+        skillNote = createInstruments(context, output.se)
       }
       if (context.state === 'suspended') context.resume().catch(() => {})
+      if (volume.bgm) {
+        music.prepare()
+        music.set(scene)
+      }
     } catch { /* Audio availability does not affect play. */ }
   }
 
+  const enabled = () => !muted && volume.se > 0
   return {
-    get enabled() { return enabled },
+    get enabled() { return enabled() },
+    volume(channel) { return channel === 'se' && muted ? 0 : volume[channel] },
     unlock,
     toggle() {
-      enabled = !enabled
-      try { localStorage.setItem(soundKey, enabled ? 'on' : 'off') } catch { /* Storage is optional. */ }
-      if (output) output.gain.value = enabled ? .13 : 0
+      muted = enabled()
+      if (!muted && !volume.se) volume.se = defaults.se
+      persist()
       unlock()
+      updateVolume('se')
+    },
+    setVolume(channel, value) {
+      if (!Object.hasOwn(volume, channel) || !Number.isFinite(value)) return
+      volume[channel] = clampVolume(value)
+      if (channel === 'se') muted = false
+      persist()
+      unlock()
+      updateVolume(channel)
+    },
+    setScene(next) {
+      scene = next
+      if (volume.bgm) music?.set(scene)
+      else if (next !== 'battle' && next !== 'danger') music?.set('off')
+    },
+    playSkill(style) {
+      if (context?.state !== 'running') return
+      music?.duck()
+      if (!enabled() || !skillPhrases[style]) return
+      const start = context.currentTime + .008
+      for (const [voice, pitch, offset, duration, velocity] of skillPhrases[style]) {
+        skillNote(voice, pitch, start + offset, duration, velocity)
+      }
     },
     play(cue, pan = 0) {
-      if (!enabled || context?.state !== 'running') return
+      if (!enabled() || context?.state !== 'running') return
       if (!Object.hasOwn(phrases, cue)) {
         if (!buffers.has(cue)) {
           const samples = impactSamples(cue, context.sampleRate)
@@ -61,9 +128,9 @@ export function createBattleAudio() {
         if (pan && context.createStereoPanner) {
           const stereo = context.createStereoPanner()
           stereo.pan.value = pan
-          source.connect(stereo).connect(output)
+          source.connect(stereo).connect(output.se)
           source.onended = () => stereo.disconnect()
-        } else source.connect(output)
+        } else source.connect(output.se)
         source.start()
         return
       }
@@ -76,7 +143,7 @@ export function createBattleAudio() {
         envelope.gain.setValueAtTime(.001, at)
         envelope.gain.exponentialRampToValueAtTime(.22, at + .025)
         envelope.gain.exponentialRampToValueAtTime(.001, at + duration)
-        tone.connect(envelope).connect(output)
+        tone.connect(envelope).connect(output.se)
         tone.start(at)
         tone.stop(at + duration)
       }

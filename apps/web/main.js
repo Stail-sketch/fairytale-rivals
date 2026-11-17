@@ -82,11 +82,26 @@ function colors(leader) {
   return ' style="--class:' + leader.color + ';--trim:' + leader.accent + '"'
 }
 
-function titlebar() {
+function audioControls(open) {
+  return `<details class="audio-controls"${open ? ' open' : ''}>
+    <summary class="icon-button" aria-label="BGMと効果音の音量">音量</summary>
+    <div class="audio-mixer" aria-label="音量設定">
+      ${[['bgm', 'BGM'], ['se', '効果音']].map(([channel, label]) => {
+        const value = battleAudio.volume(channel)
+        return `<div class="audio-channel">
+          <label for="volume-${channel}">${label}</label><output for="volume-${channel}" data-volume-value="${channel}">${value}%</output>
+          <input id="volume-${channel}" data-volume="${channel}" type="range" min="0" max="100" value="${value}">
+        </div>`
+      }).join('')}
+    </div>
+  </details>`
+}
+
+function titlebar(mixerOpen) {
   return `<header class="topbar"><div class="brand"><span class="brand-mark" aria-hidden="true">✦</span>
     <span>童話戦記<small>PROJECT FAIRYTALE RIVALS</small></span></div>
     <div class="top-actions"><span class="local-label">${{ cpu: 'CPU対戦', local: 'ローカル対戦', friend: 'フレンド対戦' }[mode]}</span>
-      ${view ? `<button type="button" data-op="sound" class="icon-button sound-button" aria-pressed="${battleAudio.enabled}">効果音</button>` : ''}
+      ${view ? `<button type="button" data-op="sound" class="icon-button sound-button" aria-pressed="${battleAudio.enabled}">効果音</button>${audioControls(mixerOpen)}` : ''}
       <button type="button" data-op="rules" class="icon-button">ルール</button>
       ${inMatch() ? '<button type="button" data-op="home" class="icon-button">タイトル</button>' : ''}
     </div></header>`
@@ -728,12 +743,24 @@ function rulesModal() {
     <button class="primary" data-op="close-rules">閉じる</button></dialog>`
 }
 
+function syncBattleMusic() {
+  if (!view || view.phase === 'mulligan' || roomConnection === 'closed') return battleAudio.setScene('off')
+  if (view.phase === 'finished' && !presentation) {
+    const seat = room ? roomSeat : solo() ? 0 : view.winner
+    return battleAudio.setScene(view.winner === 'draw' ? 'draw' : view.winner === seat ? 'victory' : 'defeat')
+  }
+  battleAudio.setScene(view.players.some(player => player.hp <= 8) ? 'danger' : 'battle')
+}
+
 function render(focusOn = null) {
   const scroll = app.querySelector('.events')?.scrollTop
+  const mixerOpen = app.querySelector('.audio-controls')?.open
+  const volumeFocus = document.activeElement?.dataset.volume
   const surface = !inMatch() ? (showDecks ? deckEditor.view(art, escape) : showLibrary ? library(art) : home())
     : !view ? roomLobby() : view.phase === 'finished' && !presentation ? results() :
     view.phase === 'mulligan' ? mulligan() : battlefield()
-  app.innerHTML = titlebar() + surface + rulesModal()
+  app.innerHTML = titlebar(mixerOpen) + surface + rulesModal()
+  syncBattleMusic()
   if (lastInspection && !selected && matchMedia('(min-width: 1160px)').matches) {
     const node = app.querySelector(lastInspection)
     if (node) inspectNode(node)
@@ -755,6 +782,8 @@ function render(focusOn = null) {
   }
   if (focusOn && !showRules && !document.querySelector('.battle-card-dialog[open]')) {
     app.querySelector(focusOn)?.focus({ preventScroll: true })
+  } else if (mixerOpen && volumeFocus && !showRules) {
+    app.querySelector(`[data-volume="${volumeFocus}"]`)?.focus({ preventScroll: true })
   }
 }
 
@@ -814,7 +843,7 @@ function playPresentation(scene, next, action) {
   presentation = { scene, beat: 'reveal' }
   if (scene.revealMs) {
     render()
-    if (scene.skill) battleAudio.play(scene.skill.leader)
+    if (scene.skill) battleAudio.playSkill(scene.skill.style)
     presentationTimer = setTimeout(approach, scene.revealMs)
   } else approach()
 }
@@ -1083,11 +1112,26 @@ app.addEventListener('change', event => {
 })
 
 app.addEventListener('input', event => {
+  if (event.target.dataset.volume) {
+    const channel = event.target.dataset.volume
+    battleAudio.setVolume(channel, Number(event.target.value))
+    updateVolumeControls()
+    return
+  }
   if (showDecks && deckEditor.importField(app, art, escape, event.target, render, 'input')) return
   if (showLibrary && event.target.matches('input[data-library-filter]')) changeLibraryFilter(app, art, event.target)
   if (showDecks && event.target.matches('input[data-deck-filter]')) deckEditor.filter(app, art, event.target)
   if (showDecks && event.target.id === 'deck-name') deckEditor.rename(app, event.target.value)
 })
+
+function updateVolumeControls() {
+  for (const slider of app.querySelectorAll('input[data-volume]')) {
+    const value = battleAudio.volume(slider.dataset.volume)
+    slider.value = value
+    app.querySelector(`[data-volume-value="${slider.dataset.volume}"]`).value = value + '%'
+  }
+  app.querySelector('[data-op="sound"]')?.setAttribute('aria-pressed', battleAudio.enabled)
+}
 
 document.addEventListener('paste', event => {
   const image = [...(event.clipboardData?.files ?? [])].find(file => file.type.startsWith('image/'))
@@ -1104,6 +1148,7 @@ app.addEventListener('drop', event => {
 })
 
 app.addEventListener('click', event => {
+  if (event.target.closest('.audio-controls summary')) battleAudio.unlock()
   const node = event.target.closest('button')
   if (!node) return
   if ((presentation || roomLocked()) && node.closest('.battle-grid, .tray, .mulligan')) return
@@ -1170,7 +1215,7 @@ app.addEventListener('click', event => {
     case 'motion': toggleBattleMotion(); if (!presentation) render('[data-op="motion"]'); break
     case 'sound':
       battleAudio.toggle()
-      node.setAttribute('aria-pressed', battleAudio.enabled)
+      updateVolumeControls()
       break
     case 'start':
       battleAudio.unlock()

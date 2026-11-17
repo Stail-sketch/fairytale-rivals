@@ -34,6 +34,18 @@ small { font-size: 11px; }
 .icon-button:hover, .secondary:not(:disabled):hover { background: #293849; border-color: #b99d6b; }
 .sound-button[aria-pressed="true"] { color: var(--gold); border-color: #aa8d5b; }
 .sound-button[aria-pressed="false"] { color: var(--muted); }
+.audio-controls { position: relative; }
+.audio-controls summary { list-style: none; cursor: pointer; white-space: nowrap; }
+.audio-controls summary::-webkit-details-marker { display: none; }
+.audio-controls[open] summary { color: #fff0cf; border-color: #c7a674; }
+.audio-mixer {
+  position: absolute; z-index: 10; right: 0; top: calc(100% + 8px); width: min(246px, 82vw);
+  display: grid; gap: 13px; padding: 13px 15px; border: 1px solid #aa8d62; border-radius: 8px;
+  background: linear-gradient(145deg, #203851, #101d2d 72%); box-shadow: 0 12px 30px #040a16bf;
+}
+.audio-channel { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: center; font-size: 12px; }
+.audio-channel output { color: #ffdc9e; font-variant-numeric: tabular-nums; }
+.audio-channel input { grid-column: 1 / -1; width: 100%; margin: 0; accent-color: #f0c879; cursor: pointer; }
 .splash, .ceremony, .battle {
   min-height: calc(100vh - 60px);
   background: linear-gradient(#0a142270, #0a1422bd 75%, #0a1422), url("assets/arena.webp") center 42% / cover no-repeat;
@@ -273,14 +285,6 @@ small { font-size: 11px; }
   100% { transform: translate(var(--reveal-x), var(--reveal-y)) scale(var(--reveal-scale)); opacity: .68; }
 }
 @keyframes reveal-release { to { opacity: .12; transform: scale(1.035); } }
-.skill-reveal {
-  position: relative; display: flex; align-items: center; gap: 14px; padding: 8px 23px 8px 8px;
-  border: 1px solid var(--skill-light); border-radius: 46px 8px 8px 46px; color: #fff4db;
-  background: linear-gradient(110deg, color-mix(in srgb, var(--skill-light) 28%, #111a26), #131e2c 74%);
-  box-shadow: 0 0 0 3px #131e2cba, 0 0 38px color-mix(in srgb, var(--skill-light) 36%, transparent);
-  font: 800 clamp(18px, 2.3vw, 27px)/1.25 var(--serif);
-}
-.skill-reveal img { width: 64px; height: 64px; object-fit: cover; border: 1px solid var(--skill-light); border-radius: 50%; }
 .effect-caption {
   position: absolute; bottom: 10px; z-index: 1; max-width: 65%; padding: 3px 10px; color: #ffe7af;
   background: #111c2bf2; border: 1px solid #b79a62; border-radius: 4px; font-size: 12px; text-align: center;
@@ -706,23 +710,147 @@ dialog li, dialog p { font-size: 14px; line-height: 1.7; color: #d8e0e1; margin-
 .terrain-flash[data-stage="runway"] { --stage-color: #88e5ff; background: linear-gradient(90deg, transparent, #8fdbf685, transparent); }
 .terrain-flash[data-stage="treasure"] { --stage-color: #ffd780; }
 @keyframes stage-flash { from { opacity: 0; scale: .83; } 40% { opacity: 1; scale: 1.02; } to { opacity: .26; } }
-.skill-reveal { position: relative; }
-.skill-reveal > img, .skill-reveal > strong { position: relative; z-index: 1; }
-.skill-emblem {
-  position: absolute; inset: 50% auto auto 50%; translate: -50% -50%;
-  width: 94px; height: 94px; display: grid; place-content: center; text-align: center; font-style: normal;
-  color: var(--skill-light); font-size: 51px; opacity: .46; text-shadow: 0 0 15px var(--skill-light);
-  border: 1px solid var(--skill-light); border-radius: var(--sigil-shape, 50%);
-  animation: skill-sigil .43s ease-out both;
+.skill-scene {
+  position: absolute; inset: 0; display: grid; place-items: center; overflow: clip;
+  background: radial-gradient(ellipse at 50% 48%, color-mix(in srgb, var(--skill-light) 25%, #14122675), #090d1b7d 60%, transparent 77%);
+  animation: skill-veil-in .19s ease-out both;
 }
-.skill-reveal[data-skill-class="warrior"] { --sigil-shape: 4px; --sigil-angle: -26deg; }
-.skill-reveal[data-skill-class="mage"] { --sigil-angle: 120deg; }
-.skill-reveal[data-skill-class="fighter"] { --sigil-shape: 26%; --sigil-angle: -68deg; }
-.skill-reveal[data-skill-class="priest"] { --sigil-angle: 15deg; }
-.skill-reveal[data-skill-class="merchant"] { --sigil-shape: 4px; --sigil-angle: 45deg; }
-.skill-reveal[data-skill-class="seer"] { --sigil-shape: 18%; --sigil-angle: 88deg; }
-.skill-reveal[data-skill-class="swordsman"] { --sigil-shape: 31%; --sigil-angle: -105deg; }
-@keyframes skill-sigil { from { opacity: 0; rotate: var(--sigil-angle, 0deg); scale: .4; } to { scale: 1.25; } }
+.skill-reveal {
+  position: relative; z-index: 2; isolation: isolate; display: flex; align-items: center;
+  gap: clamp(8px, 1.65vw, 21px); min-width: min(268px, 75%); max-width: 87%; padding: 7px 15px 7px 8px;
+  border: 1px solid color-mix(in srgb, var(--skill-light) 80%, #706255);
+  outline: 1px solid color-mix(in srgb, var(--skill-light) 43%, transparent); outline-offset: 4px;
+  border-radius: 14px 6px 18px 6px; color: #fff4e4;
+  background: linear-gradient(102deg, #101625 1%, color-mix(in srgb, var(--skill-light) 23%, #121827) 57%, #111929 99%);
+  box-shadow: 0 10px 26px #050b18cf, inset 0 1px 0 #fff2d26b,
+    0 0 27px color-mix(in srgb, var(--skill-light) 39%, transparent);
+  font: 800 clamp(16px, 2.2vw, 28px)/1.23 var(--serif); text-shadow: 0 2px 4px #070b16;
+}
+.skill-reveal img {
+  width: clamp(48px, 7vw, 87px); aspect-ratio: 1 / 1.05; object-fit: cover; object-position: 50% 35%;
+  border: 1px solid var(--skill-light); border-radius: 8px 4px 11px 4px; box-shadow: 0 4px 9px #050b17;
+}
+.skill-seal { color: var(--skill-light); font-size: .8em; margin-left: auto; padding-inline: 4px; }
+.skill-ornament {
+  position: absolute; left: 50%; top: 50%; translate: -50% -50%;
+  width: clamp(192px, 37vw, 490px); height: clamp(152px, 24vw, 325px);
+  animation: skill-orbit-in 445ms cubic-bezier(.16,.79,.29,1) both;
+}
+.skill-ornament b, .skill-ornament i { position: absolute; inset: 0; display: block; pointer-events: none; }
+.skill-ornament i {
+  inset: 50% auto auto 50%; width: var(--piece-width, 15px); height: var(--piece-height, 27px); translate: -50% -50%;
+  transform: rotate(var(--skill-angle)) translateX(clamp(70px, 13vw, 169px));
+  background: var(--skill-light); box-shadow: 0 0 13px var(--skill-light);
+}
+.skill-scene[data-skill-motif="lightning"] .skill-ornament b {
+  background: linear-gradient(145deg, transparent 15%, #e09b4d 44%, #fff4bf 54%, transparent 75%);
+  clip-path: polygon(9% 96%, 42% 51%, 36% 47%, 86% 4%, 60% 49%, 66% 51%, 51% 69%);
+  animation: skill-lightning .42s ease-out both;
+}
+.skill-scene[data-skill-motif="lightning"] i { --piece-width: 47px; --piece-height: 1px; rotate: -33deg; }
+.skill-scene[data-skill-motif="mirror"] .skill-ornament b {
+  border-radius: 49%; inset: 2% 28%; rotate: 10deg;
+  border: 2px solid #e6d2ff; outline: 4px double #c29bff89; outline-offset: 6px;
+  background: radial-gradient(ellipse at 63% 29%, #e9d7ffbe, #765de930 63%);
+  box-shadow: 0 0 32px #9e5fff88, inset 0 0 23px #c398ffa0;
+  animation: skill-mirror 445ms cubic-bezier(.16,.73,.32,1) both;
+}
+.skill-scene[data-skill-motif="mirror"] .skill-ornament i,
+.skill-scene[data-skill-motif="crystal"] .skill-ornament i {
+  background: linear-gradient(126deg, #fff 13%, var(--skill-light) 48%, #6177a4a5 87%);
+  clip-path: polygon(50% 0%, 100% 36%, 70% 100%, 0 62%);
+}
+.skill-scene[data-skill-motif="steps"] .skill-ornament b {
+  inset: 6% -12%; transform: skewX(-24deg);
+  background: repeating-linear-gradient(0deg, transparent 0 20px, #ff8b71b2 21px 24px, transparent 27px 39px);
+  mask-image: radial-gradient(ellipse, #000 31%, transparent 69%);
+  animation: skill-steps .42s ease-out both;
+}
+.skill-scene[data-skill-motif="steps"] .skill-ornament i {
+  --piece-width: 66px; --piece-height: 3px; rotate: -16deg; border-radius: 50%;
+}
+.skill-scene[data-skill-motif="blossom"] .skill-ornament b {
+  inset: 2% 16%; border: 1px solid #ffd8c8; border-radius: 50%;
+  background: radial-gradient(ellipse, #ffd5b727, #ffe2df50 44%, transparent 72%);
+  box-shadow: inset 0 0 25px #ffb0bc62, 0 0 34px #ffc3b773;
+}
+.skill-scene[data-skill-motif="blossom"] .skill-ornament i {
+  --piece-width: 17px; --piece-height: 29px;
+  border-radius: 75% 8% 75% 37%; background: linear-gradient(20deg, #e686a8, #fff1d5);
+  animation: skill-petal .45s calc(var(--skill-index) * 13ms) ease-out both;
+}
+.skill-scene[data-skill-motif="coins"] .skill-ornament b {
+  inset: 10% 7%; border: 2px solid #f7c976; border-radius: 50%; rotate: -14deg;
+  box-shadow: 0 0 16px #ffd66d93, inset 0 0 21px #ffd66d8a;
+}
+.skill-scene[data-skill-motif="coins"] .skill-ornament i {
+  --piece-width: 24px; --piece-height: 28px;
+  border-radius: 50%; background: radial-gradient(ellipse, #9b601d 21%, #f7c66e 26% 58%, #e3973d 62% 72%, #ffedaa 74%);
+  animation: skill-coin .45s calc(var(--skill-index) * 9ms) ease-out both;
+}
+.skill-scene[data-skill-motif="crystal"] .skill-ornament b {
+  inset: -5% 31%; background: linear-gradient(137deg, #fff, #71d7f18a 36%, #c9edffa0 54%, #49609c94 55%, #a4eeff);
+  clip-path: polygon(53% 0, 83% 24%, 100% 67%, 59% 100%, 24% 74%, 0 37%);
+  animation: skill-mirror .44s ease-out both; opacity: .78;
+}
+.skill-scene[data-skill-motif="crystal"] .skill-ornament i { --piece-width: 19px; --piece-height: 48px; }
+.skill-scene:is([data-skill-motif="thorns"], [data-skill-motif="rosefire"]) .skill-ornament b {
+  inset: -5% 8%; border-radius: 48%; border: 3px solid #fb8497c8;
+  border-left-color: transparent; border-bottom-color: #722438; rotate: -23deg;
+  background: radial-gradient(ellipse, #7a1f5d1e, #9e21426b 61%, transparent 73%);
+  box-shadow: inset 2px 0 19px #dd305a75, 0 0 25px #ec40745e;
+  animation: skill-thorns .44s ease-out both;
+}
+.skill-scene:is([data-skill-motif="thorns"], [data-skill-motif="rosefire"]) .skill-ornament i {
+  --piece-width: 22px; --piece-height: 42px; background: linear-gradient(155deg, #ffd6bb, #c34064 37%, #2d163f);
+  clip-path: polygon(50% 0, 89% 49%, 100% 50%, 70% 74%, 53% 100%, 45% 61%, 5% 24%);
+}
+.skill-scene[data-skill-motif="rosefire"] .skill-ornament b { border-width: 5px; filter: brightness(1.31); }
+.skill-projectile {
+  position: absolute; z-index: 3; width: 30px; height: 30px; translate: -50% -50%;
+  border-radius: 50%; background: radial-gradient(circle, #fff4d4 4%, var(--skill-light) 22%, transparent 70%);
+  filter: drop-shadow(0 0 11px var(--skill-light));
+}
+.skill-scene[data-skill-motif="mirror"] .skill-projectile {
+  width: clamp(36px, 5vw, 72px); height: clamp(36px, 5vw, 72px);
+  background: radial-gradient(circle, #fff2d7 9%, #ffba73 32%, #b284ff 51%, transparent 71%);
+}
+.skill-scene[data-skill-motif="coins"] .skill-projectile {
+  width: 19px; height: 22px; border: 1px solid #fff0b7;
+  background: radial-gradient(ellipse, #b4742c 30%, #ffe096 35% 62%, #cd8b37 69%);
+}
+.skill-scene[data-skill-motif="crystal"] .skill-projectile {
+  clip-path: polygon(50% 0, 100% 36%, 64% 100%, 0 55%);
+  background: linear-gradient(135deg, #effbff, #a9e9ff 49%, #3fa4ca 52%, #ddf9ff);
+}
+[data-beat="approach"] .skill-scene { animation: none; background-color: transparent; }
+[data-beat="approach"] .skill-ornament { animation: skill-trace-out 205ms ease-in both; }
+.combat-impact[data-skill-impact="lightning"]::before {
+  clip-path: polygon(31% 100%, 42% 64%, 23% 64%, 59% 4%, 54% 39%, 81% 34%, 57% 67%, 50% 98%);
+  background: linear-gradient(110deg, #ff9c49, #fff0a4 48%, #fffdf4);
+}
+.combat-impact[data-skill-impact="blossom"]::before {
+  background: radial-gradient(ellipse 16% 40% at 51% 38%, #fff0d3 10%, #ffb9d6 70%, transparent 76%),
+    radial-gradient(ellipse 36% 16% at 43% 58%, #fff0d3 10%, #ffb9d6 70%, transparent 76%),
+    radial-gradient(ellipse 36% 16% at 64% 58%, #fff0d3 10%, #ffb9d6 70%, transparent 76%);
+  animation-delay: calc(var(--skill-impact-order) * 22ms);
+}
+.combat-impact[data-skill-impact="mirror"] { --burst-light: #ffd0b2; }
+.combat-impact:is([data-skill-impact="thorns"], [data-skill-impact="rosefire"]) { --burst-light: #ff7c9a; }
+.combat-impact:is([data-skill-impact="thorns"], [data-skill-impact="rosefire"])::before {
+  background: repeating-conic-gradient(from 16deg, #ffbe849c 0deg 7deg, #e9467891 12deg 19deg, transparent 22deg 45deg);
+  mask-image: radial-gradient(closest-side, transparent 29%, #000 40% 75%, transparent 91%);
+}
+@keyframes skill-veil-in { from { opacity: 0; } }
+@keyframes skill-orbit-in { from { opacity: 0; transform: scale(.42) rotate(-13deg); } to { transform: scale(1.07); } }
+@keyframes skill-lightning { 0%, 20% { opacity: 0; scale: .48; } 43% { opacity: 1; scale: 1.1; } to { opacity: .68; } }
+@keyframes skill-mirror { from { transform: rotateY(78deg) scale(.58); } 59% { transform: rotateY(-14deg) scale(1.12); } }
+@keyframes skill-steps { from { opacity: 0; translate: -75% 0; } 26% { translate: 14% 0; } 58% { translate: -9% 0; } }
+@keyframes skill-petal { from { opacity: 0; scale: .3; rotate: 55deg; } 68% { opacity: 1; scale: 1.17; } }
+@keyframes skill-coin { from { opacity: 0; rotate: y 83deg; } 48% { opacity: 1; rotate: y -22deg; } }
+@keyframes skill-thorns { from { opacity: 0; scale: .31; rotate: 15deg; } 64% { scale: 1.15; rotate: -43deg; } }
+@keyframes skill-trace-out { from { opacity: .68; } to { opacity: 0; scale: 1.24; } }
+.short-motion .skill-scene { animation: none; }
 .phoenix-reveal {
   position: relative; display: grid; justify-items: center; gap: 5px; padding: 16px 20px;
   color: #fff2c8; font: 700 clamp(17px, 3vw, 29px) var(--serif); letter-spacing: .08em;
@@ -744,7 +872,7 @@ dialog li, dialog p { font-size: 14px; line-height: 1.7; color: #d8e0e1; margin-
   100% { opacity: 0; transform: rotate(var(--seed-angle)) translateX(4px) scale(.5); }
 }
 @keyframes phoenix-rise { from { opacity: 0; translate: 0 18px; scale: .7; } }
-.short-motion :is(.battle-reveal, .reveal-travel, .skill-reveal, .skill-emblem, .effect-destination, .finish-reveal, .seed-light, .phoenix-reveal img,
+.short-motion :is(.battle-reveal, .reveal-travel, .skill-reveal, .effect-destination, .finish-reveal, .seed-light, .phoenix-reveal img,
   .phoenix-reveal span, .delta, .terrain-flash, .just-drawn, .pile-draw, .turn-arrival, .mp-refresh) {
   animation-duration: .09s !important; animation-delay: 0s !important;
 }
@@ -760,6 +888,9 @@ dialog li, dialog p { font-size: 14px; line-height: 1.7; color: #d8e0e1; margin-
   body:has(.battle, .mulligan, .result) { min-width: 0; }
   body:has(.battle, .mulligan, .result) .topbar { padding-inline: 8px; }
   body:has(.battle, .mulligan, .result) .top-actions { gap: 4px; }
+  .audio-controls { position: static; }
+  .audio-mixer { top: calc(100% + 6px); right: 8px; }
+  .audio-controls summary { padding-inline: 7px; }
   body:has(.battle, .mulligan, .result) :is(.topbar .brand small, .topbar .local-label) { display: none; }
   .battle { --wing: clamp(58px, 14vw, 105px); --gutter: 4px; --rank-gap: 5px; padding: 8px 5px; }
   .battle-heading { grid-template-columns: minmax(0, 1fr) auto; margin-bottom: 7px; }
@@ -826,41 +957,6 @@ dialog li, dialog p { font-size: 14px; line-height: 1.7; color: #d8e0e1; margin-
   23% { opacity: 1; }
   100% { opacity: 0; transform: translate(0, 0) scale(.5); }
 }
-[data-skill-class="warrior"] .skill-emblem { animation-name: skill-cleave; }
-[data-skill-class="fighter"] .skill-emblem { animation-name: skill-step; }
-[data-skill-class="priest"] .skill-emblem { animation-name: skill-bloom; }
-[data-skill-class="merchant"] .skill-emblem { animation-name: skill-glint; }
-[data-skill-class="seer"] .skill-emblem { animation-name: skill-refract; }
-[data-skill-class="swordsman"] .skill-emblem { animation-name: skill-rise; }
-@keyframes skill-cleave {
-  from { opacity: 0; transform: translateX(-32px) rotate(-35deg) scaleX(.3); }
-  40% { transform: translateX(7px) rotate(-18deg) scaleX(1.28); }
-}
-@keyframes skill-step {
-  0% { opacity: 0; transform: translateY(20px) rotate(-12deg) scale(.55); }
-  35% { transform: translateY(-13px) rotate(8deg) scale(1.12); }
-  65% { transform: translateY(5px) rotate(-5deg) scale(.94); }
-}
-@keyframes skill-bloom {
-  from { opacity: 0; scale: .38; }
-  57% { opacity: .74; scale: 1.28; }
-}
-@keyframes skill-glint {
-  from { opacity: 0; transform: rotateY(84deg) scale(.7); }
-  48% { opacity: .84; transform: rotateY(0) scale(1.16); }
-  73% { transform: rotateY(-18deg); }
-}
-@keyframes skill-refract {
-  from { opacity: 0; transform: rotate(85deg) scaleX(.34); }
-  55% { transform: rotate(42deg) scaleX(1.23); }
-  to { transform: rotate(18deg); }
-}
-@keyframes skill-rise {
-  from { opacity: 0; transform: translateY(29px) scaleY(.3); }
-  60% { opacity: .69; transform: translateY(-7px) scaleY(1.2); }
-}
-
-
 .rivals-import { max-width: 1050px; margin-inline: auto; }
 .rivals-upload {
   padding: 17px 20px; border: 1px dashed #ac9160; border-radius: 7px;
