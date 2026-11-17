@@ -12,6 +12,15 @@ export function toggleBattleMotion() {
 }
 const leaderAnchor = seat => ({ kind: 'leader', seat })
 
+function attackStyle(view, attack) {
+  const player = view.players[attack.seat]
+  const card = cards[attack.type === 'leaderAttack' ? player.weapon?.card : player.units.find(unit => unit.id === attack.id)?.card]
+  const job = card?.classId ?? player.leader
+  if (['mage', 'seer'].includes(job) || card?.species === '精霊族') return 'arcane'
+  if (['warrior', 'swordsman'].includes(job) || card?.kind === 'weapon' && !['priest', 'fighter'].includes(job)) return 'slash'
+  return 'blow'
+}
+
 function positionAnchor(event) {
   return { kind: 'unit', seat: event.seat, id: event.id, position: event.position }
 }
@@ -47,11 +56,14 @@ export function planBattlePresentation(before, after, events, cpu) {
   const decisive = after.phase === 'finished'
   const phoenix = events.some(event => event.type === 'specialVictory')
   const attack = events.find(event => event.type === 'attack' || event.type === 'leaderAttack')
+  const style = attack && attackStyle(before, attack)
+  let strike
   const motions = events.filter(event => event.type === 'move').slice(0, 6)
   const terrain = new Map()
   const sources = new Map()
   const targets = new Map()
   const links = new Map()
+  const impacts = new Map()
   const chained = events.some(event => event.type === 'terrain' || event.type === 'terrainTrigger')
   for (const [index, event] of events.entries()) {
     if (!outcomes.has(event.type)) continue
@@ -65,27 +77,35 @@ export function planBattlePresentation(before, after, events, cpu) {
     if (!targets.has(key) || targets.get(key).tone === 'effect') targets.set(key, { to, tone, order })
     const from = event.source
     if (from && anchorKey(from) !== key) links.set(anchorKey(from) + '>' + key, { from, to, tone, order })
+    const impact = event.type === 'damage' ? (event.value ? style || 'arcane' : 'guard') :
+      event.type === 'heal' ? 'heal' : event.type === 'summon' ? 'summon' :
+        event.type === 'equip' ? 'equip' : (event.type === 'terrain' || event.type === 'terrainTrigger') && 'terrain'
+    if (impact) impacts.set(key + '/' + impact, { to, style: impact })
   }
   if (attack) {
     const from = attack.type === 'leaderAttack' ? leaderAnchor(attack.seat) : anchorFor({ kind: 'unit', id: attack.id }, before, after)
     const to = anchorFor(attack.target, before, after)
     if (from && to) {
+      strike = { from, to, style }
       sources.set(anchorKey(from), from)
-      links.set(anchorKey(from) + '>' + anchorKey(to), { from, to, tone: 'strike', order: 0 })
+      links.set(anchorKey(from) + '>' + anchorKey(to), { ...strike, tone: 'strike', order: 0 })
     }
   }
   if (!card && !skill && !decisive && !targets.size && !sources.size) return null
   const reduced = reducedMotion()
+  const bursts = [...impacts.values()]
+  const firstImpact = bursts.find(impact => attack ? [style, 'guard'].includes(impact.style) :
+    landing ? ['summon', 'equip'].includes(impact.style) : ['arcane', 'heal', 'guard', 'terrain'].includes(impact.style))
+  if (!firstImpact && strike) bursts.push({ to: strike.to, style })
+  const sound = firstImpact ?? bursts[0]
   return {
-    card, cost: play?.cost, skill, landing, decisive, phoenix, winner: after.specialVictory, motions, before, reduced,
+    card, cost: play?.cost, skill, landing, strike, decisive, phoenix, winner: after.specialVictory, motions, before, reduced,
     terrain: [...terrain.values()],
-    impactCue: attack ? 'attack' : play?.type === 'equip' ? 'equip' : landing ? 'summon' :
-      events.some(event => event.type === 'heal' && event.value > 0) ? 'heal' :
-        terrain.size ? 'terrain' : card?.kind === 'spell' ? 'spell' : null,
+    bursts, sound, impactCue: sound?.style ?? (card?.kind === 'spell' ? 'spell' : null),
     sources: [...sources.values()], targets: [...targets.values()], links: [...links.values()],
     caption: events.find(event => event.triggered)?.text,
     revealMs: reduced ? (card || skill ? 145 : 0) : skill ? 430 : card ? (cpu ? 395 : 285) : 0,
-    approachMs: reduced ? 60 : chained ? 250 : landing ? 155 : 130,
+    approachMs: reduced ? 60 : chained ? 230 : landing ? 162 : strike ? 135 : 125,
     finishMs: phoenix ? (reduced ? 440 : 1350) : reduced ? 210 : 540,
   }
 }
@@ -168,6 +188,7 @@ export function positionPresentation(app, presentation) {
     face.style.setProperty('--reveal-x', end.x - start.x + 'px')
     face.style.setProperty('--reveal-y', end.y - start.y + 'px')
     face.style.setProperty('--reveal-scale', Math.min(0.75, end.width / start.width))
+    face.style.setProperty('--reveal-travel-time', scene.approachMs + 'ms')
   }
 
   if (scene.reduced) return
@@ -186,7 +207,7 @@ export function positionPresentation(app, presentation) {
   }
   const paths = app.querySelector('.effect-paths')
   const origin = paths.getBoundingClientRect()
-  for (const { from, to, tone, order } of scene.links.slice(0, 18)) {
+  for (const { from, to, tone, order, style } of scene.links.slice(0, 18)) {
     const source = anchorNode(app, from)
     const target = anchorNode(app, to)
     if (!source || !target) continue
@@ -196,6 +217,7 @@ export function positionPresentation(app, presentation) {
     const y = end.y - start.y
     const path = document.createElement('i')
     path.className = 'effect-path effect-' + tone
+    if (style) path.dataset.strikeStyle = style
     path.style.left = start.x - origin.left + 'px'
     path.style.top = start.y - origin.top + 'px'
     path.style.animationDelay = order * 32 + 'ms'
@@ -203,4 +225,62 @@ export function positionPresentation(app, presentation) {
     path.style.rotate = Math.atan2(y, x) + 'rad'
     paths.append(path)
   }
+  if (scene.strike) windUp(app, scene.strike, scene.approachMs)
+}
+
+function windUp(app, { from, to, style }, duration) {
+  const attacker = anchorNode(app, from)
+  const defender = anchorNode(app, to)
+  if (!attacker || !defender) return
+  const start = center(attacker)
+  const end = center(defender)
+  const length = Math.hypot(end.x - start.x, end.y - start.y) || 1
+  const reach = Math.min(start.width * .38, length * .29, 44)
+  const x = (end.x - start.x) / length * reach
+  const y = (end.y - start.y) / length * reach
+  attacker.classList.add('attack-approach')
+  attacker.animate(style === 'arcane' ? [
+    { filter: 'brightness(1)', scale: 1 }, { filter: 'brightness(1.45)', scale: 1.04 },
+  ] : [
+    { translate: '0px 0px', scale: 1 },
+    { translate: `${-x * .20}px ${-y * .20}px`, scale: .97, offset: .37 },
+    { translate: `${x}px ${y}px`, scale: 1.06 },
+  ], { duration, easing: 'ease-in', fill: 'forwards' })
+}
+
+const sparkAngles = [-115, -77, -40, 5, 42, 81, 124, 162, 195, 224]
+
+export function positionBattleImpact(app, scene) {
+  const grid = app.querySelector('.battle-grid')
+  if (!grid || !scene.bursts.length) return 0
+  const origin = grid.getBoundingClientRect()
+  const layer = document.createElement('div')
+  layer.className = 'battle-impacts'
+  layer.setAttribute('aria-hidden', 'true')
+  let pan = 0
+  for (const impact of scene.bursts.slice(0, 12)) {
+    const target = anchorNode(app, impact.to)
+    if (!target) continue
+    const { x, y, width } = center(target)
+    const burst = document.createElement('div')
+    burst.className = 'combat-impact'
+    burst.dataset.impactStyle = impact.style
+    burst.style.left = x - origin.left + 'px'
+    burst.style.top = y - origin.top + 'px'
+    burst.style.setProperty('--impact-size', Math.min(170, Math.max(44, width * 1.23)) + 'px')
+    if (impact === scene.sound) pan = .46 * (2 * (x - origin.left) / origin.width - 1)
+    if (!scene.reduced) {
+      for (const [index, angle] of sparkAngles.entries()) {
+        const spark = document.createElement('i')
+        spark.style.setProperty('--ray-angle', angle + 'deg')
+        spark.style.setProperty('--ray-reach', (.46 + (index % 4) * .12) * Math.min(140, width) + 'px')
+        spark.style.setProperty('--ray-life', (240 + (index % 4) * 57) + 'ms')
+        burst.append(spark)
+      }
+    }
+    layer.append(burst)
+  }
+  layer.addEventListener('animationend', event => { if (event.target === layer) layer.remove() })
+  grid.append(layer)
+  return Math.max(-1, Math.min(1, pan))
 }

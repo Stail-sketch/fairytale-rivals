@@ -239,6 +239,7 @@ async function driveBattle() {
       'カードが召喚先へ移動し、召喚先が光る')
     completePresentation()
     expect(query(square + '.ready'), '召喚と奇襲')
+    expect(query('[data-impact-style=summon]'), 'カードがマスに着地したフレームで召喚の光を出す')
     expect(query(square + ' img').src === whelpArt, '手札と盤面で同じカードの画像を表示')
     expect(/MP\s*0\/1/.test(query('.leader-panel:not(.opponent) .resources').textContent), '召喚でMPを消費')
     click('.battle-log summary')
@@ -258,9 +259,11 @@ async function driveBattle() {
     expect(query('#attack-preview').textContent.includes('2 ダメージ') && query('#attack-preview').textContent.includes('HP 23'),
       '攻撃を実行する前に戦闘の結果が見える')
     drag(square, '[data-leader="1"]', false)
-    expect(query('.effect-path.effect-strike'), '攻撃元から攻撃対象へ斬線が走る')
+    expect(query('.effect-path.effect-strike[data-strike-style=blow]') && query(square + '.attack-approach') &&
+      query('[data-leader="1"] .leader-hp').textContent === '25', '攻撃元が動き始めるまでHPを維持する')
     completePresentation()
-    expect(query('[data-leader="1"] .leader-hp').textContent === '23', 'HPに損傷が反映')
+    expect(query('[data-impact-style=blow]') && query('[data-leader="1"] .delta')?.textContent === '−2' &&
+      query('[data-leader="1"] .leader-hp').textContent === '23', '打撃・ダメージ数字・HP減少が同じタイミングで出る')
     expect(!query(square + '.ready'), '攻撃済み')
     next()
     expect(x('[data-leader="1"]') < x('[data-leader="0"]'), '交代すると操作側が左に回る')
@@ -279,7 +282,8 @@ async function driveBattle() {
     expect(query('[data-leader="1"].effect-origin') && query(square + '.effect-destination.effect-damage[data-unit]') &&
       query('.effect-path.effect-damage'), 'ダメージ反映前に奥義の発動元と対象を示す')
     completePresentation()
-    expect(!query(square + '[data-unit]') && query(square + ' .delta'), '奥義のダメージを表示して相手ユニットが退場')
+    expect(!query(square + '[data-unit]') && query(square + ' .delta') && query('[data-impact-style=arcane]'),
+      '魔法の着弾と奥義のダメージを表示して相手ユニットが退場')
     next()
 
     // Seat 0 continues playing cheap units and attacking while Seat 1 passes.
@@ -585,8 +589,8 @@ async function driveBattle() {
       '武器の耐久にカーソルを合わせて装備の詳細を確認できる')
     click('[data-leader="0"]')
     click('[data-leader="1"]')
-    expect(Number(query('[data-leader="1"] .leader-hp').textContent) === 25 - cards['FT-0086'].attack,
-      '装備した武器で敵リーダーを攻撃できる')
+    expect(Number(query('[data-leader="1"] .leader-hp').textContent) === 25 - cards['FT-0086'].attack &&
+      query('[data-impact-style=slash]'), '装備した剣で敵リーダーを攻撃し、斬撃を表示する')
     expect(query(durability)?.textContent === '耐久 ' + (cards['FT-0086'].hp - 1), '攻撃で減った耐久を表示')
     next()
     next()

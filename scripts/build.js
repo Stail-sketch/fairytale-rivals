@@ -19,7 +19,7 @@ export async function standalone(afterReady = '') {
     const bytes = await readFile(new URL('apps/web/assets/' + image, root))
     images[image] = 'data:image/webp;base64,' + bytes.toString('base64')
   }
-  css = css.replaceAll('assets/arena.webp', images['arena.webp'])
+  css = css.replace(/assets\/([\w-]+\.webp)/g, (path, image) => images[image] ?? path)
 
   async function include(path) {
     if (modules.has(path)) return

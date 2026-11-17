@@ -11,7 +11,7 @@ import { createDeckEditor } from './deck-editor.js'
 import { initialDecks } from '../../packages/cards/initial-decks.js'
 import { retireRivalsExample } from './rivals-example.js'
 import { createBattleAudio } from './battle-audio.js'
-import { planBattlePresentation, positionPresentation, presentationLayer, reducedMotion, toggleBattleMotion } from './battle-presentation.js'
+import { planBattlePresentation, positionBattleImpact, positionPresentation, presentationLayer, reducedMotion, toggleBattleMotion } from './battle-presentation.js'
 import { connectRoom, enterRoom, forgetRoom, inviteUrl, invitedRoom, onlineAvailable, rememberRoom, savedRoom } from './online.js'
 
 const app = document.querySelector('#app')
@@ -200,14 +200,13 @@ function placementAt(seat, position) {
 
 function flashes(target, id) {
   const events = animatedView === view ? [] : view.events.filter(event => event.seq > eventFloor)
-  const attack = events.some(event => event.type === 'attack' && event.id === id && id !== undefined)
   const summon = events.some(event => event.type === 'summon' && event.id === id)
   const hit = events.filter(event => event.type === 'damage' && sameTarget(event.target, target))
   const heal = events.filter(event => event.type === 'heal' && sameTarget(event.target, target))
   const amount = hit.reduce((sum, event) => sum + event.value, 0)
   const restored = heal.reduce((sum, event) => sum + event.value, 0)
   return {
-    cls: [attack && 'strike', summon && 'arrival', amount && 'hit', restored && 'heal'].filter(Boolean).join(' '),
+    cls: [summon && 'arrival', amount && 'hit', restored && 'heal'].filter(Boolean).join(' '),
     label: amount ? `<span class="delta">−${amount}</span>` : restored ? `<span class="delta good">+${restored}</span>` : '',
   }
 }
@@ -220,9 +219,8 @@ function leaderPanel(seat, enemy) {
   const target = leaderTarget(seat)
   const flash = flashes(target)
   const ready = !enemy && view.legal?.leaderAttack.enabled
-  const striking = animatedView !== view && view.events.some(event => event.seq > eventFloor && event.type === 'leaderAttack' && event.seat === seat)
   return `<aside class="leader-panel ${enemy ? 'opponent' : ''} ${seat === view.active ? 'active-side' : ''}" data-side="${seat}"${colors(leader)}>
-    <button class="leader-target ${targetEnabled(target) ? 'targetable' : ''} ${ready ? 'ready' : ''} ${selected?.type === 'leaderAttack' && seat === view.active ? 'chosen' : ''} ${striking ? 'strike' : ''} ${flash.cls}"
+    <button class="leader-target ${targetEnabled(target) ? 'targetable' : ''} ${ready ? 'ready' : ''} ${selected?.type === 'leaderAttack' && seat === view.active ? 'chosen' : ''} ${flash.cls}"
       data-leader="${seat}" aria-label="${seatName(seat)}リーダー ${leader.name} HP ${Math.max(0, player.hp)}${weapon ? ' 武器耐久 ' + weapon.durability : ''}${ready ? ' 攻撃可能' : ''}"
       title="${ready ? 'クリックしてリーダーで攻撃' : leader.motif}">
       ${portrait(player.leader)}<span class="crest" aria-hidden="true">${leader.sigil}</span>
@@ -776,7 +774,12 @@ function scheduleCpu() {
   }, cpuMoves === 0 ? 340 : 250)
 }
 
-function finishAction(action) {
+function showBattleImpact(scene) {
+  const pan = positionBattleImpact(app, scene)
+  if (scene.impactCue) battleAudio.play(scene.impactCue, pan)
+}
+
+function finishAction(action, impact = null) {
   presentation = null
   presentationTimer = null
   const announcement = view.events.findLast(event => event.seq > eventFloor
@@ -785,6 +788,7 @@ function finishAction(action) {
   if (view.phase === 'finished') render('.result [data-op="home"]')
   else if (view.phase === 'mulligan') render('[data-replace]')
   else render(!cpuTurn() && (action.type === 'end' || action.type === 'mulligan') ? '.battle' : null)
+  if (impact) showBattleImpact(impact)
   scheduleCpu()
   const update = roomUpdates.shift()
   if (update) receiveRoom(update)
@@ -793,17 +797,18 @@ function finishAction(action) {
 function playPresentation(scene, next, action) {
   function impact() {
     view = next
-    if (scene.impactCue) battleAudio.play(scene.impactCue)
     if (scene.decisive) {
       presentation.beat = 'finish'
       render()
+      showBattleImpact(scene)
       battleAudio.play(scene.phoenix ? 'phoenix' : 'finish')
       presentationTimer = setTimeout(() => finishAction(action), scene.finishMs)
-    } else finishAction(action)
+    } else finishAction(action, scene)
   }
   function approach() {
     presentation.beat = 'approach'
     render()
+    if (scene.strike && !scene.reduced) battleAudio.play('windup')
     presentationTimer = setTimeout(impact, scene.approachMs)
   }
   presentation = { scene, beat: 'reveal' }
