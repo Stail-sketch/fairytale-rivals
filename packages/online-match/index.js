@@ -1,6 +1,6 @@
 import { randomBytes, randomInt } from 'node:crypto'
 import { roomSnapshot } from './room-snapshot.js'
-import { lobbyCode, normalizeRoomId, startRoomMatch, updateLobby, validatedLineup } from './lobby.js'
+import { leaveRoom, lobbyCode, normalizeRoomId, startRoomMatch, updateRoom, validatedLineup } from './lobby.js'
 
 const route = /^\/api\/rooms(?:\/([a-z0-9]+)(?:\/(join|actions))?)?$/
 const limit = 12 * 1024
@@ -120,34 +120,18 @@ export function createRoomApi() {
     const player = [room.host, room.guest].find(entry => entry && req.headers.authorization === 'Bearer ' + entry.token)
     if (!player) throw new RequestError(403, 'この部屋の対戦権限がありません。')
     if (!operation && req.method === 'GET') {
-      if (Number(url.searchParams.get('since') ?? -1) === room.version && !room.finished) return wait(room, player, res)
+      if (Number(url.searchParams.get('since') ?? -1) === room.version) return wait(room, player, res)
       return reply(res, 200, roomSnapshot(room, player))
     }
     if (!operation && req.method === 'DELETE') {
-      if (!room.match && room.lobby && player === room.guest) room.guest = null
-      else if (!room.match) room.closed = true
-      else if (!room.finished) {
-        room.resigned = player.seat
-        room.finished = true
-      } else return reply(res, 204)
-      publish(room)
+      if (leaveRoom(room, player)) publish(room)
       return reply(res, 204)
     }
     if (operation === 'actions' && req.method === 'POST') {
       const { version, action } = await json(req)
       if (!rooms.has(id) || room.closed) throw new RequestError(404, missingRoom)
       if (player !== room.host && player !== room.guest) throw new RequestError(403, 'この部屋の対戦権限がありません。')
-      if (room.lobby && !room.match) {
-        updateLobby(room, player, version, action, () => [randomInt(2), randomBytes(4).readUInt32LE()])
-        publish(room)
-        return reply(res, 200, roomSnapshot(room, player))
-      }
-      if (!room.match || room.finished) throw new RequestError(409, '対戦中の部屋で操作してください。')
-      if (version !== room.version) throw new RequestError(409, '盤面が更新されました。表示を確認してください。')
-      const result = room.match.act(player.seat, action)
-      if (!result.ok) throw new RequestError(422, result.issue)
-      room.finished = result.events.some(event => event.type === 'finish')
-      publish(room, { seat: player.seat, type: action.type, events: result.events })
+      publish(room, updateRoom(room, player, version, action, () => [randomInt(2), randomBytes(4).readUInt32LE()]))
       return reply(res, 200, roomSnapshot(room, player))
     }
     throw new RequestError(405, 'この操作は利用できません。')

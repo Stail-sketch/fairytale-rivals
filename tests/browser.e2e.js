@@ -423,7 +423,11 @@ async function driveBattle() {
       expect(query('[data-op=end]').disabled && query('.selection-bar span').textContent === 'CPUが行動中', 'CPU中の操作をロック')
       expect(query('.ally-formation [data-slot^="0:"]'), 'CPUターンも自分の盤面が左')
       if (i === 0) {
-        expect(query('.turn-notice[data-direction=outgoing]')?.textContent === '相手のターン', '手番を渡したときに知らせる')
+        const outgoing = query('.board .turn-notice[data-direction=outgoing]')
+        const rect = outgoing?.getBoundingClientRect()
+        expect(outgoing?.textContent === '相手のターン' &&
+          Math.abs(rect.top + rect.height / 2 - (board.top + board.height / 2)) < 2 &&
+          getComputedStyle(outgoing).animationDuration === '1.7s', '相手の手番を盤面中央に長めに表示する')
         const hand = query('[data-hand][aria-haspopup=dialog]')
         const card = cards[hand.dataset.card]
         hand.dispatchEvent(new PointerEvent('pointerover', { bubbles: true }))
@@ -963,8 +967,8 @@ test('別々のChromiumセッションで招待URLから参加し、対戦と再
 })
 
 
-test('静的公開版でロビーIDから合流し、別のブラウザーセッションが対戦と再接続をする', {
-  skip: !process.env.FAIRYTALE_PEER_E2E, timeout: 60000,
+test('静的公開版でロビーIDから合流し、対戦・再接続・再戦・ロビーへ戻る操作ができる', {
+  skip: !process.env.FAIRYTALE_PEER_E2E, timeout: 90000,
 }, async t => {
   const temp = await realpath(tmpdir())
   const profile = await mkdtemp(join(temp, 'fairytale-peer-'))
@@ -1027,6 +1031,46 @@ test('静的公開版でロビーIDから合流し、別のブラウザーセッ
   await guest.wait('.battle')
   await finishTurn(second)
   await first.wait(end)
+
+  async function finishMatch(firstToAct, secondToAct) {
+    const players = [firstToAct, secondToAct]
+    for (let turn = 0; turn < 115; turn++) {
+      const actor = players[turn % 2]
+      await actor.wait(end + ', .result')
+      const ended = await actor.evaluate(`(() => {
+        const button = document.querySelector('[data-op=end]:enabled')
+        if (!button) return false
+        button.click()
+        document.querySelector('#end-turn-dialog[open] [value=end]')?.click()
+        return true
+      })()`)
+      if (!ended) break
+    }
+    await Promise.all([host.wait('.result'), guest.wait('.result')])
+  }
+
+  await finishMatch(first, second)
+  const rematch = '[data-op=rematch]'
+  await host.click(rematch + ':enabled')
+  await host.wait(rematch + ':disabled')
+  await eventually(() => guest.evaluate('document.querySelector(".result .room-status")?.textContent.includes("再戦を希望")'),
+    '相手の再戦希望を表示')
+  await guest.click(rematch + ':enabled')
+  await Promise.all([host.wait('.mulligan'), guest.wait('.mulligan')])
+  const [rematchFirst, rematchSecond] = await host.evaluate(`Boolean(document.querySelector('${keep}'))`) ? [host, guest] : [guest, host]
+  await rematchFirst.click(keep)
+  await rematchSecond.click(keep)
+  await finishMatch(rematchFirst, rematchSecond)
+  await guest.click('[data-op=return-lobby]:enabled')
+  for (const page of [host, guest]) {
+    await page.wait('[data-lobby-member=guest][data-ready=false]')
+    assert.equal(await page.evaluate('document.querySelector("#lobby-id").value'), code)
+    assert.equal(await page.evaluate('document.querySelector("#invite-url").value'), invite)
+  }
+  assert.equal(await host.evaluate('document.querySelector("[data-op=lobby-start]").disabled'), true)
+  await host.click('.room-lobby [data-op=home]:enabled')
+  await guest.wait('.room-lobby:not(:has(#lobby-id))')
+  assert.match(await guest.evaluate('document.querySelector(".room-status").textContent'), /閉じられました/)
 })
 
 test('添付のライバルズ画像を貼り付けて30枚を照合し、修正して保存する', {

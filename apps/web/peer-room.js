@@ -1,5 +1,5 @@
 import { roomSnapshot } from '../../packages/online-match/room-snapshot.js'
-import { lobbyCode, startRoomMatch, updateLobby, validatedLineup } from '../../packages/online-match/lobby.js'
+import { leaveRoom, lobbyCode, startRoomMatch, updateRoom, validatedLineup } from '../../packages/online-match/lobby.js'
 
 const active = new Map()
 const protocol = 'fairytale-room-v1'
@@ -67,16 +67,6 @@ const randomSeats = () => {
   return [numbers[0] % 2, numbers[1]]
 }
 
-function apply(room, player, version, action) {
-  if (room.lobby && !room.match && !room.closed) return updateLobby(room, player, version, action, randomSeats)
-  if (room.finished || room.closed || room.version !== version) throw error('盤面が更新されました。表示を確認してください。', 409)
-  if (!room.match) throw error('対戦開始を待ってください。', 409)
-  const result = room.match.act(player.seat, action)
-  if (!result.ok) throw error(result.issue, 422)
-  room.finished = result.events.some(event => event.type === 'finish')
-  return { seat: player.seat, type: action.type, events: result.events }
-}
-
 function hostRoom(peer, session, lineup, lobby) {
   const room = { version: 0, lobby, host: { lineup }, guest: null, match: null }
   const waiting = new Set()
@@ -93,11 +83,12 @@ function hostRoom(peer, session, lineup, lobby) {
 
   function join(token, guestLineup, joining) {
     if (!idPattern.test(token)) throw error('参加情報が不正です。', 403)
+    if (room.closed) throw error(unavailable, 404)
     if (room.guest) {
       if (room.guest.token !== token) throw error('この部屋にはすでに2人が参加しています。', 409)
       return false
     }
-    if (!joining || room.closed) throw error(unavailable, 404)
+    if (!joining) throw error(unavailable, 404)
     room.guest = { token, lineup: room.lobby ? null : validatedLineup(guestLineup) }
     if (!room.lobby) startRoomMatch(room, ...randomSeats())
     return true
@@ -122,7 +113,9 @@ function hostRoom(peer, session, lineup, lobby) {
       clearTimeout(deadline)
       if (link === incoming) {
         link = null
-        if (!room.finished) status('reconnecting', '友達の再接続を待っています。')
+        if (!room.finished || (room.lobby && room.resultVersion !== undefined)) {
+          status('reconnecting', '友達の再接続を待っています。')
+        }
       }
     })
     incoming.on('data', raw => {
@@ -140,19 +133,15 @@ function hostRoom(peer, session, lineup, lobby) {
           status('connected')
           if (started) publish()
         } else if (!authorized || link !== incoming) throw error('この部屋の対戦権限がありません。', 403)
-        else if (message.kind === 'act') publish(apply(room, room.guest, message.version, message.action))
-        else if (message.kind === 'leave' && !room.finished) {
-          if (room.lobby && !room.match) {
-            const guest = room.guest
-            room.guest = null
-            link = null
+        else if (message.kind === 'act') publish(updateRoom(room, room.guest, message.version, message.action, randomSeats))
+        else if (message.kind === 'leave') {
+          const guest = room.guest
+          if (leaveRoom(room, guest)) {
+            if (!room.guest) link = null
             publish()
-            send(incoming, { kind: 'reply', request: message.request, state: roomSnapshot(room, guest) })
-            return
           }
-          room.resigned = room.guest.seat
-          room.finished = true
-          publish()
+          send(incoming, { kind: 'reply', request: message.request, state: roomSnapshot(room, guest) })
+          return
         }
         send(incoming, { kind: 'reply', request: message.request, state: roomSnapshot(room, room.guest) })
       } catch (issue) {
@@ -169,15 +158,11 @@ function hostRoom(peer, session, lineup, lobby) {
       update(roomSnapshot(room, room.host))
     },
     async act(version, action) {
-      if (action.type === 'lobby-start' && !link?.open) throw error('友達の再接続を待っています。', 409)
-      publish(apply(room, room.host, version, action))
+      if (['lobby-start', 'rematch'].includes(action.type) && !link?.open) throw error('友達の再接続を待っています。', 409)
+      publish(updateRoom(room, room.host, version, action, randomSeats))
     },
     async leave() {
-      if (room.finished) return
-      if (room.match) {
-        room.resigned = room.host.seat
-        room.finished = true
-      } else room.closed = true
+      if (!leaveRoom(room, room.host)) return
       publish()
       await new Promise(resolve => setTimeout(resolve, 120))
     },
@@ -301,11 +286,12 @@ export function connectPeerRoom(session, update, status) {
   }
 
   let stopped = false
+  let roomClosed = false
   let lastVersion = -1
   let missedHost = 0
   let timer
   function reconnect() {
-    if (stopped) return
+    if (stopped || roomClosed) return
     endpoint = null
     status('reconnecting')
     timer = setTimeout(resume, 1100)
@@ -316,6 +302,7 @@ export function connectPeerRoom(session, update, status) {
     link.start(state => {
       if (state.version <= lastVersion) return
       lastVersion = state.version
+      roomClosed = state.phase === 'closed'
       update(state)
     }, reconnect)
   }

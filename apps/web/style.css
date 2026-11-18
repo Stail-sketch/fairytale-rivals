@@ -124,6 +124,8 @@ small { font-size: 11px; }
 .mulligan-cards { display: flex; gap: 13px; justify-content: center; margin: 24px auto 14px; }
 .result .portrait { width: 110px; height: 110px; object-fit: cover; border: 2px solid var(--gold); border-radius: 50%; margin: auto; }
 .result-hp, .result-actions { display: flex; gap: 15px; justify-content: center; margin-top: 18px; align-items: center; }
+.result-actions { flex-wrap: wrap; gap: 9px 12px; }
+.result .room-status { color: var(--gold); margin: 12px 0 0; }
 .result-hp span { padding: 6px 10px; background: #0a1420; color: var(--muted); }
 .result .primary { margin: 0; }
 .battle {
@@ -136,26 +138,23 @@ small { font-size: 11px; }
 .battle:focus { outline: none; }
 .battle-heading, .battle-grid, .tray { max-width: 1240px; margin-inline: auto; }
 .battle-heading { position: relative; z-index: 4; display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; margin-bottom: 14px; align-items: center; color: #f0d6a4; font-size: 12px; letter-spacing: .14em; }
-.turn-label { position: relative; background: #141d29e8; border: 1px solid #b29663; color: var(--text); border-radius: 4px; padding: 6px 19px; font-size: 12px; letter-spacing: .08em; }
+.turn-label { background: #141d29e8; border: 1px solid #b29663; color: var(--text); border-radius: 4px; padding: 6px 19px; font-size: 12px; letter-spacing: .08em; }
 .turn-notice {
-  position: absolute; inset-block: -4px; min-width: 100%; left: 50%; transform: translateX(-50%);
-  display: grid; place-items: center; padding: 0 18px; white-space: nowrap; pointer-events: none;
-  border: 1px solid #d4b474; border-radius: 6px; background: linear-gradient(#352b1c, #201c19);
-  color: #ffe7b7; box-shadow: 0 3px 14px #0a101aca; font-weight: 800;
+  position: absolute; z-index: 5; inset: 50% auto auto 50%; width: min(calc(100% - 12px), 560px);
+  transform: translate(-50%, -50%); padding: clamp(8px, 1.8vw, 22px) 6px;
+  display: grid; place-items: center; white-space: nowrap; pointer-events: none;
+  border-block: 1px solid #e5bc7c;
+  background: linear-gradient(90deg, #17162455, #211b25f7 17%, #3a261b 50%, #211b25f7 83%, #17162455);
+  color: #fff0ca; font-family: var(--serif); font-size: clamp(19px, 4.65vw, 55px);
+  font-weight: 800; letter-spacing: .07em; line-height: 1.2; text-shadow: 0 3px 9px #100e17, 0 0 23px #e8ac5666;
+  box-shadow: 0 6px 28px #080a15bb;
   animation: turn-notice ease-out both;
   animation-duration: var(--turn-notice-duration) !important;
 }
-.turn-notice[data-direction="incoming"] {
-  z-index: 5; inset: 50% auto auto 50%; min-width: 0; width: min(calc(100% - 12px), 560px);
-  transform: translate(-50%, -50%); padding: clamp(8px, 1.8vw, 22px) 6px;
-  border-inline: 0; border-radius: 0; border-block-color: #e5bc7c;
-  background: linear-gradient(90deg, #17162455, #211b25f7 17%, #3a261b 50%, #211b25f7 83%, #17162455);
-  color: #fff0ca; font-family: var(--serif); font-size: clamp(19px, 4.65vw, 55px);
-  letter-spacing: .07em; line-height: 1.2; text-shadow: 0 3px 9px #100e17, 0 0 23px #e8ac5666;
-  box-shadow: 0 6px 28px #080a15bb;
-}
 .turn-notice[data-direction="outgoing"] {
-  border-color: #819bb7; background: linear-gradient(#25394d, #172331); color: #dbe9f8;
+  border-color: #9ab9db; color: #dfedff;
+  background: linear-gradient(90deg, #141d3255, #15273df7 17%, #263f59 50%, #15273df7 83%, #141d3255);
+  text-shadow: 0 3px 9px #0b1422, 0 0 23px #769fce80;
 }
 @keyframes turn-notice {
   0%, 100% { opacity: 0; }
@@ -999,8 +998,7 @@ dialog li, dialog p { font-size: 14px; line-height: 1.7; color: #d8e0e1; margin-
   .battle-heading { grid-template-columns: minmax(0, 1fr) auto; margin-bottom: 7px; }
   .battle-heading > span:first-child { display: none; }
   .battle-heading .turn-label { justify-self: start; padding: 4px 7px; }
-  .turn-notice[data-direction="outgoing"] { left: 0; transform: none; padding-inline: 9px; }
-  .turn-notice[data-direction="incoming"] { letter-spacing: .025em; }
+  .turn-notice { letter-spacing: .025em; }
   .board { grid-template-columns: minmax(0, 1fr) 15px minmax(0, 1fr); padding: 5px 4px 8px; }
   .formation { gap: 4px; }
   .lane-mark { width: 14px; height: 14px; font-size: 9px; }

@@ -32,8 +32,7 @@ export function lobbySnapshot(room, player) {
   return { role: player === room.host ? 'host' : 'guest', host: member(room.host), guest: member(room.guest) }
 }
 
-export function updateLobby(room, player, version, action, random) {
-  if (!action || typeof action !== 'object') throw roomError(400, 'ロビーの操作を読み取れません。')
+function updateLobby(room, player, version, action, random) {
   const minimum = action.type === 'lobby-ready' ? player.readyVersion ?? 0 : room.version
   if (!Number.isSafeInteger(version) || version < minimum || version > room.version) {
     throw roomError(409, 'ロビーの状態が更新されました。')
@@ -47,11 +46,72 @@ export function updateLobby(room, player, version, action, random) {
   if (action.type !== 'lobby-start') throw roomError(409, '対戦を開始してから操作してください。')
   if (player !== room.host) throw roomError(403, '対戦を開始できるのはホストです。')
   if (!room.host.lineup || !room.guest?.lineup) throw roomError(409, '二人とも準備ができるまでお待ちください。')
-  const [seat, seed] = random()
-  startRoomMatch(room, seat, seed)
+  startRoomMatch(room, ...random())
+}
+
+function clearResult(room) {
+  room.finished = false
+  room.resigned = undefined
+  room.resultVersion = undefined
+  for (const player of [room.host, room.guest]) {
+    if (player) player.rematch = false
+  }
+}
+
+function returnToLobby(room) {
+  room.match = null
+  clearResult(room)
+  for (const player of [room.host, room.guest]) {
+    if (!player) continue
+    player.lineup = null
+    player.readyVersion = room.version + 1
+  }
+}
+
+export function updateRoom(room, player, version, action, random) {
+  if (room.closed) throw roomError(404, 'この対戦部屋は終了しました。')
+  if (!action || typeof action !== 'object') throw roomError(400, '対戦の操作を読み取れません。')
+  if (room.lobby && !room.match) return updateLobby(room, player, version, action, random)
+  if (room.lobby && room.finished && room.resultVersion !== undefined) {
+    if (!Number.isSafeInteger(version) || version < room.resultVersion || version > room.version) {
+      throw roomError(409, '対戦結果が更新されました。')
+    }
+    if (action.type === 'return-lobby') return returnToLobby(room)
+    if (action.type === 'rematch') {
+      player.rematch = true
+      if (room.host.rematch && room.guest.rematch) startRoomMatch(room, ...random())
+      return
+    }
+  }
+  if (!room.match || room.finished) throw roomError(409, '対戦中の部屋で操作してください。')
+  if (version !== room.version) throw roomError(409, '盤面が更新されました。表示を確認してください。')
+  const result = room.match.act(player.seat, action)
+  if (!result.ok) throw roomError(422, result.issue)
+  if (result.events.some(event => event.type === 'finish')) {
+    room.finished = true
+    room.resultVersion = room.version + 1
+  }
+  return { seat: player.seat, type: action.type, events: result.events }
+}
+
+export function leaveRoom(room, player) {
+  if (room.closed) return false
+  if (room.lobby && (!room.match || room.resultVersion !== undefined)) {
+    if (player === room.host) room.closed = true
+    else {
+      room.guest = null
+      if (room.match) returnToLobby(room)
+    }
+  } else if (!room.match) room.closed = true
+  else if (!room.finished) {
+    room.resigned = player.seat
+    room.finished = true
+  } else return false
+  return true
 }
 
 export function startRoomMatch(room, guestSeat, seed) {
+  clearResult(room)
   room.guest.seat = guestSeat
   room.host.seat = 1 - guestSeat
   room.match = createLocalMatch({

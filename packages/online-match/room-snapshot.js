@@ -1,8 +1,9 @@
 import { lobbySnapshot } from './lobby.js'
 
 export function roomSnapshot(room, player) {
-  if (room.lobby && !room.match && !room.closed) return { version: room.version, phase: 'lobby', lobby: lobbySnapshot(room, player) }
-  if (!room.match) return { version: room.version, phase: room.closed ? 'closed' : 'waiting' }
+  if (room.closed) return { version: room.version, phase: 'closed' }
+  if (room.lobby && !room.match) return { version: room.version, phase: 'lobby', lobby: lobbySnapshot(room, player) }
+  if (!room.match) return { version: room.version, phase: 'waiting' }
   const view = room.match.view(player.seat)
   const lastPlay = view.events.findLast(event => event.played)
   view.events = view.events.slice(-100)
@@ -16,5 +17,8 @@ export function roomSnapshot(room, player) {
   return {
     version: room.version, phase: 'playing', seat: player.seat, view,
     last: room.last, resigned: room.resigned,
+    ...(room.lobby && room.resultVersion !== undefined ? {
+      result: { rematch: Boolean(player.rematch), opponentRematch: Boolean((player === room.host ? room.guest : room.host).rematch) },
+    } : {}),
   }
 }

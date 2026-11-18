@@ -94,7 +94,7 @@ test('未参加の部屋は閉じられ、デッキが不正なら入室でき�
   assert.equal((await api.join(host.id)).status, 404)
 })
 
-test('ロビーIDで入室し、両者の準備後にホストが対戦を開始できる', async t => {
+test('ロビーIDで入室し、同じ部屋で再戦とデッキ変更ができる', async t => {
   const api = await roomClient(t)
   const host = (await api.request('', { method: 'POST', body: { lobby: true } })).data
   assert.match(host.id, /^[a-z2-9]{8}$/)
@@ -122,6 +122,48 @@ test('ロビーIDで入室し、両者の準備後にホストが対戦を開始
   assert.equal(started.view.phase, 'mulligan')
   assert.equal(started.view.players[started.seat].leader, 'mage')
   assert.deepEqual(started.view.players[1 - started.seat].hand, [])
+
+  const finishMatch = async initial => {
+    const seats = initial.seat === 0 ? [host, replacement] : [replacement, host]
+    let state = initial
+    for (let step = 0; step < 115 && state.view.phase !== 'finished'; step++) {
+      const action = state.view.phase === 'mulligan' ? { type: 'mulligan', replace: [] } : { type: 'end' }
+      const result = await api.act(seats[state.view.active], state.version, action)
+      assert.equal(result.status, 200)
+      state = result.data
+    }
+    assert.equal(state.view.phase, 'finished')
+    return state.version
+  }
+  const firstResult = await finishMatch(started)
+  const waitingForVote = api.state(replacement, firstResult)
+  const vote = await api.act(host, firstResult, { type: 'rematch' })
+  assert.equal(vote.data.view.phase, 'finished', '一人の希望だけでは再戦しない')
+  assert.deepEqual(vote.data.result, { rematch: true, opponentRematch: false })
+  assert.deepEqual((await waitingForVote).data.result, { rematch: false, opponentRematch: true })
+
+  const restarted = await api.act(replacement, firstResult, { type: 'rematch' })
+  assert.equal(restarted.status, 200, '同じ結果バージョンを見ている両者が再戦できる')
+  assert.equal(restarted.data.view.phase, 'mulligan')
+  assert.equal(restarted.data.view.turn, 0)
+  assert.equal(restarted.data.view.players[restarted.data.seat].leader, 'priest')
+  const hostRestarted = (await api.state(host)).data
+  assert.equal(hostRestarted.view.players[hostRestarted.seat].leader, 'mage')
+  assert.deepEqual(hostRestarted.view.players[1 - hostRestarted.seat].hand, [])
+
+  const secondResult = await finishMatch(hostRestarted)
+  assert.equal((await api.act(host, firstResult, { type: 'rematch' })).status, 409, '前回の希望は次の結果に適用されない')
+  const returned = (await api.act(replacement, secondResult, { type: 'return-lobby' })).data
+  assert.equal(returned.phase, 'lobby')
+  assert.deepEqual(returned.lobby.guest, { joined: true, ready: false })
+  assert.deepEqual(returned.lobby.host, { joined: true, ready: false })
+  assert.equal((await api.act(host, secondResult, ready('warrior'))).status, 409, '前回の準備が届いても復元しない')
+  assert.equal((await api.act(host, returned.version, ready('warrior'))).status, 200)
+  assert.equal((await api.act(replacement, returned.version, ready('fighter'))).status, 200)
+  const nextStart = (await api.act(host, returned.version + 2, { type: 'lobby-start' })).data
+  assert.equal(nextStart.view.phase, 'mulligan')
+  assert.equal(nextStart.view.players[nextStart.seat].leader, 'warrior')
+  assert.equal(nextStart.view.players[1 - nextStart.seat].leader, 'fighter')
 })
 
 test('第3弾のカードで配置した舞台がフレンド対戦の両画面に反映される', async t => {

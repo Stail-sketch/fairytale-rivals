@@ -82,7 +82,7 @@ export function connectRoom(session, update, connection) {
     update(next)
   }
   async function poll() {
-    while (!signal.aborted && received?.phase !== 'closed' && received?.view?.phase !== 'finished') {
+    while (!signal.aborted && received?.phase !== 'closed') {
       try {
         const next = await request(path + '?since=' + (received?.version ?? -1), {
           token: session.token, signal, timeout: 30_000,

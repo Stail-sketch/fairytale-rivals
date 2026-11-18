@@ -54,6 +54,7 @@ let invite = invitedRoom()
 let mode = invite ? 'friend' : 'cpu'
 let room = null
 let roomLobbyState = null
+let roomResult = null
 let lobbyInput = ''
 let roomSeat = null
 let roomVersion = -1
@@ -78,7 +79,7 @@ const waitingForFriend = () => room && (view?.decisionSeat ?? view?.active) !== 
 const roomLocked = () => room && (roomBusy || roomConnection !== 'connected' || waitingForFriend())
 const cardInspectionOnly = () => view?.phase === 'battle' &&
   (presentation || roomLocked() || view.active !== battleSeat() || !view.legal)
-const turnNoticeMs = 1200
+const turnNoticeMs = 1700
 
 function portrait(id) {
   return '<img class="portrait" src="' + art(id) + '" alt="">'
@@ -668,7 +669,7 @@ function renderTurnNotice() {
   if (!turnNotice) return
   const elapsed = performance.now() - turnNotice.startedAt
   if (elapsed >= turnNoticeMs) return
-  const anchor = app.querySelector(turnNotice.incoming ? '.board' : '.turn-label')
+  const anchor = app.querySelector('.board')
   if (!anchor) return
   const notice = document.createElement('span')
   notice.className = 'turn-notice'
@@ -830,6 +831,9 @@ function results() {
   const winner = draw ? null : view.players[view.winner]
   const result = draw ? '引き分け' : (room ? (view.winner === roomSeat ? 'あなた' : '相手')
     : solo() ? (view.winner === 0 ? 'あなた' : 'CPU') : seatName(view.winner)) + 'の勝利'
+  const locked = roomBusy || roomConnection !== 'connected'
+  const status = feedback || (roomResult?.rematch ? '相手の再戦を待っています。' :
+    roomResult?.opponentRematch ? '相手が再戦を希望しています。' : '')
   return `<main class="ceremony"><section class="modal result">
     ${winner ? portrait(winner.leader) : '<div class="title-ornament" aria-hidden="true">✦</div>'}
     <p class="modal-kicker">対戦結果 · 第 ${view.turn} ターン</p><h1>${result}</h1>
@@ -838,7 +842,13 @@ function results() {
     ${winner ? `<p>${leaders[winner.leader].name}</p>` : ''}
     ${decisivePlay()}
     <div class="result-hp">${view.players.map((p, i) => `<span>${seatName(i)} HP <b>${Math.max(p.hp, 0)}</b></span>`).join('')}</div>
-    <div class="result-actions">${battleLog()}<button class="secondary" data-op="replay">対戦ログを保存</button><button class="primary" data-op="home">タイトルへ</button></div>
+    ${roomResult ? `<div class="result-actions">
+      <button class="primary" data-op="rematch" ${locked || roomResult.rematch ? 'disabled' : ''}>再戦</button>
+      <button class="secondary" data-op="return-lobby" ${locked ? 'disabled' : ''}>ロビーに戻る</button>
+    </div>` : ''}
+    ${room && status ? `<p class="room-status" role="status">${escape(status)}</p>` : ''}
+    <div class="result-actions">${battleLog()}<button class="secondary" data-op="replay">対戦ログを保存</button>
+      <button class="${roomResult ? 'secondary' : 'primary'}" data-op="home" ${roomBusy ? 'disabled' : ''}>タイトルへ</button></div>
   </section></main>`
 }
 
@@ -925,7 +935,7 @@ function finishAction(action, impact = null) {
   const announcement = view.events.findLast(event => event.seq > eventFloor
     && event.privateTo === undefined && event.type !== 'handAdded')
   announcer.textContent = announcement?.text ?? ''
-  if (view.phase === 'finished') render('.result [data-op="home"]')
+  if (view.phase === 'finished') render('.result [data-op="rematch"]:enabled, .result [data-op="return-lobby"]:enabled, .result [data-op="home"]')
   else if (view.phase === 'mulligan') render('[data-replace]')
   else render(!cpuTurn() && (action.type === 'end' || action.type === 'mulligan') ? '.battle' : null)
   if (impact) showBattleImpact(impact)
@@ -986,15 +996,20 @@ function receiveRoom(update) {
   roomVersion = update.version
   if (update.phase === 'closed') {
     roomLobbyState = null
+    roomResult = null
     roomConnection = 'closed'
     feedback = '対戦部屋が閉じられました。'
     render()
     return
   }
   if (update.phase === 'lobby') {
+    const returned = view?.phase === 'finished'
     roomLobbyState = update.lobby
+    roomResult = view = selected = lastInspection = animatedView = turnNotice = resigned = null
+    eventFloor = 0
+    replacements.clear()
     feedback = ''
-    render()
+    render(returned ? '[data-op="lobby-ready"]' : null)
     return
   }
   if (update.phase === 'waiting') {
@@ -1002,6 +1017,7 @@ function receiveRoom(update) {
     return
   }
   roomLobbyState = null
+  roomResult = update.result ?? null
   roomSeat = update.seat
   resigned = update.resigned ?? null
   if (view && sequential && update.last) {
@@ -1009,6 +1025,7 @@ function receiveRoom(update) {
     presentAction(update.view, { type }, events, seat !== roomSeat)
     return
   }
+  if (view?.phase === 'finished' && update.view.phase !== 'finished') lastInspection = null
   view = update.view
   turnNotice = null
   eventFloor = view.events.at(-1)?.seq ?? 0
@@ -1182,7 +1199,7 @@ function returnHome() {
   room?.stop()
   if (invite) forgetRoom(invite)
   match = view = selected = room = invite = roomSeat = resigned = null
-  roomLobbyState = null
+  roomLobbyState = roomResult = null
   lobbyInput = ''
   lastInspection = null
   animatedView = null
@@ -1201,7 +1218,7 @@ async function leaveMatch() {
     ? '対戦を終了してタイトルへ戻りますか？ 退出すると相手の勝利になります。'
     : 'この対戦を終了してタイトルへ戻りますか？')) return
   const current = room
-  if (current && view?.phase !== 'finished' && roomConnection !== 'closed') {
+  if (current && (view?.phase !== 'finished' || roomResult) && roomConnection !== 'closed') {
     try { await current.leave() } catch (error) {
       if (room !== current) return
       if (![403, 404].includes(error.status)) {
@@ -1409,6 +1426,10 @@ app.addEventListener('click', event => {
     }
     case 'lobby-start':
       if (roomLobbyState && !roomBusy && roomConnection === 'connected') sendRoomAction({ type: 'lobby-start' })
+      break
+    case 'rematch':
+    case 'return-lobby':
+      if (roomResult && !roomBusy && roomConnection === 'connected') sendRoomAction({ type: op })
       break
     case 'mulligan':
       showMulliganReturns(node)
