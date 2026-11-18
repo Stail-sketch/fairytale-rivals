@@ -58,7 +58,7 @@ export function openDeckOverview(panel, deck, trigger, art, escape, compareCards
     <form method="dialog"><button type="submit" class="icon-button" autofocus>閉じる</button></form>
   </header>
   <div class="deck-overview-grid" aria-label="デッキのカード">
-    ${Array.from({ length: rules.deckSize }, (_, index) => slot(entries[index], art, escape)).join('')}
+    ${Array.from({ length: Math.max(rules.deckSize, entries.length) }, (_, index) => slot(entries[index], art, escape)).join('')}
   </div>
   ${statsSummary(entries)}
   <aside class="deck-overview-detail" aria-live="polite" hidden></aside>`

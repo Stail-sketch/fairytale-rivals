@@ -540,6 +540,17 @@ async function driveBattle() {
     expect(query('.term-dialog[open] h2')?.textContent === '奇襲', 'デッキ編集から用語を確認')
     click('.term-dialog button')
     expect(query('#deck-size').textContent === '30 / 30枚', 'クラスの構築済みデッキから始められる')
+    click('[data-deck-add=FT-0039]')
+    click('[data-deck-add=FT-0039]')
+    expect(query('#deck-size.over-limit').textContent === '32 / 30枚 · 2枚オーバー' &&
+      query('[data-op=save-deck]').disabled && query('[data-deck-add=FT-0039]').disabled,
+      '編集中は32枚まで追加でき、保存と同名上限は検証する')
+    click('[data-op=deck-overview]')
+    expect(document.querySelectorAll('.deck-overview [data-overview-card]').length === 32, '超過分も全体表示に含める')
+    click('.deck-overview button[type=submit]')
+    click('[data-deck-remove=FT-0039]')
+    click('[data-deck-remove=FT-0039]')
+    expect(!query('#deck-size.over-limit') && !query('[data-op=save-deck]').disabled, '30枚に戻すと保存できる')
     click('[data-deck-remove=ember-whelp]')
     expect(query('#deck-size').textContent === '29 / 30枚' && query('[data-op=save-deck]').disabled, '30枚で保存できる')
     click('[data-op=deck-overview]')
@@ -554,6 +565,18 @@ async function driveBattle() {
       field.value = value
       field.dispatchEvent(new Event(field.type === 'search' ? 'input' : 'change', { bubbles: true }))
     }
+    deckFilter('order', 'kind')
+    const order = ['unit', 'spell', 'weapon']
+    for (const selector of ['#deck-pool .deck-card', '#deck-list .deck-card']) {
+      const values = [...document.querySelectorAll(selector)].map(node => order.indexOf(node.dataset.kind))
+      expect(values.every((kind, index) => !index || kind >= values[index - 1]), '候補とデッキを種類順に並べる')
+    }
+    deckFilter('kind', 'spell')
+    const spells = [...document.querySelectorAll('#deck-pool .deck-card')]
+    expect(spells.length && spells.every(node => node.dataset.kind === 'spell') &&
+      query('#deck-list .deck-card[data-kind=unit]'), 'カード候補だけを特技に絞り込む')
+    deckFilter('kind', '')
+    deckFilter('order', 'cost')
     deckFilter('pack', 'set-2')
     expect(query('[data-deck-add=FT-0040]') && !query('[data-deck-add=FT-0047]'), '共通と選択職業を追加できる')
     deckFilter('rarity', 'rare')
@@ -722,6 +745,52 @@ async function driveBattle() {
     expect(!query('[data-deck-open=legacy-mage]') && !createDeckCollection(storage).get('legacy-mage'), '旧デッキも削除後に復活しない')
     click('[data-op=close-decks]')
     expect(!query('#match-deck-0'), '選択中のデッキを削除すると基本デッキに戻る')
+    const beast = starterLineup('swordsman', false)
+    beast.deck = beast.deck.map(id => id === 'crossroads' ? 'FT-0243' : id)
+    const mirror = starterLineup('mage', false)
+    const beastDeck = collection.save({ ...beast, name: '覚醒の検証' }).deck
+    const mirrorDeck = collection.save({ ...mirror, name: '防護の検証' }).deck
+    setLeader(0, beast.leader)
+    setLeader(1, mirror.leader)
+    selectDeck(0, beastDeck.id)
+    selectDeck(1, mirrorDeck.id)
+    useBattleSeed(15485863)
+    click('[data-op=start]')
+    click('[data-op=mulligan]')
+    click('[data-op=mulligan]')
+    const guardCell = '[data-slot="0:front:0"]'
+    click('[data-hand][data-card=twig-guard]')
+    click(guardCell)
+    expect(query(guardCell + ' [data-ability=GUARD][data-active=true].ability-pulse'), '前衛の騎士の誓いが光る')
+    next()
+    next()
+    click('[data-hand][data-card=veil]')
+    click(guardCell)
+    expect(query(guardCell + ' .defense-burst'), '完全防護を付与した瞬間にシールドが光る')
+    query(guardCell).dispatchEvent(new PointerEvent('pointerover', { bubbles: true }))
+    expect(query('#detail .inspector-current').textContent.includes('持ち主の次のターン開始まで'), '詳細欄に防護の期限を表示する')
+    next()
+    click('[data-hand][data-card=spark]')
+    click(guardCell)
+    expect(query(guardCell + ' .defense-burst') && query(guardCell + ' .unit-stats span:last-child').textContent === '2',
+      '防護でダメージがゼロになった瞬間にシールドが光る')
+    next()
+    expect(!query(guardCell + ' .defense-field'), '持ち主の次のターン開始でシールドが消える')
+    for (let mp = 3; mp < 9; mp++) {
+      if (mp <= 5) click('[data-op=focus]')
+      next()
+      next()
+    }
+    const leaderBefore = '[data-leader="0"] .portrait'
+    expect(query(leaderBefore).src === globalThis.fairytaleImages['swordsman.webp'], '変身前は通常のヴァルドの肖像')
+    click('[data-hand][data-card=FT-0243]')
+    click('[data-op=confirm]', false)
+    expect(query(leaderBefore).src === globalThis.fairytaleImages['swordsman.webp'], '変身の解決前は通常の肖像を表示する')
+    completePresentation()
+    expect(query('[data-leader="0"].leader-awakening .portrait')?.src === globalThis.fairytaleImages['swordsman-awakened.webp'] &&
+      query('[data-op=skill]').textContent.includes('黒薔薇の焔嵐'), '変身が成立すると肖像と奥義が切り替わる')
+    next()
+    expect(query('.opponent ' + leaderBefore)?.src === globalThis.fairytaleImages['swordsman-awakened.webp'], '相手側の盤面にも覚醒後の肖像を出す')
     expect(!document.body.dataset.runtimeError, document.body.dataset.runtimeError)
     document.body.dataset.e2e = 'pass'
   } catch (error) {

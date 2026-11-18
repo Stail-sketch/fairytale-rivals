@@ -34,8 +34,23 @@ export function damagePower(game, effect, skillUses, { seat, spell, scaling } = 
 }
 
 export function damageAllowed(game, victim, spell) {
-  return !spell || (!victim.position || !has(victim, 'RESIST_SPELL')) && game.turn > (victim.spellGuardThrough ?? -1)
+  return !spell || !spellProtection(game, victim)
 }
+
+function spellProtection(game, victim) {
+  if (game.turn <= (victim.spellGuardThrough ?? -1)) return 'SPELL_WARD'
+  if (victim.position && has(victim, 'RESIST_SPELL')) return 'RESIST_SPELL'
+}
+
+function unitProtection(unit, amount) {
+  if (unit.statuses.includes('INVULNERABLE')) return 'INVULNERABLE'
+  if (has(unit, 'DARK_CLOAK')) return 'DARK_CLOAK'
+  if (amount <= 3 && has(unit, 'METAL_BODY')) return 'METAL_BODY'
+  return null
+}
+
+const damageLabel = (target, victim) => target.kind === 'unit' ? displayName(victim) :
+  (target.seat === 0 ? '先攻リーダー' : '後攻リーダー')
 
 function powerSource(context) {
   return names[context.trigger] ?? (context.effectSource?.kind === 'leader' ? names.TENSION_SKILL :
@@ -53,7 +68,7 @@ export function effectAnchor(game, target) {
   return unit && unitAnchor(unit)
 }
 
-export function damageValue(game, victim, amount) {
+export function damageValue(game, victim, amount, protection = victim.position && unitProtection(victim, amount)) {
   if (amount <= 0) return 0
   const unit = victim.position && victim
   let value = amount
@@ -62,8 +77,8 @@ export function damageValue(game, victim, amount) {
       canUseAbilities(ally) ? cards[ally.card].frontLeaderArmor ?? 0 : 0), 0)
     value = Math.max(0, amount - (victim.leaderArmor ?? 0) - (victim.temporaryArmor ?? 0) - reduction)
   }
-  if (unit && (unit.statuses.includes('INVULNERABLE') || has(unit, 'DARK_CLOAK'))) value = 0
-  else if (unit && has(unit, 'METAL_BODY') && amount <= 3) value = 1
+  if (protection === 'INVULNERABLE' || protection === 'DARK_CLOAK') value = 0
+  else if (protection === 'METAL_BODY') value = 1
   else if (unit && (has(unit, 'VULNERABLE') || allUnits(game).some(otherUnit =>
     canUseAbilities(otherUnit) && cards[otherUnit.card].doubleDamageAura))) value *= 2
   if (unit && value > 0 && unit.oneDamageTurn === game.turn && canUseAbilities(unit)) value = 1
@@ -74,12 +89,14 @@ export function damage(game, target, amount, source) {
   if (amount <= 0) return 0
   const victim = target.kind === 'unit' ? findUnit(game, target.id) : game.players[target.seat]
   if (!victim) return 0
-  const value = damageValue(game, victim, amount)
+  const protection = victim.position && unitProtection(victim, amount)
+  const value = damageValue(game, victim, amount, protection)
   victim.hp -= value
   const unit = target.kind === 'unit' && victim
-  const label = unit ? displayName(unit) : (target.seat === 0 ? '先攻リーダー' : '後攻リーダー')
+  const label = damageLabel(target, victim)
   emit(game, 'damage', value ? label + 'に' + value + 'ダメージ' : label + 'がダメージを防いだ', {
     target, value, destination: unit ? unitAnchor(unit) : effectAnchor(game, target), source,
+    ...(protection && value < amount ? { protection } : {}),
   })
   return value
 }
@@ -464,14 +481,19 @@ export function resolution(game) {
 
     switch (effect.id) {
       case 'damage': {
-        if (damageAllowed(game, victim, context.spell)) {
-          const dealt = dealDamage(target, damagePower(game, effect, skillUses, context).value)
-          if (dealt && unit && unit.hp <= 0 && context.spell) {
-            for (const ally of game.players[context.seat].units) trigger(ally, 'ON_SPELL_KILL', target)
-          }
-          return dealt
+        const amount = damagePower(game, effect, skillUses, context).value
+        const protection = context.spell && spellProtection(game, victim)
+        if (protection) {
+          if (amount > 0) emit(game, 'damage', damageLabel(target, victim) + 'が特技ダメージを防いだ', {
+            target, value: 0, protection, destination: effectAnchor(game, target),
+          })
+          break
         }
-        break
+        const dealt = dealDamage(target, amount)
+        if (dealt && unit && unit.hp <= 0 && context.spell) {
+          for (const ally of game.players[context.seat].units) trigger(ally, 'ON_SPELL_KILL', target)
+        }
+        return dealt
       }
       case 'heal': {
         if (victim.hp <= 0) break

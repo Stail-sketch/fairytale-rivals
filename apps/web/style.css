@@ -260,9 +260,71 @@ small { font-size: 11px; }
 .board-rule::before, .board-rule::after { content: ""; width: 1px; flex: 1; background: linear-gradient(#86683e38, #c6a978); }
 .board-rule::after { transform: rotate(180deg); }
 .ready { border-color: #5cccaa; box-shadow: inset 0 0 12px #65ffbe36; }
-.ready-mark, .status-dot { position: absolute; top: 4px; z-index: 2; display: grid; place-items: center; border: 1px solid #78cbbb; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; color: #b7ffe0; background: #153d3e; }
+.ready-mark { position: absolute; top: 4px; z-index: 2; display: grid; place-items: center; border: 1px solid #78cbbb; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; color: #b7ffe0; background: #153d3e; }
 .ready-mark { left: 4px; }
-.status-dot { right: 4px; background: #382c56; border-color: #ae9ed9; color: #f0e1ff; }
+.ability-badges {
+  position: absolute; top: 4px; right: 4px; z-index: 3; display: flex;
+  flex-wrap: wrap; justify-content: flex-end; gap: 2px; max-width: calc(100% - 25px);
+}
+.ability-badge {
+  display: grid; place-items: center; width: 20px; height: 20px; border-radius: 4px;
+  border: 1px solid #ab98d5; background: #201832e8; color: #e5d9ff;
+  font: 700 14px/1 system-ui, sans-serif;
+}
+.ability-badge:is([data-ability="PIERCE"], [data-ability="SUPER_PIERCE"]) {
+  background: #382316; border-color: #edba70; color: #ffdf9c;
+}
+.ability-badge:is([data-ability="INVULNERABLE"], [data-ability="SPELL_WARD"], [data-ability="RESIST_SPELL"], [data-ability="GUARD"], [data-ability="METAL_BODY"]) {
+  background: #102c41; border-color: #89d9fa; color: #d9f5ff;
+}
+.ability-badge[data-active="false"] { opacity: .57; filter: saturate(.25); }
+.guard-active [data-ability="GUARD"] { box-shadow: 0 0 8px #65d6ffb0; }
+.slot.guard-active:not(.chosen, .targetable) { border-color: #79bcd5; }
+.preview-protector [data-ability="GUARD"][data-active="true"] {
+  color: #ffffff; background: #235875; border-color: #e6f9ff; box-shadow: 0 0 12px #9ceeff;
+}
+.ability-pulse { animation: ability-flare .72s ease-out; }
+@keyframes ability-flare {
+  0%, 25% { opacity: 1; filter: brightness(1.65); box-shadow: 0 0 12px #c6f4ff, inset 0 0 5px #ffffffba; }
+}
+.leader-target .ability-badges { top: clamp(18px, 25%, 31px); left: 0; right: auto; justify-content: flex-start; }
+.defense-field {
+  position: absolute; z-index: 2; inset: 2px; border-radius: inherit; pointer-events: none;
+  border: 1px solid #9ce9ffb5; box-shadow: inset 0 0 12px #7fdcfa8c, 0 0 6px #79cbf97d;
+}
+.defense-field.defense-burst { animation: shield-flare .85s cubic-bezier(.16,.8,.2,1) both; }
+.defense-burst::before {
+  content: "⛨"; display: grid; place-items: center; position: absolute; z-index: 1; inset: 0;
+  color: #f1fdff; text-shadow: 0 0 9px #9df4ff, 0 0 24px #39baff;
+  font: 700 clamp(20px, 4vw, 44px)/1 "Segoe UI Symbol", system-ui, sans-serif;
+  animation: shield-crest .78s cubic-bezier(.16,.8,.2,1) both;
+}
+.defense-burst::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; animation: shield-wave .85s ease-out both;
+  background: radial-gradient(ellipse at 20% 15%, #e3fbffe5, #61d9ff5e 24%, transparent 65%);
+}
+.defense-burst:not(.protected-now .defense-burst) { border-color: transparent; box-shadow: none; }
+@keyframes shield-flare {
+  0%, 20% { border-color: #efffff; box-shadow: inset 0 0 24px #a3f1ff, 0 0 16px #7cdcff; }
+}
+@keyframes shield-wave {
+  from { opacity: .9; }
+  to { opacity: 0; }
+}
+@keyframes shield-crest {
+  0% { opacity: 0; scale: .75; }
+  22%, 42% { opacity: 1; scale: 1; }
+  100% { opacity: 0; scale: 1.12; }
+}
+.leader-awakening .portrait { animation: portrait-awakening 1.05s ease-out; }
+@keyframes portrait-awakening {
+  0% { filter: brightness(.6) saturate(2); }
+  26% { filter: brightness(1.48) saturate(1.48) drop-shadow(0 0 12px #fc3e68); }
+}
+.short-motion :is(.ability-pulse, .defense-burst, .leader-awakening .portrait), .short-motion .defense-burst::after {
+  animation-duration: .18s;
+}
+.short-motion .defense-burst::before { display: none; }
 .targetable, .slot.targetable, .formation-rank .slot.empty.targetable { border-color: #8df4d9; box-shadow: inset 0 0 18px #75ffe16b, 0 0 12px #61ffd369; outline: 1px solid #abffdf9c; }
 .targetable .empty-symbol { color: #c4ffef; }
 .chosen, .slot.chosen { outline: 2px solid var(--gold); outline-offset: 2px; border-color: var(--gold); }
@@ -467,7 +529,9 @@ dialog li, dialog p { font-size: 14px; line-height: 1.7; color: #d8e0e1; margin-
 .deck-columns section { min-width: 0; min-height: 0; border: 1px solid #8b744f; border-radius: 7px; background: #111f30ed; }
 .deck-columns h2 { display: flex; align-items: center; justify-content: space-between; margin: 0; padding: 11px 12px 9px; color: var(--gold); font-size: 15px; }
 #deck-size, #deck-pool-size { font-variant-numeric: tabular-nums; font-size: 13px; }
-.deck-filters { grid-template-columns: minmax(0, 1.65fr) repeat(2, minmax(88px, 1fr)); padding: 0 11px 11px; gap: 8px; border: 0; background: transparent; }
+.deck-filters { grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 0 11px 11px; gap: 8px; border: 0; background: transparent; }
+.deck-filters label:first-child { grid-column: 1 / -1; }
+#deck-size.over-limit { color: #ffaf9b; }
 .deck-scroll { height: clamp(280px, 53vh, 600px); overflow: auto; scrollbar-color: #807153 #111f30; border-top: 1px solid var(--line); }
 .deck-pool { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-content: start; gap: 10px; padding: 10px; }
 .deck-card { min-width: 0; }
@@ -1004,7 +1068,9 @@ dialog li, dialog p { font-size: 14px; line-height: 1.7; color: #d8e0e1; margin-
   .lane-mark { width: 14px; height: 14px; font-size: 9px; }
   .slot .unit-stats { left: 1px; right: 1px; }
   .slot .unit-stats span { min-width: 14px; line-height: 14px; font-size: 10px; }
-  .slot :is(.ready-mark, .status-dot) { width: 14px; height: 14px; font-size: 9px; }
+  .slot .ready-mark { width: 14px; height: 14px; font-size: 9px; }
+  .ability-badges { top: 2px; right: 2px; max-width: calc(100% - 14px); }
+  .ability-badge { width: 13px; height: 13px; font-size: 10px; }
   .slot.occupied .slot-stage { max-width: calc(100% - 11px); top: auto; bottom: 33px; font-size: 8px; padding: 1px 2px; }
   .slot.occupied .board-name { bottom: 18px; font-size: 8px; }
   .leader-panel { gap: 7px; padding: 7px 2px; }

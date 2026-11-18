@@ -1,11 +1,12 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { cardCost, catalog, leaders, names, prototypeDeck } from '../packages/cards/index.js'
+import { cardCost, cards, catalog, leaders, names, prototypeDeck } from '../packages/cards/index.js'
 import { createGame, deckIssue, dispatch, leaderTarget as leader, legalAttack, legalLeaderAttack, legalPlay, legalSkill,
   replay, unitTarget as target } from '../packages/engine/index.js'
 import { createInstance, resolution } from '../packages/engine/effects.js'
 import { attackBreakdown, leaderAttackBreakdown } from '../packages/engine/targeting.js'
 import { project } from '../packages/local-match/index.js'
+import { statusVisuals, statusDescriptions } from '../apps/web/battle-status.js'
 
 const front = (column = 0) => ({ row: 'front', column })
 const back = (column = 0) => ({ row: 'back', column })
@@ -219,9 +220,55 @@ test('対象不在、除外、能力封じ、毒、完全防護、転位', () =>
   game = act(game, { type: 'end' })
   game = act(game, { type: 'attack', id: guard.id, target: target(own.id) })
   assert.equal(game.players[0].units[0].hp, 2)
+  assert(game.events.some(event => event.type === 'damage' && event.target.id === own.id &&
+    event.value === 0 && event.protection === 'INVULNERABLE'))
   game = act(game, { type: 'end' })
   assert.equal(game.players[1].units.length, 0)
   assert.deepEqual(game.players[0].units[0].statuses, [])
+})
+
+test('防護と常在型能力の表示を、付与・実際の軽減・期限切れに合わせる', () => {
+  let game = fixture()
+  game.players[0].leader = 'merchant'
+  const guard = add(game, 0, 'twig-guard', back())
+  const steel = add(game, 0, 'steel-beetle', front(2))
+  const cloaked = add(game, 0, 'mist-cat', back(1))
+  const view = () => project(game, game.active)
+  const status = (unit, before, events = []) => {
+    const current = view()
+    const live = current.players[unit.owner].units.find(value => value.id === unit.id)
+    return statusVisuals(current, before, live.owner, live, cards[live.card], events)
+  }
+  const before = view()
+  assert.match(status(guard, before).markup, /data-ability="GUARD" data-active="false"/)
+  guard.position = front()
+  assert.match(status(guard, before, [{}]).cls, /guard-active/)
+  game = play(game, 'FT-0108', { target: target(guard.id) })
+  assert.match(status(guard, before, game.events.slice(-1)).markup, /ability-pulse" data-ability="PIERCE"/)
+  game = act(game, { type: 'attack', id: cloaked.id, target: leader(1) })
+  assert.match(status(cloaked, before, game.events.slice(-2)).markup, /ability-pulse" data-ability="STEALTH" data-active="false"/)
+
+  game = act(game, { type: 'end' })
+  game = play(game, 'spark', { target: target(steel.id) })
+  const reduced = game.events.at(-1)
+  assert.equal(reduced.protection, 'METAL_BODY')
+  assert.equal(reduced.value, 1)
+  assert.match(status(steel, before, [reduced]).markup, /ability-pulse" data-ability="METAL_BODY"/)
+
+  game = act(game, { type: 'end' })
+  game = play(game, 'FT-0139', { position: front(1) })
+  assert.match(status(guard, before, game.events.slice(-2)).markup, /defense-burst/)
+  game = act(game, { type: 'end' })
+  const hp = game.players[0].hp
+  game = play(game, 'spark', { target: leader(0) })
+  const blocked = game.events.at(-1)
+  assert.equal(blocked.protection, 'SPELL_WARD')
+  assert.equal(blocked.value, 0)
+  assert.equal(game.players[0].hp, hp)
+  assert.match(statusVisuals(view(), before, 0, null, null, [blocked]).markup, /defense-burst/)
+  assert.match(statusDescriptions(view().players[0], view()).join(), /現在のターン終了まで/)
+  game = act(game, { type: 'end' })
+  assert.deepEqual(statusDescriptions(view().players[0], view()), [])
 })
 
 test('MPと熱量上限、共鳴と物語の共鳴が別々に発動', () => {

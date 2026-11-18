@@ -12,6 +12,8 @@ import { initialDecks } from '../../packages/cards/initial-decks.js'
 import { retireRivalsExample } from './rivals-example.js'
 import { createBattleAudio } from './battle-audio.js'
 import { planBattlePresentation, positionBattleImpact, positionPresentation, presentationLayer, reducedMotion, toggleBattleMotion } from './battle-presentation.js'
+import { battlePortrait } from './battle-skill-presentation.js'
+import { statusDescriptions, statusVisuals } from './battle-status.js'
 import { connectRoom, enterRoom, forgetRoom, inviteUrl, invitedRoom, onlineAvailable, rememberRoom, savedRoom } from './online.js'
 import { escapeText as escape, handleTermLink, termDetails, termLink, termText } from './card-terms.js'
 import { relatedPreview } from './card-related.js'
@@ -249,8 +251,7 @@ function placementAt(seat, position) {
     (space.seat !== undefined || !selected.position || !samePosition(selected.position, space)))
 }
 
-function flashes(target, id) {
-  const events = animatedView === view ? [] : view.events.filter(event => event.seq > eventFloor)
+function flashes(target, events, id) {
   const summon = events.some(event => event.type === 'summon' && event.id === id)
   const hit = events.filter(event => event.type === 'damage' && sameTarget(event.target, target))
   const heal = events.filter(event => event.type === 'heal' && sameTarget(event.target, target))
@@ -262,26 +263,29 @@ function flashes(target, id) {
   }
 }
 
-function leaderPanel(seat, enemy) {
+function leaderPanel(seat, enemy, events) {
   const player = view.players[seat]
   const leader = leaders[player.leader]
   const weapon = player.weapon
   const weaponName = weapon ? cards[weapon.card].name : ''
   const target = leaderTarget(seat)
-  const flash = flashes(target)
+  const flash = flashes(target, events)
+  const status = statusVisuals(view, animatedView, seat, null, null, events)
+  const awakened = player.awakenedLeader && events.length > 0 && !animatedView?.players[seat].awakenedLeader
+  const current = status.labels
   const ready = !enemy && view.legal?.leaderAttack.enabled
   const skill = player.skill ?? leader.skill
   const fortune = fortuneStatus(player)
   return `<aside class="leader-panel ${enemy ? 'opponent' : ''} ${seat === view.active ? 'active-side' : ''}" data-side="${seat}"${colors(leader)}>
-    <button class="leader-target ${targetEnabled(target) ? 'targetable' : ''} ${ready ? 'ready' : ''} ${selected?.type === 'leaderAttack' && seat === view.active ? 'chosen' : ''} ${flash.cls}"
-      data-leader="${seat}" aria-label="${seatName(seat)}リーダー ${leader.name} HP ${Math.max(0, player.hp)}${weapon ? ' 武器耐久 ' + weapon.durability : ''}${ready ? ' 攻撃可能' : ''}"
+    <button class="leader-target ${targetEnabled(target) ? 'targetable' : ''} ${ready ? 'ready' : ''} ${selected?.type === 'leaderAttack' && seat === view.active ? 'chosen' : ''} ${flash.cls} ${status.cls}${awakened ? ' leader-awakening' : ''}"
+      data-leader="${seat}" aria-label="${seatName(seat)}リーダー ${leader.name}${player.awakenedLeader ? '（覚醒）' : ''} HP ${Math.max(0, player.hp)}${weapon ? ' 武器耐久 ' + weapon.durability : ''}${ready ? ' 攻撃可能' : ''}${current.length ? ' · ' + current.join('・') : ''}"
       title="${ready ? 'クリックしてリーダーで攻撃' : leader.motif}">
-      ${portrait(player.leader)}<span class="crest" aria-hidden="true">${leader.sigil}</span>
+      ${portrait(battlePortrait(player))}<span class="crest" aria-hidden="true">${leader.sigil}</span>
       ${player.leaderPower > 0 || weapon ? `<span class="leader-combat-stats">
         <span class="leader-power">⚔ ${player.leaderPower}</span>
         ${weapon ? `<span class="leader-durability" data-inspect-weapon="${seat}" title="${escape(weaponName)}">耐久 ${weapon.durability}</span>` : ''}
       </span>` : ''}
-      <span class="leader-hp">${Math.max(0, player.hp)}</span>${flash.label}
+      <span class="leader-hp">${Math.max(0, player.hp)}</span>${flash.label}${status.markup}
     </button>
     <div class="leader-identity"><small>${enemy ? (solo() ? 'CPU' : '相手') : 'あなた'} · ${seatName(seat)} · ${leader.job}</small><strong>${leader.name}</strong></div>
     ${enemy ? `<button class="opponent-skill" type="button" data-inspect-skill="${seat}" aria-haspopup="dialog">
@@ -293,7 +297,7 @@ function leaderPanel(seat, enemy) {
         aria-label="${escape(weaponName)}の詳細">${escape(weaponName)}</button>` : ''}
       ${enemy ? `<span data-hand-count="${seat}" title="相手の手札枚数">手札 <strong>${player.handCount}</strong></span>` : ''}
     </div>
-    <div class="tension ${animatedView !== view && view.events.some(event => event.seq > eventFloor && event.type === 'focus' && event.seat === seat) ? 'glow' : ''}">
+    <div class="tension ${events.some(event => event.type === 'focus' && event.seat === seat) ? 'glow' : ''}">
       <span title="${names.TENSION}">熱量</span>
       <div class="diamonds" aria-label="熱量 ${player.tension}/3">${[1, 2, 3].map(i => `<i class="${i <= player.tension ? 'filled' : ''}"></i>`).join('')}</div>
     </div>
@@ -302,7 +306,7 @@ function leaderPanel(seat, enemy) {
   </aside>`
 }
 
-function square(seat, row, column) {
+function square(seat, row, column, events) {
   const position = { row, column }
   const unit = view.players[seat].units.find(value => samePosition(value.position, position))
   const inspectionOnly = cardInspectionOnly()
@@ -312,40 +316,38 @@ function square(seat, row, column) {
   const playable = placementAt(seat, position)
   const stage = view.players[seat].terrain?.[terrainKey(position)]
   const stageLabel = stage && terrainName(stage)
-  const death = animatedView !== view && view.events.findLast(event => event.seq > eventFloor && (event.type === 'death' || event.type === 'exile')
+  const death = events.findLast(event => (event.type === 'death' || event.type === 'exile')
     && event.seat === seat && samePosition(event.position, { row, column }))
   const target = unit && unitTarget(unit.id)
-  const flash = unit || death ? flashes(target ?? unitTarget(death.id), unit?.id) : { cls: '', label: '' }
+  const flash = unit || death ? flashes(target ?? unitTarget(death.id), events, unit?.id) : { cls: '', label: '' }
   const card = unit && cards[unit.card]
+  const display = unit && statusVisuals(view, animatedView, seat, unit, card, events)
   const index = column + 1
-  const status = unit ? [...unit.statuses, ...[...new Set([...card.keywords, ...unit.grants ?? []])].filter(
-    keyword => !unit.statuses.includes('SILENCE') && !(keyword === 'STEALTH' && unit.revealed),
-  )].map(id => names[id]).join('・') : ''
+  const activeStatuses = display?.labels ?? []
   const classes = [unit ? 'occupied' : 'empty', ready && 'ready', playable && 'targetable', chosenPosition && 'chosen',
-    target && targetEnabled(target) && 'targetable', selected?.id === unit?.id && unit && 'chosen', !unit && death && 'departure', flash.cls]
+    target && targetEnabled(target) && 'targetable', selected?.id === unit?.id && unit && 'chosen', !unit && death && 'departure', flash.cls, display?.cls]
   const attack = unit && (view.players[seat].boardAttack?.[unit.id] ?? unit.attack)
   const label = seatName(seat) + ' ' + rowName(row) + ' ' + index + (unit ? ' ' + card.name + ' ' + attack + '/' + unit.hp : ' 空き') +
-    (ready ? ' 攻撃可能' : '')
+    (ready ? ' 攻撃可能' : '') + (activeStatuses.length ? ' · ' + activeStatuses.join('・') : '')
   const tooltip = unit ? card.name + '｜' + card.description : label
   return `<button class="slot ${classes.filter(Boolean).join(' ')}" data-slot="${seat}:${row}:${column}"
     ${stageLabel ? `data-terrain="${stage}"` : ''}
     ${unit ? `data-unit="${unit.id}" data-card="${unit.card}" draggable="${Boolean(ready)}" aria-keyshortcuts="I"
       ${inspectionOnly ? 'aria-haspopup="dialog"' : ''}` : ''}
     aria-label="${label}${stageLabel ? ' · ' + stageLabel : ''}" title="${escape(tooltip + (stageLabel ? '｜' + stageLabel + ' · ' + (terrainText[stage] ?? '六色で特殊勝利') : ''))}">
-    ${unit ? `<img src="${art(card.artId)}" alt=""><span class="board-name">${card.name}</span>
+    ${unit ? `<img src="${art(card.artId)}" alt=""><span class="board-name">${card.name}</span>${display.markup}
       ${ready ? '<span class="ready-mark" aria-label="攻撃可能">⚔</span>' : ''}
-      ${status ? `<span class="status-dot" title="${status}">✦</span><span class="sr-only">${status}</span>` : ''}
       <span class="unit-stats"><span class="${attack !== card.attack ? 'changed-stat' : ''}" title="攻撃力">${attack}</span><span class="${unit.hp < unit.maxHp ? 'wounded-stat' : ''}" title="HP">${unit.hp}</span></span>` :
       stageLabel ? '' : `<span class="empty-symbol" aria-hidden="true">${playable ? '+' : '◇'}</span>`}${flash.label}
     ${stageLabel ? `<span class="slot-stage" aria-hidden="true">${stageLabel}</span>` : ''}
   </button>`
 }
 
-function field(seat, enemy) {
+function field(seat, enemy, events) {
   const rows = enemy ? ['front', 'back'] : ['back', 'front']
   return `<div class="formation ${enemy ? 'enemy-formation' : 'ally-formation'}" aria-label="${enemy ? '相手' : '味方'}の盤面">
     ${rows.map(row => `<div class="formation-rank" data-rank="${row}"><span class="row-tag">${rowName(row)}</span>
-      ${[0, 1, 2].map(column => square(seat, row, column)).join('')}</div>`).join('')}
+      ${[0, 1, 2].map(column => square(seat, row, column, events)).join('')}</div>`).join('')}
   </div>`
 }
 
@@ -410,11 +412,13 @@ function skillDetail(seat, target, labelled = false) {
   const options = selected?.type === 'skill' && seat === battleSeat() ? selected : null
   const numbers = definitionPowerRows(view, seat, skill, { skill: true, chosen: target ?? options?.target, choice: options?.choice })
   if (player.leaderPower) numbers.push({ label: 'リーダーの攻撃力', ...leaderAttackBreakdown(view, seat) })
+  const current = statusDescriptions(player, view)
   return `<div class="inspector-copy">
     <small>${escape(leaders[player.leader].name)} · ${names.TENSION_SKILL}</small>
     <h2${labelled ? ' id="battle-card-title"' : ''}>${escape(skill.name)}</h2><p class="inspector-effect">${termText(skill.description)}</p>
     <small class="skill-target-label">対象 · ${skillTarget(skill)}</small>
     ${powerDetails(numbers)}
+    ${current.length ? `<p class="inspector-effect">${current.map(termText).join('・')}</p>` : ''}
     ${relatedPreview(skill, art)}
   </div>`
 }
@@ -536,11 +540,12 @@ function liveCardDetails(node) {
   if (!unit) return node.dataset.cost && Number(node.dataset.cost) !== card.cost ? ['基本MP ' + card.cost] : []
   const attack = player.boardAttack?.[unit.id] ?? unit.attack
   const stage = player.terrain?.[terrainKey({ row, column })]
-  const states = unit.statuses.map(id => names[id]).filter(Boolean)
+  const states = unit.statuses.filter(id => id !== 'INVULNERABLE').map(id => names[id]).filter(Boolean)
   return [
     '攻撃力 ' + attack + (attack !== card.attack ? '（基本 ' + card.attack + '）' : ''),
     'HP ' + unit.hp + '/' + unit.maxHp + (unit.maxHp !== card.hp ? '（基本最大HP ' + card.hp + '）' : ''),
     ...(stage ? [terrainName(stage) + ' · ' + (terrainText[stage] ?? '六色で特殊勝利')] : []),
+    ...statusDescriptions(unit, view, card),
     ...(states.length ? [states.join('・')] : []),
   ]
 }
@@ -760,17 +765,18 @@ function selectionBar() {
 function battlefield() {
   const own = battleSeat()
   const enemy = 1 - own
+  const events = animatedView === view ? [] : view.events.filter(event => event.seq > eventFloor)
   const latestAction = view.events.findLast(event => event.seq > eventFloor
     && event.privateTo === undefined && !['handAdded', 'mulligan', 'turn'].includes(event.type))
   return `<main class="battle${reducedMotion() ? ' short-motion' : ''}" style="--ally-light:${leaders[view.players[own].leader].accent};--enemy-light:${leaders[view.players[enemy].leader].accent}" tabindex="-1">
     <div class="battle-layout"><div class="battle-core">
     <div class="battle-heading"><span>綴りの大競技会</span><span class="turn-label">第 ${view.turn} ターン</span><div class="battle-tools"><button class="icon-button" data-op="motion" aria-pressed="${reducedMotion()}" ${matchMedia('(prefers-reduced-motion: reduce)').matches ? 'disabled title="端末の設定に合わせて短縮しています"' : ''}>短い演出</button>${battleLog()}</div></div>
     <div class="battle-grid" data-active-side="${view.active === own ? 'ally' : 'enemy'}" aria-label="対戦盤面">
-      ${leaderPanel(own, false)}
+      ${leaderPanel(own, false, events)}
       <div class="board">
-        ${field(own, false)}<div class="board-rule" aria-hidden="true">${[1, 2, 3].map(lane => `<span class="lane-mark">${lane}</span>`).join('')}</div>${field(enemy, true)}
+        ${field(own, false, events)}<div class="board-rule" aria-hidden="true">${[1, 2, 3].map(lane => `<span class="lane-mark">${lane}</span>`).join('')}</div>${field(enemy, true, events)}
       </div>
-      ${leaderPanel(enemy, true)}
+      ${leaderPanel(enemy, true, events)}
       ${presentationLayer(presentation, art, escape)}
     </div>
     <div class="battle-message"><span class="last-action">${latestAction && !selected && !feedback ? escape(latestAction.text) : ''}</span><output id="attack-preview" aria-live="polite"></output></div>
@@ -835,7 +841,7 @@ function results() {
   const status = feedback || (roomResult?.rematch ? '相手の再戦を待っています。' :
     roomResult?.opponentRematch ? '相手が再戦を希望しています。' : '')
   return `<main class="ceremony"><section class="modal result">
-    ${winner ? portrait(winner.leader) : '<div class="title-ornament" aria-hidden="true">✦</div>'}
+    ${winner ? portrait(battlePortrait(winner)) : '<div class="title-ornament" aria-hidden="true">✦</div>'}
     <p class="modal-kicker">対戦結果 · 第 ${view.turn} ターン</p><h1>${result}</h1>
     ${view.specialVictory !== undefined ? '<p>六彩の暁鳥の特殊勝利</p>' : ''}
     ${resigned !== null ? `<p>${resigned === roomSeat ? 'あなた' : '相手'}が対戦を終了しました。</p>` : ''}

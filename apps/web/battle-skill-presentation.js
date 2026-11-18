@@ -11,9 +11,11 @@ const themes = {
   rosefire: { motif: 'rosefire', light: '#ff6885', petals: 9 },
 }
 
+export const battlePortrait = player => player.awakenedLeader ? 'swordsman-awakened' : player.leader
+
 export function skillTheme(event, player, handAdded) {
   const style = player.awakenedLeader ? 'rosefire' : player.leader
-  return { style, leader: player.leader, name: event.name, seat: event.seat,
+  return { style, leader: player.leader, portrait: battlePortrait(player), name: event.name, seat: event.seat,
     handAdded, ...themes[style] }
 }
 
@@ -23,7 +25,7 @@ export function skillPresentation(skill, art, escape, reduced) {
     ${reduced ? '' : `<div class="skill-ornament"><b></b>${Array.from({ length: skill.petals }, (_, index) =>
       `<i style="--skill-index:${index};--skill-angle:${360 / skill.petals * index}deg"></i>`).join('')}</div>`}
     <div class="skill-reveal" data-skill-class="${skill.leader}">
-      <img src="${art(skill.leader)}" alt="">
+      <img src="${art(skill.portrait)}" alt="">
       <strong>${escape(skill.name)}</strong>
       <span class="skill-seal" aria-hidden="true">${hero.sigil}</span>
     </div>

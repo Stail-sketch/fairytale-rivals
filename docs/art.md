@@ -95,3 +95,11 @@ Asset type: a single 3×3 illustration atlas for a Japanese fantasy card game's 
 Top left: unmistakable amber magical flame above a small gold diamond ember, gathering heat. Top center: a single brilliant golden sword pointing diagonally across sparks of gold lightning. Top right: vivid orange fireball inside a broken ring of lavender mirror shards. Middle left: a red hood-shaped arc with crimson autumn leaves and a dynamic slash, martial arts. Middle center: a radiant pale pink-and-white floral crown surrounded by petals and pale warm healing light. Middle right: lime-green magical beanstalk shoots curling around a small golden treasure chest. Bottom left: luminous silver-blue faceted crystal orb and a crescent of frosty light. Bottom center: a single dark steel chess knight armored in thorned purple roses. Bottom right: a single deep red rose bursting into scarlet fire, distinct from the amber flame. Every object centered within its tile, substantial clean silhouettes, composed for downsampling.
 ```
 
+## 獣王の黒薔薇で変身したヴァルド・ローゼン
+
+通常の肖像を参照して組み込みの ImageGen で覚醒後の肖像を作り、さらに禍々しい表情と配色に調整した。盤面、覚醒後の奥義演出、勝利画面で `apps/web/assets/swordsman-awakened.webp` を使用する。
+
+```text
+Edit the attached awakened leader portrait for Fairytale Rivals. The user wants a much more ominous, menacing, cursed Beast King. Keep the same recognizable horned, lion-faced Vard Rosen, eyes centered high and readable, square chest-up composition, clean painted JRPG technique. Intensify the transformation: jagged almost-black crown grown organically out of interlocking thorn spines, horns in charcoal and deep violet with ragged red embers, ink-black mane with sharp shapes, one visible fang and fierce cold stare with vivid supernatural ruby irises and tiny white hot pupils. Obsidian armor with jagged black rose thorns, one seething blood-red magical rose at his chest, densely layered shadowy plum mist and dark crimson flame, eerie silhouettes of thorn branches bending toward him. Use dramatic chiaroscuro, near black and deep wine-red with sparse crimson highlights. Keep strong rim light and enough light on the face so the gaze is unmistakable as a tiny arched in-game leader icon. Mature Gothic dark fairy-tale game art, magical and malevolent, no gore, no text, no watermark, no decorative frame.
+```
+
