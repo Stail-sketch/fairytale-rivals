@@ -25,31 +25,41 @@ export function stageEffects(game, api) {
     return true
   }
 
-  function enter(unit) {
+  function enter(unit, afterFrontDeath = false) {
     const stage = terrainAt(game, unit.owner, unit.position)
     if (terrainReacts.has(stage)) {
-      enqueue([{ id: 'enterStage', stage }], { seat: unit.owner, source: unit, stagePosition: { ...unit.position } })
+      enqueue([{ id: 'enterStage', stage }], {
+        seat: unit.owner, source: unit, stagePosition: { ...unit.position }, afterFrontDeath,
+      })
     }
   }
 
-  function move(unit, position) {
+  function move(unit, position, afterFrontDeath = false) {
     if (samePosition(unit.position, position)) return
     unit.position = position
-    afterMove(unit)
+    afterMove(unit, afterFrontDeath)
   }
 
-  function afterMove(unit) {
+  function afterMove(unit, afterFrontDeath = false) {
     const active = game.players[game.active]
     active.unitsMoved = (active.unitsMoved ?? 0) + 1
-    emit(game, 'move', cards[unit.card].name + 'が転位', { seat: unit.owner, id: unit.id, position: unit.position })
+    emit(game, 'move', cards[unit.card].name + 'が転位', {
+      seat: unit.owner, id: unit.id, position: unit.position, ...(afterFrontDeath ? { afterFrontDeath } : {}),
+    })
     trigger(unit, 'ON_MOVE')
     enter(unit)
   }
 
   function fall(unit) {
-    if (terrainAt(game, unit.owner, unit.position) !== 'guide') return
-    enqueue([{ id: 'guideReward', cost: cardCost(unit, game.players[unit.owner].skillUses) + 1 }],
-      { seat: unit.owner, position: unit.position })
+    if (terrainAt(game, unit.owner, unit.position) === 'guide') {
+      enqueue([{ id: 'guideReward', cost: cardCost(unit, game.players[unit.owner].skillUses) + 1 }],
+        { seat: unit.owner, position: unit.position })
+    }
+    if (unit.position.row !== 'front') return
+    const behind = { row: 'back', column: unit.position.column }
+    if (terrainAt(game, unit.owner, behind) !== 'runway') return
+    const waiting = at(game, unit.owner, behind)
+    if (waiting) enter(waiting, true)
   }
 
   function recoverScheduled(seat) {
@@ -101,14 +111,14 @@ export function stageEffects(game, api) {
         if (!source || source.hp <= 0 || !player.units.includes(source)
             || !samePosition(source.position, context.stagePosition)
             || terrainAt(game, seat, source.position) !== effect.stage) break
+        const ahead = effect.stage === 'runway' ? { row: 'front', column: source.position.column } : undefined
+        if (ahead && (source.position.row !== 'back' || at(game, seat, ahead))) break
         emit(game, 'terrainTrigger', terrainName(effect.stage) + 'が発動', {
           seat, id: source.id, position: { ...source.position }, terrain: effect.stage,
+          ...(context.afterFrontDeath ? { afterFrontDeath: true } : {}),
         })
         if (effect.stage === 'hazard') damage(unitTarget(source.id), 1)
-        if (effect.stage === 'runway' && source.position.row === 'back') {
-          const ahead = { row: 'front', column: source.position.column }
-          if (!at(game, seat, ahead)) move(source, ahead)
-        }
+        if (ahead) move(source, ahead, context.afterFrontDeath)
         if (effect.stage === 'treasure') {
           const treasure = pick(catalog.filter(card => card.packId !== 'generated' && card.classId === 'merchant' && card.kind !== 'unit'))
           if (treasure) addCard(seat, treasure.id)

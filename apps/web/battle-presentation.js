@@ -75,7 +75,7 @@ export function planBattlePresentation(before, after, events, cpu) {
     const tone = event.type === 'damage' || event.type === 'death' ? 'damage' : event.type === 'heal' ? 'heal' : 'effect'
     const key = anchorKey(to)
     const order = chained ? Math.min(index, 4) : 0
-    if (event.terrain) terrain.set(key, { to, stage: event.terrain, order })
+    if (event.terrain && !event.afterFrontDeath) terrain.set(key, { to, stage: event.terrain, order })
     if (!targets.has(key) || targets.get(key).tone === 'effect') targets.set(key, { to, tone, order })
     const from = event.source
     if (from && anchorKey(from) !== key) links.set(anchorKey(from) + '>' + key, { from, to, tone, order })
@@ -205,6 +205,7 @@ export function positionPresentation(app, presentation) {
     skillProjectile(app, scene.skill, resource, scene.approachMs)
   }
   for (const event of scene.motions) {
+    if (event.afterFrontDeath) continue
     const start = anchorFor({ kind: 'unit', id: event.id }, scene.before, scene.before)
     const source = start && anchorNode(app, start)?.querySelector('img')
     const destination = anchorNode(app, positionAnchor(event))
@@ -265,6 +266,23 @@ const sparkAngles = [-115, -77, -40, 5, 42, 81, 124, 162, 195, 224]
 export function positionBattleImpact(app, scene) {
   const grid = app.querySelector('.battle-grid')
   if (!grid || !scene.bursts.length) return 0
+  if (!scene.reduced) {
+    for (const event of scene.motions.filter(motion => motion.afterFrontDeath)) {
+      const start = anchorNode(app, { ...positionAnchor(event), position: { ...event.position, row: 'back' } })
+      const destination = anchorNode(app, positionAnchor(event))
+      if (!start || destination?.dataset.unit !== String(event.id)) continue
+      const art = destination.querySelector('img')
+      if (!art) continue
+      const from = center(start)
+      const to = center(destination)
+      destination.classList.add('moving-unit')
+      const animation = art.animate([
+        { transform: `translate(${from.x - to.x}px, ${from.y - to.y}px)` },
+        { transform: 'translate(0, 0)' },
+      ], { duration: 190, easing: 'cubic-bezier(.22,.78,.36,1)' })
+      animation.onfinish = () => destination.classList.remove('moving-unit')
+    }
+  }
   const origin = grid.getBoundingClientRect()
   const layer = document.createElement('div')
   layer.className = 'battle-impacts'

@@ -181,6 +181,44 @@ test('滑走路が転位を誘発し、危険床を重ねると再びダメー�
   assert.equal(game.players[1].terrain['back:1'], 'hazard')
 })
 
+test('前衛が埋まっている滑走路は後衛で待機し、同じ列の前衛の退場で転位する', () => {
+  let game = fixture('fighter')
+  const blocker = put(game, 'twig-guard', 0, front(2))
+  const runner = put(game, 'FT-0526', 0, back(2))
+  put(game, 'twig-guard', 0, front(1))
+  const otherRunner = put(game, 'moon-hare', 0, back(1))
+  const beforeStage = game.events.length
+  game = play(game, 'FT-0525')
+  assert.equal(game.players[0].terrain['back:2'], 'runway')
+  assert.deepEqual(unit(game, runner).position, back(2))
+  assert.equal(game.events.slice(beforeStage).some(event => event.type === 'terrainTrigger'), false)
+
+  game = run(game, { type: 'end' })
+  const beforeDeath = game.events.length
+  game = play(game, 'spark', { target: unitTarget(blocker) })
+  assert.equal(unit(game, blocker), undefined)
+  assert.deepEqual(unit(game, runner).position, front(2))
+  assert.deepEqual(unit(game, otherRunner).position, back(1))
+  assert.equal(unit(game, runner).attack, cards['FT-0526'].attack + 2)
+  assert.deepEqual(game.events.slice(beforeDeath).filter(event => ['death', 'terrainTrigger', 'move'].includes(event.type))
+    .map(event => [event.type, event.id, event.position, Boolean(event.afterFrontDeath)]), [
+    ['death', blocker, front(2), false], ['terrainTrigger', runner, back(2), true], ['move', runner, front(2), true],
+  ])
+})
+
+test('退場時の召喚で前衛が埋まったら、次に空くまで滑走路で待機する', () => {
+  let game = fixture('fighter')
+  const blocker = put(game, 'lantern-ghost', 0, front(0))
+  const runner = put(game, 'moon-hare', 0, back(0))
+  game = play(game, 'FT-0525')
+  defeat(game, blocker)
+  const replacement = game.players[0].units.find(unit => unit.position.row === 'front')
+  assert.equal(replacement.card, 'page-sprite')
+  assert.deepEqual(unit(game, runner).position, back(0))
+  defeat(game, replacement.id)
+  assert.deepEqual(unit(game, runner).position, front(0))
+})
+
 test('導きの地は退場時能力の後に消え、山札から取得したカードが反応する', () => {
   let game = fixture('seer')
   const oracle = put(game, 'FT-0556', 0, front(0))

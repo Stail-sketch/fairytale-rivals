@@ -127,6 +127,7 @@ export type Event = {
   played?: boolean; cost?: number; name?: string; triggered?: boolean;
   source?: EffectAnchor; destination?: EffectAnchor;
   protection?: 'INVULNERABLE' | 'DARK_CLOAK' | 'METAL_BODY' | 'SPELL_WARD' | 'RESIST_SPELL';
+  afterFrontDeath?: boolean;
   privateTo?: Seat; terrain?: TerrainId | null
 }
 export type Game = {

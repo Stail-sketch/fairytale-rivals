@@ -5,7 +5,7 @@ export const orbCards = Object.freeze(Object.keys(orbNames).map(stage => 'token-
 export const isOrb = terrain => typeof terrain === 'string' && terrain.startsWith('orb-')
 export const terrainName = id => terrains[id] ?? orbNames[id]
 export const terrainText = Object.freeze({
-  runway: '後衛から前衛の空きマスへ転位する。',
+  runway: 'この後衛マスにいるユニットは、同じ列の前衛が空いていれば転位する。前衛が埋まっている場合は待機し、前衛ユニットが退場して空いたときにも転位する。',
   treasure: 'ユニットが踏むと商人の特技か武器が1枚手に入り、この舞台は消える。',
   hazard: 'ユニットが踏むと1ダメージ。',
   sword: 'ユニットがいる間、味方の武器で与えるダメージ+1。',
