@@ -41,8 +41,8 @@ export function project(game, viewer) {
   }
 }
 
-export function createLocalMatch(config) {
-  let game = createGame(config)
+export function createLocalMatch(config, savedGame) {
+  let game = savedGame ? structuredClone(savedGame) : createGame(config)
   return {
     view: (viewer = null) => structuredClone(project(game, viewer)),
     act(actor, action) {
@@ -53,6 +53,8 @@ export function createLocalMatch(config) {
       return { ok: result.ok, issue: result.issue, events: structuredClone(events) }
     },
     exportReplay: () => structuredClone({ version: 1, ruleset: rules.id, config, history: game.history }),
+    // Trusted server storage only; never send this unprojected state to a player.
+    exportState: () => structuredClone({ config, game }),
   }
 }
 

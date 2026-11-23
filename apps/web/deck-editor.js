@@ -68,6 +68,8 @@ export function createDeckEditor(collection) {
     const pages = Math.max(1, Math.ceil(decks.length / pageSize))
     page = Math.min(page, pages - 1)
     return heading('デッキ一覧', `<button type="button" data-op="close-decks" class="icon-button">タイトルへ戻る</button>
+      <button type="button" data-op="export-decks" class="icon-button">デッキを書き出す</button>
+      <button type="button" data-op="import-decks" class="icon-button">デッキを引き継ぐ</button>
       <button type="button" data-op="rivals-import" class="icon-button">スクショから作成</button>
       <button type="button" data-op="new-deck" class="primary">＋ 新規作成</button>`) +
       (listMessage ? `<p id="deck-list-status" role="status" tabindex="-1">${escape(listMessage)}</p>` : '') +
@@ -241,6 +243,34 @@ export function createDeckEditor(collection) {
     },
     handle(app, art, escape, node, render) {
       const { op, deckOpen, deckDelete, deckClass, deckPage, deckAdd, deckRemove, deckOverview } = node.dataset
+      if (screen === 'list' && op === 'export-decks') {
+        const url = URL.createObjectURL(new Blob([collection.backup()], { type: 'application/json' }))
+        const link = document.createElement('a')
+        link.href = url
+        link.download = '童話戦記-デッキ引き継ぎ.json'
+        link.click()
+        setTimeout(() => URL.revokeObjectURL(url), 10_000)
+        listMessage = 'デッキを書き出しました。移行先の「デッキを引き継ぐ」でこのファイルを選んでください。'
+        render('#deck-list-status')
+        return true
+      }
+      if (screen === 'list' && op === 'import-decks') {
+        const input = document.createElement('input')
+        input.type = 'file'
+        input.accept = '.json,application/json'
+        input.addEventListener('change', async () => {
+          const file = input.files?.[0]
+          if (!file) return
+          let result
+          try {
+            result = file.size > 8 * 1024 * 1024 ? { ok: false, issue: '引き継ぎファイルが大きすぎます。' } : collection.restore(await file.text())
+          } catch { result = { ok: false, issue: 'ファイルを読み取れませんでした。' } }
+          listMessage = result.ok ? `${result.added}件のデッキを引き継ぎました。同じ名前・内容の${result.skipped}件は保存済みです。` : result.issue
+          if (screen === 'list') render('#deck-list-status')
+        }, { once: true })
+        input.click()
+        return true
+      }
       if (screen === 'import' && screenshot.handle(node, render, imported => {
         edit({ ...imported, deck: [] })
         draft.deck = imported.deck

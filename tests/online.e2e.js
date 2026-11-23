@@ -5,14 +5,18 @@ import { starterLineup } from '../packages/cards/decks.js'
 import { createDevServer } from '../scripts/dev-server.js'
 
 async function roomClient(t) {
-  const server = createDevServer()
-  server.listen(0, '127.0.0.1')
-  await once(server, 'listening')
-  t.after(() => {
-    server.closeAllConnections()
-    return new Promise(resolve => server.close(resolve))
-  })
-  const base = `http://127.0.0.1:${server.address().port}/api/rooms`
+  let origin = process.env.FAIRYTALE_SERVER_URL
+  if (!origin) {
+    const server = createDevServer()
+    server.listen(0, '127.0.0.1')
+    await once(server, 'listening')
+    t.after(() => {
+      server.closeAllConnections()
+      return new Promise(resolve => server.close(resolve))
+    })
+    origin = `http://127.0.0.1:${server.address().port}`
+  }
+  const base = origin.replace(/\/$/, '') + '/api/rooms'
   async function request(path = '', { method = 'GET', body, token, signal } = {}) {
     const headers = {}
     if (body) headers['Content-Type'] = 'application/json'

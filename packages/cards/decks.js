@@ -112,6 +112,40 @@ export function createDeckCollection(storage) {
 
   return {
     get, list,
+    backup() {
+      return JSON.stringify({ format: 'fairytale-rivals-decks', version: 1, decks: list() }, null, 2)
+    },
+    restore(text) {
+      let data
+      try { data = JSON.parse(text) } catch { return { ok: false, issue: 'デッキの引き継ぎファイルを読み取れません。' } }
+      if (data?.format !== 'fairytale-rivals-decks' || data.version !== 1 || !Array.isArray(data.decks)
+          || data.decks.some(record => !record || typeof record.name !== 'string' || !record.name.trim()
+            || !validDeck(record.deck, record.leader))) {
+        return { ok: false, issue: '対応するデッキの引き継ぎファイルではありません。' }
+      }
+      const existing = list()
+      const signature = record => JSON.stringify([record.leader, record.name, [...record.deck].sort()])
+      const known = new Set(existing.map(signature))
+      const added = []
+      let skipped = 0
+      try {
+        for (const record of data.decks) {
+          const key = signature(record)
+          if (known.has(key)) { skipped++; continue }
+          let id = /^[a-f0-9]{32}$/.test(record.id) && !get(record.id) ? record.id : null
+          id ??= Array.from(crypto.getRandomValues(new Uint8Array(16)), byte => byte.toString(16).padStart(2, '0')).join('')
+          const created = Number.isFinite(record.created) ? record.created : Date.now()
+          storage.setItem(savedDeckPrefix + id, JSON.stringify({ id, name: record.name, leader: record.leader, deck: record.deck, created }))
+          added.push(id)
+          known.add(key)
+        }
+        return { ok: true, added: added.length, skipped }
+      } catch {
+        // Imports only add records, so an interrupted import never overwrites an existing deck.
+        for (const id of added) { try { storage.removeItem(savedDeckPrefix + id) } catch { /* Keep existing records intact. */ } }
+        return { ok: false, issue: '保存容量が足りないか、ブラウザーに保存できませんでした。既存のデッキは変更していません。' }
+      }
+    },
     initialize(initialDecks) {
       for (const { id, leader, name, deck } of initialDecks) {
         if (!/^[a-f0-9]{32}$/.test(id) || !validDeck(deck, leader)) continue

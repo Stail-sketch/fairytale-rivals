@@ -10,6 +10,7 @@ import test from 'node:test'
 import { standalone } from '../scripts/build.js'
 import { createDevServer } from '../scripts/dev-server.js'
 import { catalog } from '../packages/cards/index.js'
+import { starterLineup } from '../packages/cards/decks.js'
 import { exampleRivalsDeck } from '../apps/web/rivals-example.js'
 
 const run = promisify(execFile)
@@ -897,13 +898,17 @@ async function finishTurn(page) {
 test('別々のChromiumセッションで招待URLから参加し、対戦と再接続ができる', { timeout: 45000 }, async t => {
   const temp = await realpath(tmpdir())
   const profile = await mkdtemp(join(temp, 'fairytale-online-'))
-  const server = createDevServer()
-  server.listen(0, '127.0.0.1')
-  await once(server, 'listening')
-  t.after(() => {
-    server.closeAllConnections()
-    return new Promise(resolve => server.close(resolve))
-  })
+  let origin = process.env.FAIRYTALE_SERVER_URL
+  if (!origin) {
+    const server = createDevServer()
+    server.listen(0, '127.0.0.1')
+    await once(server, 'listening')
+    t.after(() => {
+      server.closeAllConnections()
+      return new Promise(resolve => server.close(resolve))
+    })
+    origin = 'http://127.0.0.1:' + server.address().port
+  }
   const open = await browserControl(t, profile)
   t.after(async () => {
     const resolved = await realpath(profile)
@@ -911,9 +916,11 @@ test('別々のChromiumセッションで招待URLから参加し、対戦と再
     await rm(resolved, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 })
   })
   const [host, guest] = await Promise.all([open(), open()])
-  await host.navigate('http://127.0.0.1:' + server.address().port + '/')
+  await host.navigate(origin + '/')
   await host.click('[data-op=decks]')
   await host.viewport(390, 800)
+  assert.equal(await host.evaluate('document.documentElement.scrollWidth === document.documentElement.clientWidth'), true,
+    'デッキの書き出し・引き継ぎボタンも狭い画面に収まる')
   await host.click('[data-deck-overview]')
   assert.equal(await host.evaluate('getComputedStyle(document.querySelector(".deck-overview-grid")).gridTemplateColumns.split(" ").length'), 5)
   assert.equal(await host.evaluate('document.querySelector(".deck-overview").scrollWidth === document.querySelector(".deck-overview").clientWidth'), true)
@@ -931,6 +938,26 @@ test('別々のChromiumセッションで招待URLから参加し、対戦と再
   }`)
   await host.click('[data-op=save-deck]:enabled')
   await host.click('[data-op=deck-list]')
+  assert.equal(await host.evaluate('Boolean(document.querySelector("[data-op=export-decks]"))'), true)
+  const backup = { format: 'fairytale-rivals-decks', version: 1,
+    decks: [{ name: '引き継いだ森の守り', leader: 'priest', deck: starterLineup('priest').deck }] }
+  await host.evaluate(`{
+    const create = document.createElement
+    document.createElement = function(tag, ...args) {
+      const element = create.call(this, tag, ...args)
+      if (tag === 'input') element.click = () => {
+        const files = new DataTransfer()
+        files.items.add(new File([${JSON.stringify(JSON.stringify(backup))}], 'decks.json', { type: 'application/json' }))
+        element.files = files.files
+        element.dispatchEvent(new Event('change'))
+      }
+      return element
+    }
+    try { document.querySelector('[data-op=import-decks]').click() }
+    finally { document.createElement = create }
+  }`)
+  await eventually(() => host.evaluate('document.querySelector("#deck-list-status")?.textContent.includes("1件のデッキを引き継ぎました")'), 'デッキファイルの読み込み')
+  assert.equal(await host.evaluate('Array.from(document.querySelectorAll(".saved-deck strong")).some(node => node.textContent === "引き継いだ森の守り")'), true)
   await host.click('[data-op=close-decks]')
   await host.click('[data-mode=friend]')
   await host.evaluate(`{

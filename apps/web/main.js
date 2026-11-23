@@ -159,6 +159,11 @@ function home() {
   const start = friend ? (invite ? (legacyInvite ? '対戦に参加' : 'ロビーに参加') : 'ロビーを作る') : solo() ? 'CPUと対戦する' : '対戦を始める'
   return `<main class="splash${friend ? ' friend-home' : ''}">
     <section class="intro" aria-labelledby="game-title">
+      ${location.hostname === 'stail-sketch.github.io' ? `<aside class="hosting-migration">
+        <strong>Cloudflare版を公開しました</strong>
+        <p>フレンド対戦は新しいURLをご利用ください。保存済みデッキは「デッキ編集」で書き出してから、新しい画面で引き継げます。</p>
+        <a class="secondary" href="https://fairytale-rivals.kamuikamui350.workers.dev/" target="_blank" rel="noopener">Cloudflare版を開く ↗</a>
+      </aside>` : ''}
       <div class="title-ornament" aria-hidden="true">◆ <span>✦</span> ◆</div>
       <h1 id="game-title">童話戦記</h1>
       <p class="subtitle">PROJECT FAIRYTALE RIVALS</p>
