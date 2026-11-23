@@ -1,4 +1,6 @@
-import { cards, catalog, leaders } from '../cards/index.js'
+import { catalog, leaders } from '../cards/index.js'
+import { arenaCpuLevel, cpuDraftChoices } from './cpu-level.js'
+export { arenaCpuLevel } from './cpu-level.js'
 
 export const arenaVersion = 1
 export const rarityLabels = { common: 'ノーマル', rare: 'レア', superRare: 'スーパーレア', legendary: 'レジェンド' }
@@ -92,19 +94,16 @@ export function draftView(draft) {
 
 export function autoDraft(seed, schedule, strength = 0) {
   const draft = createDraft(seed, schedule)
+  const difficulty = arenaCpuLevel(strength)
+  const selectionRng = { rng: (seed ^ 0x74fa915b) >>> 0 }
   while (draft.stage !== 'complete') {
     let choice = draft.choices[0]
     if (draft.stage === 'card') {
-      const counts = draft.deck.map(id => cards[id])
-      const score = id => {
-        const c = cards[id]
-        const expensive = counts.filter(card => card.cost >= 5).length >= 8
-        const needsUnits = counts.filter(card => card.kind === 'unit').length < draft.deck.length * .65
-        return (c.kind === 'unit' ? (c.attack + c.hp) / Math.max(1, c.cost) + (needsUnits ? 2 : 0) : 1.3)
-          + (c.description ? .8 : 0) - (expensive && c.cost >= 5 ? 3 : 0)
-      }
-      // Later opponents select for mana balance and board presence, without changing card stats.
-      if (strength > 0) choice = [...draft.choices].sort((a, b) => score(b) - score(a))[0]
+      const { choices, weights } = cpuDraftChoices(draft, difficulty)
+      let roll = random(selectionRng, 1_000_000) / 1_000_000 * weights.reduce((sum, weight) => sum + weight, 0)
+      let index = 0
+      while (index < weights.length - 1 && roll >= weights[index]) roll -= weights[index++]
+      choice = choices[index]
     }
     draftAction(draft, { type: { class: 'arena-class', door: 'arena-door', card: 'arena-pick' }[draft.stage], choice })
   }

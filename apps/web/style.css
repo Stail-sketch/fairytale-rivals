@@ -110,6 +110,7 @@
 .arena-lobby-summary { padding: 12px; margin: 14px 0; border: 1px solid #977cb1; border-radius: 8px; background: #262039; }
 .arena-lobby-summary p { font-size: 13px; line-height: 1.7; }
 .arena-result-record { font-size: 23px; color: #f3ce8b; }
+.arena-cpu-badge { display: block; padding: 5px 8px; margin: 6px auto; border: 1px solid #b59b6e; border-radius: 5px; color: #ffe0a4; text-align: center; background: #292133; }
 @media (max-width: 1100px) {
   .arena-pick-footer { grid-template-columns: minmax(0, 1fr); }
   .arena-confirm-area .primary { width: 100%; }

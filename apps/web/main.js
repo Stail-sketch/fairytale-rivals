@@ -19,7 +19,7 @@ import { escapeText as escape, handleTermLink, termDetails, termLink, termText }
 import { relatedPreview } from './card-related.js'
 import { fortuneStatus } from './fortune-status.js'
 import { isLobbyCode, normalizeRoomId, visibleLobbyCode } from '../../packages/online-match/lobby.js'
-import { autoDraft, draftAction, rarityLabels } from '../../packages/arena/index.js'
+import { arenaCpuLevel, autoDraft, draftAction, rarityLabels } from '../../packages/arena/index.js'
 import { arenaDetails, arenaDraftScreen, arenaMenu, arenaSeed, createArenaStore, localDraftView } from './arena.js'
 
 const app = document.querySelector('#app')
@@ -303,6 +303,7 @@ function leaderPanel(seat, enemy, events) {
       <span class="leader-hp">${Math.max(0, player.hp)}</span>${flash.label}${status.markup}
     </button>
     <div class="leader-identity"><small>${enemy ? (solo() ? 'CPU' : '相手') : 'あなた'} · ${seatName(seat)} · ${leader.job}</small><strong>${leader.name}</strong></div>
+    ${arenaBattle && enemy && arenaStore.run.match?.config.arenaCpu ? `<small class="arena-cpu-badge" data-arena-cpu-level>CPU Lv.${arenaStore.run.match.config.arenaCpu.level} · ${arenaStore.run.match.config.arenaCpu.label}</small>` : ''}
     ${enemy ? `<button class="opponent-skill" type="button" data-inspect-skill="${seat}" aria-haspopup="dialog">
       <small>奥義</small><strong>${escape(skill.name)}</strong></button>` : ''}
     <div class="resources">
@@ -953,7 +954,7 @@ function startArenaBattle() {
   arenaBattle = true
   if (run.match && !run.settled) match = createLocalMatch(run.match.config, run.match.game)
   else {
-    const config = { seed: arenaSeed(), format: 'arena', lineups: [
+    const config = { seed: arenaSeed(), format: 'arena', arenaCpu: arenaCpuLevel(run.wins), lineups: [
       { leader: run.draft.leader, deck: [...run.draft.deck] },
       autoDraft(arenaSeed(), run.draft.schedule, run.wins),
     ] }

@@ -77,6 +77,9 @@ test('闘技場で扉と30枚を選び、保存・再開してCPUと対戦でき
   await page.wait('.battle')
   const before = await page.evaluate('JSON.parse(localStorage.getItem("fairytale-rivals.arena.v1")).match')
   assert.equal(before.config.format, 'arena')
+  assert.equal(before.config.arenaCpu.level, 1)
+  assert.equal(before.config.arenaCpu.label, '入門')
+  assert.equal(await page.evaluate('document.querySelector("[data-arena-cpu-level]").textContent'), 'CPU Lv.1 · 入門')
   await page.click('[data-op=home]')
   await page.wait('[data-op=arena-resume]')
   await page.navigate(origin + '/')
@@ -86,6 +89,7 @@ test('闘技場で扉と30枚を選び、保存・再開してCPUと対戦でき
   const after = await page.evaluate('JSON.parse(localStorage.getItem("fairytale-rivals.arena.v1")).match')
   assert.equal(after.config.seed, before.config.seed)
   assert.deepEqual(after.config.lineups, before.config.lineups)
+  assert.deepEqual(after.config.arenaCpu, before.config.arenaCpu)
   assert.equal(after.game.phase, 'battle')
 })
 

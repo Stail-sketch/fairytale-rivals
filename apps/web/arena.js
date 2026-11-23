@@ -1,5 +1,5 @@
 import { cards, leaders } from '../../packages/cards/index.js'
-import { createDraft, draftView, doors, rarityLabels } from '../../packages/arena/index.js'
+import { arenaCpuLevel, createDraft, draftView, doors, rarityLabels } from '../../packages/arena/index.js'
 import { escapeText as escape, termText } from './card-terms.js'
 import { relatedPreview } from './card-related.js'
 
@@ -47,12 +47,14 @@ export function createArenaStore(storage) {
 
 export function arenaMenu(store, feedback) {
   const run = store.run
+  const difficulty = run?.match && !run.settled ? run.match.config.arenaCpu : arenaCpuLevel(run?.wins ?? 0)
   return `<main class="arena-menu ceremony"><section class="modal">
     <p class="modal-kicker">扉を開き、自分だけの物語を編む</p><h1>物語の闘技場</h1>
     <p>3人の語り手から1人を選び、扉とカードを選んで30枚のデッキを作ります。</p>
     <div class="arena-mode-grid"><section><span class="arena-mode-icon">♜</span><h2>CPU勝ち抜き</h2>
       <p>ピックしたデッキで連戦。1敗するまで何勝できるか挑戦できます。</p>
       <p class="arena-record">最高記録 <b>${store.best}</b> 勝${run ? ` · 今回 <b>${run.wins}</b> 勝` : ''}</p>
+      <p data-arena-cpu-level>${difficulty ? `CPU Lv.${difficulty.level} · ${difficulty.label}` : '進行中の対戦は以前のCPU設定です'}<br><small>0〜2勝：入門 ／ 3〜5勝：標準 ／ 6〜9勝：熟練 ／ 10勝以上：達人</small></p>
       ${run && !run.ended ? `<button class="primary" data-op="arena-resume">${run.match ? '対戦の続きから' : run.draft.stage === 'complete' ? '完成したデッキで挑戦' : 'ピックの続きから'}</button>` : ''}
       <button class="secondary" data-op="arena-cpu-new">新しくピックする</button></section>
       <section><span class="arena-mode-icon">⚔</span><h2>フレンド闘技場</h2>
