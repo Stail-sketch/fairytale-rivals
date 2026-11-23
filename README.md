@@ -2,7 +2,7 @@
 
 PCブラウザで遊べる横型カードバトル。タイトルから「CPU対戦」「同じPCで2人」「フレンド対戦」を選べます。
 
-**公開版：[Cloudflare版の童話戦記](https://fairytale-rivals.kamuikamui350.workers.dev/)**
+**公開版：[Cloudflare版の童話戦記](https://fairytale-rivals.pages.dev/)**
 
 開発ソースは引き続き [Stail-sketch/fairytale-rivals](https://github.com/Stail-sketch/fairytale-rivals) で管理します。
 
@@ -54,7 +54,7 @@ URLを移行すると、ブラウザー内のデッキは自動では共有さ�
 
 ## フレンド対戦
 
-[Cloudflare版](https://fairytale-rivals.kamuikamui350.workers.dev/)では、ロビーと対戦状態をDurable Objectsに保存します。タブの再読み込みやサーバーの再配置後も、期限内なら同じURL・同じタブから対戦に戻れます。相手の手札はサーバーで伏せ、各自が自分のブラウザーに保存したデッキを選びます。
+[Cloudflare版](https://fairytale-rivals.pages.dev/)では、ロビーと対戦状態をDurable Objectsに保存します。タブの再読み込みやサーバーの再配置後も、期限内なら同じURL・同じタブから対戦に戻れます。相手の手札はサーバーで伏せ、各自が自分のブラウザーに保存したデッキを選びます。
 
 [旧GitHub Pages版](https://stail-sketch.github.io/fairytale-rivals/)はデッキの書き出し用にも残します。旧版のフレンド対戦はWebRTC方式のため、ホストがタブを閉じたり再読み込みすると部屋が終了します。新しく遊ぶ場合は双方でCloudflare版を使ってください。旧版のロビーID・招待URLはCloudflare版へは移りません。
 
@@ -78,7 +78,9 @@ npx wrangler login
 npm run dev:cloudflare
 ```
 
-ローカルの [Cloudflare実行環境](http://127.0.0.1:8787/) で確認したら、`npm run deploy:cloudflare` で公開します。`wrangler.jsonc` にWorkersとSQLite対応Durable Objectの設定があります。配信ファイルは `dist` に生成し、開発資料・テスト・認証情報は含めません。GitHubへpushしただけではCloudflareの公開版は更新されないため、変更後はこの公開コマンドも実行します。
+ローカルの [Cloudflare実行環境](http://127.0.0.1:8787/) で確認したら、`npm run deploy:cloudflare` で公開します。このコマンドは対戦サーバーのWorkersと、短い公開URLのPagesを両方更新します。`wrangler.jsonc` にWorkersとSQLite対応Durable Object、`cloudflare/pages/wrangler.jsonc` にPagesから対戦サーバーへのサービス接続を設定しています。配信ファイルは `dist` と `dist-pages` に生成し、開発資料・テスト・認証情報は含めません。GitHubへpushしただけではCloudflareの公開版は更新されないため、変更後はこの公開コマンドも実行します。
+
+公開URLは `https://fairytale-rivals.pages.dev/` です。以前のWorkers URLもデッキの書き出し用に残します。Workers URLで保存したデッキはその画面の「デッキを書き出す」から保存し、新しいPages URLの「デッキを引き継ぐ」で読み込んでください。対戦APIは内部のサービス接続で同じサーバーへ届きます。既存のロビーIDも同じサーバーで扱いますが、参加権限は元のURL・同じタブに保存されるため、進行中の試合は元のタブで続けてください。
 
 対戦APIの検証先は `FAIRYTALE_SERVER_URL` で切り替えられます。
 

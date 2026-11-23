@@ -1,0 +1,7 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "fairytale-rivals",
+  "pages_build_output_dir": "../../dist-pages",
+  "compatibility_date": "2026-11-23",
+  "services": [{ "binding": "GAME_SERVER", "service": "fairytale-rivals" }]
+}
