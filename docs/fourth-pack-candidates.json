@@ -1,0 +1,3196 @@
+{
+  "pack": "set-4",
+  "sourcePack": "モンスターもりもり物語",
+  "originalRelease": "2018-08-24",
+  "archiveFilter": {
+    "cardpack": 5
+  },
+  "sources": {
+    "archive": "https://dqrdb.com/",
+    "cardImageUrlPattern": "https://dqrdb.com/card/{id}.png",
+    "crossReference": "https://gameconductor.com/dqrivals/card/",
+    "crossCardUrlPattern": "https://gameconductor.com/dqrivals/c/d/{id}",
+    "officialAnnouncement": "https://www.jp.square-enix.com/presents/info/20180817000717.html",
+    "producerInterview": "https://www.famitsu.com/news/201808/24162841.html",
+    "badgeReference": "https://gameconductor.com/dqrivals/tokusei/detail/?no=33"
+  },
+  "metadataStatus": "archive-catalogued",
+  "originalCardIdStatus": "unverified",
+  "releaseVersionStatus": "unverified",
+  "implementation": "not-implemented",
+  "cards": [
+    {
+      "ftId": "FT-0575",
+      "sourceName": "ミノーン",
+      "referenceId": "dqrdb:830",
+      "stats": {
+        "cost": 1,
+        "attack": 0,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "crossReference": "gameconductor:635",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0576",
+      "sourceName": "スライムファング",
+      "referenceId": "dqrdb:831",
+      "stats": {
+        "cost": 1,
+        "attack": 1,
+        "hp": 2,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "crossReference": "gameconductor:575",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0577",
+      "sourceName": "シャーマン",
+      "referenceId": "dqrdb:832",
+      "stats": {
+        "cost": 1,
+        "attack": 2,
+        "hp": 1,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "archiveKeywords": [
+        "パワフルバッジ"
+      ],
+      "crossReference": "gameconductor:597",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0578",
+      "sourceName": "マヒャドフライ",
+      "referenceId": "dqrdb:833",
+      "stats": {
+        "cost": 2,
+        "attack": 1,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "crossReference": "gameconductor:637",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0579",
+      "sourceName": "ドロル",
+      "referenceId": "dqrdb:834",
+      "stats": {
+        "cost": 2,
+        "attack": 2,
+        "hp": 3,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "archiveFamilies": [
+        "ゾンビ系"
+      ],
+      "crossReference": "gameconductor:576",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0580",
+      "sourceName": "はなカワセミ",
+      "referenceId": "dqrdb:835",
+      "stats": {
+        "cost": 2,
+        "attack": 2,
+        "hp": 3,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "archiveKeywords": [
+        "パワフルバッジ"
+      ],
+      "crossReference": "gameconductor:577",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0581",
+      "sourceName": "まものつかい",
+      "referenceId": "dqrdb:836",
+      "stats": {
+        "cost": 2,
+        "attack": 3,
+        "hp": 1,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "crossReference": "gameconductor:598",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0582",
+      "sourceName": "どくどくゾンビ",
+      "referenceId": "dqrdb:837",
+      "stats": {
+        "cost": 2,
+        "attack": 3,
+        "hp": 2,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "archiveFamilies": [
+        "ゾンビ系"
+      ],
+      "crossReference": "gameconductor:602",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0583",
+      "sourceName": "ホミロン軍曹",
+      "referenceId": "dqrdb:838",
+      "stats": {
+        "cost": 2,
+        "attack": 1,
+        "hp": 3,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "archiveFamilies": [
+        "スライム系"
+      ],
+      "crossReference": "gameconductor:606",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0584",
+      "sourceName": "エビルマスター",
+      "referenceId": "dqrdb:839",
+      "stats": {
+        "cost": 3,
+        "attack": 2,
+        "hp": 2,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "crossReference": "gameconductor:638",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0585",
+      "sourceName": "パペットマン",
+      "referenceId": "dqrdb:840",
+      "stats": {
+        "cost": 3,
+        "attack": 5,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "crossReference": "gameconductor:639",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0586",
+      "sourceName": "ブラッドレディ",
+      "referenceId": "dqrdb:841",
+      "stats": {
+        "cost": 3,
+        "attack": 3,
+        "hp": 3,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "crossReference": "gameconductor:599",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0587",
+      "sourceName": "どくろ大臣",
+      "referenceId": "dqrdb:842",
+      "stats": {
+        "cost": 3,
+        "attack": 3,
+        "hp": 2,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "archiveFamilies": [
+        "ゾンビ系"
+      ],
+      "crossReference": "gameconductor:579",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0588",
+      "sourceName": "マーマンダイン",
+      "referenceId": "dqrdb:843",
+      "stats": {
+        "cost": 3,
+        "attack": 3,
+        "hp": 2,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "archiveKeywords": [
+        "パワフルバッジ"
+      ],
+      "crossReference": "gameconductor:578",
+      "alternativeStats": {
+        "cost": 2
+      },
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0589",
+      "sourceName": "もりもりスライム",
+      "referenceId": "dqrdb:844",
+      "stats": {
+        "cost": 3,
+        "attack": 2,
+        "hp": 2,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "archiveFamilies": [
+        "スライム系"
+      ],
+      "crossReference": "gameconductor:603",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0590",
+      "sourceName": "妖魔軍王ブギー",
+      "referenceId": "dqrdb:845",
+      "stats": {
+        "cost": 3,
+        "attack": 3,
+        "hp": 2,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "crossReference": "gameconductor:645",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0591",
+      "sourceName": "ベビーゴイル",
+      "referenceId": "dqrdb:846",
+      "stats": {
+        "cost": 4,
+        "attack": 4,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "crossReference": "gameconductor:640",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0592",
+      "sourceName": "ぶっちズキーニャ",
+      "referenceId": "dqrdb:847",
+      "stats": {
+        "cost": 4,
+        "attack": 3,
+        "hp": 5,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "archiveKeywords": [
+        "貫通"
+      ],
+      "crossReference": "gameconductor:600",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0593",
+      "sourceName": "コドラ",
+      "referenceId": "dqrdb:848",
+      "stats": {
+        "cost": 4,
+        "attack": 4,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "archiveFamilies": [
+        "ドラゴン系"
+      ],
+      "crossReference": "gameconductor:604",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0594",
+      "sourceName": "カーディナルナイト",
+      "referenceId": "dqrdb:849",
+      "stats": {
+        "cost": 4,
+        "attack": 4,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "crossReference": "gameconductor:605",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0595",
+      "sourceName": "ハッスルじじい",
+      "referenceId": "dqrdb:850",
+      "stats": {
+        "cost": 4,
+        "attack": 3,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "archiveKeywords": [
+        "パワフルバッジ"
+      ],
+      "crossReference": "gameconductor:644",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0596",
+      "sourceName": "オルゴ・デミーラ",
+      "referenceId": "dqrdb:851",
+      "stats": {
+        "cost": 4,
+        "attack": 4,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "archiveFamilies": [
+        "ドラゴン系"
+      ],
+      "crossReference": "gameconductor:633",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0597",
+      "sourceName": "エステラ",
+      "referenceId": "dqrdb:852",
+      "stats": {
+        "cost": 4,
+        "attack": 2,
+        "hp": 5,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "archiveFamilies": [
+        "冒険者"
+      ],
+      "crossReference": "gameconductor:646",
+      "alternativeStats": {
+        "hp": 6
+      },
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0598",
+      "sourceName": "スライムダーク",
+      "referenceId": "dqrdb:853",
+      "stats": {
+        "cost": 5,
+        "attack": 5,
+        "hp": 5,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "archiveFamilies": [
+        "スライム系"
+      ],
+      "crossReference": "gameconductor:641",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0599",
+      "sourceName": "ヘルシーサー",
+      "referenceId": "dqrdb:854",
+      "stats": {
+        "cost": 5,
+        "attack": 4,
+        "hp": 5,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "crossReference": "gameconductor:596",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0600",
+      "sourceName": "マザーウッド",
+      "referenceId": "dqrdb:855",
+      "stats": {
+        "cost": 6,
+        "attack": 5,
+        "hp": 5,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "archiveKeywords": [
+        "速攻"
+      ],
+      "crossReference": "gameconductor:601",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0601",
+      "sourceName": "屍騎軍王ゾルデ",
+      "referenceId": "dqrdb:856",
+      "stats": {
+        "cost": 6,
+        "attack": 3,
+        "hp": 6,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "archiveFamilies": [
+        "ゾンビ系"
+      ],
+      "crossReference": "gameconductor:647",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0602",
+      "sourceName": "ジャックポッター",
+      "referenceId": "dqrdb:857",
+      "stats": {
+        "cost": 7,
+        "attack": 5,
+        "hp": 5,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "archiveKeywords": [
+        "スキルブースト"
+      ],
+      "crossReference": "gameconductor:642",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0603",
+      "sourceName": "ブラックドラゴン",
+      "referenceId": "dqrdb:858",
+      "stats": {
+        "cost": 7,
+        "attack": 6,
+        "hp": 6,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "archiveFamilies": [
+        "ドラゴン系"
+      ],
+      "crossReference": "gameconductor:580",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0604",
+      "sourceName": "レジェンドウルフ",
+      "referenceId": "dqrdb:859",
+      "stats": {
+        "cost": 9,
+        "attack": 9,
+        "hp": 9,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "archiveFamilies": [
+        "ドラゴン系"
+      ],
+      "crossReference": "gameconductor:643",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0605",
+      "sourceName": "排水の構え",
+      "referenceId": "dqrdb:760",
+      "stats": {
+        "cost": 0,
+        "attack": null,
+        "hp": null,
+        "classId": "warrior",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0606",
+      "sourceName": "ことだまつかい",
+      "referenceId": "dqrdb:761",
+      "stats": {
+        "cost": 1,
+        "attack": 2,
+        "hp": 2,
+        "classId": "warrior",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "archiveFamilies": [
+        "ゾンビ系"
+      ],
+      "crossReference": "gameconductor:651",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0607",
+      "sourceName": "ガスト",
+      "referenceId": "dqrdb:762",
+      "stats": {
+        "cost": 3,
+        "attack": 2,
+        "hp": 4,
+        "classId": "warrior",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "archiveKeywords": [
+        "パワフルバッジ"
+      ],
+      "crossReference": "gameconductor:608",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0608",
+      "sourceName": "剣豪の闘志",
+      "referenceId": "dqrdb:763",
+      "stats": {
+        "cost": 3,
+        "attack": null,
+        "hp": null,
+        "classId": "warrior",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "archiveKeywords": [
+        "スキルブースト"
+      ],
+      "crossReference": "gameconductor:607",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0609",
+      "sourceName": "剣の錬成",
+      "referenceId": "dqrdb:764",
+      "stats": {
+        "cost": 3,
+        "attack": null,
+        "hp": null,
+        "classId": "warrior",
+        "kind": "spell",
+        "rarity": "superRare"
+      },
+      "crossReference": "gameconductor:581",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0610",
+      "sourceName": "ゾンビマスター",
+      "referenceId": "dqrdb:765",
+      "stats": {
+        "cost": 4,
+        "attack": 5,
+        "hp": 4,
+        "classId": "warrior",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "crossReference": "gameconductor:609",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0611",
+      "sourceName": "ヘルオーディン",
+      "referenceId": "dqrdb:766",
+      "stats": {
+        "cost": 5,
+        "attack": 4,
+        "hp": 5,
+        "classId": "warrior",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "archiveFamilies": [
+        "ゾンビ系"
+      ],
+      "archiveKeywords": [
+        "におうだち",
+        "パワフルバッジ"
+      ],
+      "crossReference": "gameconductor:593",
+      "alternativeStats": {
+        "attack": 5,
+        "hp": 6
+      },
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0612",
+      "sourceName": "大怨霊マアモン",
+      "referenceId": "dqrdb:767",
+      "stats": {
+        "cost": 7,
+        "attack": 6,
+        "hp": 2,
+        "classId": "warrior",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "archiveFamilies": [
+        "ゾンビ系"
+      ],
+      "crossReference": "gameconductor:649",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0613",
+      "sourceName": "黒騎士レオコーン",
+      "referenceId": "dqrdb:768",
+      "stats": {
+        "cost": 8,
+        "attack": 4,
+        "hp": 8,
+        "classId": "warrior",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "archiveFamilies": [
+        "ゾンビ系"
+      ],
+      "archiveKeywords": [
+        "パワフルバッジ"
+      ],
+      "crossReference": "gameconductor:610",
+      "alternativeStats": {
+        "attack": 5
+      },
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0614",
+      "sourceName": "じごくのサーベル",
+      "referenceId": "dqrdb:769",
+      "stats": {
+        "cost": 8,
+        "attack": 4,
+        "hp": 2,
+        "classId": "warrior",
+        "kind": "weapon",
+        "rarity": "rare"
+      },
+      "crossReference": "gameconductor:650",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0615",
+      "sourceName": "まほうの小ビン",
+      "referenceId": "dqrdb:770",
+      "stats": {
+        "cost": 1,
+        "attack": null,
+        "hp": null,
+        "classId": "mage",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "crossReference": "gameconductor:594",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0616",
+      "sourceName": "だんごスライム",
+      "referenceId": "dqrdb:771",
+      "stats": {
+        "cost": 2,
+        "attack": 2,
+        "hp": 1,
+        "classId": "mage",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "archiveFamilies": [
+        "スライム系"
+      ],
+      "crossReference": "gameconductor:611",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0617",
+      "sourceName": "ルカナン",
+      "referenceId": "dqrdb:772",
+      "stats": {
+        "cost": 2,
+        "attack": null,
+        "hp": null,
+        "classId": "mage",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "crossReference": "gameconductor:582",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0618",
+      "sourceName": "てつのさそり",
+      "referenceId": "dqrdb:773",
+      "stats": {
+        "cost": 3,
+        "attack": 2,
+        "hp": 4,
+        "classId": "mage",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "archiveKeywords": [
+        "パワフルバッジ"
+      ],
+      "crossReference": "gameconductor:612",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0619",
+      "sourceName": "闇の司祭",
+      "referenceId": "dqrdb:774",
+      "stats": {
+        "cost": 4,
+        "attack": 5,
+        "hp": 4,
+        "classId": "mage",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "archiveKeywords": [
+        "パワフルバッジ"
+      ],
+      "crossReference": "gameconductor:653",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0620",
+      "sourceName": "魔力の奔流",
+      "referenceId": "dqrdb:775",
+      "stats": {
+        "cost": 4,
+        "attack": null,
+        "hp": null,
+        "classId": "mage",
+        "kind": "spell",
+        "rarity": "superRare"
+      },
+      "archiveKeywords": [
+        "スキルブースト"
+      ],
+      "crossReference": "gameconductor:654",
+      "alternativeStats": {
+        "cost": 7
+      },
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0621",
+      "sourceName": "まどうスライム",
+      "referenceId": "dqrdb:776",
+      "stats": {
+        "cost": 5,
+        "attack": 4,
+        "hp": 4,
+        "classId": "mage",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "archiveFamilies": [
+        "スライム系"
+      ],
+      "archiveKeywords": [
+        "特技ダメージ＋"
+      ],
+      "crossReference": "gameconductor:614",
+      "alternativeStats": {
+        "cost": 4
+      },
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0622",
+      "sourceName": "スライム呼び",
+      "referenceId": "dqrdb:777",
+      "stats": {
+        "cost": 5,
+        "attack": null,
+        "hp": null,
+        "classId": "mage",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "archiveKeywords": [
+        "スキルブースト"
+      ],
+      "crossReference": "gameconductor:652",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0623",
+      "sourceName": "ダークキング",
+      "referenceId": "dqrdb:778",
+      "stats": {
+        "cost": 7,
+        "attack": 6,
+        "hp": 6,
+        "classId": "mage",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "archiveFamilies": [
+        "スライム系"
+      ],
+      "crossReference": "gameconductor:655",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0624",
+      "sourceName": "スライムの心",
+      "referenceId": "dqrdb:779",
+      "stats": {
+        "cost": 7,
+        "attack": null,
+        "hp": null,
+        "classId": "mage",
+        "kind": "spell",
+        "rarity": "rare"
+      },
+      "crossReference": "gameconductor:613",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0625",
+      "sourceName": "スライムフィーバー",
+      "referenceId": "dqrdb:780",
+      "stats": {
+        "cost": 0,
+        "attack": null,
+        "hp": null,
+        "classId": "fighter",
+        "kind": "spell",
+        "rarity": "rare"
+      },
+      "crossReference": "gameconductor:583",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0626",
+      "sourceName": "はねスライム",
+      "referenceId": "dqrdb:781",
+      "stats": {
+        "cost": 2,
+        "attack": 1,
+        "hp": 3,
+        "classId": "fighter",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "archiveFamilies": [
+        "スライム系"
+      ],
+      "archiveKeywords": [
+        "2回攻撃"
+      ],
+      "crossReference": "gameconductor:656",
+      "alternativeStats": {
+        "attack": 2
+      },
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0627",
+      "sourceName": "スライムホイッスル",
+      "referenceId": "dqrdb:782",
+      "stats": {
+        "cost": 2,
+        "attack": null,
+        "hp": null,
+        "classId": "fighter",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "crossReference": "gameconductor:657",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0628",
+      "sourceName": "せいけん爆撃",
+      "referenceId": "dqrdb:783",
+      "stats": {
+        "cost": 3,
+        "attack": null,
+        "hp": null,
+        "classId": "fighter",
+        "kind": "spell",
+        "rarity": "superRare"
+      },
+      "crossReference": "gameconductor:616",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0629",
+      "sourceName": "いしのツメ",
+      "referenceId": "dqrdb:784",
+      "stats": {
+        "cost": 3,
+        "attack": 1,
+        "hp": 2,
+        "classId": "fighter",
+        "kind": "weapon",
+        "rarity": "common"
+      },
+      "crossReference": "gameconductor:615",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0630",
+      "sourceName": "キラーエイプ",
+      "referenceId": "dqrdb:785",
+      "stats": {
+        "cost": 4,
+        "attack": 4,
+        "hp": 4,
+        "classId": "fighter",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "archiveKeywords": [
+        "パワフルバッジ"
+      ],
+      "crossReference": "gameconductor:584",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0631",
+      "sourceName": "エンゼルスライム",
+      "referenceId": "dqrdb:786",
+      "stats": {
+        "cost": 5,
+        "attack": 3,
+        "hp": 4,
+        "classId": "fighter",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "archiveFamilies": [
+        "スライム系"
+      ],
+      "crossReference": "gameconductor:658",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0632",
+      "sourceName": "必中拳",
+      "referenceId": "dqrdb:787",
+      "stats": {
+        "cost": 4,
+        "attack": 0,
+        "hp": 0,
+        "classId": "fighter",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "crossReference": "gameconductor:595",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0633",
+      "sourceName": "ドンガラドン",
+      "referenceId": "dqrdb:788",
+      "stats": {
+        "cost": 6,
+        "attack": 6,
+        "hp": 5,
+        "classId": "fighter",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "archiveKeywords": [
+        "パワフルバッジ"
+      ],
+      "crossReference": "gameconductor:617",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0634",
+      "sourceName": "グランスライム",
+      "referenceId": "dqrdb:789",
+      "stats": {
+        "cost": 5,
+        "attack": 5,
+        "hp": 5,
+        "classId": "fighter",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "archiveFamilies": [
+        "スライム系"
+      ],
+      "crossReference": "gameconductor:585",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0635",
+      "sourceName": "リンリン",
+      "referenceId": "dqrdb:790",
+      "stats": {
+        "cost": 2,
+        "attack": 1,
+        "hp": 3,
+        "classId": "priest",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "archiveKeywords": [
+        "スキルブースト"
+      ],
+      "crossReference": "gameconductor:619",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0636",
+      "sourceName": "スクルト",
+      "referenceId": "dqrdb:791",
+      "stats": {
+        "cost": 2,
+        "attack": null,
+        "hp": null,
+        "classId": "priest",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "crossReference": "gameconductor:618",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0637",
+      "sourceName": "竜のうろこ",
+      "referenceId": "dqrdb:792",
+      "stats": {
+        "cost": 2,
+        "attack": null,
+        "hp": null,
+        "classId": "priest",
+        "kind": "spell",
+        "rarity": "superRare"
+      },
+      "crossReference": "gameconductor:662",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0638",
+      "sourceName": "ダックスビル",
+      "referenceId": "dqrdb:793",
+      "stats": {
+        "cost": 3,
+        "attack": 3,
+        "hp": 3,
+        "classId": "priest",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "archiveKeywords": [
+        "パワフルバッジ"
+      ],
+      "crossReference": "gameconductor:661",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0639",
+      "sourceName": "しっぷうのレイピア",
+      "referenceId": "dqrdb:794",
+      "stats": {
+        "cost": 4,
+        "attack": 3,
+        "hp": 2,
+        "classId": "priest",
+        "kind": "weapon",
+        "rarity": "common"
+      },
+      "crossReference": "gameconductor:659",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0640",
+      "sourceName": "たつのこナイト",
+      "referenceId": "dqrdb:795",
+      "stats": {
+        "cost": 5,
+        "attack": 5,
+        "hp": 4,
+        "classId": "priest",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "archiveFamilies": [
+        "ドラゴン系"
+      ],
+      "archiveKeywords": [
+        "パワフルバッジ"
+      ],
+      "crossReference": "gameconductor:630",
+      "alternativeStats": {
+        "attack": 6,
+        "hp": 5
+      },
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0641",
+      "sourceName": "グレイナル",
+      "referenceId": "dqrdb:796",
+      "stats": {
+        "cost": 6,
+        "attack": 6,
+        "hp": 6,
+        "classId": "priest",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "archiveFamilies": [
+        "ドラゴン系"
+      ],
+      "crossReference": "gameconductor:634",
+      "alternativeStats": {
+        "cost": 7
+      },
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0642",
+      "sourceName": "冷たい笑み",
+      "referenceId": "dqrdb:797",
+      "stats": {
+        "cost": 6,
+        "attack": null,
+        "hp": null,
+        "classId": "priest",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "crossReference": "gameconductor:660",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0643",
+      "sourceName": "精霊の矢",
+      "referenceId": "dqrdb:798",
+      "stats": {
+        "cost": 6,
+        "attack": null,
+        "hp": null,
+        "classId": "priest",
+        "kind": "spell",
+        "rarity": "superRare"
+      },
+      "crossReference": "gameconductor:586",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0644",
+      "sourceName": "ドラゴンバゲージ",
+      "referenceId": "dqrdb:799",
+      "stats": {
+        "cost": 7,
+        "attack": 5,
+        "hp": 7,
+        "classId": "priest",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "archiveFamilies": [
+        "ドラゴン系"
+      ],
+      "archiveKeywords": [
+        "におうだち"
+      ],
+      "crossReference": "gameconductor:620",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0645",
+      "sourceName": "メタルの巻物",
+      "referenceId": "dqrdb:800",
+      "stats": {
+        "cost": 1,
+        "attack": null,
+        "hp": null,
+        "classId": "merchant",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "crossReference": "gameconductor:663",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0646",
+      "sourceName": "メタルのそろばん",
+      "referenceId": "dqrdb:801",
+      "stats": {
+        "cost": 2,
+        "attack": 1,
+        "hp": 2,
+        "classId": "merchant",
+        "kind": "weapon",
+        "rarity": "superRare"
+      },
+      "archiveKeywords": [
+        "メタルボディ"
+      ],
+      "crossReference": "gameconductor:623",
+      "alternativeStats": {
+        "cost": 1
+      },
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0647",
+      "sourceName": "からくりエッグ",
+      "referenceId": "dqrdb:802",
+      "stats": {
+        "cost": 3,
+        "attack": 3,
+        "hp": 3,
+        "classId": "merchant",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "archiveKeywords": [
+        "パワフルバッジ"
+      ],
+      "crossReference": "gameconductor:622",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0648",
+      "sourceName": "メタルブラザーズ",
+      "referenceId": "dqrdb:803",
+      "stats": {
+        "cost": 4,
+        "attack": 3,
+        "hp": 2,
+        "classId": "merchant",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "archiveFamilies": [
+        "スライム系"
+      ],
+      "archiveKeywords": [
+        "メタルボディ"
+      ],
+      "crossReference": "gameconductor:621",
+      "alternativeStats": {
+        "attack": 4
+      },
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0649",
+      "sourceName": "てっこうまじん",
+      "referenceId": "dqrdb:804",
+      "stats": {
+        "cost": 4,
+        "attack": 3,
+        "hp": 5,
+        "classId": "merchant",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "crossReference": "gameconductor:632",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0650",
+      "sourceName": "覚醒の巻物",
+      "referenceId": "dqrdb:805",
+      "stats": {
+        "cost": 4,
+        "attack": null,
+        "hp": null,
+        "classId": "merchant",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "archiveKeywords": [
+        "貫通",
+        "におうだち",
+        "スキルブースト"
+      ],
+      "crossReference": "gameconductor:587",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0651",
+      "sourceName": "痛みわけの杖",
+      "referenceId": "dqrdb:806",
+      "stats": {
+        "cost": 4,
+        "attack": null,
+        "hp": null,
+        "classId": "merchant",
+        "kind": "spell",
+        "rarity": "rare"
+      },
+      "crossReference": "gameconductor:664",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0652",
+      "sourceName": "デュランダル",
+      "referenceId": "dqrdb:807",
+      "stats": {
+        "cost": 4,
+        "attack": 4,
+        "hp": 4,
+        "classId": "merchant",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "archiveKeywords": [
+        "パワフルバッジ"
+      ],
+      "crossReference": "gameconductor:666",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0653",
+      "sourceName": "スペクタクルショー",
+      "referenceId": "dqrdb:808",
+      "stats": {
+        "cost": 6,
+        "attack": null,
+        "hp": null,
+        "classId": "merchant",
+        "kind": "spell",
+        "rarity": "rare"
+      },
+      "crossReference": "gameconductor:665",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0654",
+      "sourceName": "ダイヤモンドスライム",
+      "referenceId": "dqrdb:809",
+      "stats": {
+        "cost": 7,
+        "attack": 5,
+        "hp": 5,
+        "classId": "merchant",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "archiveFamilies": [
+        "スライム系"
+      ],
+      "archiveKeywords": [
+        "ハードメタルボディ"
+      ],
+      "crossReference": "gameconductor:667",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0655",
+      "sourceName": "いっかく竜",
+      "referenceId": "dqrdb:810",
+      "stats": {
+        "cost": 1,
+        "attack": 2,
+        "hp": 2,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "archiveFamilies": [
+        "ドラゴン系"
+      ],
+      "crossReference": "gameconductor:669",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0656",
+      "sourceName": "魂の写し身",
+      "referenceId": "dqrdb:811",
+      "stats": {
+        "cost": 1,
+        "attack": null,
+        "hp": null,
+        "classId": "seer",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "crossReference": "gameconductor:624",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0657",
+      "sourceName": "竜の逆鱗",
+      "referenceId": "dqrdb:812",
+      "stats": {
+        "cost": 1,
+        "attack": null,
+        "hp": null,
+        "classId": "seer",
+        "kind": "spell",
+        "rarity": "rare"
+      },
+      "crossReference": "gameconductor:592",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0658",
+      "sourceName": "力のタロット",
+      "referenceId": "dqrdb:813",
+      "stats": {
+        "cost": 2,
+        "attack": null,
+        "hp": null,
+        "classId": "seer",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "crossReference": "gameconductor:668",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0659",
+      "sourceName": "バルンバ",
+      "referenceId": "dqrdb:814",
+      "stats": {
+        "cost": 3,
+        "attack": 2,
+        "hp": 4,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "archiveFamilies": [
+        "ドラゴン系"
+      ],
+      "archiveKeywords": [
+        "パワフルバッジ"
+      ],
+      "crossReference": "gameconductor:589",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0660",
+      "sourceName": "竜の胎動",
+      "referenceId": "dqrdb:815",
+      "stats": {
+        "cost": 3,
+        "attack": null,
+        "hp": null,
+        "classId": "seer",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "crossReference": "gameconductor:588",
+      "alternativeStats": {
+        "cost": 1
+      },
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0661",
+      "sourceName": "ソルジャーブル",
+      "referenceId": "dqrdb:816",
+      "stats": {
+        "cost": 4,
+        "attack": 3,
+        "hp": 5,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "archiveKeywords": [
+        "パワフルバッジ"
+      ],
+      "crossReference": "gameconductor:625",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0662",
+      "sourceName": "キースドラゴン",
+      "referenceId": "dqrdb:817",
+      "stats": {
+        "cost": 5,
+        "attack": 4,
+        "hp": 5,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "archiveFamilies": [
+        "ドラゴン系"
+      ],
+      "crossReference": "gameconductor:670",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0663",
+      "sourceName": "だいまどう",
+      "referenceId": "dqrdb:818",
+      "stats": {
+        "cost": 5,
+        "attack": 3,
+        "hp": 6,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "archiveKeywords": [
+        "特技ダメージ＋"
+      ],
+      "crossReference": "gameconductor:626",
+      "alternativeStats": {
+        "attack": 4
+      },
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0664",
+      "sourceName": "しんりゅう",
+      "referenceId": "dqrdb:819",
+      "stats": {
+        "cost": 8,
+        "attack": 5,
+        "hp": 5,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "archiveFamilies": [
+        "ドラゴン系"
+      ],
+      "crossReference": "gameconductor:590",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0665",
+      "sourceName": "悪鬼丸",
+      "referenceId": "dqrdb:820",
+      "stats": {
+        "cost": 2,
+        "attack": 3,
+        "hp": 2,
+        "classId": "swordsman",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "archiveFamilies": [
+        "ゾンビ系"
+      ],
+      "crossReference": "gameconductor:673",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0666",
+      "sourceName": "死への誘い",
+      "referenceId": "dqrdb:821",
+      "stats": {
+        "cost": 2,
+        "attack": null,
+        "hp": null,
+        "classId": "swordsman",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "archiveKeywords": [
+        "スキルブースト"
+      ],
+      "crossReference": "gameconductor:591",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0667",
+      "sourceName": "冥府の門",
+      "referenceId": "dqrdb:822",
+      "stats": {
+        "cost": 2,
+        "attack": null,
+        "hp": null,
+        "classId": "swordsman",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "crossReference": "gameconductor:671",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0668",
+      "sourceName": "猛毒の霧",
+      "referenceId": "dqrdb:823",
+      "stats": {
+        "cost": 3,
+        "attack": null,
+        "hp": null,
+        "classId": "swordsman",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "crossReference": "gameconductor:672",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0669",
+      "sourceName": "デビルウィザード",
+      "referenceId": "dqrdb:824",
+      "stats": {
+        "cost": 4,
+        "attack": 4,
+        "hp": 4,
+        "classId": "swordsman",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "archiveKeywords": [
+        "パワフルバッジ"
+      ],
+      "crossReference": "gameconductor:627",
+      "alternativeStats": {
+        "cost": 3,
+        "hp": 3
+      },
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0670",
+      "sourceName": "死者の魂",
+      "referenceId": "dqrdb:825",
+      "stats": {
+        "cost": 4,
+        "attack": null,
+        "hp": null,
+        "classId": "swordsman",
+        "kind": "spell",
+        "rarity": "rare"
+      },
+      "crossReference": "gameconductor:674",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0671",
+      "sourceName": "亡者の執念",
+      "referenceId": "dqrdb:826",
+      "stats": {
+        "cost": 4,
+        "attack": null,
+        "hp": null,
+        "classId": "swordsman",
+        "kind": "spell",
+        "rarity": "superRare"
+      },
+      "crossReference": "gameconductor:628",
+      "alternativeStats": {
+        "cost": 2
+      },
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0672",
+      "sourceName": "バラモスブロス",
+      "referenceId": "dqrdb:827",
+      "stats": {
+        "cost": 6,
+        "attack": 5,
+        "hp": 6,
+        "classId": "swordsman",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "archiveKeywords": [
+        "パワフルバッジ"
+      ],
+      "crossReference": "gameconductor:631",
+      "alternativeStats": {
+        "cost": 5
+      },
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0673",
+      "sourceName": "アスラ王",
+      "referenceId": "dqrdb:828",
+      "stats": {
+        "cost": 7,
+        "attack": 4,
+        "hp": 5,
+        "classId": "swordsman",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "archiveFamilies": [
+        "ゾンビ系"
+      ],
+      "crossReference": "gameconductor:629",
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "ftId": "FT-0674",
+      "sourceName": "暗黒皇帝ガナサダイ",
+      "referenceId": "dqrdb:829",
+      "stats": {
+        "cost": 8,
+        "attack": 6,
+        "hp": 6,
+        "classId": "swordsman",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "archiveFamilies": [
+        "ゾンビ系"
+      ],
+      "archiveKeywords": [
+        "パワフルバッジ"
+      ],
+      "crossReference": "gameconductor:675",
+      "alternativeStats": {
+        "cost": 7,
+        "attack": 4,
+        "hp": 4
+      },
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    }
+  ],
+  "generatedReferences": [
+    {
+      "role": "generated-card",
+      "sourceName": "うまのふん",
+      "referenceId": "dqrdb:753",
+      "stats": {
+        "cost": 1,
+        "attack": null,
+        "hp": null,
+        "classId": "neutral",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "role": "generated-card",
+      "sourceName": "エッチな本",
+      "referenceId": "dqrdb:754",
+      "stats": {
+        "cost": 1,
+        "attack": null,
+        "hp": null,
+        "classId": "neutral",
+        "kind": "spell",
+        "rarity": "superRare"
+      },
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "role": "generated-card",
+      "sourceName": "屍騎軍王ゾルデ・影",
+      "referenceId": "dqrdb:755",
+      "stats": {
+        "cost": 3,
+        "attack": 2,
+        "hp": 2,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "archiveFamilies": [
+        "ゾンビ系"
+      ],
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "role": "generated-card",
+      "sourceName": "オルゴ・デミーラ：第２形態",
+      "referenceId": "dqrdb:756",
+      "stats": {
+        "cost": 4,
+        "attack": 4,
+        "hp": 5,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "archiveKeywords": [
+        "2回攻撃"
+      ],
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "role": "generated-card",
+      "sourceName": "オルゴ・デミーラ：第３形態",
+      "referenceId": "dqrdb:757",
+      "stats": {
+        "cost": 4,
+        "attack": 6,
+        "hp": 3,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "archiveFamilies": [
+        "ゾンビ系"
+      ],
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "role": "generated-card",
+      "sourceName": "オルゴ・デミーラ：第４形態",
+      "referenceId": "dqrdb:758",
+      "stats": {
+        "cost": 4,
+        "attack": 3,
+        "hp": 9,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "archiveKeywords": [
+        "におうだち"
+      ],
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "role": "generated-card",
+      "sourceName": "エステラ：竜化の術",
+      "referenceId": "dqrdb:759",
+      "stats": {
+        "cost": 9,
+        "attack": 2,
+        "hp": 8,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "archiveFamilies": [
+        "ドラゴン系"
+      ],
+      "archiveKeywords": [
+        "超貫通",
+        "におうだち",
+        "速攻"
+      ],
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "role": "generated-card",
+      "sourceName": "闇のクリスタル",
+      "referenceId": "dqrdb:746",
+      "stats": {
+        "cost": 3,
+        "attack": 0,
+        "hp": 3,
+        "classId": "mage",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "role": "generated-card",
+      "sourceName": "竜戦士の装具",
+      "referenceId": "dqrdb:747",
+      "stats": {
+        "cost": 4,
+        "attack": null,
+        "hp": null,
+        "classId": "priest",
+        "kind": "spell",
+        "rarity": "superRare"
+      },
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "role": "choice-option",
+      "sourceName": "てふだを ふやしたい",
+      "referenceId": "dqrdb:748",
+      "stats": {
+        "cost": 8,
+        "attack": 5,
+        "hp": 5,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "archiveFamilies": [
+        "ドラゴン系"
+      ],
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "role": "choice-option",
+      "sourceName": "ドラゴンを だしやすく したい",
+      "referenceId": "dqrdb:749",
+      "stats": {
+        "cost": 8,
+        "attack": 5,
+        "hp": 5,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "archiveFamilies": [
+        "ドラゴン系"
+      ],
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "role": "choice-option",
+      "sourceName": "ドランゴを つよくしたい",
+      "referenceId": "dqrdb:750",
+      "stats": {
+        "cost": 8,
+        "attack": 5,
+        "hp": 5,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "archiveFamilies": [
+        "ドラゴン系"
+      ],
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "role": "choice-option",
+      "sourceName": "エッチな ほんが よみたい",
+      "referenceId": "dqrdb:751",
+      "stats": {
+        "cost": 8,
+        "attack": 5,
+        "hp": 5,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "archiveFamilies": [
+        "ドラゴン系"
+      ],
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    },
+    {
+      "role": "generated-card",
+      "sourceName": "アンデッドマン",
+      "referenceId": "dqrdb:752",
+      "stats": {
+        "cost": 1,
+        "attack": 1,
+        "hp": 2,
+        "classId": "swordsman",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "archiveFamilies": [
+        "ゾンビ系"
+      ],
+      "originalCardId": null,
+      "adaptedName": null,
+      "verification": {
+        "metadata": "archive-catalogued",
+        "effect": "unverified",
+        "targetsAndOrder": "unverified",
+        "interactions": "unverified"
+      },
+      "implementation": "not-implemented",
+      "testStatus": "not-tested",
+      "artStatus": "not-created"
+    }
+  ],
+  "preparedOn": "2026-11-23",
+  "ftIdStatus": "reserved",
+  "effectVerification": "pending-image-and-ruling-review",
+  "sourceNameVerification": "archive-transcription",
+  "summary": {
+    "deckCards": 100,
+    "byClass": {
+      "neutral": 30,
+      "warrior": 10,
+      "mage": 10,
+      "fighter": 10,
+      "priest": 10,
+      "merchant": 10,
+      "seer": 10,
+      "swordsman": 10
+    },
+    "byKind": {
+      "unit": 68,
+      "spell": 28,
+      "weapon": 4
+    },
+    "byRarity": {
+      "common": 33,
+      "rare": 28,
+      "superRare": 27,
+      "legendary": 12
+    },
+    "generatedCards": 10,
+    "choiceOptions": 4,
+    "crossReferencedCards": 99,
+    "numericVariances": 17
+  }
+}
