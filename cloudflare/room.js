@@ -1,4 +1,5 @@
 import { createLocalMatch } from '../packages/local-match/index.js'
+import { initializeArena, joinArena } from '../packages/online-match/arena.js'
 import { leaveRoom, roomError, startRoomMatch, updateRoom, validatedLineup } from '../packages/online-match/lobby.js'
 import { roomSnapshot } from '../packages/online-match/room-snapshot.js'
 
@@ -108,6 +109,7 @@ export class BattleRoom {
       if (this.room && this.room.expires > Date.now()) throw roomError(409, '部屋がすでに存在します。')
       const lobby = data.lobby === true
       const room = { lobby, host: { token: token(), lineup: lobby ? null : validatedLineup(data) }, guest: null, version: 0 }
+      if (data.arena === true) initializeArena(room, random()[1])
       await this.commit(room, false)
       return reply(201, { id: url.pathname.slice('/create/'.length), token: room.host.token })
     }
@@ -118,6 +120,7 @@ export class BattleRoom {
       const lineup = room.lobby ? null : validatedLineup(data)
       if (room.guest) throw roomError(409, 'この部屋にはすでに2人が参加しています。')
       room.guest = { token: token(), lineup }
+      joinArena(room, random()[1])
       if (!room.lobby) startRoomMatch(room, ...random())
       room.version++
       room.last = undefined

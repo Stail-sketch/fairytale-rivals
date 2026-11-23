@@ -1,4 +1,5 @@
 import { roomSnapshot } from '../../packages/online-match/room-snapshot.js'
+import { initializeArena, joinArena } from '../../packages/online-match/arena.js'
 import { leaveRoom, lobbyCode, startRoomMatch, updateRoom, validatedLineup } from '../../packages/online-match/lobby.js'
 
 const active = new Map()
@@ -67,8 +68,9 @@ const randomSeats = () => {
   return [numbers[0] % 2, numbers[1]]
 }
 
-function hostRoom(peer, session, lineup, lobby) {
+function hostRoom(peer, session, lineup, lobby, arena) {
   const room = { version: 0, lobby, host: { lineup }, guest: null, match: null }
+  if (arena) initializeArena(room, randomSeats()[1])
   const waiting = new Set()
   let link
   let update = () => {}
@@ -90,6 +92,7 @@ function hostRoom(peer, session, lineup, lobby) {
     }
     if (!joining) throw error(unavailable, 404)
     room.guest = { token, lineup: room.lobby ? null : validatedLineup(guestLineup) }
+    joinArena(room, randomSeats()[1])
     if (!room.lobby) startRoomMatch(room, ...randomSeats())
     return true
   }
@@ -258,13 +261,13 @@ async function guestLink(session, lineup, joining = false) {
   })
 }
 
-export async function enterPeerRoom(id, lineup, lobby) {
+export async function enterPeerRoom(id, lineup, lobby, arena = false) {
   for (let attempt = 0; attempt < 4; attempt++) {
     const roomId = id ?? (lobby ? lobbyCode(crypto.getRandomValues(new Uint8Array(8))) : randomId())
     const session = { id: roomId, token: randomId(), transport: 'peer', role: id ? 'guest' : 'host' }
     try {
       const endpoint = id ? await guestLink(session, lineup, true) :
-        hostRoom(await openPeer(roomPeerId(roomId)), session, lineup, lobby)
+        hostRoom(await openPeer(roomPeerId(roomId)), session, lineup, lobby, arena)
       active.set(roomId, endpoint)
       return session
     } catch (issue) {

@@ -120,6 +120,45 @@ test('Cloudflareは本文上限・入力・存在しないAPI・期限切れを�
   assert.equal(api.rooms.stored(host.id).size, 0)
 })
 
+test('Cloudflare闘技場はピック途中の再起動から復元し、完成デッキだけで対戦できる', async () => {
+  const api = client()
+  const host = (await api.create({ lobby: true, arena: true })).data
+  let state = (await api.state(host)).data
+  assert.equal(state.arena.draft.stage, 'class')
+  const chosen = state.arena.draft.choices[0]
+  assert.equal((await api.act(host, state.version, { type: 'arena-class', choice: chosen })).status, 200)
+  api.rooms.reboot(host.id)
+  state = (await api.state(host)).data
+  assert.equal(state.arena.draft.leader, chosen)
+  const guest = (await api.join(host.id)).data
+  const other = (await api.state(guest)).data
+  assert.deepEqual(other.arena.draft.allocation, state.arena.draft.allocation)
+  assert.equal(Object.hasOwn(other.lobby.host, 'choices'), false)
+  assert.equal((await api.act(guest, other.version, { type: 'lobby-ready', ready: true })).status, 409)
+  for (const player of [host, guest]) {
+    state = (await api.state(player)).data
+    while (state.arena.draft.stage !== 'complete') {
+      const draft = state.arena.draft
+      const result = await api.act(player, state.version, {
+        type: { class: 'arena-class', door: 'arena-door', card: 'arena-pick' }[draft.stage], choice: draft.choices[0],
+      })
+      assert.equal(result.status, 200)
+      state = result.data
+    }
+    api.rooms.reboot(host.id)
+    const restored = (await api.state(player)).data
+    assert.deepEqual(restored.arena.draft, state.arena.draft)
+    assert.equal((await api.act(player, restored.version, { type: 'lobby-ready', ready: true, lineup: {} })).status, 200)
+  }
+  state = (await api.state(host)).data
+  const started = await api.act(host, state.version, { type: 'lobby-start' })
+  assert.equal(started.status, 200)
+  assert.equal(started.data.view.phase, 'mulligan')
+  assert.deepEqual(started.data.view.players[1 - started.data.seat].hand, [])
+  api.rooms.reboot(host.id)
+  assert.deepEqual((await api.state(host)).data, started.data)
+})
+
 function memoryStorage() {
   const map = new Map()
   return { map, keys: () => map.keys(), getItem: key => map.get(key) ?? null,

@@ -17,7 +17,7 @@ export const playerSkill = player => player.awakenedLeader ? awakenedSkill : lea
 const allowed = () => ({ enabled: true })
 const denied = reason => ({ enabled: false, reason })
 
-export function deckIssue(deck, leader) {
+export function deckIssue(deck, leader, format = 'constructed') {
   if (!Object.hasOwn(leaders, leader)) return '未知のリーダーです'
   if (!Array.isArray(deck) || deck.length !== rules.deckSize) return 'デッキは30枚必要です'
   const amounts = new Map()
@@ -27,13 +27,14 @@ export function deckIssue(deck, leader) {
     if (card.packId === 'generated') return '生成カードはデッキに入れられません'
     if (card.classId !== 'neutral' && card.classId !== leader) return '職業が一致しません'
     const count = (amounts.get(id) ?? 0) + 1
-    if (count > (rules.copyLimit[card.rarity] ?? 2)) return card.name + 'の同名制限を超えています'
+    if (format !== 'arena' && count > (rules.copyLimit[card.rarity] ?? 2)) return card.name + 'の同名制限を超えています'
     amounts.set(id, count)
   }
   return null
 }
 
-export function createGame({ seed, lineups = [{ leader: 'warrior' }, { leader: 'mage' }] }) {
+export function createGame({ seed, format = 'constructed', lineups = [{ leader: 'warrior' }, { leader: 'mage' }] }) {
+  if (!['constructed', 'arena'].includes(format)) throw new Error('未知の対戦形式です')
   if (lineups.length !== 2 || !Number.isInteger(seed) || seed < 0 || seed > 0xffffffff) {
     throw new Error('対戦には2人のリーダーと32ビットのシードが必要です')
   }
@@ -42,7 +43,7 @@ export function createGame({ seed, lineups = [{ leader: 'warrior' }, { leader: '
     nextId: 1, players: [], exiled: [], events: [], history: [],
   }
   for (const [seat, { leader, deck = prototypeDeck }] of lineups.entries()) {
-    const issue = deckIssue(deck, leader)
+    const issue = deckIssue(deck, leader, format)
     if (issue) throw new Error(issue)
     const player = {
       leader, hp: rules.leaderHp, mp: 0, maxMp: 0, tension: rules.initialTension[seat],

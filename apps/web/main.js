@@ -19,6 +19,8 @@ import { escapeText as escape, handleTermLink, termDetails, termLink, termText }
 import { relatedPreview } from './card-related.js'
 import { fortuneStatus } from './fortune-status.js'
 import { isLobbyCode, normalizeRoomId, visibleLobbyCode } from '../../packages/online-match/lobby.js'
+import { autoDraft, draftAction, rarityLabels } from '../../packages/arena/index.js'
+import { arenaDetails, arenaDraftScreen, arenaMenu, arenaSeed, createArenaStore, localDraftView } from './arena.js'
 
 const app = document.querySelector('#app')
 const announcer = document.querySelector('#announcer')
@@ -41,6 +43,11 @@ deckCollection.initialize(initialDecks)
 const initialDeckIds = new Set(initialDecks.map(deck => deck.id))
 const deckEditor = createDeckEditor(deckCollection)
 const battleAudio = createBattleAudio()
+const arenaStore = createArenaStore(deckStorage)
+let showArena = null
+let arenaChoice = null
+let arenaBattle = false
+let roomArena = null
 
 let match = null
 let view = null
@@ -106,11 +113,11 @@ function audioControls(open) {
 function titlebar(mixerOpen) {
   return `<header class="topbar"><div class="brand"><span class="brand-mark" aria-hidden="true">✦</span>
     <span>童話戦記<small>PROJECT FAIRYTALE RIVALS</small></span></div>
-    <div class="top-actions"><span class="local-label">${{ cpu: 'CPU対戦', local: 'ローカル対戦', friend: 'フレンド対戦' }[mode]}</span>
+    <div class="top-actions"><span class="local-label">${showArena || arenaBattle || roomArena ? '物語の闘技場' : { cpu: 'CPU対戦', local: 'ローカル対戦', friend: 'フレンド対戦' }[mode]}</span>
       ${view ? `<button type="button" data-op="sound" class="icon-button sound-button" aria-pressed="${battleAudio.enabled}">効果音</button>
         <button type="button" data-op="audio-mixer" class="icon-button" aria-expanded="${Boolean(mixerOpen)}" aria-controls="audio-mixer">音量</button>` : ''}
       <button type="button" data-op="rules" class="icon-button">ルール</button>
-      ${inMatch() ? '<button type="button" data-op="home" class="icon-button">タイトル</button>' : ''}
+      ${inMatch() ? `<button type="button" data-op="home" class="icon-button">${arenaBattle ? '保存して中断' : 'タイトル'}</button>` : ''}
     </div>${view ? audioControls(mixerOpen) : ''}</header>`
 }
 
@@ -184,6 +191,7 @@ function home() {
           <button type="submit" class="secondary" ${!ready || roomBusy ? 'disabled' : ''}>ロビーIDで参加</button></div>
       </form>` : ''}
       <div class="title-tools">
+        <button class="secondary browse-cards" type="button" data-op="arena-open">物語の闘技場</button>
         <button class="secondary browse-cards" type="button" data-op="library">カードライブラリ</button>
         <button class="secondary browse-cards" type="button" data-op="decks">デッキ編集</button>
       </div>
@@ -201,7 +209,7 @@ function roomLobby() {
     !lobby.guest.joined ? 'ロビーIDを友達に伝えてください。' :
       lobby.host.ready && lobby.guest.ready ? '二人の準備ができました。' : 'デッキを選び、準備OKを押してください。'
   return `<main class="ceremony"><section class="modal room-lobby">
-    <h1>フレンド対戦ロビー</h1>
+    <h1>${roomArena ? 'フレンド闘技場ロビー' : 'フレンド対戦ロビー'}</h1>
     <p class="room-status" role="status">${escape(feedback || (roomConnection === 'connected'
       ? status : '対戦サーバーに接続しています。'))}</p>
     ${closed ? '' : `${isLobbyCode(room.id) ? `<label for="lobby-id">ロビーID</label>
@@ -217,13 +225,15 @@ function roomLobby() {
         const member = lobby[role]
         return `<div class="lobby-member" data-lobby-member="${role}" data-ready="${member.ready}">
           <strong>${role === 'host' ? 'ホスト' : 'ゲスト'}${role === lobby.role ? '（あなた）' : ''}</strong>
-          <span>${member.joined ? member.ready ? '準備OK' : 'デッキ選択中' : '参加待ち'}</span>
+          <span>${member.joined ? member.ready ? '準備OK' : roomArena ? `ピック ${member.picked} / 30枚` : 'デッキ選択中' : '参加待ち'}</span>
           ${member.leader ? `<small>${escape(leaders[member.leader].name)}</small>` : ''}</div>`
       }).join('')}
       </div>
-      <div class="lineups single-lineup">${chooseLeader(0, mine.ready || locked)}</div>
+      ${roomArena ? `<div class="arena-lobby-summary"><p>今回の配分：${Object.entries(roomArena.draft.allocation).map(([key, n]) => `${rarityLabels[key]} ${n}枚`).join(' · ')}</p>
+        <button class="secondary" data-op="arena-friend-pick"${locked ? ' disabled' : ''}>${mine.complete ? 'ピックしたデッキを見る' : 'ピックを始める・続ける'}</button>
+        ${host ? `<button class="secondary" data-op="arena-reset"${locked ? ' disabled' : ''}>二人のピックを作り直す</button>` : ''}</div>` : `<div class="lineups single-lineup">${chooseLeader(0, mine.ready || locked)}</div>`}
       <div class="lobby-actions">
-        <button class="secondary" data-op="lobby-ready"${locked ? ' disabled' : ''}>${mine.ready ? '準備を解除' : '準備OK'}</button>
+        <button class="secondary" data-op="lobby-ready"${locked || (roomArena && !mine.complete) ? ' disabled' : ''}>${mine.ready ? '準備を解除' : '準備OK'}</button>
         ${host ? `<button class="primary" data-op="lobby-start"${locked || !lobby.host.ready || !lobby.guest.ready ? ' disabled' : ''}>対戦開始</button>` :
           (mine.ready ? '<small>ホストの開始を待っています。</small>' : '')}
       </div>` : ''}
@@ -851,6 +861,11 @@ function results() {
     ${view.specialVictory !== undefined ? '<p>六彩の暁鳥の特殊勝利</p>' : ''}
     ${resigned !== null ? `<p>${resigned === roomSeat ? 'あなた' : '相手'}が対戦を終了しました。</p>` : ''}
     ${winner ? `<p>${leaders[winner.leader].name}</p>` : ''}
+    ${arenaBattle ? `<p class="arena-result-record">今回 ${arenaStore.run.wins} 勝 · 最高 ${arenaStore.best} 勝</p>
+      <p>${arenaStore.run.ended ? '今回の挑戦は終了です。新しい物語に挑戦しましょう。' : draw ? '引き分けです。勝利数を保って次の対戦へ進めます。' : '同じピックデッキで次のCPUに挑戦できます。'}</p>
+      ${!arenaStore.run.ended ? '<button class="primary" data-op="arena-next">次のCPUに挑む</button>' : ''}
+      <button class="secondary" data-op="arena-battle-menu">闘技場へ戻る</button>
+      <p class="arena-notice" role="status">${escape(arenaStore.issue)}</p>` : ''}
     ${decisivePlay()}
     <div class="result-hp">${view.players.map((p, i) => `<span>${seatName(i)} HP <b>${Math.max(p.hp, 0)}</b></span>`).join('')}</div>
     ${roomResult ? `<div class="result-actions">
@@ -887,7 +902,10 @@ function render(focusOn = null) {
   const scroll = app.querySelector('.events')?.scrollTop
   const mixerOpen = Boolean(app.querySelector('.audio-mixer:not([hidden])'))
   const volumeFocus = document.activeElement?.dataset.volume
-  const surface = !inMatch() ? (showDecks ? deckEditor.view(art, escape) : showLibrary ? library(art) : home())
+  const arenaDraft = roomArena?.draft ?? (arenaStore.run ? localDraftView(arenaStore) : null)
+  const surface = showArena === 'draft' && !view && arenaDraft ? arenaDraftScreen(arenaDraft, art, arenaChoice,
+      feedback || (!room ? arenaStore.issue : ''), Boolean(room), Boolean(room && (roomBusy || roomConnection !== 'connected')))
+    : !inMatch() ? (showArena === 'menu' ? arenaMenu(arenaStore, feedback) : showDecks ? deckEditor.view(art, escape) : showLibrary ? library(art) : home())
     : !view ? roomLobby() : view.phase === 'finished' && !presentation ? results() :
     view.phase === 'mulligan' ? mulligan() : battlefield()
   app.innerHTML = titlebar(mixerOpen) + surface + rulesModal()
@@ -923,6 +941,124 @@ function readView() {
   const publicView = match.view()
   return publicView.phase === 'finished' ? publicView : match.view(solo() ? 0 : publicView.active)
 }
+
+function startArenaBattle() {
+  const run = arenaStore.run
+  if (!run || run.ended || run.draft.stage !== 'complete') return
+  clearTimeout(cpuTimer)
+  clearTimeout(presentationTimer)
+  cpuTimer = presentationTimer = presentation = null
+  mode = 'cpu'
+  showArena = null
+  arenaBattle = true
+  if (run.match && !run.settled) match = createLocalMatch(run.match.config, run.match.game)
+  else {
+    const config = { seed: arenaSeed(), format: 'arena', lineups: [
+      { leader: run.draft.leader, deck: [...run.draft.deck] },
+      autoDraft(arenaSeed(), run.draft.schedule, run.wins),
+    ] }
+    match = createLocalMatch(config)
+    run.settled = false
+    arenaStore.saveMatch(match)
+  }
+  eventFloor = 0
+  cpuMoves = 0
+  selected = lastInspection = animatedView = null
+  replacements.clear()
+  feedback = ''
+  view = readView()
+  if (view.phase === 'mulligan' && view.active === 1) {
+    match.act(1, chooseCpuAction(match.view(1), 1))
+    arenaStore.saveMatch(match)
+    view = readView()
+  }
+  render()
+  scheduleCpu()
+}
+
+function handleArenaButton(node) {
+  const { op, arenaChoice: choice, arenaInspect } = node.dataset
+  if (choice !== undefined) {
+    arenaChoice = choice
+    render(`[data-arena-choice="${choice}"]`)
+    return true
+  }
+  if (arenaInspect) {
+    app.querySelector('#arena-card-detail').innerHTML = arenaDetails(arenaInspect, art)
+    return true
+  }
+  if (!op?.startsWith('arena-')) return false
+  switch (op) {
+    case 'arena-open': showArena = 'menu'; feedback = ''; render(); break
+    case 'arena-close': showArena = null; render(); break
+    case 'arena-cpu-new':
+      if (arenaStore.run && !arenaStore.run.ended && !window.confirm('現在の闘技場の挑戦を終了して、新しくピックしますか？')) break
+      arenaStore.newRun()
+      mode = 'cpu'
+      arenaChoice = null
+      showArena = 'draft'
+      feedback = ''
+      render()
+      break
+    case 'arena-resume':
+      if (!arenaStore.run) break
+      if (arenaStore.run.match) {
+        if (arenaStore.run.settled) {
+          arenaBattle = true
+          mode = 'cpu'
+          const saved = arenaStore.run.match
+          match = createLocalMatch(saved.config, saved.game)
+          view = readView()
+          showArena = null
+          render()
+        } else startArenaBattle()
+      } else { mode = 'cpu'; showArena = 'draft'; arenaChoice = null; feedback = ''; render() }
+      break
+    case 'arena-suspend': arenaStore.save(); showArena = 'menu'; render(); break
+    case 'arena-friend-create': mode = 'friend'; startFriendMatch(null, true); break
+    case 'arena-friend-pick': showArena = 'draft'; arenaChoice = null; render(); break
+    case 'arena-lobby-back': showArena = null; render(); break
+    case 'arena-reset':
+      if (roomArena && !roomBusy && window.confirm('二人のピックを最初から作り直しますか？')) sendRoomAction({ type: 'arena-reset' })
+      break
+    case 'arena-confirm': {
+      const draft = roomArena?.draft ?? (arenaStore.run ? localDraftView(arenaStore) : null)
+      if (!draft || !draft.choices.includes(arenaChoice)) break
+      const type = { class: 'arena-class', door: 'arena-door', card: 'arena-pick' }[draft.stage]
+      if (!type) break
+      const action = { type, choice: arenaChoice }
+      if (room) { if (!roomBusy) { arenaChoice = null; sendRoomAction(action) } }
+      else {
+        draftAction(arenaStore.run.draft, action)
+        arenaStore.save()
+        arenaChoice = null
+        render()
+      }
+      break
+    }
+    case 'arena-cpu-battle':
+    case 'arena-next': startArenaBattle(); break
+    case 'arena-battle-menu':
+      arenaStore.saveMatch(match)
+      returnHome()
+      showArena = 'menu'
+      render()
+      break
+  }
+  return true
+}
+
+app.addEventListener('pointerover', event => {
+  const node = event.target.closest('[data-arena-preview]')
+  if (!node || node.contains(event.relatedTarget)) return
+  const detail = app.querySelector('#arena-card-detail')
+  if (detail) detail.innerHTML = arenaDetails(node.dataset.arenaPreview, art)
+})
+app.addEventListener('focusin', event => {
+  const node = event.target.closest('[data-arena-preview]')
+  const detail = app.querySelector('#arena-card-detail')
+  if (node && detail) detail.innerHTML = arenaDetails(node.dataset.arenaPreview, art)
+})
 
 function scheduleCpu() {
   if (!cpuTurn() || presentation || cpuTimer !== null) return
@@ -1014,6 +1150,9 @@ function receiveRoom(update) {
     return
   }
   if (update.phase === 'lobby') {
+    const previous = roomArena?.draft
+    roomArena = update.arena ?? null
+    if (JSON.stringify(previous?.choices) !== JSON.stringify(roomArena?.draft.choices)) arenaChoice = null
     const returned = view?.phase === 'finished'
     roomLobbyState = update.lobby
     roomResult = view = selected = lastInspection = animatedView = turnNotice = resigned = null
@@ -1028,6 +1167,7 @@ function receiveRoom(update) {
     return
   }
   roomLobbyState = null
+  showArena = null
   roomResult = update.result ?? null
   roomSeat = update.seat
   resigned = update.resigned ?? null
@@ -1060,14 +1200,15 @@ function openRoom(session) {
   room.start()
 }
 
-async function startFriendMatch(id = invite) {
+async function startFriendMatch(id = invite, arena = false) {
   if (roomBusy || !onlineAvailable()) return
   roomBusy = true
   feedback = ''
   render()
   try {
     const lobby = !id || isLobbyCode(id)
-    const session = await enterRoom(id, lobby ? null : battleLineup(0), lobby)
+    const session = await enterRoom(id, lobby ? null : battleLineup(0), lobby, arena)
+    showArena = null
     roomBusy = false
     openRoom(session)
   } catch (error) {
@@ -1119,6 +1260,7 @@ function execute(action, actor = solo() ? 0 : view.active) {
     match.act(1, cpuMulligan)
   }
   if (action.type === 'end') cpuMoves = 0
+  if (arenaBattle) arenaStore.saveMatch(match)
   presentAction(readView(), action, result.events, solo() && actor === 1)
   return true
 }
@@ -1211,6 +1353,10 @@ function returnHome() {
   if (invite) forgetRoom(invite)
   match = view = selected = room = invite = roomSeat = resigned = null
   roomLobbyState = roomResult = null
+  roomArena = null
+  arenaBattle = false
+  showArena = null
+  arenaChoice = null
   lobbyInput = ''
   lastInspection = null
   animatedView = null
@@ -1225,6 +1371,13 @@ function returnHome() {
 }
 
 async function leaveMatch() {
+  if (arenaBattle) {
+    arenaStore.saveMatch(match)
+    returnHome()
+    showArena = 'menu'
+    render()
+    return
+  }
   if (view && view.phase !== 'finished' && !window.confirm(room
     ? '対戦を終了してタイトルへ戻りますか？ 退出すると相手の勝利になります。'
     : 'この対戦を終了してタイトルへ戻りますか？')) return
@@ -1277,6 +1430,14 @@ app.addEventListener('input', event => {
 })
 
 app.addEventListener('submit', event => {
+  if (event.target.id === 'arena-lobby-join') {
+    event.preventDefault()
+    const id = normalizeRoomId(event.target.elements.lobby.value)
+    if (!id) { feedback = 'ロビーIDを確認してください。'; render(); return }
+    mode = 'friend'
+    startFriendMatch(id, true)
+    return
+  }
   if (event.target.id === 'end-turn-form') {
     event.preventDefault()
     event.target.closest('dialog').close()
@@ -1334,6 +1495,7 @@ app.addEventListener('drop', event => {
 app.addEventListener('click', event => {
   const node = event.target.closest('button')
   if (!node) return
+  if (handleArenaButton(node)) return
   const card = inspectableCard(node)
   if (event.detail > 0 && card && performance.now() < ignoreCardClickUntil) {
     ignoreCardClickUntil = 0

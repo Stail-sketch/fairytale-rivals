@@ -1,5 +1,6 @@
 import { deckIssue, rules } from '../engine/index.js'
 import { createLocalMatch } from '../local-match/index.js'
+import { updateArena } from './arena.js'
 
 const alphabet = 'abcdefghjklmnpqrstuvwxyz23456789'
 const codePattern = /^[abcdefghjklmnpqrstuvwxyz23456789]{8}$/
@@ -28,18 +29,21 @@ export function validatedLineup(data) {
 }
 
 export function lobbySnapshot(room, player) {
-  const member = entry => ({ joined: Boolean(entry), ready: Boolean(entry?.lineup), leader: entry?.lineup?.leader })
+  const member = entry => ({ joined: Boolean(entry), ready: Boolean(entry?.lineup), leader: entry?.lineup?.leader,
+    ...(room.arena && entry ? { picked: entry.draft.deck.length, complete: entry.draft.stage === 'complete' } : {}) })
   return { role: player === room.host ? 'host' : 'guest', host: member(room.host), guest: member(room.guest) }
 }
 
 function updateLobby(room, player, version, action, random) {
+  if (room.arena && typeof action.type === 'string' && action.type.startsWith('arena-')) return updateArena(room, player, version, action, random)
   const minimum = action.type === 'lobby-ready' ? player.readyVersion ?? 0 : room.version
   if (!Number.isSafeInteger(version) || version < minimum || version > room.version) {
     throw roomError(409, 'ロビーの状態が更新されました。')
   }
   if (action.type === 'lobby-ready') {
     if (typeof action.ready !== 'boolean') throw roomError(400, '準備状態が不正です。')
-    player.lineup = action.ready ? validatedLineup(action.lineup) : null
+    if (action.ready && room.arena && player.draft.stage !== 'complete') throw roomError(409, '30枚のピックを完了してください。')
+    player.lineup = action.ready ? (room.arena ? { leader: player.draft.leader, deck: [...player.draft.deck] } : validatedLineup(action.lineup)) : null
     player.readyVersion = room.version + 1
     return
   }
@@ -115,6 +119,6 @@ export function startRoomMatch(room, guestSeat, seed) {
   room.guest.seat = guestSeat
   room.host.seat = 1 - guestSeat
   room.match = createLocalMatch({
-    seed, lineups: [room.host, room.guest].sort((a, b) => a.seat - b.seat).map(player => player.lineup),
+    seed, format: room.arena ? 'arena' : 'constructed', lineups: [room.host, room.guest].sort((a, b) => a.seat - b.seat).map(player => player.lineup),
   })
 }

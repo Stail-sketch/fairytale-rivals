@@ -1,4 +1,5 @@
 import { randomBytes, randomInt } from 'node:crypto'
+import { initializeArena, joinArena } from './arena.js'
 import { roomSnapshot } from './room-snapshot.js'
 import { leaveRoom, lobbyCode, normalizeRoomId, startRoomMatch, updateRoom, validatedLineup } from './lobby.js'
 
@@ -99,7 +100,9 @@ export function createRoomApi() {
       let id
       do { id = lobby ? lobbyCode(randomBytes(8)) : randomBytes(16).toString('hex') } while (rooms.has(id))
       const host = { token: token(), lineup: deck }
-      rooms.set(id, { lobby, host, guest: null, version: 0, waiters: new Set(), touched: Date.now() })
+      const room = { lobby, host, guest: null, version: 0, waiters: new Set(), touched: Date.now() }
+      if (data.arena === true) initializeArena(room, randomBytes(4).readUInt32LE())
+      rooms.set(id, room)
       return reply(res, 201, { id, token: host.token })
     }
 
@@ -112,6 +115,7 @@ export function createRoomApi() {
       if (room.guest) throw new RequestError(409, 'この部屋にはすでに2人が参加しています。')
       const guest = { lineup: deck, token: token() }
       room.guest = guest
+      joinArena(room, randomBytes(4).readUInt32LE())
       if (!room.lobby) startRoomMatch(room, randomInt(2), randomBytes(4).readUInt32LE())
       publish(room)
       return reply(res, 201, { id, token: guest.token })

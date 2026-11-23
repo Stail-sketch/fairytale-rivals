@@ -20,9 +20,9 @@ await rm(output, { recursive: true, force: true })
 await mkdir(output, { recursive: true })
 await cp(join(root, 'apps/web/index.html'), join(output, 'index.html'))
 await copy('apps/web')
-for (const name of ['cards', 'engine', 'cpu', 'local-match']) await copy('packages/' + name)
+for (const name of ['cards', 'engine', 'cpu', 'local-match', 'arena']) await copy('packages/' + name)
 // Only these portable online modules are used by the browser. The server is never a static asset.
-for (const name of ['lobby.js', 'room-snapshot.js']) {
+for (const name of ['lobby.js', 'room-snapshot.js', 'arena.js']) {
   await mkdir(join(output, 'packages/online-match'), { recursive: true })
   await copyFile(join(root, 'packages/online-match', name), join(output, 'packages/online-match', name))
 }
