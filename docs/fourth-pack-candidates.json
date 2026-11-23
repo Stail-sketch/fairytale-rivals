@@ -1,5 +1,9 @@
 {
   "pack": "set-4",
+  "adaptedPack": "刻印に集う、おとぎの一族",
+  "adaptedKeywords": {
+    "パワフルバッジ": "物語の刻印"
+  },
   "sourcePack": "モンスターもりもり物語",
   "originalRelease": "2018-08-24",
   "archiveFilter": {
