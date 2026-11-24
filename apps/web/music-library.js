@@ -17,8 +17,13 @@ export function createMusicLibrary({art, volume, setVolume, onOpen, onClose}) {
     <section class="music-tracklist" aria-label="収録曲">${musicTracks.map((track,index)=>`<button data-music-track="${track.id}" aria-pressed="false"><span class="music-track-number">${String(index+1).padStart(2,'0')}</span><img src="${art(track.art)}" alt="" loading="lazy"><span><strong>${escapeText(track.title)}</strong><small>${escapeText(track.subtitle)}</small></span><span class="music-track-indicator" aria-hidden="true">▶</span></button>`).join('')}</section></div>`
   document.body.append(dialog)
   const audio=dialog.querySelector('audio'),status=dialog.querySelector('.music-status')
-  let index=0,request=0,focusBack=null
+  let index=0,request=0,focusBack=null,download=null,objectUrl=null
   audio.loop=true
+  function release() {
+    download?.abort();download=null
+    audio.pause();audio.removeAttribute('src');audio.load()
+    if(objectUrl){URL.revokeObjectURL(objectUrl);objectUrl=null}
+  }
   function updatePlaying() {
     const playing=!audio.paused&&!audio.ended
     dialog.classList.toggle('is-playing',playing)
@@ -29,15 +34,28 @@ export function createMusicLibrary({art, volume, setVolume, onOpen, onClose}) {
     }
   }
   function select(next,play=true) {
+    release()
     index=(next+musicTracks.length)%musicTracks.length
     const track=musicTracks[index],file=bgmFiles[track.id],ticket=++request
     dialog.querySelector('.music-cover img').src=art(track.art)
     dialog.querySelector('.music-now h2').textContent=track.title
     dialog.querySelector('.music-now-category').textContent=track.subtitle
-    audio.src=globalThis.fairytaleMusic?.[file]??new URL('./assets/'+file,import.meta.url).href
-    status.textContent=play?'読み込み中…':'再生ボタンで試聴できます。'
+    audio.dataset.track=track.id
+    status.textContent='音源を読み込み中…'
     updatePlaying()
-    if(play) audio.play().catch(()=>{if(ticket===request&&dialog.open)status.textContent='再生ボタンを押して試聴してください。'})
+    // Pages may ignore byte ranges. A single local Blob makes seeking reliable without
+    // decoding the whole collection, and is released on selection change or close.
+    download=new AbortController()
+    const signal=download.signal
+    const source=globalThis.fairytaleMusic?.[file]
+    const ready=source?Promise.resolve(source):fetch(new URL('./assets/'+file,import.meta.url),{signal})
+      .then(response=>{if(!response.ok)throw new Error('Audio unavailable');return response.blob()})
+    ready.then(value=>{
+      if(ticket!==request||!dialog.open||signal.aborted)return
+      audio.src=typeof value==='string'?value:(objectUrl=URL.createObjectURL(value))
+      status.textContent=play?'読み込み中…':'再生ボタンで試聴できます。'
+      if(play)audio.play().catch(()=>{if(ticket===request&&dialog.open)status.textContent='再生ボタンを押して試聴してください。'})
+    }).catch(error=>{if(ticket===request&&dialog.open&&error.name!=='AbortError')status.textContent='音源を読み込めませんでした。曲を選び直してください。'})
   }
   for(const event of ['playing','pause','ended'])audio.addEventListener(event,()=>{updatePlaying();if(dialog.open)status.textContent=event==='playing'?'再生中':event==='ended'?'再生が終了しました':'一時停止中'})
   audio.addEventListener('ended',()=>{if(!audio.loop&&dialog.open)select(index+1)})
@@ -51,7 +69,7 @@ export function createMusicLibrary({art, volume, setVolume, onOpen, onClose}) {
     if(button.hasAttribute('data-music-next'))select(index+1)
   })
   dialog.querySelector('[data-music-loop]').addEventListener('change',event=>audio.loop=event.target.checked)
-  dialog.addEventListener('close',()=>{++request;audio.pause();audio.removeAttribute('src');audio.load();dialog.classList.remove('is-playing');onClose();if(focusBack?.isConnected)focusBack.focus()})
+  dialog.addEventListener('close',()=>{++request;release();dialog.classList.remove('is-playing');onClose();if(focusBack?.isConnected)focusBack.focus()})
   return {
     get isOpen(){return dialog.open},
     open(){if(dialog.open)return;focusBack=document.activeElement;dialog.showModal();onOpen();audio.volume=volume()/100;select(index,false);dialog.querySelector('[data-music-close]').focus()},
