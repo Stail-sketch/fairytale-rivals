@@ -2,13 +2,14 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-export function cardSearchNames({ cards, generatedFromSecondPack, otherGeneratedCards, generatedFromThirdPack = [] }) {
+export function cardSearchNames({ cards, generatedFromSecondPack, otherGeneratedCards, generatedFromThirdPack = [], generatedFromFourthPack = [] }) {
   const entries = cards.map(({ ftId, sourceName, sourceAliases, archive }) =>
     [ftId, [sourceName, ...(sourceAliases ?? []), archive?.sourceName].filter(Boolean)])
   for (const { sourceName, cardIds } of [...generatedFromSecondPack, ...otherGeneratedCards]) {
     for (const id of cardIds) entries.push([id, [sourceName]])
   }
   for (const { sourceName, ftId } of generatedFromThirdPack) entries.push([ftId, [sourceName]])
+  for (const { sourceName, ftId } of generatedFromFourthPack) entries.push([ftId, [sourceName]])
   return Object.fromEntries(entries.sort(([a], [b]) => a.localeCompare(b))
     .map(([id, names]) => [id, [...new Set(names)]]))
 }

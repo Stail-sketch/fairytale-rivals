@@ -1,4 +1,4 @@
-import { cards, catalog, leaders, names } from '../../packages/cards/index.js'
+import { cards, catalog, familyNames, leaders, names } from '../../packages/cards/index.js'
 import { createCardSearch, rarityLabels } from './card-search.js'
 import { termText } from './card-terms.js'
 import { relatedPreview } from './card-related.js'
@@ -6,7 +6,7 @@ import { relatedPreview } from './card-related.js'
 const jobLabel = id => leaders[id]?.job ?? '共通'
 const typeLabel = card => ({ unit: 'ユニット', spell: '特技', weapon: '武器' })[card.kind]
 export const sourceLabels = {
-  prototype: '検証用', basic: 'ベーシック対応', standard: '第1弾対応', 'set-2': '第2弾対応', 'set-3': '第3弾対応', generated: '効果で生成',
+  prototype: '検証用', basic: 'ベーシック対応', standard: '第1弾対応', 'set-2': '第2弾対応', 'set-3': '第3弾対応', 'set-4': '第4弾 · 刻印に集う、おとぎの一族', generated: '効果で生成',
 }
 const catalogByCost = [...catalog].sort((a, b) => a.cost - b.cost)
 const searchCards = createCardSearch(catalogByCost, card => [card.id, jobLabel(card.classId), card.origin])
@@ -40,6 +40,7 @@ function cardDetails(card, art) {
       <dt>収録</dt><dd>${sourceLabels[card.packId]}</dd>
       <dt>レアリティ</dt><dd>${rarityLabels[card.rarity]}</dd>
       ${card.species ? `<dt>種族</dt><dd>${card.species}</dd>` : ''}
+      ${familyNames[card.family] ? `<dt>一族</dt><dd>${familyNames[card.family]}</dd>` : ''}
       ${card.origin ? `<dt>入手元</dt><dd>${card.origin}</dd>` : ''}
     </dl>
     ${relatedPreview(card, art)}</div>`

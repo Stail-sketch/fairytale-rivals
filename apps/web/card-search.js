@@ -1,4 +1,5 @@
 import { originalCardNames } from './original-card-names.js'
+import { familyNames } from '../../packages/cards/index.js'
 
 export const rarityLabels = {
   common: 'ノーマル', rare: 'レア', superRare: 'スーパーレア', legendary: 'レジェンド', unlabeled: 'ベーシック',
@@ -15,7 +16,7 @@ export function createCardSearch(orderedCards, extraFields = () => []) {
     return {
       card,
       names: [card.name, ...originalNames].map(normalize),
-      text: normalize([card.name, card.description, ...extraFields(card), ...originalNames].filter(Boolean).join(' ')),
+      text: normalize([card.name, card.description, familyNames[card.family], ...extraFields(card), ...originalNames].filter(Boolean).join(' ')),
     }
   })
 

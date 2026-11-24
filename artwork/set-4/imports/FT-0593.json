@@ -1,0 +1,12 @@
+{
+  "id": "FT-0593",
+  "original": "artwork/set-4/card-FT-0593.png",
+  "delivery": "apps/web/assets/card-FT-0593.webp",
+  "width": 1254,
+  "height": 1254,
+  "sha256": "7be561e0535a611baadd4bf1e8862444557eaff74d33d7c8d9015be01a243c33",
+  "deliverySha256": "e857203b732163a91d6a8ab4ed401f690f83f2c7254eedeb69be98d1b2d5c6c8",
+  "generationFile": "exec-2fa4ae15-7d1b-4e8b-b4d6-9532be8797be.png",
+  "generator": "image_gen",
+  "review": "visual-approved"
+}

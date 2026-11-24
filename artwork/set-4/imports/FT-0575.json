@@ -1,0 +1,12 @@
+{
+  "id": "FT-0575",
+  "original": "artwork/set-4/card-FT-0575.png",
+  "delivery": "apps/web/assets/card-FT-0575.webp",
+  "width": 1254,
+  "height": 1254,
+  "sha256": "2668ef76a523db7773adf04e6ebbc653d1f9025ccdec1a3a1c69e7a81f124555",
+  "deliverySha256": "d14e7b64581be1cfd32387a43db931518f9ad6d8aa46103cc4420f262e517b20",
+  "generationFile": "exec-9f6a98d2-1cd0-4b12-b43e-4c8f8ac2fe3d.png",
+  "generator": "image_gen",
+  "review": "visual-approved"
+}

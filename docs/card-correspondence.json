@@ -1,5 +1,5 @@
 {
-  "edition": "保存カード画像・保存目録・個別カード資料で確認できる範囲の、ベーシックから第3弾までのカード。試遊版の採用値と資料間の版差は別々に記録。",
+  "edition": "ベーシックから第4弾まで。第4弾はDQRDBのカード画像を採用版として照合し、資料間の版差を別記。",
   "sources": {
     "originalCardImages": "https://www.woodus.com/den/gallery/graphics/dqrivals/pdf/Dragon%20Quest%20Rivals%20-%20Basic%20Card%20Pool%20Full%20Translation.pdf",
     "officialLibrary": "https://www.dragonquest.jp/news/detail/2681/",
@@ -13,7 +13,8 @@
     "thirdTerrainScreens": "https://www.woodus.com/den/gallery/graphics/dqrivals/pdf/Dragon%20Quest%20Rivals%20Unique%20Terrains%20Guide.pdf",
     "thirdRulings2018": "https://blog.livedoor.jp/deckkoutikucardgame/archives/2077647.html",
     "thirdBookkeeping": "https://wikiwiki.jp/dqdic3rd/%E3%80%90%E4%B8%8D%E6%AD%BB%E9%B3%A5%E3%81%A8%E5%A4%A7%E5%9C%B0%E3%81%AE%E5%91%BD%E5%8B%95%E3%80%91",
-    "phoenixTournament": "https://www.famitsu.com/news/201909/18183624.html"
+    "phoenixTournament": "https://www.famitsu.com/news/201909/18183624.html",
+    "fourthCardImages": "https://dqrdb.com/card/{id}.png"
   },
   "packs": [
     {
@@ -431,6 +432,15 @@
           "superRare": 3
         }
       }
+    },
+    {
+      "id": "set-4",
+      "count": 100,
+      "archivedCount": 100,
+      "implemented": 100,
+      "implementation": "tested",
+      "name": "モンスターもりもり物語",
+      "adaptedName": "刻印に集う、おとぎの一族"
     }
   ],
   "cards": [
@@ -32973,6 +32983,3222 @@
         ]
       },
       "unverifiedInteractions": "原作実機との特殊な相互作用・同時誘発順の照合は未完。"
+    },
+    {
+      "ftId": "FT-0575",
+      "sourceName": "ミノーン",
+      "name": "繭灯の守り子",
+      "packId": "set-4",
+      "sourceKey": "set-4/ミノーン",
+      "archive": {
+        "id": 830,
+        "referenceId": "dqrdb:830",
+        "cardImageUrl": "https://dqrdb.com/card/830.png",
+        "cost": 1,
+        "attack": 0,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 1,
+        "attack": 0,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/830.png"
+    },
+    {
+      "ftId": "FT-0576",
+      "sourceName": "スライムファング",
+      "name": "露牙の小獣",
+      "packId": "set-4",
+      "sourceKey": "set-4/スライムファング",
+      "archive": {
+        "id": 831,
+        "referenceId": "dqrdb:831",
+        "cardImageUrl": "https://dqrdb.com/card/831.png",
+        "cost": 1,
+        "attack": 1,
+        "hp": 2,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 1,
+        "attack": 1,
+        "hp": 2,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/831.png"
+    },
+    {
+      "ftId": "FT-0577",
+      "sourceName": "シャーマン",
+      "name": "夜継ぎの錆祓い",
+      "packId": "set-4",
+      "sourceKey": "set-4/シャーマン",
+      "archive": {
+        "id": 832,
+        "referenceId": "dqrdb:832",
+        "cardImageUrl": "https://dqrdb.com/card/832.png",
+        "cost": 1,
+        "attack": 2,
+        "hp": 1,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 1,
+        "attack": 2,
+        "hp": 1,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/832.png"
+    },
+    {
+      "ftId": "FT-0578",
+      "sourceName": "マヒャドフライ",
+      "name": "霜便りの羽虫",
+      "packId": "set-4",
+      "sourceKey": "set-4/マヒャドフライ",
+      "archive": {
+        "id": 833,
+        "referenceId": "dqrdb:833",
+        "cardImageUrl": "https://dqrdb.com/card/833.png",
+        "cost": 2,
+        "attack": 1,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 2,
+        "attack": 1,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/833.png"
+    },
+    {
+      "ftId": "FT-0579",
+      "sourceName": "ドロル",
+      "name": "墓土の縫い子",
+      "packId": "set-4",
+      "sourceKey": "set-4/ドロル",
+      "archive": {
+        "id": 834,
+        "referenceId": "dqrdb:834",
+        "cardImageUrl": "https://dqrdb.com/card/834.png",
+        "cost": 2,
+        "attack": 2,
+        "hp": 3,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 2,
+        "attack": 2,
+        "hp": 3,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/834.png"
+    },
+    {
+      "ftId": "FT-0580",
+      "sourceName": "はなカワセミ",
+      "name": "露珠を継ぐ花告鳥",
+      "packId": "set-4",
+      "sourceKey": "set-4/はなカワセミ",
+      "archive": {
+        "id": 835,
+        "referenceId": "dqrdb:835",
+        "cardImageUrl": "https://dqrdb.com/card/835.png",
+        "cost": 2,
+        "attack": 2,
+        "hp": 3,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 2,
+        "attack": 2,
+        "hp": 3,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/835.png"
+    },
+    {
+      "ftId": "FT-0581",
+      "sourceName": "まものつかい",
+      "name": "刻印探しの獣案内",
+      "packId": "set-4",
+      "sourceKey": "set-4/まものつかい",
+      "archive": {
+        "id": 836,
+        "referenceId": "dqrdb:836",
+        "cardImageUrl": "https://dqrdb.com/card/836.png",
+        "cost": 2,
+        "attack": 3,
+        "hp": 1,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 2,
+        "attack": 3,
+        "hp": 1,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/836.png"
+    },
+    {
+      "ftId": "FT-0582",
+      "sourceName": "どくどくゾンビ",
+      "name": "夜継ぎの毒縫い師",
+      "packId": "set-4",
+      "sourceKey": "set-4/どくどくゾンビ",
+      "archive": {
+        "id": 837,
+        "referenceId": "dqrdb:837",
+        "cardImageUrl": "https://dqrdb.com/card/837.png",
+        "cost": 2,
+        "attack": 3,
+        "hp": 2,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 2,
+        "attack": 3,
+        "hp": 2,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "superRare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/837.png"
+    },
+    {
+      "ftId": "FT-0583",
+      "sourceName": "ホミロン軍曹",
+      "name": "露珠隊の星撃曹長",
+      "packId": "set-4",
+      "sourceKey": "set-4/ホミロン軍曹",
+      "archive": {
+        "id": 838,
+        "referenceId": "dqrdb:838",
+        "cardImageUrl": "https://dqrdb.com/card/838.png",
+        "cost": 2,
+        "attack": 1,
+        "hp": 3,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 2,
+        "attack": 1,
+        "hp": 3,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "legendary",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/838.png"
+    },
+    {
+      "ftId": "FT-0584",
+      "sourceName": "エビルマスター",
+      "name": "三族を訪ねる招き手",
+      "packId": "set-4",
+      "sourceKey": "set-4/エビルマスター",
+      "archive": {
+        "id": 839,
+        "referenceId": "dqrdb:839",
+        "cardImageUrl": "https://dqrdb.com/card/839.png",
+        "cost": 3,
+        "attack": 2,
+        "hp": 2,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 3,
+        "attack": 2,
+        "hp": 2,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/839.png"
+    },
+    {
+      "ftId": "FT-0585",
+      "sourceName": "パペットマン",
+      "name": "糸喰いの木偶",
+      "packId": "set-4",
+      "sourceKey": "set-4/パペットマン",
+      "archive": {
+        "id": 840,
+        "referenceId": "dqrdb:840",
+        "cardImageUrl": "https://dqrdb.com/card/840.png",
+        "cost": 3,
+        "attack": 5,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 3,
+        "attack": 5,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/840.png"
+    },
+    {
+      "ftId": "FT-0586",
+      "sourceName": "ブラッドレディ",
+      "name": "紅露の針姫",
+      "packId": "set-4",
+      "sourceKey": "set-4/ブラッドレディ",
+      "archive": {
+        "id": 841,
+        "referenceId": "dqrdb:841",
+        "cardImageUrl": "https://dqrdb.com/card/841.png",
+        "cost": 3,
+        "attack": 3,
+        "hp": 3,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 3,
+        "attack": 3,
+        "hp": 3,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/841.png"
+    },
+    {
+      "ftId": "FT-0587",
+      "sourceName": "どくろ大臣",
+      "name": "夜継ぎの帰路大臣",
+      "packId": "set-4",
+      "sourceKey": "set-4/どくろ大臣",
+      "archive": {
+        "id": 842,
+        "referenceId": "dqrdb:842",
+        "cardImageUrl": "https://dqrdb.com/card/842.png",
+        "cost": 3,
+        "attack": 3,
+        "hp": 2,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 3,
+        "attack": 3,
+        "hp": 2,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/842.png"
+    },
+    {
+      "ftId": "FT-0588",
+      "sourceName": "マーマンダイン",
+      "name": "竜鱗の潮鳴り師",
+      "packId": "set-4",
+      "sourceKey": "set-4/マーマンダイン",
+      "archive": {
+        "id": 843,
+        "referenceId": "dqrdb:843",
+        "cardImageUrl": "https://dqrdb.com/card/843.png",
+        "cost": 3,
+        "attack": 3,
+        "hp": 2,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 3,
+        "attack": 3,
+        "hp": 2,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/843.png"
+    },
+    {
+      "ftId": "FT-0589",
+      "sourceName": "もりもりスライム",
+      "name": "露珠のふくらみ樹",
+      "packId": "set-4",
+      "sourceKey": "set-4/もりもりスライム",
+      "archive": {
+        "id": 844,
+        "referenceId": "dqrdb:844",
+        "cardImageUrl": "https://dqrdb.com/card/844.png",
+        "cost": 3,
+        "attack": 2,
+        "hp": 2,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 3,
+        "attack": 2,
+        "hp": 2,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "superRare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/844.png"
+    },
+    {
+      "ftId": "FT-0590",
+      "sourceName": "妖魔軍王ブギー",
+      "name": "硝子檻の仮面公",
+      "packId": "set-4",
+      "sourceKey": "set-4/妖魔軍王ブギー",
+      "archive": {
+        "id": 845,
+        "referenceId": "dqrdb:845",
+        "cardImageUrl": "https://dqrdb.com/card/845.png",
+        "cost": 3,
+        "attack": 3,
+        "hp": 2,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 3,
+        "attack": 3,
+        "hp": 2,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "legendary",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/845.png"
+    },
+    {
+      "ftId": "FT-0591",
+      "sourceName": "ベビーゴイル",
+      "name": "小翼の書庫番",
+      "packId": "set-4",
+      "sourceKey": "set-4/ベビーゴイル",
+      "archive": {
+        "id": 846,
+        "referenceId": "dqrdb:846",
+        "cardImageUrl": "https://dqrdb.com/card/846.png",
+        "cost": 4,
+        "attack": 4,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 4,
+        "attack": 4,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/846.png"
+    },
+    {
+      "ftId": "FT-0592",
+      "sourceName": "ぶっちズキーニャ",
+      "name": "舞台を渡る蔓槍兵",
+      "packId": "set-4",
+      "sourceKey": "set-4/ぶっちズキーニャ",
+      "archive": {
+        "id": 847,
+        "referenceId": "dqrdb:847",
+        "cardImageUrl": "https://dqrdb.com/card/847.png",
+        "cost": 4,
+        "attack": 3,
+        "hp": 5,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 4,
+        "attack": 3,
+        "hp": 5,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare",
+        "keywords": [
+          "PIERCE"
+        ]
+      },
+      "referenceUrl": "https://dqrdb.com/card/847.png"
+    },
+    {
+      "ftId": "FT-0593",
+      "sourceName": "コドラ",
+      "name": "竜鱗の道開き",
+      "packId": "set-4",
+      "sourceKey": "set-4/コドラ",
+      "archive": {
+        "id": 848,
+        "referenceId": "dqrdb:848",
+        "cardImageUrl": "https://dqrdb.com/card/848.png",
+        "cost": 4,
+        "attack": 4,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 4,
+        "attack": 4,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "superRare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/848.png"
+    },
+    {
+      "ftId": "FT-0594",
+      "sourceName": "カーディナルナイト",
+      "name": "刻印断ちの白槍騎士",
+      "packId": "set-4",
+      "sourceKey": "set-4/カーディナルナイト",
+      "archive": {
+        "id": 849,
+        "referenceId": "dqrdb:849",
+        "cardImageUrl": "https://dqrdb.com/card/849.png",
+        "cost": 4,
+        "attack": 4,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 4,
+        "attack": 4,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "superRare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/849.png"
+    },
+    {
+      "ftId": "FT-0595",
+      "sourceName": "ハッスルじじい",
+      "name": "星路の踊り翁",
+      "packId": "set-4",
+      "sourceKey": "set-4/ハッスルじじい",
+      "archive": {
+        "id": 850,
+        "referenceId": "dqrdb:850",
+        "cardImageUrl": "https://dqrdb.com/card/850.png",
+        "cost": 4,
+        "attack": 3,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 4,
+        "attack": 3,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "superRare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/850.png"
+    },
+    {
+      "ftId": "FT-0596",
+      "sourceName": "オルゴ・デミーラ",
+      "name": "四幕の原初竜アウル",
+      "packId": "set-4",
+      "sourceKey": "set-4/オルゴ・デミーラ",
+      "archive": {
+        "id": 851,
+        "referenceId": "dqrdb:851",
+        "cardImageUrl": "https://dqrdb.com/card/851.png",
+        "cost": 4,
+        "attack": 4,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 4,
+        "attack": 4,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "legendary",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/851.png"
+    },
+    {
+      "ftId": "FT-0597",
+      "sourceName": "エステラ",
+      "name": "竜詩を継ぐ少女セレナ",
+      "packId": "set-4",
+      "sourceKey": "set-4/エステラ",
+      "archive": {
+        "id": 852,
+        "referenceId": "dqrdb:852",
+        "cardImageUrl": "https://dqrdb.com/card/852.png",
+        "cost": 4,
+        "attack": 2,
+        "hp": 5,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 4,
+        "attack": 2,
+        "hp": 5,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "legendary",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/852.png"
+    },
+    {
+      "ftId": "FT-0598",
+      "sourceName": "スライムダーク",
+      "name": "宵露の刃精",
+      "packId": "set-4",
+      "sourceKey": "set-4/スライムダーク",
+      "archive": {
+        "id": 853,
+        "referenceId": "dqrdb:853",
+        "cardImageUrl": "https://dqrdb.com/card/853.png",
+        "cost": 5,
+        "attack": 5,
+        "hp": 5,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 5,
+        "attack": 5,
+        "hp": 5,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/853.png"
+    },
+    {
+      "ftId": "FT-0599",
+      "sourceName": "ヘルシーサー",
+      "name": "舞台守りの双尾獅子",
+      "packId": "set-4",
+      "sourceKey": "set-4/ヘルシーサー",
+      "archive": {
+        "id": 854,
+        "referenceId": "dqrdb:854",
+        "cardImageUrl": "https://dqrdb.com/card/854.png",
+        "cost": 5,
+        "attack": 4,
+        "hp": 5,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 5,
+        "attack": 4,
+        "hp": 5,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/854.png"
+    },
+    {
+      "ftId": "FT-0600",
+      "sourceName": "マザーウッド",
+      "name": "共鳴の母樹",
+      "packId": "set-4",
+      "sourceKey": "set-4/マザーウッド",
+      "archive": {
+        "id": 855,
+        "referenceId": "dqrdb:855",
+        "cardImageUrl": "https://dqrdb.com/card/855.png",
+        "cost": 6,
+        "attack": 5,
+        "hp": 5,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 6,
+        "attack": 5,
+        "hp": 5,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/855.png"
+    },
+    {
+      "ftId": "FT-0601",
+      "sourceName": "屍騎軍王ゾルデ",
+      "name": "夜継ぎの影冠将",
+      "packId": "set-4",
+      "sourceKey": "set-4/屍騎軍王ゾルデ",
+      "archive": {
+        "id": 856,
+        "referenceId": "dqrdb:856",
+        "cardImageUrl": "https://dqrdb.com/card/856.png",
+        "cost": 6,
+        "attack": 3,
+        "hp": 6,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 6,
+        "attack": 3,
+        "hp": 6,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "legendary",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/856.png"
+    },
+    {
+      "ftId": "FT-0602",
+      "sourceName": "ジャックポッター",
+      "name": "星札の両替師",
+      "packId": "set-4",
+      "sourceKey": "set-4/ジャックポッター",
+      "archive": {
+        "id": 857,
+        "referenceId": "dqrdb:857",
+        "cardImageUrl": "https://dqrdb.com/card/857.png",
+        "cost": 7,
+        "attack": 5,
+        "hp": 5,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 7,
+        "attack": 5,
+        "hp": 5,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/857.png"
+    },
+    {
+      "ftId": "FT-0603",
+      "sourceName": "ブラックドラゴン",
+      "name": "竜鱗の黒嵐",
+      "packId": "set-4",
+      "sourceKey": "set-4/ブラックドラゴン",
+      "archive": {
+        "id": 858,
+        "referenceId": "dqrdb:858",
+        "cardImageUrl": "https://dqrdb.com/card/858.png",
+        "cost": 7,
+        "attack": 6,
+        "hp": 6,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 7,
+        "attack": 6,
+        "hp": 6,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "superRare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/858.png"
+    },
+    {
+      "ftId": "FT-0604",
+      "sourceName": "レジェンドウルフ",
+      "name": "星鱗の遠吠え竜",
+      "packId": "set-4",
+      "sourceKey": "set-4/レジェンドウルフ",
+      "archive": {
+        "id": 859,
+        "referenceId": "dqrdb:859",
+        "cardImageUrl": "https://dqrdb.com/card/859.png",
+        "cost": 9,
+        "attack": 9,
+        "hp": 9,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 9,
+        "attack": 9,
+        "hp": 9,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/859.png"
+    },
+    {
+      "ftId": "FT-0605",
+      "sourceName": "背水のかまえ",
+      "name": "不退の剣誓",
+      "packId": "set-4",
+      "sourceKey": "set-4/背水のかまえ",
+      "archive": {
+        "id": 760,
+        "referenceId": "dqrdb:760",
+        "cardImageUrl": "https://dqrdb.com/card/760.png",
+        "cost": 0,
+        "attack": null,
+        "hp": null,
+        "classId": "warrior",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 0,
+        "attack": 0,
+        "hp": 0,
+        "classId": "warrior",
+        "kind": "spell",
+        "rarity": "common",
+        "keywords": []
+      },
+      "sourceAliases": [
+        "背水の構え",
+        "排水の構え"
+      ],
+      "referenceUrl": "https://dqrdb.com/card/760.png"
+    },
+    {
+      "ftId": "FT-0606",
+      "sourceName": "ことだまつかい",
+      "name": "夜継ぎの双鐘語り",
+      "packId": "set-4",
+      "sourceKey": "set-4/ことだまつかい",
+      "archive": {
+        "id": 761,
+        "referenceId": "dqrdb:761",
+        "cardImageUrl": "https://dqrdb.com/card/761.png",
+        "cost": 1,
+        "attack": 2,
+        "hp": 2,
+        "classId": "warrior",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 1,
+        "attack": 2,
+        "hp": 2,
+        "classId": "warrior",
+        "kind": "unit",
+        "rarity": "superRare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/761.png"
+    },
+    {
+      "ftId": "FT-0607",
+      "sourceName": "ガスト",
+      "name": "夜継ぎの繕い番",
+      "packId": "set-4",
+      "sourceKey": "set-4/ガスト",
+      "archive": {
+        "id": 762,
+        "referenceId": "dqrdb:762",
+        "cardImageUrl": "https://dqrdb.com/card/762.png",
+        "cost": 3,
+        "attack": 2,
+        "hp": 4,
+        "classId": "warrior",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 3,
+        "attack": 2,
+        "hp": 4,
+        "classId": "warrior",
+        "kind": "unit",
+        "rarity": "rare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/762.png"
+    },
+    {
+      "ftId": "FT-0608",
+      "sourceName": "剣豪の闘志",
+      "name": "覚めゆく剣豪の熱",
+      "packId": "set-4",
+      "sourceKey": "set-4/剣豪の闘志",
+      "archive": {
+        "id": 763,
+        "referenceId": "dqrdb:763",
+        "cardImageUrl": "https://dqrdb.com/card/763.png",
+        "cost": 3,
+        "attack": null,
+        "hp": null,
+        "classId": "warrior",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 3,
+        "attack": 0,
+        "hp": 0,
+        "classId": "warrior",
+        "kind": "spell",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/763.png"
+    },
+    {
+      "ftId": "FT-0609",
+      "sourceName": "剣の錬成",
+      "name": "折れ刃を継ぐ炉",
+      "packId": "set-4",
+      "sourceKey": "set-4/剣の錬成",
+      "archive": {
+        "id": 764,
+        "referenceId": "dqrdb:764",
+        "cardImageUrl": "https://dqrdb.com/card/764.png",
+        "cost": 3,
+        "attack": null,
+        "hp": null,
+        "classId": "warrior",
+        "kind": "spell",
+        "rarity": "superRare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 3,
+        "attack": 0,
+        "hp": 0,
+        "classId": "warrior",
+        "kind": "spell",
+        "rarity": "superRare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/764.png"
+    },
+    {
+      "ftId": "FT-0610",
+      "sourceName": "ゾンビマスター",
+      "name": "夜継ぎの返り糸師",
+      "packId": "set-4",
+      "sourceKey": "set-4/ゾンビマスター",
+      "archive": {
+        "id": 765,
+        "referenceId": "dqrdb:765",
+        "cardImageUrl": "https://dqrdb.com/card/765.png",
+        "cost": 4,
+        "attack": 5,
+        "hp": 4,
+        "classId": "warrior",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 4,
+        "attack": 5,
+        "hp": 4,
+        "classId": "warrior",
+        "kind": "unit",
+        "rarity": "rare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/765.png"
+    },
+    {
+      "ftId": "FT-0611",
+      "sourceName": "ヘルオーディン",
+      "name": "夜継ぎの貫槍守",
+      "packId": "set-4",
+      "sourceKey": "set-4/ヘルオーディン",
+      "archive": {
+        "id": 766,
+        "referenceId": "dqrdb:766",
+        "cardImageUrl": "https://dqrdb.com/card/766.png",
+        "cost": 5,
+        "attack": 4,
+        "hp": 5,
+        "classId": "warrior",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 5,
+        "attack": 4,
+        "hp": 5,
+        "classId": "warrior",
+        "kind": "unit",
+        "rarity": "superRare",
+        "keywords": [
+          "GUARD"
+        ]
+      },
+      "referenceUrl": "https://dqrdb.com/card/766.png"
+    },
+    {
+      "ftId": "FT-0612",
+      "sourceName": "大怨霊マアモン",
+      "name": "夜継ぎの弔火巨人",
+      "packId": "set-4",
+      "sourceKey": "set-4/大怨霊マアモン",
+      "archive": {
+        "id": 767,
+        "referenceId": "dqrdb:767",
+        "cardImageUrl": "https://dqrdb.com/card/767.png",
+        "cost": 7,
+        "attack": 6,
+        "hp": 2,
+        "classId": "warrior",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 7,
+        "attack": 6,
+        "hp": 2,
+        "classId": "warrior",
+        "kind": "unit",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/767.png"
+    },
+    {
+      "ftId": "FT-0613",
+      "sourceName": "黒騎士レオコーン",
+      "name": "夜継ぎの疾駆黒騎士",
+      "packId": "set-4",
+      "sourceKey": "set-4/黒騎士レオコーン",
+      "archive": {
+        "id": 768,
+        "referenceId": "dqrdb:768",
+        "cardImageUrl": "https://dqrdb.com/card/768.png",
+        "cost": 8,
+        "attack": 4,
+        "hp": 8,
+        "classId": "warrior",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 8,
+        "attack": 4,
+        "hp": 8,
+        "classId": "warrior",
+        "kind": "unit",
+        "rarity": "legendary",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/768.png"
+    },
+    {
+      "ftId": "FT-0614",
+      "sourceName": "じごくのサーベル",
+      "name": "弔い火の継承剣",
+      "packId": "set-4",
+      "sourceKey": "set-4/じごくのサーベル",
+      "archive": {
+        "id": 769,
+        "referenceId": "dqrdb:769",
+        "cardImageUrl": "https://dqrdb.com/card/769.png",
+        "cost": 8,
+        "attack": 4,
+        "hp": 2,
+        "classId": "warrior",
+        "kind": "weapon",
+        "rarity": "rare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 8,
+        "attack": 4,
+        "hp": 2,
+        "classId": "warrior",
+        "kind": "weapon",
+        "rarity": "rare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/769.png"
+    },
+    {
+      "ftId": "FT-0615",
+      "sourceName": "まほうの小ビン",
+      "name": "めぐり巡る小瓶",
+      "packId": "set-4",
+      "sourceKey": "set-4/まほうの小ビン",
+      "archive": {
+        "id": 770,
+        "referenceId": "dqrdb:770",
+        "cardImageUrl": "https://dqrdb.com/card/770.png",
+        "cost": 1,
+        "attack": null,
+        "hp": null,
+        "classId": "mage",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 1,
+        "attack": 0,
+        "hp": 0,
+        "classId": "mage",
+        "kind": "spell",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/770.png"
+    },
+    {
+      "ftId": "FT-0616",
+      "sourceName": "だんごスライム",
+      "name": "露珠の三つ編み精",
+      "packId": "set-4",
+      "sourceKey": "set-4/だんごスライム",
+      "archive": {
+        "id": 771,
+        "referenceId": "dqrdb:771",
+        "cardImageUrl": "https://dqrdb.com/card/771.png",
+        "cost": 2,
+        "attack": 2,
+        "hp": 1,
+        "classId": "mage",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 2,
+        "attack": 2,
+        "hp": 1,
+        "classId": "mage",
+        "kind": "unit",
+        "rarity": "rare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/771.png"
+    },
+    {
+      "ftId": "FT-0617",
+      "sourceName": "ルカナン",
+      "name": "ほどける護りの糸",
+      "packId": "set-4",
+      "sourceKey": "set-4/ルカナン",
+      "archive": {
+        "id": 772,
+        "referenceId": "dqrdb:772",
+        "cardImageUrl": "https://dqrdb.com/card/772.png",
+        "cost": 2,
+        "attack": null,
+        "hp": null,
+        "classId": "mage",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 2,
+        "attack": 0,
+        "hp": 0,
+        "classId": "mage",
+        "kind": "spell",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/772.png"
+    },
+    {
+      "ftId": "FT-0618",
+      "sourceName": "てつのさそり",
+      "name": "露珠の甲織り蠍",
+      "packId": "set-4",
+      "sourceKey": "set-4/てつのさそり",
+      "archive": {
+        "id": 773,
+        "referenceId": "dqrdb:773",
+        "cardImageUrl": "https://dqrdb.com/card/773.png",
+        "cost": 3,
+        "attack": 2,
+        "hp": 4,
+        "classId": "mage",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 3,
+        "attack": 2,
+        "hp": 4,
+        "classId": "mage",
+        "kind": "unit",
+        "rarity": "rare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/773.png"
+    },
+    {
+      "ftId": "FT-0619",
+      "sourceName": "闇の司祭",
+      "name": "露珠の宵衣司祭",
+      "packId": "set-4",
+      "sourceKey": "set-4/闇の司祭",
+      "archive": {
+        "id": 774,
+        "referenceId": "dqrdb:774",
+        "cardImageUrl": "https://dqrdb.com/card/774.png",
+        "cost": 4,
+        "attack": 5,
+        "hp": 4,
+        "classId": "mage",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 4,
+        "attack": 5,
+        "hp": 4,
+        "classId": "mage",
+        "kind": "unit",
+        "rarity": "superRare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/774.png"
+    },
+    {
+      "ftId": "FT-0620",
+      "sourceName": "魔力の奔流",
+      "name": "覚めゆく魔力の川",
+      "packId": "set-4",
+      "sourceKey": "set-4/魔力の奔流",
+      "archive": {
+        "id": 775,
+        "referenceId": "dqrdb:775",
+        "cardImageUrl": "https://dqrdb.com/card/775.png",
+        "cost": 4,
+        "attack": null,
+        "hp": null,
+        "classId": "mage",
+        "kind": "spell",
+        "rarity": "superRare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 4,
+        "attack": 0,
+        "hp": 0,
+        "classId": "mage",
+        "kind": "spell",
+        "rarity": "superRare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/775.png"
+    },
+    {
+      "ftId": "FT-0621",
+      "sourceName": "まどうスライム",
+      "name": "露珠の星綴り術師",
+      "packId": "set-4",
+      "sourceKey": "set-4/まどうスライム",
+      "archive": {
+        "id": 776,
+        "referenceId": "dqrdb:776",
+        "cardImageUrl": "https://dqrdb.com/card/776.png",
+        "cost": 5,
+        "attack": 4,
+        "hp": 4,
+        "classId": "mage",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 5,
+        "attack": 4,
+        "hp": 4,
+        "classId": "mage",
+        "kind": "unit",
+        "rarity": "superRare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/776.png"
+    },
+    {
+      "ftId": "FT-0622",
+      "sourceName": "スライム呼び",
+      "name": "露珠の縦糸召喚",
+      "packId": "set-4",
+      "sourceKey": "set-4/スライム呼び",
+      "archive": {
+        "id": 777,
+        "referenceId": "dqrdb:777",
+        "cardImageUrl": "https://dqrdb.com/card/777.png",
+        "cost": 5,
+        "attack": null,
+        "hp": null,
+        "classId": "mage",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 5,
+        "attack": 0,
+        "hp": 0,
+        "classId": "mage",
+        "kind": "spell",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/777.png"
+    },
+    {
+      "ftId": "FT-0623",
+      "sourceName": "ダークキング",
+      "name": "露珠の黒晶王",
+      "packId": "set-4",
+      "sourceKey": "set-4/ダークキング",
+      "archive": {
+        "id": 778,
+        "referenceId": "dqrdb:778",
+        "cardImageUrl": "https://dqrdb.com/card/778.png",
+        "cost": 7,
+        "attack": 6,
+        "hp": 6,
+        "classId": "mage",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 7,
+        "attack": 6,
+        "hp": 6,
+        "classId": "mage",
+        "kind": "unit",
+        "rarity": "legendary",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/778.png"
+    },
+    {
+      "ftId": "FT-0624",
+      "sourceName": "スライムの心",
+      "name": "ひと雫への帰還",
+      "packId": "set-4",
+      "sourceKey": "set-4/スライムの心",
+      "archive": {
+        "id": 779,
+        "referenceId": "dqrdb:779",
+        "cardImageUrl": "https://dqrdb.com/card/779.png",
+        "cost": 7,
+        "attack": null,
+        "hp": null,
+        "classId": "mage",
+        "kind": "spell",
+        "rarity": "rare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 7,
+        "attack": 0,
+        "hp": 0,
+        "classId": "mage",
+        "kind": "spell",
+        "rarity": "rare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/779.png"
+    },
+    {
+      "ftId": "FT-0625",
+      "sourceName": "スライムフィーバー",
+      "name": "露珠の祭り替え",
+      "packId": "set-4",
+      "sourceKey": "set-4/スライムフィーバー",
+      "archive": {
+        "id": 780,
+        "referenceId": "dqrdb:780",
+        "cardImageUrl": "https://dqrdb.com/card/780.png",
+        "cost": 0,
+        "attack": null,
+        "hp": null,
+        "classId": "fighter",
+        "kind": "spell",
+        "rarity": "rare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 0,
+        "attack": 0,
+        "hp": 0,
+        "classId": "fighter",
+        "kind": "spell",
+        "rarity": "rare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/780.png"
+    },
+    {
+      "ftId": "FT-0626",
+      "sourceName": "はねスライム",
+      "name": "露珠の双翼跳び",
+      "packId": "set-4",
+      "sourceKey": "set-4/はねスライム",
+      "archive": {
+        "id": 781,
+        "referenceId": "dqrdb:781",
+        "cardImageUrl": "https://dqrdb.com/card/781.png",
+        "cost": 2,
+        "attack": 1,
+        "hp": 3,
+        "classId": "fighter",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 2,
+        "attack": 1,
+        "hp": 3,
+        "classId": "fighter",
+        "kind": "unit",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/781.png"
+    },
+    {
+      "ftId": "FT-0627",
+      "sourceName": "スライムホイッスル",
+      "name": "露珠招きの草笛",
+      "packId": "set-4",
+      "sourceKey": "set-4/スライムホイッスル",
+      "archive": {
+        "id": 782,
+        "referenceId": "dqrdb:782",
+        "cardImageUrl": "https://dqrdb.com/card/782.png",
+        "cost": 2,
+        "attack": null,
+        "hp": null,
+        "classId": "fighter",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 2,
+        "attack": 0,
+        "hp": 0,
+        "classId": "fighter",
+        "kind": "spell",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/782.png"
+    },
+    {
+      "ftId": "FT-0628",
+      "sourceName": "せいけん爆撃",
+      "name": "紅拳の破城打",
+      "packId": "set-4",
+      "sourceKey": "set-4/せいけん爆撃",
+      "archive": {
+        "id": 783,
+        "referenceId": "dqrdb:783",
+        "cardImageUrl": "https://dqrdb.com/card/783.png",
+        "cost": 3,
+        "attack": null,
+        "hp": null,
+        "classId": "fighter",
+        "kind": "spell",
+        "rarity": "superRare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 3,
+        "attack": 0,
+        "hp": 0,
+        "classId": "fighter",
+        "kind": "spell",
+        "rarity": "superRare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/783.png"
+    },
+    {
+      "ftId": "FT-0629",
+      "sourceName": "いしのツメ",
+      "name": "露珠響きの石爪",
+      "packId": "set-4",
+      "sourceKey": "set-4/いしのツメ",
+      "archive": {
+        "id": 784,
+        "referenceId": "dqrdb:784",
+        "cardImageUrl": "https://dqrdb.com/card/784.png",
+        "cost": 3,
+        "attack": 1,
+        "hp": 2,
+        "classId": "fighter",
+        "kind": "weapon",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 3,
+        "attack": 1,
+        "hp": 2,
+        "classId": "fighter",
+        "kind": "weapon",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/784.png"
+    },
+    {
+      "ftId": "FT-0630",
+      "sourceName": "キラーエイプ",
+      "name": "露珠の拳継ぎ",
+      "packId": "set-4",
+      "sourceKey": "set-4/キラーエイプ",
+      "archive": {
+        "id": 785,
+        "referenceId": "dqrdb:785",
+        "cardImageUrl": "https://dqrdb.com/card/785.png",
+        "cost": 4,
+        "attack": 4,
+        "hp": 4,
+        "classId": "fighter",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 4,
+        "attack": 4,
+        "hp": 4,
+        "classId": "fighter",
+        "kind": "unit",
+        "rarity": "rare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/785.png"
+    },
+    {
+      "ftId": "FT-0631",
+      "sourceName": "エンゼルスライム",
+      "name": "露珠の雲梯使い",
+      "packId": "set-4",
+      "sourceKey": "set-4/エンゼルスライム",
+      "archive": {
+        "id": 786,
+        "referenceId": "dqrdb:786",
+        "cardImageUrl": "https://dqrdb.com/card/786.png",
+        "cost": 5,
+        "attack": 3,
+        "hp": 4,
+        "classId": "fighter",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 5,
+        "attack": 3,
+        "hp": 4,
+        "classId": "fighter",
+        "kind": "unit",
+        "rarity": "rare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/786.png"
+    },
+    {
+      "ftId": "FT-0632",
+      "sourceName": "必中拳",
+      "name": "露珠合わせの必中掌",
+      "packId": "set-4",
+      "sourceKey": "set-4/必中拳",
+      "archive": {
+        "id": 787,
+        "referenceId": "dqrdb:787",
+        "cardImageUrl": "https://dqrdb.com/card/787.png",
+        "cost": 4,
+        "attack": 0,
+        "hp": 0,
+        "classId": "fighter",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 4,
+        "attack": 0,
+        "hp": 0,
+        "classId": "fighter",
+        "kind": "unit",
+        "rarity": "superRare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/787.png"
+    },
+    {
+      "ftId": "FT-0633",
+      "sourceName": "ドンガラドン",
+      "name": "露珠の鼓動太鼓",
+      "packId": "set-4",
+      "sourceKey": "set-4/ドンガラドン",
+      "archive": {
+        "id": 788,
+        "referenceId": "dqrdb:788",
+        "cardImageUrl": "https://dqrdb.com/card/788.png",
+        "cost": 6,
+        "attack": 6,
+        "hp": 5,
+        "classId": "fighter",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 6,
+        "attack": 6,
+        "hp": 5,
+        "classId": "fighter",
+        "kind": "unit",
+        "rarity": "superRare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/788.png"
+    },
+    {
+      "ftId": "FT-0634",
+      "sourceName": "グランスライム",
+      "name": "露珠の大族長",
+      "packId": "set-4",
+      "sourceKey": "set-4/グランスライム",
+      "archive": {
+        "id": 789,
+        "referenceId": "dqrdb:789",
+        "cardImageUrl": "https://dqrdb.com/card/789.png",
+        "cost": 5,
+        "attack": 5,
+        "hp": 5,
+        "classId": "fighter",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 5,
+        "attack": 5,
+        "hp": 5,
+        "classId": "fighter",
+        "kind": "unit",
+        "rarity": "legendary",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/789.png"
+    },
+    {
+      "ftId": "FT-0635",
+      "sourceName": "リンリン",
+      "name": "竜呼びの鈴守り",
+      "packId": "set-4",
+      "sourceKey": "set-4/リンリン",
+      "archive": {
+        "id": 790,
+        "referenceId": "dqrdb:790",
+        "cardImageUrl": "https://dqrdb.com/card/790.png",
+        "cost": 2,
+        "attack": 1,
+        "hp": 3,
+        "classId": "priest",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 2,
+        "attack": 1,
+        "hp": 3,
+        "classId": "priest",
+        "kind": "unit",
+        "rarity": "rare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/790.png"
+    },
+    {
+      "ftId": "FT-0636",
+      "sourceName": "スクルト",
+      "name": "縦糸の守護祈り",
+      "packId": "set-4",
+      "sourceKey": "set-4/スクルト",
+      "archive": {
+        "id": 791,
+        "referenceId": "dqrdb:791",
+        "cardImageUrl": "https://dqrdb.com/card/791.png",
+        "cost": 2,
+        "attack": null,
+        "hp": null,
+        "classId": "priest",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 2,
+        "attack": 0,
+        "hp": 0,
+        "classId": "priest",
+        "kind": "spell",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/791.png"
+    },
+    {
+      "ftId": "FT-0637",
+      "sourceName": "竜のうろこ",
+      "name": "竜鱗を継ぐ祝福",
+      "packId": "set-4",
+      "sourceKey": "set-4/竜のうろこ",
+      "archive": {
+        "id": 792,
+        "referenceId": "dqrdb:792",
+        "cardImageUrl": "https://dqrdb.com/card/792.png",
+        "cost": 2,
+        "attack": null,
+        "hp": null,
+        "classId": "priest",
+        "kind": "spell",
+        "rarity": "superRare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 2,
+        "attack": 0,
+        "hp": 0,
+        "classId": "priest",
+        "kind": "spell",
+        "rarity": "superRare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/792.png"
+    },
+    {
+      "ftId": "FT-0638",
+      "sourceName": "ダックスビル",
+      "name": "竜鱗の繕い獣",
+      "packId": "set-4",
+      "sourceKey": "set-4/ダックスビル",
+      "archive": {
+        "id": 793,
+        "referenceId": "dqrdb:793",
+        "cardImageUrl": "https://dqrdb.com/card/793.png",
+        "cost": 3,
+        "attack": 3,
+        "hp": 3,
+        "classId": "priest",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 3,
+        "attack": 3,
+        "hp": 3,
+        "classId": "priest",
+        "kind": "unit",
+        "rarity": "rare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/793.png"
+    },
+    {
+      "ftId": "FT-0639",
+      "sourceName": "しっぷうのレイピア",
+      "name": "竜便りの風細剣",
+      "packId": "set-4",
+      "sourceKey": "set-4/しっぷうのレイピア",
+      "archive": {
+        "id": 794,
+        "referenceId": "dqrdb:794",
+        "cardImageUrl": "https://dqrdb.com/card/794.png",
+        "cost": 4,
+        "attack": 3,
+        "hp": 2,
+        "classId": "priest",
+        "kind": "weapon",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 4,
+        "attack": 3,
+        "hp": 2,
+        "classId": "priest",
+        "kind": "weapon",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/794.png"
+    },
+    {
+      "ftId": "FT-0640",
+      "sourceName": "たつのこナイト",
+      "name": "竜鱗の若き旗騎士",
+      "packId": "set-4",
+      "sourceKey": "set-4/たつのこナイト",
+      "archive": {
+        "id": 795,
+        "referenceId": "dqrdb:795",
+        "cardImageUrl": "https://dqrdb.com/card/795.png",
+        "cost": 5,
+        "attack": 5,
+        "hp": 4,
+        "classId": "priest",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 5,
+        "attack": 5,
+        "hp": 4,
+        "classId": "priest",
+        "kind": "unit",
+        "rarity": "superRare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/795.png"
+    },
+    {
+      "ftId": "FT-0641",
+      "sourceName": "グレイナル",
+      "name": "竜鱗の黎明賢竜",
+      "packId": "set-4",
+      "sourceKey": "set-4/グレイナル",
+      "archive": {
+        "id": 796,
+        "referenceId": "dqrdb:796",
+        "cardImageUrl": "https://dqrdb.com/card/796.png",
+        "cost": 6,
+        "attack": 6,
+        "hp": 6,
+        "classId": "priest",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 6,
+        "attack": 6,
+        "hp": 6,
+        "classId": "priest",
+        "kind": "unit",
+        "rarity": "legendary",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/796.png"
+    },
+    {
+      "ftId": "FT-0642",
+      "sourceName": "冷たい笑み",
+      "name": "静謐なる鏡の微笑",
+      "packId": "set-4",
+      "sourceKey": "set-4/冷たい笑み",
+      "archive": {
+        "id": 797,
+        "referenceId": "dqrdb:797",
+        "cardImageUrl": "https://dqrdb.com/card/797.png",
+        "cost": 6,
+        "attack": null,
+        "hp": null,
+        "classId": "priest",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 6,
+        "attack": 0,
+        "hp": 0,
+        "classId": "priest",
+        "kind": "spell",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/797.png"
+    },
+    {
+      "ftId": "FT-0643",
+      "sourceName": "精霊の矢",
+      "name": "返り光の精霊矢",
+      "packId": "set-4",
+      "sourceKey": "set-4/精霊の矢",
+      "archive": {
+        "id": 798,
+        "referenceId": "dqrdb:798",
+        "cardImageUrl": "https://dqrdb.com/card/798.png",
+        "cost": 6,
+        "attack": null,
+        "hp": null,
+        "classId": "priest",
+        "kind": "spell",
+        "rarity": "superRare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 6,
+        "attack": 0,
+        "hp": 0,
+        "classId": "priest",
+        "kind": "spell",
+        "rarity": "superRare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/798.png"
+    },
+    {
+      "ftId": "FT-0644",
+      "sourceName": "ドラゴンバゲージ",
+      "name": "竜鱗の荷守り竜",
+      "packId": "set-4",
+      "sourceKey": "set-4/ドラゴンバゲージ",
+      "archive": {
+        "id": 799,
+        "referenceId": "dqrdb:799",
+        "cardImageUrl": "https://dqrdb.com/card/799.png",
+        "cost": 7,
+        "attack": 5,
+        "hp": 7,
+        "classId": "priest",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 7,
+        "attack": 5,
+        "hp": 7,
+        "classId": "priest",
+        "kind": "unit",
+        "rarity": "rare",
+        "keywords": [
+          "GUARD"
+        ]
+      },
+      "referenceUrl": "https://dqrdb.com/card/799.png"
+    },
+    {
+      "ftId": "FT-0645",
+      "sourceName": "メタルの巻物",
+      "name": "銀環の招き巻物",
+      "packId": "set-4",
+      "sourceKey": "set-4/メタルの巻物",
+      "archive": {
+        "id": 800,
+        "referenceId": "dqrdb:800",
+        "cardImageUrl": "https://dqrdb.com/card/800.png",
+        "cost": 1,
+        "attack": null,
+        "hp": null,
+        "classId": "merchant",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 1,
+        "attack": 0,
+        "hp": 0,
+        "classId": "merchant",
+        "kind": "spell",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/800.png"
+    },
+    {
+      "ftId": "FT-0646",
+      "sourceName": "メタルのそろばん",
+      "name": "銀環の数珠算盤",
+      "packId": "set-4",
+      "sourceKey": "set-4/メタルのそろばん",
+      "archive": {
+        "id": 801,
+        "referenceId": "dqrdb:801",
+        "cardImageUrl": "https://dqrdb.com/card/801.png",
+        "cost": 2,
+        "attack": 1,
+        "hp": 2,
+        "classId": "merchant",
+        "kind": "weapon",
+        "rarity": "superRare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 2,
+        "attack": 1,
+        "hp": 2,
+        "classId": "merchant",
+        "kind": "weapon",
+        "rarity": "superRare",
+        "keywords": [
+          "METAL_BODY"
+        ]
+      },
+      "referenceUrl": "https://dqrdb.com/card/801.png"
+    },
+    {
+      "ftId": "FT-0647",
+      "sourceName": "からくりエッグ",
+      "name": "銀環の刻印卵",
+      "packId": "set-4",
+      "sourceKey": "set-4/からくりエッグ",
+      "archive": {
+        "id": 802,
+        "referenceId": "dqrdb:802",
+        "cardImageUrl": "https://dqrdb.com/card/802.png",
+        "cost": 3,
+        "attack": 3,
+        "hp": 3,
+        "classId": "merchant",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 3,
+        "attack": 3,
+        "hp": 3,
+        "classId": "merchant",
+        "kind": "unit",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/802.png"
+    },
+    {
+      "ftId": "FT-0648",
+      "sourceName": "メタルブラザーズ",
+      "name": "銀露の三つ子",
+      "packId": "set-4",
+      "sourceKey": "set-4/メタルブラザーズ",
+      "archive": {
+        "id": 803,
+        "referenceId": "dqrdb:803",
+        "cardImageUrl": "https://dqrdb.com/card/803.png",
+        "cost": 4,
+        "attack": 3,
+        "hp": 2,
+        "classId": "merchant",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 4,
+        "attack": 3,
+        "hp": 2,
+        "classId": "merchant",
+        "kind": "unit",
+        "rarity": "common",
+        "keywords": [
+          "METAL_BODY"
+        ]
+      },
+      "referenceUrl": "https://dqrdb.com/card/803.png"
+    },
+    {
+      "ftId": "FT-0649",
+      "sourceName": "てっこうまじん",
+      "name": "銀環の鎧仕立て巨人",
+      "packId": "set-4",
+      "sourceKey": "set-4/てっこうまじん",
+      "archive": {
+        "id": 804,
+        "referenceId": "dqrdb:804",
+        "cardImageUrl": "https://dqrdb.com/card/804.png",
+        "cost": 4,
+        "attack": 3,
+        "hp": 5,
+        "classId": "merchant",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 4,
+        "attack": 3,
+        "hp": 5,
+        "classId": "merchant",
+        "kind": "unit",
+        "rarity": "superRare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/804.png"
+    },
+    {
+      "ftId": "FT-0650",
+      "sourceName": "覚醒の巻物",
+      "name": "覚めゆく守護の巻物",
+      "packId": "set-4",
+      "sourceKey": "set-4/覚醒の巻物",
+      "archive": {
+        "id": 805,
+        "referenceId": "dqrdb:805",
+        "cardImageUrl": "https://dqrdb.com/card/805.png",
+        "cost": 4,
+        "attack": null,
+        "hp": null,
+        "classId": "merchant",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 4,
+        "attack": 0,
+        "hp": 0,
+        "classId": "merchant",
+        "kind": "spell",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/805.png"
+    },
+    {
+      "ftId": "FT-0651",
+      "sourceName": "痛みわけの杖",
+      "name": "痛みを分かつ双枝杖",
+      "packId": "set-4",
+      "sourceKey": "set-4/痛みわけの杖",
+      "archive": {
+        "id": 806,
+        "referenceId": "dqrdb:806",
+        "cardImageUrl": "https://dqrdb.com/card/806.png",
+        "cost": 4,
+        "attack": null,
+        "hp": null,
+        "classId": "merchant",
+        "kind": "spell",
+        "rarity": "rare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 4,
+        "attack": 0,
+        "hp": 0,
+        "classId": "merchant",
+        "kind": "spell",
+        "rarity": "rare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/806.png"
+    },
+    {
+      "ftId": "FT-0652",
+      "sourceName": "デュランダル",
+      "name": "銀環の歯車公",
+      "packId": "set-4",
+      "sourceKey": "set-4/デュランダル",
+      "archive": {
+        "id": 807,
+        "referenceId": "dqrdb:807",
+        "cardImageUrl": "https://dqrdb.com/card/807.png",
+        "cost": 4,
+        "attack": 4,
+        "hp": 4,
+        "classId": "merchant",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 4,
+        "attack": 4,
+        "hp": 4,
+        "classId": "merchant",
+        "kind": "unit",
+        "rarity": "superRare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/807.png"
+    },
+    {
+      "ftId": "FT-0653",
+      "sourceName": "スペクタクルショー",
+      "name": "銀環の大変身舞台",
+      "packId": "set-4",
+      "sourceKey": "set-4/スペクタクルショー",
+      "archive": {
+        "id": 808,
+        "referenceId": "dqrdb:808",
+        "cardImageUrl": "https://dqrdb.com/card/808.png",
+        "cost": 6,
+        "attack": null,
+        "hp": null,
+        "classId": "merchant",
+        "kind": "spell",
+        "rarity": "rare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 6,
+        "attack": 0,
+        "hp": 0,
+        "classId": "merchant",
+        "kind": "spell",
+        "rarity": "rare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/808.png"
+    },
+    {
+      "ftId": "FT-0654",
+      "sourceName": "ダイヤモンドスライム",
+      "name": "銀露の金剛冠",
+      "packId": "set-4",
+      "sourceKey": "set-4/ダイヤモンドスライム",
+      "archive": {
+        "id": 809,
+        "referenceId": "dqrdb:809",
+        "cardImageUrl": "https://dqrdb.com/card/809.png",
+        "cost": 7,
+        "attack": 5,
+        "hp": 5,
+        "classId": "merchant",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 7,
+        "attack": 5,
+        "hp": 5,
+        "classId": "merchant",
+        "kind": "unit",
+        "rarity": "legendary",
+        "keywords": [
+          "HARD_METAL_BODY"
+        ]
+      },
+      "referenceUrl": "https://dqrdb.com/card/809.png"
+    },
+    {
+      "ftId": "FT-0655",
+      "sourceName": "いっかく竜",
+      "name": "竜鱗の星角案内竜",
+      "packId": "set-4",
+      "sourceKey": "set-4/いっかく竜",
+      "archive": {
+        "id": 810,
+        "referenceId": "dqrdb:810",
+        "cardImageUrl": "https://dqrdb.com/card/810.png",
+        "cost": 1,
+        "attack": 2,
+        "hp": 2,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 1,
+        "attack": 2,
+        "hp": 2,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "rare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/810.png"
+    },
+    {
+      "ftId": "FT-0656",
+      "sourceName": "魂の写し身",
+      "name": "魂を写す双鏡",
+      "packId": "set-4",
+      "sourceKey": "set-4/魂の写し身",
+      "archive": {
+        "id": 811,
+        "referenceId": "dqrdb:811",
+        "cardImageUrl": "https://dqrdb.com/card/811.png",
+        "cost": 1,
+        "attack": null,
+        "hp": null,
+        "classId": "seer",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 1,
+        "attack": 0,
+        "hp": 0,
+        "classId": "seer",
+        "kind": "spell",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/811.png"
+    },
+    {
+      "ftId": "FT-0657",
+      "sourceName": "竜の逆鱗",
+      "name": "竜鱗の逆巻く雷",
+      "packId": "set-4",
+      "sourceKey": "set-4/竜の逆鱗",
+      "archive": {
+        "id": 812,
+        "referenceId": "dqrdb:812",
+        "cardImageUrl": "https://dqrdb.com/card/812.png",
+        "cost": 1,
+        "attack": null,
+        "hp": null,
+        "classId": "seer",
+        "kind": "spell",
+        "rarity": "rare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 1,
+        "attack": 0,
+        "hp": 0,
+        "classId": "seer",
+        "kind": "spell",
+        "rarity": "rare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/812.png"
+    },
+    {
+      "ftId": "FT-0658",
+      "sourceName": "力のタロット",
+      "name": "力を分ける星札",
+      "packId": "set-4",
+      "sourceKey": "set-4/力のタロット",
+      "archive": {
+        "id": 813,
+        "referenceId": "dqrdb:813",
+        "cardImageUrl": "https://dqrdb.com/card/813.png",
+        "cost": 2,
+        "attack": null,
+        "hp": null,
+        "classId": "seer",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 2,
+        "attack": 0,
+        "hp": 0,
+        "classId": "seer",
+        "kind": "spell",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/813.png"
+    },
+    {
+      "ftId": "FT-0659",
+      "sourceName": "バルンバ",
+      "name": "竜鱗の盾翼獣",
+      "packId": "set-4",
+      "sourceKey": "set-4/バルンバ",
+      "archive": {
+        "id": 814,
+        "referenceId": "dqrdb:814",
+        "cardImageUrl": "https://dqrdb.com/card/814.png",
+        "cost": 3,
+        "attack": 2,
+        "hp": 4,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 3,
+        "attack": 2,
+        "hp": 4,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "superRare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/814.png"
+    },
+    {
+      "ftId": "FT-0660",
+      "sourceName": "竜の胎動",
+      "name": "竜卵の星呼吸",
+      "packId": "set-4",
+      "sourceKey": "set-4/竜の胎動",
+      "archive": {
+        "id": 815,
+        "referenceId": "dqrdb:815",
+        "cardImageUrl": "https://dqrdb.com/card/815.png",
+        "cost": 3,
+        "attack": null,
+        "hp": null,
+        "classId": "seer",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 3,
+        "attack": 0,
+        "hp": 0,
+        "classId": "seer",
+        "kind": "spell",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/815.png"
+    },
+    {
+      "ftId": "FT-0661",
+      "sourceName": "ソルジャーブル",
+      "name": "竜鱗の角旗兵",
+      "packId": "set-4",
+      "sourceKey": "set-4/ソルジャーブル",
+      "archive": {
+        "id": 816,
+        "referenceId": "dqrdb:816",
+        "cardImageUrl": "https://dqrdb.com/card/816.png",
+        "cost": 4,
+        "attack": 3,
+        "hp": 5,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 4,
+        "attack": 3,
+        "hp": 5,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "rare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/816.png"
+    },
+    {
+      "ftId": "FT-0662",
+      "sourceName": "キースドラゴン",
+      "name": "竜鱗の双相氷竜",
+      "packId": "set-4",
+      "sourceKey": "set-4/キースドラゴン",
+      "archive": {
+        "id": 817,
+        "referenceId": "dqrdb:817",
+        "cardImageUrl": "https://dqrdb.com/card/817.png",
+        "cost": 5,
+        "attack": 4,
+        "hp": 5,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 5,
+        "attack": 4,
+        "hp": 5,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "superRare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/817.png"
+    },
+    {
+      "ftId": "FT-0663",
+      "sourceName": "だいまどう",
+      "name": "竜詩の大占術師",
+      "packId": "set-4",
+      "sourceKey": "set-4/だいまどう",
+      "archive": {
+        "id": 818,
+        "referenceId": "dqrdb:818",
+        "cardImageUrl": "https://dqrdb.com/card/818.png",
+        "cost": 5,
+        "attack": 3,
+        "hp": 6,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 5,
+        "attack": 3,
+        "hp": 6,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "superRare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/818.png"
+    },
+    {
+      "ftId": "FT-0664",
+      "sourceName": "しんりゅう",
+      "name": "四願の天書竜",
+      "packId": "set-4",
+      "sourceKey": "set-4/しんりゅう",
+      "archive": {
+        "id": 819,
+        "referenceId": "dqrdb:819",
+        "cardImageUrl": "https://dqrdb.com/card/819.png",
+        "cost": 8,
+        "attack": 5,
+        "hp": 5,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 8,
+        "attack": 5,
+        "hp": 5,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "legendary",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/819.png"
+    },
+    {
+      "ftId": "FT-0665",
+      "sourceName": "悪鬼丸",
+      "name": "夜継ぎの目覚め角",
+      "packId": "set-4",
+      "sourceKey": "set-4/悪鬼丸",
+      "archive": {
+        "id": 820,
+        "referenceId": "dqrdb:820",
+        "cardImageUrl": "https://dqrdb.com/card/820.png",
+        "cost": 2,
+        "attack": 3,
+        "hp": 2,
+        "classId": "swordsman",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 2,
+        "attack": 3,
+        "hp": 2,
+        "classId": "swordsman",
+        "kind": "unit",
+        "rarity": "rare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/820.png"
+    },
+    {
+      "ftId": "FT-0666",
+      "sourceName": "死への誘い",
+      "name": "小さき命への終鐘",
+      "packId": "set-4",
+      "sourceKey": "set-4/死への誘い",
+      "archive": {
+        "id": 821,
+        "referenceId": "dqrdb:821",
+        "cardImageUrl": "https://dqrdb.com/card/821.png",
+        "cost": 2,
+        "attack": null,
+        "hp": null,
+        "classId": "swordsman",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 2,
+        "attack": 0,
+        "hp": 0,
+        "classId": "swordsman",
+        "kind": "spell",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/821.png"
+    },
+    {
+      "ftId": "FT-0667",
+      "sourceName": "冥府の門",
+      "name": "夜継ぎの二重門",
+      "packId": "set-4",
+      "sourceKey": "set-4/冥府の門",
+      "archive": {
+        "id": 822,
+        "referenceId": "dqrdb:822",
+        "cardImageUrl": "https://dqrdb.com/card/822.png",
+        "cost": 2,
+        "attack": null,
+        "hp": null,
+        "classId": "swordsman",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 2,
+        "attack": 0,
+        "hp": 0,
+        "classId": "swordsman",
+        "kind": "spell",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/822.png"
+    },
+    {
+      "ftId": "FT-0668",
+      "sourceName": "猛毒の霧",
+      "name": "夜園を満たす毒霧",
+      "packId": "set-4",
+      "sourceKey": "set-4/猛毒の霧",
+      "archive": {
+        "id": 823,
+        "referenceId": "dqrdb:823",
+        "cardImageUrl": "https://dqrdb.com/card/823.png",
+        "cost": 3,
+        "attack": null,
+        "hp": null,
+        "classId": "swordsman",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 3,
+        "attack": 0,
+        "hp": 0,
+        "classId": "swordsman",
+        "kind": "spell",
+        "rarity": "common",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/823.png"
+    },
+    {
+      "ftId": "FT-0669",
+      "sourceName": "デビルウィザード",
+      "name": "夜継ぎの紅杖魔術師",
+      "packId": "set-4",
+      "sourceKey": "set-4/デビルウィザード",
+      "archive": {
+        "id": 824,
+        "referenceId": "dqrdb:824",
+        "cardImageUrl": "https://dqrdb.com/card/824.png",
+        "cost": 4,
+        "attack": 4,
+        "hp": 4,
+        "classId": "swordsman",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 4,
+        "attack": 4,
+        "hp": 4,
+        "classId": "swordsman",
+        "kind": "unit",
+        "rarity": "rare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/824.png"
+    },
+    {
+      "ftId": "FT-0670",
+      "sourceName": "死者の魂",
+      "name": "死者が灯す魔泉",
+      "packId": "set-4",
+      "sourceKey": "set-4/死者の魂",
+      "archive": {
+        "id": 825,
+        "referenceId": "dqrdb:825",
+        "cardImageUrl": "https://dqrdb.com/card/825.png",
+        "cost": 4,
+        "attack": null,
+        "hp": null,
+        "classId": "swordsman",
+        "kind": "spell",
+        "rarity": "rare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 4,
+        "attack": 0,
+        "hp": 0,
+        "classId": "swordsman",
+        "kind": "spell",
+        "rarity": "rare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/825.png"
+    },
+    {
+      "ftId": "FT-0671",
+      "sourceName": "亡者の執念",
+      "name": "夜継ぎの帰還誓約",
+      "packId": "set-4",
+      "sourceKey": "set-4/亡者の執念",
+      "archive": {
+        "id": 826,
+        "referenceId": "dqrdb:826",
+        "cardImageUrl": "https://dqrdb.com/card/826.png",
+        "cost": 4,
+        "attack": null,
+        "hp": null,
+        "classId": "swordsman",
+        "kind": "spell",
+        "rarity": "superRare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 4,
+        "attack": 0,
+        "hp": 0,
+        "classId": "swordsman",
+        "kind": "spell",
+        "rarity": "superRare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/826.png"
+    },
+    {
+      "ftId": "FT-0672",
+      "sourceName": "バラモスブロス",
+      "name": "夜継ぎの還魔公",
+      "packId": "set-4",
+      "sourceKey": "set-4/バラモスブロス",
+      "archive": {
+        "id": 827,
+        "referenceId": "dqrdb:827",
+        "cardImageUrl": "https://dqrdb.com/card/827.png",
+        "cost": 6,
+        "attack": 5,
+        "hp": 6,
+        "classId": "swordsman",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 6,
+        "attack": 5,
+        "hp": 6,
+        "classId": "swordsman",
+        "kind": "unit",
+        "rarity": "superRare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/827.png"
+    },
+    {
+      "ftId": "FT-0673",
+      "sourceName": "アスラ王",
+      "name": "夜継ぎの大召還王",
+      "packId": "set-4",
+      "sourceKey": "set-4/アスラ王",
+      "archive": {
+        "id": 828,
+        "referenceId": "dqrdb:828",
+        "cardImageUrl": "https://dqrdb.com/card/828.png",
+        "cost": 7,
+        "attack": 4,
+        "hp": 5,
+        "classId": "swordsman",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 7,
+        "attack": 4,
+        "hp": 5,
+        "classId": "swordsman",
+        "kind": "unit",
+        "rarity": "superRare",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/828.png"
+    },
+    {
+      "ftId": "FT-0674",
+      "sourceName": "暗黒皇帝ガナサダイ",
+      "name": "夜継ぎの黒薔薇帝",
+      "packId": "set-4",
+      "sourceKey": "set-4/暗黒皇帝ガナサダイ",
+      "archive": {
+        "id": 829,
+        "referenceId": "dqrdb:829",
+        "cardImageUrl": "https://dqrdb.com/card/829.png",
+        "cost": 8,
+        "attack": 6,
+        "hp": 6,
+        "classId": "swordsman",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "verification": "image-verified",
+      "implementation": "tested",
+      "tests": "tests/fourth-pack.test.js",
+      "pack": "set-4",
+      "stats": {
+        "cost": 8,
+        "attack": 6,
+        "hp": 6,
+        "classId": "swordsman",
+        "kind": "unit",
+        "rarity": "legendary",
+        "keywords": []
+      },
+      "referenceUrl": "https://dqrdb.com/card/829.png"
     }
   ],
   "idAliases": {
@@ -33643,6 +36869,92 @@
         "family": "dragon",
         "cannotAttack": true
       }
+    }
+  ],
+  "generatedFromFourthPack": [
+    {
+      "sourceName": "うまのふん",
+      "ftId": "token-set4-withered-bookmark",
+      "referenceId": "dqrdb:753",
+      "role": "generated-card"
+    },
+    {
+      "sourceName": "エッチな本",
+      "ftId": "token-set4-secret-grimoire",
+      "referenceId": "dqrdb:754",
+      "role": "generated-card"
+    },
+    {
+      "sourceName": "屍騎軍王ゾルデ・影",
+      "ftId": "token-set4-shadow-knight",
+      "referenceId": "dqrdb:755",
+      "role": "generated-card"
+    },
+    {
+      "sourceName": "オルゴ・デミーラ：第２形態",
+      "ftId": "token-set4-aul-act-two",
+      "referenceId": "dqrdb:756",
+      "role": "generated-card"
+    },
+    {
+      "sourceName": "オルゴ・デミーラ：第３形態",
+      "ftId": "token-set4-aul-act-three",
+      "referenceId": "dqrdb:757",
+      "role": "generated-card"
+    },
+    {
+      "sourceName": "オルゴ・デミーラ：第４形態",
+      "ftId": "token-set4-aul-act-four",
+      "referenceId": "dqrdb:758",
+      "role": "generated-card"
+    },
+    {
+      "sourceName": "エステラ：竜化の術",
+      "ftId": "token-set4-serena-dragon",
+      "referenceId": "dqrdb:759",
+      "role": "generated-card"
+    },
+    {
+      "sourceName": "闇のクリスタル",
+      "ftId": "token-set4-dusk-crystal",
+      "referenceId": "dqrdb:746",
+      "role": "generated-card"
+    },
+    {
+      "sourceName": "竜戦士の装具",
+      "ftId": "token-set4-dawn-regalia",
+      "referenceId": "dqrdb:747",
+      "role": "generated-card"
+    },
+    {
+      "sourceName": "てふだを ふやしたい",
+      "ftId": "token-set4-wish-pages",
+      "referenceId": "dqrdb:748",
+      "role": "choice-option"
+    },
+    {
+      "sourceName": "ドラゴンを だしやすく したい",
+      "ftId": "token-set4-wish-summon",
+      "referenceId": "dqrdb:749",
+      "role": "choice-option"
+    },
+    {
+      "sourceName": "ドラゴンを つよくしたい",
+      "ftId": "token-set4-wish-strength",
+      "referenceId": "dqrdb:750",
+      "role": "choice-option"
+    },
+    {
+      "sourceName": "エッチな ほんが よみたい",
+      "ftId": "token-set4-wish-grimoire",
+      "referenceId": "dqrdb:751",
+      "role": "choice-option"
+    },
+    {
+      "sourceName": "アンデッドマン",
+      "ftId": "token-set4-returning-revenant",
+      "referenceId": "dqrdb:752",
+      "role": "generated-card"
     }
   ]
 }

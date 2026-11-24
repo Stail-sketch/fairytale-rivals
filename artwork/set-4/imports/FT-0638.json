@@ -1,0 +1,12 @@
+{
+  "id": "FT-0638",
+  "original": "artwork/set-4/card-FT-0638.png",
+  "delivery": "apps/web/assets/card-FT-0638.webp",
+  "width": 1254,
+  "height": 1254,
+  "sha256": "6a36c7d75303ed16e1f7973ece1dc56d167975544158f45eb6a0217547360391",
+  "deliverySha256": "e3e4b59e0f70350d7ef51aecb1e16f7f2615efd5c380e221358604f61e0896a3",
+  "generationFile": "exec-50036999-46ee-42fd-a3aa-03dc207f67a9.png",
+  "generator": "image_gen",
+  "review": "visual-approved"
+}

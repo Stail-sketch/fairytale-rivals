@@ -15,6 +15,7 @@ export function project(game, viewer) {
       leaderAttackTotal: player.leaderAttackTotal, focusCount: player.focusCount, spellsUsed: player.spellsUsed,
       awakenedLeader: player.awakenedLeader, skill: playerSkill(player), turnSpells: player.turnSpells, spellLog: player.spellLog,
       leaderNeighbors: player.leaderNeighbors,
+      badges: player.badges ?? [], skillOverride: player.skillOverride, brokenWeapons: player.brokenWeapons ?? [],
       temporaryArmor: player.temporaryArmor, blockAttackThrough: player.blockAttackThrough,
       blockSkillThrough: player.blockSkillThrough, nextMpLoss: player.nextMpLoss,
       nextSpellDiscount: player.nextSpellDiscount, nextUnitDiscount: player.nextUnitDiscount,

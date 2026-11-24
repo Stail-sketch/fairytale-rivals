@@ -64,6 +64,13 @@ export async function browserControl(t, directory) {
     const { browserContextId } = await command('Target.createBrowserContext', {})
     const { targetId } = await command('Target.createTarget', { url: 'about:blank', browserContextId })
     const { sessionId } = await command('Target.attachToTarget', { targetId, flatten: true })
+    const runtimeErrors = []
+    socket.addEventListener('message', event => {
+      const data = JSON.parse(event.data)
+      if (data.sessionId === sessionId && data.method === 'Runtime.exceptionThrown') runtimeErrors.push(
+        data.params.exceptionDetails.exception?.description ?? data.params.exceptionDetails.text)
+    })
+    await command('Runtime.enable', {}, sessionId)
     async function evaluate(expression) {
       const data = await command('Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true }, sessionId)
       if (data.exceptionDetails) throw new Error(data.exceptionDetails.exception?.description ?? data.exceptionDetails.text)
@@ -71,7 +78,7 @@ export async function browserControl(t, directory) {
     }
     const wait = selector => eventually(() => evaluate(`Boolean(document.querySelector(${JSON.stringify(selector)}))`), selector)
     return {
-      evaluate, wait,
+      evaluate, wait, errors: () => [...runtimeErrors],
       async capture(path) {
         const { data } = await command('Page.captureScreenshot', { format: 'png' }, sessionId)
         await writeFile(path, Buffer.from(data, 'base64'))

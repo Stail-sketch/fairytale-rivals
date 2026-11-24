@@ -1,0 +1,12 @@
+{
+  "id": "FT-0613",
+  "original": "artwork/set-4/card-FT-0613.png",
+  "delivery": "apps/web/assets/card-FT-0613.webp",
+  "width": 1254,
+  "height": 1254,
+  "sha256": "dae02ac9a0cdbc80a0532136597277e53a8b7e5a4508b4e33ee187edf5943b48",
+  "deliverySha256": "bd6907493fd9556a2e26b2063af40c33fb28c4b767c54c2967e0349594adb338",
+  "generationFile": "exec-f42f06f9-a3c4-43a0-9366-a7d8077757dc.png",
+  "generator": "image_gen",
+  "review": "visual-approved"
+}

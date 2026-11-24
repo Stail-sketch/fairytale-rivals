@@ -20,8 +20,8 @@
   },
   "metadataStatus": "archive-catalogued",
   "originalCardIdStatus": "unverified",
-  "releaseVersionStatus": "unverified",
-  "implementation": "not-implemented",
+  "releaseVersionStatus": "DQRDB-image-snapshot-verified",
+  "implementation": "implemented",
   "cards": [
     {
       "ftId": "FT-0575",
@@ -39,15 +39,15 @@
       "originalCardId": null,
       "adaptedName": "繭灯の守り子",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0575"
     },
     {
@@ -66,15 +66,15 @@
       "originalCardId": null,
       "adaptedName": "露牙の小獣",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0576"
     },
     {
@@ -96,15 +96,15 @@
       "originalCardId": null,
       "adaptedName": "夜継ぎの錆祓い",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "generated-draft",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0577"
     },
     {
@@ -123,15 +123,15 @@
       "originalCardId": null,
       "adaptedName": "霜便りの羽虫",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0578"
     },
     {
@@ -153,15 +153,15 @@
       "originalCardId": null,
       "adaptedName": "墓土の縫い子",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0579"
     },
     {
@@ -183,15 +183,15 @@
       "originalCardId": null,
       "adaptedName": "露珠を継ぐ花告鳥",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "generated-draft",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0580"
     },
     {
@@ -210,15 +210,15 @@
       "originalCardId": null,
       "adaptedName": "刻印探しの獣案内",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0581"
     },
     {
@@ -240,15 +240,15 @@
       "originalCardId": null,
       "adaptedName": "夜継ぎの毒縫い師",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0582"
     },
     {
@@ -270,15 +270,15 @@
       "originalCardId": null,
       "adaptedName": "露珠隊の星撃曹長",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0583"
     },
     {
@@ -297,15 +297,15 @@
       "originalCardId": null,
       "adaptedName": "三族を訪ねる招き手",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0584"
     },
     {
@@ -324,15 +324,15 @@
       "originalCardId": null,
       "adaptedName": "糸喰いの木偶",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0585"
     },
     {
@@ -351,15 +351,15 @@
       "originalCardId": null,
       "adaptedName": "紅露の針姫",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0586"
     },
     {
@@ -381,15 +381,15 @@
       "originalCardId": null,
       "adaptedName": "夜継ぎの帰路大臣",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0587"
     },
     {
@@ -414,15 +414,15 @@
       "originalCardId": null,
       "adaptedName": "竜鱗の潮鳴り師",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0588"
     },
     {
@@ -444,15 +444,15 @@
       "originalCardId": null,
       "adaptedName": "露珠のふくらみ樹",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0589"
     },
     {
@@ -471,15 +471,15 @@
       "originalCardId": null,
       "adaptedName": "硝子檻の仮面公",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0590"
     },
     {
@@ -498,15 +498,15 @@
       "originalCardId": null,
       "adaptedName": "小翼の書庫番",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0591"
     },
     {
@@ -528,15 +528,15 @@
       "originalCardId": null,
       "adaptedName": "舞台を渡る蔓槍兵",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0592"
     },
     {
@@ -558,15 +558,15 @@
       "originalCardId": null,
       "adaptedName": "竜鱗の道開き",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0593"
     },
     {
@@ -585,15 +585,15 @@
       "originalCardId": null,
       "adaptedName": "刻印断ちの白槍騎士",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0594"
     },
     {
@@ -615,15 +615,15 @@
       "originalCardId": null,
       "adaptedName": "星路の踊り翁",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0595"
     },
     {
@@ -645,15 +645,15 @@
       "originalCardId": null,
       "adaptedName": "四幕の原初竜アウル",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0596"
     },
     {
@@ -678,15 +678,15 @@
       "originalCardId": null,
       "adaptedName": "竜詩を継ぐ少女セレナ",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0597"
     },
     {
@@ -708,15 +708,15 @@
       "originalCardId": null,
       "adaptedName": "宵露の刃精",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0598"
     },
     {
@@ -735,15 +735,15 @@
       "originalCardId": null,
       "adaptedName": "舞台守りの双尾獅子",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0599"
     },
     {
@@ -765,15 +765,15 @@
       "originalCardId": null,
       "adaptedName": "共鳴の母樹",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0600"
     },
     {
@@ -795,15 +795,15 @@
       "originalCardId": null,
       "adaptedName": "夜継ぎの影冠将",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0601"
     },
     {
@@ -825,15 +825,15 @@
       "originalCardId": null,
       "adaptedName": "星札の両替師",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0602"
     },
     {
@@ -855,15 +855,15 @@
       "originalCardId": null,
       "adaptedName": "竜鱗の黒嵐",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0603"
     },
     {
@@ -885,20 +885,20 @@
       "originalCardId": null,
       "adaptedName": "星鱗の遠吠え竜",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0604"
     },
     {
       "ftId": "FT-0605",
-      "sourceName": "排水の構え",
+      "sourceName": "背水のかまえ",
       "referenceId": "dqrdb:760",
       "stats": {
         "cost": 0,
@@ -911,16 +911,20 @@
       "originalCardId": null,
       "adaptedName": "不退の剣誓",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
-      "creativeReference": "fourth-pack-creative.json#FT-0605"
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
+      "creativeReference": "fourth-pack-creative.json#FT-0605",
+      "sourceAliases": [
+        "背水の構え",
+        "排水の構え"
+      ]
     },
     {
       "ftId": "FT-0606",
@@ -941,15 +945,15 @@
       "originalCardId": null,
       "adaptedName": "夜継ぎの双鐘語り",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0606"
     },
     {
@@ -971,15 +975,15 @@
       "originalCardId": null,
       "adaptedName": "夜継ぎの繕い番",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "generated-draft",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0607"
     },
     {
@@ -1001,15 +1005,15 @@
       "originalCardId": null,
       "adaptedName": "覚めゆく剣豪の熱",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0608"
     },
     {
@@ -1028,15 +1032,15 @@
       "originalCardId": null,
       "adaptedName": "折れ刃を継ぐ炉",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0609"
     },
     {
@@ -1055,15 +1059,15 @@
       "originalCardId": null,
       "adaptedName": "夜継ぎの返り糸師",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0610"
     },
     {
@@ -1093,15 +1097,15 @@
       "originalCardId": null,
       "adaptedName": "夜継ぎの貫槍守",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0611"
     },
     {
@@ -1123,15 +1127,15 @@
       "originalCardId": null,
       "adaptedName": "夜継ぎの弔火巨人",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0612"
     },
     {
@@ -1159,15 +1163,15 @@
       "originalCardId": null,
       "adaptedName": "夜継ぎの疾駆黒騎士",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0613"
     },
     {
@@ -1186,15 +1190,15 @@
       "originalCardId": null,
       "adaptedName": "弔い火の継承剣",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0614"
     },
     {
@@ -1213,15 +1217,15 @@
       "originalCardId": null,
       "adaptedName": "めぐり巡る小瓶",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0615"
     },
     {
@@ -1243,15 +1247,15 @@
       "originalCardId": null,
       "adaptedName": "露珠の三つ編み精",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0616"
     },
     {
@@ -1270,15 +1274,15 @@
       "originalCardId": null,
       "adaptedName": "ほどける護りの糸",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0617"
     },
     {
@@ -1300,15 +1304,15 @@
       "originalCardId": null,
       "adaptedName": "露珠の甲織り蠍",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0618"
     },
     {
@@ -1330,15 +1334,15 @@
       "originalCardId": null,
       "adaptedName": "露珠の宵衣司祭",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "generated-draft",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0619"
     },
     {
@@ -1363,15 +1367,15 @@
       "originalCardId": null,
       "adaptedName": "覚めゆく魔力の川",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0620"
     },
     {
@@ -1399,15 +1403,15 @@
       "originalCardId": null,
       "adaptedName": "露珠の星綴り術師",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0621"
     },
     {
@@ -1429,15 +1433,15 @@
       "originalCardId": null,
       "adaptedName": "露珠の縦糸召喚",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0622"
     },
     {
@@ -1459,15 +1463,15 @@
       "originalCardId": null,
       "adaptedName": "露珠の黒晶王",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0623"
     },
     {
@@ -1486,15 +1490,15 @@
       "originalCardId": null,
       "adaptedName": "ひと雫への帰還",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0624"
     },
     {
@@ -1513,15 +1517,15 @@
       "originalCardId": null,
       "adaptedName": "露珠の祭り替え",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0625"
     },
     {
@@ -1549,15 +1553,15 @@
       "originalCardId": null,
       "adaptedName": "露珠の双翼跳び",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0626"
     },
     {
@@ -1576,15 +1580,15 @@
       "originalCardId": null,
       "adaptedName": "露珠招きの草笛",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0627"
     },
     {
@@ -1603,15 +1607,15 @@
       "originalCardId": null,
       "adaptedName": "紅拳の破城打",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0628"
     },
     {
@@ -1630,15 +1634,15 @@
       "originalCardId": null,
       "adaptedName": "露珠響きの石爪",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0629"
     },
     {
@@ -1660,15 +1664,15 @@
       "originalCardId": null,
       "adaptedName": "露珠の拳継ぎ",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "generated-draft",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0630"
     },
     {
@@ -1690,15 +1694,15 @@
       "originalCardId": null,
       "adaptedName": "露珠の雲梯使い",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0631"
     },
     {
@@ -1717,15 +1721,15 @@
       "originalCardId": null,
       "adaptedName": "露珠合わせの必中掌",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0632"
     },
     {
@@ -1747,15 +1751,15 @@
       "originalCardId": null,
       "adaptedName": "露珠の鼓動太鼓",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0633"
     },
     {
@@ -1777,15 +1781,15 @@
       "originalCardId": null,
       "adaptedName": "露珠の大族長",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0634"
     },
     {
@@ -1807,15 +1811,15 @@
       "originalCardId": null,
       "adaptedName": "竜呼びの鈴守り",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0635"
     },
     {
@@ -1834,15 +1838,15 @@
       "originalCardId": null,
       "adaptedName": "縦糸の守護祈り",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0636"
     },
     {
@@ -1861,15 +1865,15 @@
       "originalCardId": null,
       "adaptedName": "竜鱗を継ぐ祝福",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0637"
     },
     {
@@ -1891,15 +1895,15 @@
       "originalCardId": null,
       "adaptedName": "竜鱗の繕い獣",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0638"
     },
     {
@@ -1918,15 +1922,15 @@
       "originalCardId": null,
       "adaptedName": "竜便りの風細剣",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0639"
     },
     {
@@ -1955,15 +1959,15 @@
       "originalCardId": null,
       "adaptedName": "竜鱗の若き旗騎士",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "generated-draft",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0640"
     },
     {
@@ -1988,15 +1992,15 @@
       "originalCardId": null,
       "adaptedName": "竜鱗の黎明賢竜",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0641"
     },
     {
@@ -2015,15 +2019,15 @@
       "originalCardId": null,
       "adaptedName": "静謐なる鏡の微笑",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0642"
     },
     {
@@ -2042,15 +2046,15 @@
       "originalCardId": null,
       "adaptedName": "返り光の精霊矢",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0643"
     },
     {
@@ -2075,15 +2079,15 @@
       "originalCardId": null,
       "adaptedName": "竜鱗の荷守り竜",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0644"
     },
     {
@@ -2102,15 +2106,15 @@
       "originalCardId": null,
       "adaptedName": "銀環の招き巻物",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0645"
     },
     {
@@ -2135,15 +2139,15 @@
       "originalCardId": null,
       "adaptedName": "銀環の数珠算盤",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0646"
     },
     {
@@ -2165,15 +2169,15 @@
       "originalCardId": null,
       "adaptedName": "銀環の刻印卵",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "generated-draft",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0647"
     },
     {
@@ -2201,15 +2205,15 @@
       "originalCardId": null,
       "adaptedName": "銀露の三つ子",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0648"
     },
     {
@@ -2228,15 +2232,15 @@
       "originalCardId": null,
       "adaptedName": "銀環の鎧仕立て巨人",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0649"
     },
     {
@@ -2260,15 +2264,15 @@
       "originalCardId": null,
       "adaptedName": "覚めゆく守護の巻物",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0650"
     },
     {
@@ -2287,15 +2291,15 @@
       "originalCardId": null,
       "adaptedName": "痛みを分かつ双枝杖",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0651"
     },
     {
@@ -2317,15 +2321,15 @@
       "originalCardId": null,
       "adaptedName": "銀環の歯車公",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0652"
     },
     {
@@ -2344,15 +2348,15 @@
       "originalCardId": null,
       "adaptedName": "銀環の大変身舞台",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0653"
     },
     {
@@ -2377,15 +2381,15 @@
       "originalCardId": null,
       "adaptedName": "銀露の金剛冠",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0654"
     },
     {
@@ -2407,15 +2411,15 @@
       "originalCardId": null,
       "adaptedName": "竜鱗の星角案内竜",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0655"
     },
     {
@@ -2434,15 +2438,15 @@
       "originalCardId": null,
       "adaptedName": "魂を写す双鏡",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0656"
     },
     {
@@ -2461,15 +2465,15 @@
       "originalCardId": null,
       "adaptedName": "竜鱗の逆巻く雷",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0657"
     },
     {
@@ -2488,15 +2492,15 @@
       "originalCardId": null,
       "adaptedName": "力を分ける星札",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0658"
     },
     {
@@ -2521,15 +2525,15 @@
       "originalCardId": null,
       "adaptedName": "竜鱗の盾翼獣",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "generated-draft",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0659"
     },
     {
@@ -2551,15 +2555,15 @@
       "originalCardId": null,
       "adaptedName": "竜卵の星呼吸",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0660"
     },
     {
@@ -2581,15 +2585,15 @@
       "originalCardId": null,
       "adaptedName": "竜鱗の角旗兵",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0661"
     },
     {
@@ -2611,15 +2615,15 @@
       "originalCardId": null,
       "adaptedName": "竜鱗の双相氷竜",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0662"
     },
     {
@@ -2644,15 +2648,15 @@
       "originalCardId": null,
       "adaptedName": "竜詩の大占術師",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0663"
     },
     {
@@ -2674,15 +2678,15 @@
       "originalCardId": null,
       "adaptedName": "四願の天書竜",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0664"
     },
     {
@@ -2704,15 +2708,15 @@
       "originalCardId": null,
       "adaptedName": "夜継ぎの目覚め角",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0665"
     },
     {
@@ -2734,15 +2738,15 @@
       "originalCardId": null,
       "adaptedName": "小さき命への終鐘",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0666"
     },
     {
@@ -2761,15 +2765,15 @@
       "originalCardId": null,
       "adaptedName": "夜継ぎの二重門",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0667"
     },
     {
@@ -2788,15 +2792,15 @@
       "originalCardId": null,
       "adaptedName": "夜園を満たす毒霧",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0668"
     },
     {
@@ -2822,15 +2826,15 @@
       "originalCardId": null,
       "adaptedName": "夜継ぎの紅杖魔術師",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0669"
     },
     {
@@ -2849,15 +2853,15 @@
       "originalCardId": null,
       "adaptedName": "死者が灯す魔泉",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0670"
     },
     {
@@ -2879,15 +2883,15 @@
       "originalCardId": null,
       "adaptedName": "夜継ぎの帰還誓約",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0671"
     },
     {
@@ -2912,15 +2916,15 @@
       "originalCardId": null,
       "adaptedName": "夜継ぎの還魔公",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0672"
     },
     {
@@ -2942,15 +2946,15 @@
       "originalCardId": null,
       "adaptedName": "夜継ぎの大召還王",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0673"
     },
     {
@@ -2980,15 +2984,15 @@
       "originalCardId": null,
       "adaptedName": "夜継ぎの黒薔薇帝",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "generated-draft",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "creativeReference": "fourth-pack-creative.json#FT-0674"
     }
   ],
@@ -3008,15 +3012,15 @@
       "originalCardId": null,
       "adaptedName": "萎れた旅の栞",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "proposedFtId": "token-set4-withered-bookmark",
       "creativeReference": "fourth-pack-creative.json#token-set4-withered-bookmark"
     },
@@ -3035,15 +3039,15 @@
       "originalCardId": null,
       "adaptedName": "秘めごとの禁書",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "proposedFtId": "token-set4-secret-grimoire",
       "creativeReference": "fourth-pack-creative.json#token-set4-secret-grimoire"
     },
@@ -3065,15 +3069,15 @@
       "originalCardId": null,
       "adaptedName": "夜継ぎの影騎士",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "proposedFtId": "token-set4-shadow-knight",
       "creativeReference": "fourth-pack-creative.json#token-set4-shadow-knight"
     },
@@ -3095,15 +3099,15 @@
       "originalCardId": null,
       "adaptedName": "アウル・第二幕",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "proposedFtId": "token-set4-aul-act-two",
       "creativeReference": "fourth-pack-creative.json#token-set4-aul-act-two"
     },
@@ -3125,15 +3129,15 @@
       "originalCardId": null,
       "adaptedName": "アウル・第三幕",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "proposedFtId": "token-set4-aul-act-three",
       "creativeReference": "fourth-pack-creative.json#token-set4-aul-act-three"
     },
@@ -3155,15 +3159,15 @@
       "originalCardId": null,
       "adaptedName": "アウル・第四幕",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "proposedFtId": "token-set4-aul-act-four",
       "creativeReference": "fourth-pack-creative.json#token-set4-aul-act-four"
     },
@@ -3190,15 +3194,15 @@
       "originalCardId": null,
       "adaptedName": "セレナ・竜詩の姿",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "proposedFtId": "token-set4-serena-dragon",
       "creativeReference": "fourth-pack-creative.json#token-set4-serena-dragon"
     },
@@ -3217,15 +3221,15 @@
       "originalCardId": null,
       "adaptedName": "宵露の守晶",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "proposedFtId": "token-set4-dusk-crystal",
       "creativeReference": "fourth-pack-creative.json#token-set4-dusk-crystal"
     },
@@ -3244,15 +3248,15 @@
       "originalCardId": null,
       "adaptedName": "黎明竜の守護装具",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "proposedFtId": "token-set4-dawn-regalia",
       "creativeReference": "fourth-pack-creative.json#token-set4-dawn-regalia"
     },
@@ -3274,15 +3278,15 @@
       "originalCardId": null,
       "adaptedName": "願い：叡智の泉",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "proposedFtId": "token-set4-wish-pages",
       "creativeReference": "fourth-pack-creative.json#token-set4-wish-pages"
     },
@@ -3304,21 +3308,21 @@
       "originalCardId": null,
       "adaptedName": "願い：竜の招き",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "proposedFtId": "token-set4-wish-summon",
       "creativeReference": "fourth-pack-creative.json#token-set4-wish-summon"
     },
     {
       "role": "choice-option",
-      "sourceName": "ドランゴを つよくしたい",
+      "sourceName": "ドラゴンを つよくしたい",
       "referenceId": "dqrdb:750",
       "stats": {
         "cost": 8,
@@ -3334,15 +3338,15 @@
       "originalCardId": null,
       "adaptedName": "願い：竜の祝福",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "proposedFtId": "token-set4-wish-strength",
       "creativeReference": "fourth-pack-creative.json#token-set4-wish-strength"
     },
@@ -3364,15 +3368,15 @@
       "originalCardId": null,
       "adaptedName": "願い：秘めごとの頁",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "proposedFtId": "token-set4-wish-grimoire",
       "creativeReference": "fourth-pack-creative.json#token-set4-wish-grimoire"
     },
@@ -3394,15 +3398,15 @@
       "originalCardId": null,
       "adaptedName": "夜継ぎの小従者",
       "verification": {
-        "metadata": "archive-catalogued",
-        "effect": "unverified",
-        "targetsAndOrder": "unverified",
-        "interactions": "unverified"
+        "metadata": "image-verified",
+        "effect": "image-verified",
+        "targetsAndOrder": "implemented-regression-tested",
+        "interactions": "regression-tested-main-mechanics"
       },
-      "implementation": "not-implemented",
-      "testStatus": "not-tested",
-      "artStatus": "not-created",
-      "nameStatus": "proposed",
+      "implementation": "implemented",
+      "testStatus": "tested",
+      "artStatus": "generated",
+      "nameStatus": "adopted",
       "proposedFtId": "token-set4-returning-revenant",
       "creativeReference": "fourth-pack-creative.json#token-set4-returning-revenant"
     }

@@ -2,13 +2,15 @@ import { cards } from '../cards/index.js'
 import { leaderTarget, other, positions, samePosition, unitTarget } from './rules.js'
 import { occupiedTerrainCount, terrainAt, terrainName } from './terrain.js'
 import { addModifier, awakeningBonus, breakdown, powerChanges } from './power.js'
+import { badgeAttack, hardMetalActive } from './badges.js'
 
 export const allUnits = game => game.players.flatMap(player => player.units)
 export const at = (game, seat, position) =>
   game.players[seat].units.find(unit => samePosition(unit.position, position))
 export const canUseAbilities = unit => !unit.statuses?.includes('SILENCE')
-export const has = (unit, keyword, game) => canUseAbilities(unit) &&
-  (cards[unit.card].keywords.includes(keyword) || unit.grants?.includes(keyword) ||
+export const has = (unit, keyword, game) => unit.badgeKeywords?.includes(keyword) ||
+  keyword === 'HARD_METAL_BODY' && hardMetalActive(game, unit.owner) && has(unit, 'METAL_BODY') ||
+  canUseAbilities(unit) && (cards[unit.card].keywords.includes(keyword) || unit.grants?.includes(keyword) ||
     (keyword === 'AIM' && cards[unit.card].healthyAim && game?.players[unit.owner].hp >= 20))
 export const hidden = unit => has(unit, 'STEALTH') && !unit.revealed
 export const attackLimit = unit => has(unit, 'DOUBLE_ATTACK') ? 2 : 1
@@ -22,7 +24,7 @@ export function leaderPower(game, seat, bonuses) {
   if (player.weapon) {
     const insignia = occupiedTerrainCount(game, seat, 'sword')
     addModifier(bonuses, terrainName('sword'), insignia)
-    value += player.weapon.attack + insignia
+    value += player.weapon.attack + insignia + badgeAttack(player, cards[player.weapon.card], bonuses)
   }
   for (const unit of player.units.filter(canUseAbilities)) {
     const card = cards[unit.card]
@@ -37,7 +39,7 @@ export function leaderPower(game, seat, bonuses) {
 
 export function attackValue(game, unit, bonuses) {
   const card = cards[unit.card]
-  let value = unit.attack
+  let value = unit.attack + badgeAttack(game.players[unit.owner], card, bonuses)
   if (canUseAbilities(unit)) {
     let amount = card.healthyAim && game.players[unit.owner].hp >= 20 ? 2 : 0
     if (card.attackInRow?.row === unit.position.row &&
@@ -109,7 +111,7 @@ export function effectTargets(game, seat, definition) {
     if (unit.owner !== seat && (['allyUnit', 'ally'].includes(target) || hidden(unit))) return false
     if (has(unit, 'UNTARGETABLE')) return false
     if (filter?.row && unit.position.row !== filter.row) return false
-    if (filter?.maxAttack !== undefined && attackValue(game, unit) > filter.maxAttack) return false
+    if (filter?.maxAttack !== undefined && attackValue(game, unit) > filter.maxAttack + (filter.attackBoost ?? 0) * game.players[seat].skillUses) return false
     if (filter?.atMostSummonAttack && attackValue(game, unit) >
       definition.attack + (definition.boost?.attack ?? 0) * game.players[seat].skillUses) return false
     if (filter?.minAttack !== undefined && attackValue(game, unit) < filter.minAttack) return false

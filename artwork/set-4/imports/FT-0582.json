@@ -1,0 +1,12 @@
+{
+  "id": "FT-0582",
+  "original": "artwork/set-4/card-FT-0582.png",
+  "delivery": "apps/web/assets/card-FT-0582.webp",
+  "width": 1254,
+  "height": 1254,
+  "sha256": "e7b56b618d6460681e0aa9f4d60b86bde4837cb67069bce15cfdfc0daf411a7b",
+  "deliverySha256": "798131853691861448af12937954e7f73a4e2cf7d63b590e3f6306892281f0f6",
+  "generationFile": "exec-e0cce5d8-ad3b-4514-be3e-81848f2da2f6.png",
+  "generator": "image_gen",
+  "review": "visual-approved"
+}

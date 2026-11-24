@@ -87,6 +87,7 @@ function boardValue(game, seat, profile) {
     if (has(unit, 'AIM') || has(unit, 'PIERCE')) material += 0.55
     if (has(unit, 'DOUBLE_ATTACK')) material += unit.attack * 0.42
     if (has(unit, 'METAL_BODY')) material += 0.6
+    if (has(unit, 'HARD_METAL_BODY', game)) material += 0.8
     if (has(unit, 'GUARD') && unit.position.row === 'front') material += 0.65
     if (hidden(unit)) material += 0.35
     if (unit.position.row === 'back' && fronts.has(unit.position.column)) material += 0.45 + unit.attack * 0.09
@@ -131,9 +132,12 @@ function evaluation(game, seat, profile) {
   const resources = own.hand.length * 1.08 + own.tension * 0.56 + own.mp * 0.09
     + own.skillUses * 0.34 + (own.leaderArmor ?? 0) * 0.4
   const ramp = Math.min(own.maxMp, 8) * profile.ramp + own.maxMp * 0.14
+  const badgeValue = player => (player.badges ?? []).reduce((total, badge) => total +
+    .35 + .3 * Number(Boolean(badge.event)) + .2 * (badge.attack ?? 0) + .2 * (badge.hp ?? 0) +
+    .3 * (badge.discount ?? 0) + .4 * Number(Boolean(badge.keyword)), 0)
   return healthValue(own.hp) * profile.health - healthValue(enemy.hp) * profile.pressure
     + boardValue(game, seat, profile) * profile.board - boardValue(game, 1 - seat) * 1.08
-    + resources + ramp - enemyThreat * 0.27
+    + resources + ramp + badgeValue(own) - badgeValue(enemy) - enemyThreat * 0.27
     - (enemyThreat >= own.hp ? 4.2 : 0)
     + (immediateThreat >= enemy.hp ? 2.5 : 0)
 }

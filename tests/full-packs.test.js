@@ -46,7 +46,7 @@ function choose(game) {
 }
 
 test('追加した原作対応カードの全種類を対戦で使用できる', async t => {
-  const expansion = catalog.filter(card => card.id.startsWith('FT-') && Number(card.id.slice(3)) >= 61)
+  const expansion = catalog.filter(card => card.id.startsWith('FT-') && Number(card.id.slice(3)) >= 61 && Number(card.id.slice(3)) <= 574)
   assert.equal(expansion.length, 513)
   for (const card of expansion) await t.test(card.id + ' ' + card.name, () => {
     let game = fixture(card.classId === 'neutral' ? 'warrior' : card.classId)

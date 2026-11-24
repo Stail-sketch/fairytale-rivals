@@ -1,0 +1,12 @@
+{
+  "id": "FT-0622",
+  "original": "artwork/set-4/card-FT-0622.png",
+  "delivery": "apps/web/assets/card-FT-0622.webp",
+  "width": 1254,
+  "height": 1254,
+  "sha256": "f6ed76e43d84c8887e60b4b8dad1d580004a9998e3295ff8e4984bbf9ce03cf3",
+  "deliverySha256": "2edf5a3ee718ff74e7618f2029af05a49b0769c05bb41e9d8dfac95e07590c1f",
+  "generationFile": "exec-a1c2f23a-4f7c-4b24-ab20-e488b9d4d50e.png",
+  "generator": "image_gen",
+  "review": "visual-approved"
+}

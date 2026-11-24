@@ -1511,3 +1511,9 @@ body:has(.deck-overview[open]) { overflow: hidden; }
   .inspector-art img { aspect-ratio: 1; object-position: center 33%; }
 }
 
+.story-badge-summary { display: block; width: 100%; margin-top: .5rem; padding: .4rem .5rem; color: #f9df9b; border: 1px solid #caa75b88; border-radius: 6px; background: #151b28e8; font-size: .8rem; }
+.story-badge-summary:hover, .story-badge-summary:focus-visible { border-color: #ffe6a1; box-shadow: 0 0 12px #f2bd5444; }
+.active-story-badge { display: flex; gap: .7rem; padding: .6rem 0; border-bottom: 1px solid #b3a57444; }
+.active-story-badge img { width: 58px; height: 58px; object-fit: cover; border-radius: 6px; }
+.active-story-badge p { margin: .3rem 0; font-size: .85rem; line-height: 1.6; }
+.related-skill { padding: .7rem; border: 1px solid #a3c5e855; border-radius: 7px; margin: .5rem 0; }

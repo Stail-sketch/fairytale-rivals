@@ -1,0 +1,1944 @@
+{
+  "method": "Visual review of all 114 preserved card images; generated original artwork does not reuse these images.",
+  "snapshot": "DQRDB image files downloaded 2026-11-24",
+  "records": [
+    {
+      "id": "FT-0575",
+      "referenceId": "dqrdb:830",
+      "url": "https://dqrdb.com/card/830.png",
+      "sha256": "4f099b3c57b3e6a34ef7432a3e5b2d58f483bc597968c0ae0fd31f96fded4b90",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 1,
+        "attack": 0,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "comparisonSheet": 0
+    },
+    {
+      "id": "FT-0576",
+      "referenceId": "dqrdb:831",
+      "url": "https://dqrdb.com/card/831.png",
+      "sha256": "91a1bc04cc0ea073db53bb4ba2d8fb1ae7a7a91989ecec838dd7f05fdb15c268",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 1,
+        "attack": 1,
+        "hp": 2,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "comparisonSheet": 0
+    },
+    {
+      "id": "FT-0577",
+      "referenceId": "dqrdb:832",
+      "url": "https://dqrdb.com/card/832.png",
+      "sha256": "7af7fc41dc68e5be98c5fd6e925b83ca6457fcec65433cd02edaff7516b50428",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 1,
+        "attack": 2,
+        "hp": 1,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "comparisonSheet": 0
+    },
+    {
+      "id": "FT-0578",
+      "referenceId": "dqrdb:833",
+      "url": "https://dqrdb.com/card/833.png",
+      "sha256": "928a14baab5eba876a0ed88362fd13ef6ae4e67f84c0fea62300d9d3117753f8",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 2,
+        "attack": 1,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "comparisonSheet": 0
+    },
+    {
+      "id": "FT-0579",
+      "referenceId": "dqrdb:834",
+      "url": "https://dqrdb.com/card/834.png",
+      "sha256": "896ea4262dbcd329f40206ecc974138731b1bd1a63e3d7003eda7470e9faaae9",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 2,
+        "attack": 2,
+        "hp": 3,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "comparisonSheet": 0
+    },
+    {
+      "id": "FT-0580",
+      "referenceId": "dqrdb:835",
+      "url": "https://dqrdb.com/card/835.png",
+      "sha256": "31aca0ca1a123b4e81b4ebc640e65f7a992ad0a4a594c869c2b8d476ce0955d5",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 2,
+        "attack": 2,
+        "hp": 3,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "comparisonSheet": 0
+    },
+    {
+      "id": "FT-0581",
+      "referenceId": "dqrdb:836",
+      "url": "https://dqrdb.com/card/836.png",
+      "sha256": "43cba111eb977b3d612cb00bc52bfb221acaea8423b498fa3aed252dc3a13016",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 2,
+        "attack": 3,
+        "hp": 1,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "comparisonSheet": 0
+    },
+    {
+      "id": "FT-0582",
+      "referenceId": "dqrdb:837",
+      "url": "https://dqrdb.com/card/837.png",
+      "sha256": "14cb404dbb8ffa1f700903986ad5086c1666081cd35ccd1627394ba8be970ec0",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 2,
+        "attack": 3,
+        "hp": 2,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 0
+    },
+    {
+      "id": "FT-0583",
+      "referenceId": "dqrdb:838",
+      "url": "https://dqrdb.com/card/838.png",
+      "sha256": "4112a7647f043d2372f231952e686c52f7dc6ca8f114e99dacbe727d4c478f43",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 2,
+        "attack": 1,
+        "hp": 3,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "comparisonSheet": 0
+    },
+    {
+      "id": "FT-0584",
+      "referenceId": "dqrdb:839",
+      "url": "https://dqrdb.com/card/839.png",
+      "sha256": "30803b7e4d875596ea773f69a548f2b0aca0635e086ac48d5c3f48bc8442b49d",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 3,
+        "attack": 2,
+        "hp": 2,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "comparisonSheet": 0
+    },
+    {
+      "id": "FT-0585",
+      "referenceId": "dqrdb:840",
+      "url": "https://dqrdb.com/card/840.png",
+      "sha256": "2f971784db59361643a5a2a19c118ec6bb65d06109eb055b6a96a469565dd0ac",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 3,
+        "attack": 5,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "comparisonSheet": 0
+    },
+    {
+      "id": "FT-0586",
+      "referenceId": "dqrdb:841",
+      "url": "https://dqrdb.com/card/841.png",
+      "sha256": "3e59f692289253e76d56c69c5e98fb5ab07e3d332297b6514b7f42a023f5b784",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 3,
+        "attack": 3,
+        "hp": 3,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "comparisonSheet": 0
+    },
+    {
+      "id": "FT-0587",
+      "referenceId": "dqrdb:842",
+      "url": "https://dqrdb.com/card/842.png",
+      "sha256": "f9f1836d1331a6234aec9ad148ba68e16bce290efaa442e673e647616b667f94",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 3,
+        "attack": 3,
+        "hp": 2,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "comparisonSheet": 1
+    },
+    {
+      "id": "FT-0588",
+      "referenceId": "dqrdb:843",
+      "url": "https://dqrdb.com/card/843.png",
+      "sha256": "e59280dbae73c7b68b94bc3a858a5161023ae747292daa88a366348d61c6b63a",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 3,
+        "attack": 3,
+        "hp": 2,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "comparisonSheet": 1
+    },
+    {
+      "id": "FT-0589",
+      "referenceId": "dqrdb:844",
+      "url": "https://dqrdb.com/card/844.png",
+      "sha256": "127d0e3d4f77d6cf2bf0a50aa4faefaa03b4959caa38dc8f0c7765c0f9ef31b2",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 3,
+        "attack": 2,
+        "hp": 2,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 1
+    },
+    {
+      "id": "FT-0590",
+      "referenceId": "dqrdb:845",
+      "url": "https://dqrdb.com/card/845.png",
+      "sha256": "8e4b343746d89982c0ad62d8fde482f901adcbaacad4ce61abf8d77b68384db7",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 3,
+        "attack": 3,
+        "hp": 2,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "comparisonSheet": 1
+    },
+    {
+      "id": "FT-0591",
+      "referenceId": "dqrdb:846",
+      "url": "https://dqrdb.com/card/846.png",
+      "sha256": "2451e3b49e150fd301dbcb54976b83defc7844f1e38503e29d57198d05b79965",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 4,
+        "attack": 4,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "comparisonSheet": 1
+    },
+    {
+      "id": "FT-0592",
+      "referenceId": "dqrdb:847",
+      "url": "https://dqrdb.com/card/847.png",
+      "sha256": "86293769a31aec05c105af00396effbf39ef8355e49686cafcad13ace02bff50",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 4,
+        "attack": 3,
+        "hp": 5,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "comparisonSheet": 1
+    },
+    {
+      "id": "FT-0593",
+      "referenceId": "dqrdb:848",
+      "url": "https://dqrdb.com/card/848.png",
+      "sha256": "22ea041a5a5cd34ca19fa6045f8cb09c84c2ce831dbbd55c1951e1e567daa71e",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 4,
+        "attack": 4,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 1
+    },
+    {
+      "id": "FT-0594",
+      "referenceId": "dqrdb:849",
+      "url": "https://dqrdb.com/card/849.png",
+      "sha256": "4c6ec98dbe08a0c91bd9dc36b166fd8a6b87ba624375489d7f5e90e34379df9b",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 4,
+        "attack": 4,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 1
+    },
+    {
+      "id": "FT-0595",
+      "referenceId": "dqrdb:850",
+      "url": "https://dqrdb.com/card/850.png",
+      "sha256": "8cde1dd9b93d42197c9f41ad96b1904fe3d047f64265375ce37334280ece37ce",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 4,
+        "attack": 3,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 1
+    },
+    {
+      "id": "FT-0596",
+      "referenceId": "dqrdb:851",
+      "url": "https://dqrdb.com/card/851.png",
+      "sha256": "e5b3122591c271ca99e8823632d8a57322c4a70be92eca11d7d957b40f22d1ab",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 4,
+        "attack": 4,
+        "hp": 4,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "comparisonSheet": 1
+    },
+    {
+      "id": "FT-0597",
+      "referenceId": "dqrdb:852",
+      "url": "https://dqrdb.com/card/852.png",
+      "sha256": "d1c75d967b604ba43650b6731cf1967892dc5c45b980b271992ebf26120e8f5b",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 4,
+        "attack": 2,
+        "hp": 5,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "comparisonSheet": 1
+    },
+    {
+      "id": "FT-0598",
+      "referenceId": "dqrdb:853",
+      "url": "https://dqrdb.com/card/853.png",
+      "sha256": "d1f9e8f7dc8df17d7086fa24fb30e3ba0940403d26be5b2393f3b0a7cfeeed50",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 5,
+        "attack": 5,
+        "hp": 5,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "comparisonSheet": 1
+    },
+    {
+      "id": "FT-0599",
+      "referenceId": "dqrdb:854",
+      "url": "https://dqrdb.com/card/854.png",
+      "sha256": "9aea8669410e56c77eb85888d81a20242055973e647de5e7dd1f23f0665f3427",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 5,
+        "attack": 4,
+        "hp": 5,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "comparisonSheet": 2
+    },
+    {
+      "id": "FT-0600",
+      "referenceId": "dqrdb:855",
+      "url": "https://dqrdb.com/card/855.png",
+      "sha256": "be354b60ca558fa820f5be37ab21bdaf3b7c89fa053910260eccc55ab86c513d",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 6,
+        "attack": 5,
+        "hp": 5,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "comparisonSheet": 2
+    },
+    {
+      "id": "FT-0601",
+      "referenceId": "dqrdb:856",
+      "url": "https://dqrdb.com/card/856.png",
+      "sha256": "57240a0cf8fad81fbea27edae79e4d0524bd6798716a4ebdb3f5e05ff1e8e1df",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 6,
+        "attack": 3,
+        "hp": 6,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "comparisonSheet": 2
+    },
+    {
+      "id": "FT-0602",
+      "referenceId": "dqrdb:857",
+      "url": "https://dqrdb.com/card/857.png",
+      "sha256": "91bb9bdc0c4aa0ddd59a5d5deb341e1054252711b941ba5cd103a1e01e34ed45",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 7,
+        "attack": 5,
+        "hp": 5,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "comparisonSheet": 2
+    },
+    {
+      "id": "FT-0603",
+      "referenceId": "dqrdb:858",
+      "url": "https://dqrdb.com/card/858.png",
+      "sha256": "9510f1aa5155d57745f67aa9507b32ffdc5d9396d6d9e0c306514f821dd96bf7",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 7,
+        "attack": 6,
+        "hp": 6,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 2
+    },
+    {
+      "id": "FT-0604",
+      "referenceId": "dqrdb:859",
+      "url": "https://dqrdb.com/card/859.png",
+      "sha256": "14cbcbe986635f36a2dbb906a1a509de1ac9848c5026a789dd0c1ccb47d64908",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 9,
+        "attack": 9,
+        "hp": 9,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "comparisonSheet": 2
+    },
+    {
+      "id": "FT-0605",
+      "referenceId": "dqrdb:760",
+      "url": "https://dqrdb.com/card/760.png",
+      "sha256": "fe92c41364e3dc4bb63a62fea836e94317b45cccb7529b9fa3700b8f73a8fa33",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 0,
+        "attack": null,
+        "hp": null,
+        "classId": "warrior",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "comparisonSheet": 2
+    },
+    {
+      "id": "FT-0606",
+      "referenceId": "dqrdb:761",
+      "url": "https://dqrdb.com/card/761.png",
+      "sha256": "baf858397135e1287a87c9c43fe838dcb8f3713e285328de9576b8a706ee8954",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 1,
+        "attack": 2,
+        "hp": 2,
+        "classId": "warrior",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 2
+    },
+    {
+      "id": "FT-0607",
+      "referenceId": "dqrdb:762",
+      "url": "https://dqrdb.com/card/762.png",
+      "sha256": "2206713f6dbd38a38cd1c5a9d62d16fda592d5508b8401e2668f3ac555f0e02d",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 3,
+        "attack": 2,
+        "hp": 4,
+        "classId": "warrior",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "comparisonSheet": 2
+    },
+    {
+      "id": "FT-0608",
+      "referenceId": "dqrdb:763",
+      "url": "https://dqrdb.com/card/763.png",
+      "sha256": "370bc3f5b08e4f41e1f55b89f52be69128df9f914b2049b264019fea1ac30a2f",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 3,
+        "attack": null,
+        "hp": null,
+        "classId": "warrior",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "comparisonSheet": 2
+    },
+    {
+      "id": "FT-0609",
+      "referenceId": "dqrdb:764",
+      "url": "https://dqrdb.com/card/764.png",
+      "sha256": "679bdf893da77e501c875a889bded1a2e85a770a26db2253cc3dcc7cf670e6d4",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 3,
+        "attack": null,
+        "hp": null,
+        "classId": "warrior",
+        "kind": "spell",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 2
+    },
+    {
+      "id": "FT-0610",
+      "referenceId": "dqrdb:765",
+      "url": "https://dqrdb.com/card/765.png",
+      "sha256": "d931a26fc5176471ec751689c5a57888a6e6fc227a919247458e22b3941c1edd",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 4,
+        "attack": 5,
+        "hp": 4,
+        "classId": "warrior",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "comparisonSheet": 2
+    },
+    {
+      "id": "FT-0611",
+      "referenceId": "dqrdb:766",
+      "url": "https://dqrdb.com/card/766.png",
+      "sha256": "e028954c89c87e23040557b22f62d13f9dc1c0806323a50e0a8de4cb67a36912",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 5,
+        "attack": 4,
+        "hp": 5,
+        "classId": "warrior",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 3
+    },
+    {
+      "id": "FT-0612",
+      "referenceId": "dqrdb:767",
+      "url": "https://dqrdb.com/card/767.png",
+      "sha256": "8ced2768864f8a73e2e9fc9e4bef0152eb7f3031eb5dba5dade781fe1aa3f1c0",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 7,
+        "attack": 6,
+        "hp": 2,
+        "classId": "warrior",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "comparisonSheet": 3
+    },
+    {
+      "id": "FT-0613",
+      "referenceId": "dqrdb:768",
+      "url": "https://dqrdb.com/card/768.png",
+      "sha256": "859f1cef67670bf027f2ebebe4544875a73c81c286af7d7a2336349eeede36ce",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 8,
+        "attack": 4,
+        "hp": 8,
+        "classId": "warrior",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "comparisonSheet": 3
+    },
+    {
+      "id": "FT-0614",
+      "referenceId": "dqrdb:769",
+      "url": "https://dqrdb.com/card/769.png",
+      "sha256": "2645ec9c564f5fb419f1139c79235be04e51f7bac8c5f219114e355ca737110d",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 8,
+        "attack": 4,
+        "hp": 2,
+        "classId": "warrior",
+        "kind": "weapon",
+        "rarity": "rare"
+      },
+      "comparisonSheet": 3
+    },
+    {
+      "id": "FT-0615",
+      "referenceId": "dqrdb:770",
+      "url": "https://dqrdb.com/card/770.png",
+      "sha256": "ed2c8bc142583b9e49c77174f80bc355476f040a1eb2a06910f1f1e51a0fd9ac",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 1,
+        "attack": null,
+        "hp": null,
+        "classId": "mage",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "comparisonSheet": 3
+    },
+    {
+      "id": "FT-0616",
+      "referenceId": "dqrdb:771",
+      "url": "https://dqrdb.com/card/771.png",
+      "sha256": "c43af614232bc005dd9398b00a27d454e866f33024c1d04c7d5cf124edb5c694",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 2,
+        "attack": 2,
+        "hp": 1,
+        "classId": "mage",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "comparisonSheet": 3
+    },
+    {
+      "id": "FT-0617",
+      "referenceId": "dqrdb:772",
+      "url": "https://dqrdb.com/card/772.png",
+      "sha256": "8326a85ebe1b188fd4c3916014ebed072600dbdfc8039710fd42de2e03e2ac61",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 2,
+        "attack": null,
+        "hp": null,
+        "classId": "mage",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "comparisonSheet": 3
+    },
+    {
+      "id": "FT-0618",
+      "referenceId": "dqrdb:773",
+      "url": "https://dqrdb.com/card/773.png",
+      "sha256": "2dfc5a589ed9d56b49415721503284e0c2f951ac3e3e8ee5b96db336df30591b",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 3,
+        "attack": 2,
+        "hp": 4,
+        "classId": "mage",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "comparisonSheet": 3
+    },
+    {
+      "id": "FT-0619",
+      "referenceId": "dqrdb:774",
+      "url": "https://dqrdb.com/card/774.png",
+      "sha256": "55eb3903edee03e367f815953ceb93a9e44837763c9503d9bdbc2fa1883e67a1",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 4,
+        "attack": 5,
+        "hp": 4,
+        "classId": "mage",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 3
+    },
+    {
+      "id": "FT-0620",
+      "referenceId": "dqrdb:775",
+      "url": "https://dqrdb.com/card/775.png",
+      "sha256": "239da5a65827485cba10658a42b784046581b959c7bc3eb7282c894ad5257e57",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 4,
+        "attack": null,
+        "hp": null,
+        "classId": "mage",
+        "kind": "spell",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 3
+    },
+    {
+      "id": "FT-0621",
+      "referenceId": "dqrdb:776",
+      "url": "https://dqrdb.com/card/776.png",
+      "sha256": "05fbc7f3ec9bb4664b8f6d55e9474d3dac079f24d62d64d7d132e067001ce87f",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 5,
+        "attack": 4,
+        "hp": 4,
+        "classId": "mage",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 3
+    },
+    {
+      "id": "FT-0622",
+      "referenceId": "dqrdb:777",
+      "url": "https://dqrdb.com/card/777.png",
+      "sha256": "659205f3d25cddff9bd935805ee474ac70388d4d67ada978745b472fa16d06a6",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 5,
+        "attack": null,
+        "hp": null,
+        "classId": "mage",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "comparisonSheet": 3
+    },
+    {
+      "id": "FT-0623",
+      "referenceId": "dqrdb:778",
+      "url": "https://dqrdb.com/card/778.png",
+      "sha256": "eb4ac1542acbc8cb250173f058f7a676b085da7570a8c56013c83e271e71e3bb",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 7,
+        "attack": 6,
+        "hp": 6,
+        "classId": "mage",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "comparisonSheet": 4
+    },
+    {
+      "id": "FT-0624",
+      "referenceId": "dqrdb:779",
+      "url": "https://dqrdb.com/card/779.png",
+      "sha256": "6bb937ecfb72dbbd344ca025f7c32fcd6ea4dd9f7b23c7d6ec28d4992fcc674e",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 7,
+        "attack": null,
+        "hp": null,
+        "classId": "mage",
+        "kind": "spell",
+        "rarity": "rare"
+      },
+      "comparisonSheet": 4
+    },
+    {
+      "id": "FT-0625",
+      "referenceId": "dqrdb:780",
+      "url": "https://dqrdb.com/card/780.png",
+      "sha256": "3641c3c30df10f23d19b07403c5549b6947bd72bf6791609c5c308e8789bb101",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 0,
+        "attack": null,
+        "hp": null,
+        "classId": "fighter",
+        "kind": "spell",
+        "rarity": "rare"
+      },
+      "comparisonSheet": 4
+    },
+    {
+      "id": "FT-0626",
+      "referenceId": "dqrdb:781",
+      "url": "https://dqrdb.com/card/781.png",
+      "sha256": "d0ff59037d3d23cf3f645fe840161cf47fe107ff6078e4c3e3d516347a35af08",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 2,
+        "attack": 1,
+        "hp": 3,
+        "classId": "fighter",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "comparisonSheet": 4
+    },
+    {
+      "id": "FT-0627",
+      "referenceId": "dqrdb:782",
+      "url": "https://dqrdb.com/card/782.png",
+      "sha256": "0158ab2ca84746110953fb5c3b5a2d1f7aa8c159c6ef5dd82e76eade9c4fc3c7",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 2,
+        "attack": null,
+        "hp": null,
+        "classId": "fighter",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "comparisonSheet": 4
+    },
+    {
+      "id": "FT-0628",
+      "referenceId": "dqrdb:783",
+      "url": "https://dqrdb.com/card/783.png",
+      "sha256": "88a34131be8dc7d8fcd7a4d75fde390a925d8a64b118c1f2a760b55331ced029",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 3,
+        "attack": null,
+        "hp": null,
+        "classId": "fighter",
+        "kind": "spell",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 4
+    },
+    {
+      "id": "FT-0629",
+      "referenceId": "dqrdb:784",
+      "url": "https://dqrdb.com/card/784.png",
+      "sha256": "7e8b5a4665f97b55fccca0d86ad11a5f90a37d7409927b09d3296ae92e000683",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 3,
+        "attack": 1,
+        "hp": 2,
+        "classId": "fighter",
+        "kind": "weapon",
+        "rarity": "common"
+      },
+      "comparisonSheet": 4
+    },
+    {
+      "id": "FT-0630",
+      "referenceId": "dqrdb:785",
+      "url": "https://dqrdb.com/card/785.png",
+      "sha256": "51b3d98911d9d1770642418bfeef43bb6af927c4b68820a09b023fe4c8db0f8d",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 4,
+        "attack": 4,
+        "hp": 4,
+        "classId": "fighter",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "comparisonSheet": 4
+    },
+    {
+      "id": "FT-0631",
+      "referenceId": "dqrdb:786",
+      "url": "https://dqrdb.com/card/786.png",
+      "sha256": "9140883a7f88dd3a291f107af36174166be994679b594f0ac0a017c0b408ec98",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 5,
+        "attack": 3,
+        "hp": 4,
+        "classId": "fighter",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "comparisonSheet": 4
+    },
+    {
+      "id": "FT-0632",
+      "referenceId": "dqrdb:787",
+      "url": "https://dqrdb.com/card/787.png",
+      "sha256": "de1805ccd584f730b8b33a60037c4892a0e1dbd5f7daf5a6e8471dc8d5c3a812",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 4,
+        "attack": 0,
+        "hp": 0,
+        "classId": "fighter",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 4
+    },
+    {
+      "id": "FT-0633",
+      "referenceId": "dqrdb:788",
+      "url": "https://dqrdb.com/card/788.png",
+      "sha256": "898ba68d99c1bfbad0c0e6a09bca15efd20ed5471b124e64a65d9d8277a0b37b",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 6,
+        "attack": 6,
+        "hp": 5,
+        "classId": "fighter",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 4
+    },
+    {
+      "id": "FT-0634",
+      "referenceId": "dqrdb:789",
+      "url": "https://dqrdb.com/card/789.png",
+      "sha256": "528396a1ee3cf378137f603325766d328b6350b470ce8520cc15e6d8160d49c3",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 5,
+        "attack": 5,
+        "hp": 5,
+        "classId": "fighter",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "comparisonSheet": 4
+    },
+    {
+      "id": "FT-0635",
+      "referenceId": "dqrdb:790",
+      "url": "https://dqrdb.com/card/790.png",
+      "sha256": "4c01c4ed41b7ea1d9d9eaa8fd2e6fd593be79533ff29be13a24cfa009c561ede",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 2,
+        "attack": 1,
+        "hp": 3,
+        "classId": "priest",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "comparisonSheet": 5
+    },
+    {
+      "id": "FT-0636",
+      "referenceId": "dqrdb:791",
+      "url": "https://dqrdb.com/card/791.png",
+      "sha256": "37d61748b789f7a5a774e526fdc416db5762139f1428255b35384cc3b13aeb45",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 2,
+        "attack": null,
+        "hp": null,
+        "classId": "priest",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "comparisonSheet": 5
+    },
+    {
+      "id": "FT-0637",
+      "referenceId": "dqrdb:792",
+      "url": "https://dqrdb.com/card/792.png",
+      "sha256": "b06e9104f5596ba739b983e2cdc992462a374dc19d17f6a9610681ebd22e241a",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 2,
+        "attack": null,
+        "hp": null,
+        "classId": "priest",
+        "kind": "spell",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 5
+    },
+    {
+      "id": "FT-0638",
+      "referenceId": "dqrdb:793",
+      "url": "https://dqrdb.com/card/793.png",
+      "sha256": "09b9a066b78469f8bfc1044ae691113fab51a7db90f195c64db2f83789b1d155",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 3,
+        "attack": 3,
+        "hp": 3,
+        "classId": "priest",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "comparisonSheet": 5
+    },
+    {
+      "id": "FT-0639",
+      "referenceId": "dqrdb:794",
+      "url": "https://dqrdb.com/card/794.png",
+      "sha256": "8f3f13f0160a7e0f051e9778202c4537fb8f69363188bcc292b09feb35eb4923",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 4,
+        "attack": 3,
+        "hp": 2,
+        "classId": "priest",
+        "kind": "weapon",
+        "rarity": "common"
+      },
+      "comparisonSheet": 5
+    },
+    {
+      "id": "FT-0640",
+      "referenceId": "dqrdb:795",
+      "url": "https://dqrdb.com/card/795.png",
+      "sha256": "f95e698c08ed7ca80080456775ebba3717f7783ed2d5de8eb2d80f820560297a",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 5,
+        "attack": 5,
+        "hp": 4,
+        "classId": "priest",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 5
+    },
+    {
+      "id": "FT-0641",
+      "referenceId": "dqrdb:796",
+      "url": "https://dqrdb.com/card/796.png",
+      "sha256": "7a5ce7c1c62ab934ee4c866404c1a6175c59db08f5eb498d176a5ca76ee86662",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 6,
+        "attack": 6,
+        "hp": 6,
+        "classId": "priest",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "comparisonSheet": 5
+    },
+    {
+      "id": "FT-0642",
+      "referenceId": "dqrdb:797",
+      "url": "https://dqrdb.com/card/797.png",
+      "sha256": "5581376cc2c6872cf6e77450ec0ba42ba06fa5545807842650b811e652ac7acb",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 6,
+        "attack": null,
+        "hp": null,
+        "classId": "priest",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "comparisonSheet": 5
+    },
+    {
+      "id": "FT-0643",
+      "referenceId": "dqrdb:798",
+      "url": "https://dqrdb.com/card/798.png",
+      "sha256": "1d058c8da166f997785373ec471178397cc0cb4a17359feb4ab7d4c484503569",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 6,
+        "attack": null,
+        "hp": null,
+        "classId": "priest",
+        "kind": "spell",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 5
+    },
+    {
+      "id": "FT-0644",
+      "referenceId": "dqrdb:799",
+      "url": "https://dqrdb.com/card/799.png",
+      "sha256": "c816deada7a4a075d308950a968d8b5b9e88cd118f608b2f639a1a5d3f15d064",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 7,
+        "attack": 5,
+        "hp": 7,
+        "classId": "priest",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "comparisonSheet": 5
+    },
+    {
+      "id": "FT-0645",
+      "referenceId": "dqrdb:800",
+      "url": "https://dqrdb.com/card/800.png",
+      "sha256": "c65962a3a10deb674ca6f54f3477b1dddd83ea7de3d3f00200387497f6df70be",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 1,
+        "attack": null,
+        "hp": null,
+        "classId": "merchant",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "comparisonSheet": 5
+    },
+    {
+      "id": "FT-0646",
+      "referenceId": "dqrdb:801",
+      "url": "https://dqrdb.com/card/801.png",
+      "sha256": "d1ecc1d068809554fc4c169e013e82ac061044ab63b319fb5410437551ec13dc",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 2,
+        "attack": 1,
+        "hp": 2,
+        "classId": "merchant",
+        "kind": "weapon",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 5
+    },
+    {
+      "id": "FT-0647",
+      "referenceId": "dqrdb:802",
+      "url": "https://dqrdb.com/card/802.png",
+      "sha256": "ac667e66fdf5ad20755b29e6b634efaf30159ffe414156583ad8f690a49c39c0",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 3,
+        "attack": 3,
+        "hp": 3,
+        "classId": "merchant",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "comparisonSheet": 6
+    },
+    {
+      "id": "FT-0648",
+      "referenceId": "dqrdb:803",
+      "url": "https://dqrdb.com/card/803.png",
+      "sha256": "adc19f73f3b7188c663b06d4cca52db2da090bd5703bf362bf95a080dc4ed9fe",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 4,
+        "attack": 3,
+        "hp": 2,
+        "classId": "merchant",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "comparisonSheet": 6
+    },
+    {
+      "id": "FT-0649",
+      "referenceId": "dqrdb:804",
+      "url": "https://dqrdb.com/card/804.png",
+      "sha256": "14f560dcc395aecb63eee7aca49d06155adb78ad3d25a979a4fcd25ffb2b5e29",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 4,
+        "attack": 3,
+        "hp": 5,
+        "classId": "merchant",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 6
+    },
+    {
+      "id": "FT-0650",
+      "referenceId": "dqrdb:805",
+      "url": "https://dqrdb.com/card/805.png",
+      "sha256": "7ce1c5822a6f3e1e5fe95b41667804bf723eb632fc51589be97bcba57ff16646",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 4,
+        "attack": null,
+        "hp": null,
+        "classId": "merchant",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "comparisonSheet": 6
+    },
+    {
+      "id": "FT-0651",
+      "referenceId": "dqrdb:806",
+      "url": "https://dqrdb.com/card/806.png",
+      "sha256": "d2eb36ef4d9254d19ed0ed093ed95ffa3cbba7b4a2fbeebf32403944a74bd436",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 4,
+        "attack": null,
+        "hp": null,
+        "classId": "merchant",
+        "kind": "spell",
+        "rarity": "rare"
+      },
+      "comparisonSheet": 6
+    },
+    {
+      "id": "FT-0652",
+      "referenceId": "dqrdb:807",
+      "url": "https://dqrdb.com/card/807.png",
+      "sha256": "c816d0f1cae3d2a9d34182085433eee50ecb998e73e1351936d805d551e8f9b5",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 4,
+        "attack": 4,
+        "hp": 4,
+        "classId": "merchant",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 6
+    },
+    {
+      "id": "FT-0653",
+      "referenceId": "dqrdb:808",
+      "url": "https://dqrdb.com/card/808.png",
+      "sha256": "fe98d51c4dde9447090248ba337b9d6c4b563e2979ecbfaa1004219d9c518bc1",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 6,
+        "attack": null,
+        "hp": null,
+        "classId": "merchant",
+        "kind": "spell",
+        "rarity": "rare"
+      },
+      "comparisonSheet": 6
+    },
+    {
+      "id": "FT-0654",
+      "referenceId": "dqrdb:809",
+      "url": "https://dqrdb.com/card/809.png",
+      "sha256": "66c4e71b274204a1dae12b96988142904cc25f1ed6326466821edc330d5a9fdd",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 7,
+        "attack": 5,
+        "hp": 5,
+        "classId": "merchant",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "comparisonSheet": 6
+    },
+    {
+      "id": "FT-0655",
+      "referenceId": "dqrdb:810",
+      "url": "https://dqrdb.com/card/810.png",
+      "sha256": "02c9664ab223b7547542d011b23aeecbe2a3746ef8b9b9677b85d0563cb1c132",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 1,
+        "attack": 2,
+        "hp": 2,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "comparisonSheet": 6
+    },
+    {
+      "id": "FT-0656",
+      "referenceId": "dqrdb:811",
+      "url": "https://dqrdb.com/card/811.png",
+      "sha256": "4e9f9469c30964f2530e2a03bb3b735ce3af8cf0914f617a180edf6e620bb391",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 1,
+        "attack": null,
+        "hp": null,
+        "classId": "seer",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "comparisonSheet": 6
+    },
+    {
+      "id": "FT-0657",
+      "referenceId": "dqrdb:812",
+      "url": "https://dqrdb.com/card/812.png",
+      "sha256": "2d6bbf135e6abff33d0a00cf89971e4e3b728be62acd91373bdf7f80e4547279",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 1,
+        "attack": null,
+        "hp": null,
+        "classId": "seer",
+        "kind": "spell",
+        "rarity": "rare"
+      },
+      "comparisonSheet": 6
+    },
+    {
+      "id": "FT-0658",
+      "referenceId": "dqrdb:813",
+      "url": "https://dqrdb.com/card/813.png",
+      "sha256": "bd92261558e164f90e9c872777842333aee243c8e18abc1b703421a1c4348742",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 2,
+        "attack": null,
+        "hp": null,
+        "classId": "seer",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "comparisonSheet": 6
+    },
+    {
+      "id": "FT-0659",
+      "referenceId": "dqrdb:814",
+      "url": "https://dqrdb.com/card/814.png",
+      "sha256": "589939a181de7a76c1180cd14ed855be15340c3e6726e724afa0a7be81d0b6d8",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 3,
+        "attack": 2,
+        "hp": 4,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 7
+    },
+    {
+      "id": "FT-0660",
+      "referenceId": "dqrdb:815",
+      "url": "https://dqrdb.com/card/815.png",
+      "sha256": "74cdca50792931ded0e5f9589bb74cba86347c5c463a218c08a8a8784b231e78",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 3,
+        "attack": null,
+        "hp": null,
+        "classId": "seer",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "comparisonSheet": 7
+    },
+    {
+      "id": "FT-0661",
+      "referenceId": "dqrdb:816",
+      "url": "https://dqrdb.com/card/816.png",
+      "sha256": "c88de656d78027b7182e7f43dfff5ecb49f8897c767f06c7000cf39c5503f236",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 4,
+        "attack": 3,
+        "hp": 5,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "comparisonSheet": 7
+    },
+    {
+      "id": "FT-0662",
+      "referenceId": "dqrdb:817",
+      "url": "https://dqrdb.com/card/817.png",
+      "sha256": "8ebaeb38df34b0045878595b596ee23f549dec16bff184a830589f5d2f23b4f9",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 5,
+        "attack": 4,
+        "hp": 5,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 7
+    },
+    {
+      "id": "FT-0663",
+      "referenceId": "dqrdb:818",
+      "url": "https://dqrdb.com/card/818.png",
+      "sha256": "8055a86d975c4965a6e791269772e3badf4eac72b48d48f6be61de9c6e7ac7ad",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 5,
+        "attack": 3,
+        "hp": 6,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 7
+    },
+    {
+      "id": "FT-0664",
+      "referenceId": "dqrdb:819",
+      "url": "https://dqrdb.com/card/819.png",
+      "sha256": "3c3bd56f4dc9ebe2b76782909d42c0f5fae8999b28aa16b753975b54fdc2bb0a",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 8,
+        "attack": 5,
+        "hp": 5,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "comparisonSheet": 7
+    },
+    {
+      "id": "FT-0665",
+      "referenceId": "dqrdb:820",
+      "url": "https://dqrdb.com/card/820.png",
+      "sha256": "715cb46de46652234ee7b0da76b66cc7cc1a0c46e66cea587e82917075381303",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 2,
+        "attack": 3,
+        "hp": 2,
+        "classId": "swordsman",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "comparisonSheet": 7
+    },
+    {
+      "id": "FT-0666",
+      "referenceId": "dqrdb:821",
+      "url": "https://dqrdb.com/card/821.png",
+      "sha256": "0ddf6f7a6a0f5c2b6d53a8d75ff956889706679d79cde2ae2e88a89936e7fd25",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 2,
+        "attack": null,
+        "hp": null,
+        "classId": "swordsman",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "comparisonSheet": 7
+    },
+    {
+      "id": "FT-0667",
+      "referenceId": "dqrdb:822",
+      "url": "https://dqrdb.com/card/822.png",
+      "sha256": "deead7a154c45607d1e3b446cc698d80530359fd03c625b2a5ec77de1116a3d7",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 2,
+        "attack": null,
+        "hp": null,
+        "classId": "swordsman",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "comparisonSheet": 7
+    },
+    {
+      "id": "FT-0668",
+      "referenceId": "dqrdb:823",
+      "url": "https://dqrdb.com/card/823.png",
+      "sha256": "bed958fb1980848061fac2f57cc7fa75d93e375d785f0adffeb1c44acc1aeae4",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 3,
+        "attack": null,
+        "hp": null,
+        "classId": "swordsman",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "comparisonSheet": 7
+    },
+    {
+      "id": "FT-0669",
+      "referenceId": "dqrdb:824",
+      "url": "https://dqrdb.com/card/824.png",
+      "sha256": "b78c8d1e1dc4b63bc204515f7d821231b665937811f45a65005b4bfdc248465a",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 4,
+        "attack": 4,
+        "hp": 4,
+        "classId": "swordsman",
+        "kind": "unit",
+        "rarity": "rare"
+      },
+      "comparisonSheet": 7
+    },
+    {
+      "id": "FT-0670",
+      "referenceId": "dqrdb:825",
+      "url": "https://dqrdb.com/card/825.png",
+      "sha256": "c396f0da9c54330ba5fb6fee41f3a10ddf03391d22c8d9692a58515917bdf552",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 4,
+        "attack": null,
+        "hp": null,
+        "classId": "swordsman",
+        "kind": "spell",
+        "rarity": "rare"
+      },
+      "comparisonSheet": 7
+    },
+    {
+      "id": "FT-0671",
+      "referenceId": "dqrdb:826",
+      "url": "https://dqrdb.com/card/826.png",
+      "sha256": "023566ea2eb63fda83961cba70313dfc4d5806842a70baaf04125bffa01bbe10",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 4,
+        "attack": null,
+        "hp": null,
+        "classId": "swordsman",
+        "kind": "spell",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 8
+    },
+    {
+      "id": "FT-0672",
+      "referenceId": "dqrdb:827",
+      "url": "https://dqrdb.com/card/827.png",
+      "sha256": "8c85dbddf6a0378b0e5ada8d7504717a911077cb1c97e4b72e8a5797078560ef",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 6,
+        "attack": 5,
+        "hp": 6,
+        "classId": "swordsman",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 8
+    },
+    {
+      "id": "FT-0673",
+      "referenceId": "dqrdb:828",
+      "url": "https://dqrdb.com/card/828.png",
+      "sha256": "905274ff0e11770b0a2bdbf1a1f7ab9bfb3bea907f8d429df65ace47901e4776",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 7,
+        "attack": 4,
+        "hp": 5,
+        "classId": "swordsman",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 8
+    },
+    {
+      "id": "FT-0674",
+      "referenceId": "dqrdb:829",
+      "url": "https://dqrdb.com/card/829.png",
+      "sha256": "021dee15d96ff7ec2b99b0b1ae69d946c44d67ec8dad821bb1c10963e1cd2034",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 8,
+        "attack": 6,
+        "hp": 6,
+        "classId": "swordsman",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "comparisonSheet": 8
+    },
+    {
+      "id": "token-set4-withered-bookmark",
+      "referenceId": "dqrdb:753",
+      "url": "https://dqrdb.com/card/753.png",
+      "sha256": "d3658ca66917174c1c956b3286a651cc2d4a089659c39f2d66c48150a7403205",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 1,
+        "attack": null,
+        "hp": null,
+        "classId": "neutral",
+        "kind": "spell",
+        "rarity": "common"
+      },
+      "comparisonSheet": 8
+    },
+    {
+      "id": "token-set4-secret-grimoire",
+      "referenceId": "dqrdb:754",
+      "url": "https://dqrdb.com/card/754.png",
+      "sha256": "924ea823a9240927c343e95d7d0d4ea4ef213f020b1e83f4764d12e641504522",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 1,
+        "attack": null,
+        "hp": null,
+        "classId": "neutral",
+        "kind": "spell",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 8
+    },
+    {
+      "id": "token-set4-shadow-knight",
+      "referenceId": "dqrdb:755",
+      "url": "https://dqrdb.com/card/755.png",
+      "sha256": "d3df4201912e0fdd7c30b00c16657e979f1dfecad7114141b7d8748be657b73b",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 3,
+        "attack": 2,
+        "hp": 2,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 8
+    },
+    {
+      "id": "token-set4-aul-act-two",
+      "referenceId": "dqrdb:756",
+      "url": "https://dqrdb.com/card/756.png",
+      "sha256": "cd6efa778d71010afccf7dac97cfba11f3182f8c273fc5be100d1af8486f23b1",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 4,
+        "attack": 4,
+        "hp": 5,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "comparisonSheet": 8
+    },
+    {
+      "id": "token-set4-aul-act-three",
+      "referenceId": "dqrdb:757",
+      "url": "https://dqrdb.com/card/757.png",
+      "sha256": "1e3e86dee64bb38a8ad31725cf731b06a63a6d6e5eb9b4237b911f8434254a45",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 4,
+        "attack": 6,
+        "hp": 3,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "comparisonSheet": 8
+    },
+    {
+      "id": "token-set4-aul-act-four",
+      "referenceId": "dqrdb:758",
+      "url": "https://dqrdb.com/card/758.png",
+      "sha256": "3d5a50292efbffd0d91ac2b3761a7ebd5560c27c51bc834a62ce7040512bd0db",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 4,
+        "attack": 3,
+        "hp": 9,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "comparisonSheet": 8
+    },
+    {
+      "id": "token-set4-serena-dragon",
+      "referenceId": "dqrdb:759",
+      "url": "https://dqrdb.com/card/759.png",
+      "sha256": "8b2eb0ada19bfe5a7fc7a28a5cecc3abd12f259c5f1d628ebc9257622ce14838",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 9,
+        "attack": 2,
+        "hp": 8,
+        "classId": "neutral",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "comparisonSheet": 8
+    },
+    {
+      "id": "token-set4-dusk-crystal",
+      "referenceId": "dqrdb:746",
+      "url": "https://dqrdb.com/card/746.png",
+      "sha256": "6816b7b922d037266f82d49a49c99c317763e1b2c5ea00446970d7a2f63f7981",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 3,
+        "attack": 0,
+        "hp": 3,
+        "classId": "mage",
+        "kind": "unit",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 8
+    },
+    {
+      "id": "token-set4-dawn-regalia",
+      "referenceId": "dqrdb:747",
+      "url": "https://dqrdb.com/card/747.png",
+      "sha256": "af513ee4798eca540fd3ca1c2bfebcfea1a947f9a1827869214b49b55fc97e75",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 4,
+        "attack": null,
+        "hp": null,
+        "classId": "priest",
+        "kind": "spell",
+        "rarity": "superRare"
+      },
+      "comparisonSheet": 9
+    },
+    {
+      "id": "token-set4-wish-pages",
+      "referenceId": "dqrdb:748",
+      "url": "https://dqrdb.com/card/748.png",
+      "sha256": "0e790d9beec1acd5afb4baf5522f233b177a040d316db58b3c6de84434f4fb6f",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 8,
+        "attack": 5,
+        "hp": 5,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "comparisonSheet": 9
+    },
+    {
+      "id": "token-set4-wish-summon",
+      "referenceId": "dqrdb:749",
+      "url": "https://dqrdb.com/card/749.png",
+      "sha256": "c68806422b7c9cadd176585766c7b3db27703c5b664f63edd03b89d87216f132",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 8,
+        "attack": 5,
+        "hp": 5,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "comparisonSheet": 9
+    },
+    {
+      "id": "token-set4-wish-strength",
+      "referenceId": "dqrdb:750",
+      "url": "https://dqrdb.com/card/750.png",
+      "sha256": "3363a2a0463e0daac79eae9f71a43f6e6c170abbd119eeb1a8b93f6ef0df32b6",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 8,
+        "attack": 5,
+        "hp": 5,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "comparisonSheet": 9
+    },
+    {
+      "id": "token-set4-wish-grimoire",
+      "referenceId": "dqrdb:751",
+      "url": "https://dqrdb.com/card/751.png",
+      "sha256": "f33e417ca6b9006ba8e18f37d26dc2ffb5e296ac13dd8612d46d2768416a3730",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 8,
+        "attack": 5,
+        "hp": 5,
+        "classId": "seer",
+        "kind": "unit",
+        "rarity": "legendary"
+      },
+      "comparisonSheet": 9
+    },
+    {
+      "id": "token-set4-returning-revenant",
+      "referenceId": "dqrdb:752",
+      "url": "https://dqrdb.com/card/752.png",
+      "sha256": "112d9af777b84f8872a92065ea2334bc0eb5e6eec08137450ca358c534f2e085",
+      "review": "image-read-and-compared",
+      "reviewDate": "2026-11-24",
+      "adoptedStats": {
+        "cost": 1,
+        "attack": 1,
+        "hp": 2,
+        "classId": "swordsman",
+        "kind": "unit",
+        "rarity": "common"
+      },
+      "comparisonSheet": 9
+    }
+  ]
+}

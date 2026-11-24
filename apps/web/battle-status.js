@@ -5,11 +5,11 @@ import { escapeText } from './card-terms.js'
 
 const icons = {
   INVULNERABLE: '✧', SPELL_WARD: '◈', RESIST_SPELL: '◈', DARK_CLOAK: '◆',
-  GUARD: '⛨', METAL_BODY: '⬢', STEALTH: '◐', PIERCE: '➶', SUPER_PIERCE: '↠',
+  GUARD: '⛨', METAL_BODY: '⬢', HARD_METAL_BODY: '⬡', STEALTH: '◐', PIERCE: '➶', SUPER_PIERCE: '↠',
 }
 
 function printedKeywords(unit, card) {
-  return new Set([...card.keywords, ...(unit.grants ?? [])])
+  return new Set([...card.keywords, ...(unit.grants ?? []), ...(unit.badgeKeywords ?? [])])
 }
 
 function protectionStates(character, turn) {
@@ -28,9 +28,11 @@ function protectionStates(character, turn) {
 
 function abilityStates(unit, card, view) {
   const list = protectionStates(unit, view.turn)
-  for (const id of printedKeywords(unit, card)) {
+  const keywords = printedKeywords(unit, card)
+  if (has(unit, 'HARD_METAL_BODY', view)) { keywords.delete('METAL_BODY'); keywords.add('HARD_METAL_BODY') }
+  for (const id of keywords) {
     if (!Object.hasOwn(icons, id)) continue
-    const enabled = has(unit, id)
+    const enabled = has(unit, id, view)
     const concealed = id === 'GUARD' && hidden(unit)
     const active = enabled && (id !== 'GUARD' || unit.position.row === 'front' && !concealed) && (id !== 'STEALTH' || !unit.revealed)
     const state = !enabled ? '能力封じ中' : id === 'GUARD' ? (active ? '前衛で有効' : concealed ? '影隠れ中' : '後衛で待機中') :

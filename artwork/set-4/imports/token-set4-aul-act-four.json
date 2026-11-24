@@ -1,0 +1,12 @@
+{
+  "id": "token-set4-aul-act-four",
+  "original": "artwork/set-4/card-token-set4-aul-act-four.png",
+  "delivery": "apps/web/assets/card-token-set4-aul-act-four.webp",
+  "width": 1254,
+  "height": 1254,
+  "sha256": "4e0be4b97ed32a3af0854f6f96ff65ae72a2598d94268bb6e0da6f8cea8f746e",
+  "deliverySha256": "f2832c18d8646dc0ff2b2dc6e0d2cdc7cdc495b106e597ea2d9253f4155e1a40",
+  "generationFile": "exec-336b11b7-0344-4798-992b-ea601c22abf6.png",
+  "generator": "image_gen",
+  "review": "visual-approved"
+}

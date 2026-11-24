@@ -1,0 +1,12 @@
+{
+  "id": "token-set4-shadow-knight",
+  "original": "artwork/set-4/card-token-set4-shadow-knight.png",
+  "delivery": "apps/web/assets/card-token-set4-shadow-knight.webp",
+  "width": 1254,
+  "height": 1254,
+  "sha256": "3d30466e331530212fa3ef6b7270e2a08a1153eca8dee6217b185b61e5df1aa3",
+  "deliverySha256": "1a499899f31998e85d0d117e106d5720695855daa111bad7848c71c3315e614a",
+  "generationFile": "exec-fd9f39ef-c9f2-464c-b579-6f6fdd5666ea.png",
+  "generator": "image_gen",
+  "review": "visual-approved"
+}

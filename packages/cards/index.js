@@ -4,6 +4,7 @@ import { adaptedCards } from './adapted-cards.js'
 import { cardFamilies } from './families.js'
 
 export { names, species, terrains } from './names.js'
+export const familyNames = Object.freeze({ slime: '露珠の一族', dragon: '竜鱗の一族', undead: '夜継ぎの一族', adventurer: '星路の一族' })
 
 const ability = (trigger, ...effects) => ({ trigger, effects })
 const damage = (amount, to = 'chosen') => ({ id: 'damage', amount, to })

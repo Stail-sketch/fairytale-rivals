@@ -1,0 +1,12 @@
+{
+  "id": "token-set4-serena-dragon",
+  "original": "artwork/set-4/card-token-set4-serena-dragon.png",
+  "delivery": "apps/web/assets/card-token-set4-serena-dragon.webp",
+  "width": 1254,
+  "height": 1254,
+  "sha256": "11b9cf7860405fa5695c3618ac7aaf9017eff1ac28b0baca8de760baf5edfb1a",
+  "deliverySha256": "18917097eb5ce843f29f818e53b7fda62df7dbc857ea7d6f443be8921b1fbd77",
+  "generationFile": "exec-140e280e-a5f5-4f51-9fa4-e262ba882cfa.png",
+  "generator": "image_gen",
+  "review": "visual-approved"
+}

@@ -2,6 +2,8 @@ import { cardCost, cards, catalog, names } from '../cards/index.js'
 import { leaderTarget, other, positions, rules, samePosition, unitTarget } from './rules.js'
 import { allUnits, at, attackValue, aurasFor, canUseAbilities, has, leaderPower, openPositions, opposingApathy } from './targeting.js'
 import { stageEffects } from './stage-effects.js'
+import { fourthEffects } from './fourth-effects.js'
+import { hardMetalActive, syncBadgeStates } from './badges.js'
 import { occupiedTerrainCount, orbCards, terrainAt, terrainCount, terrainName } from './terrain.js'
 import { addModifier, awakeningBonus, breakdown, entryModifiers, entryPower, powerChanges, recordPower } from './power.js'
 
@@ -42,9 +44,10 @@ function spellProtection(game, victim) {
   if (victim.position && has(victim, 'RESIST_SPELL')) return 'RESIST_SPELL'
 }
 
-function unitProtection(unit, amount) {
+function unitProtection(unit, amount, game) {
   if (unit.statuses.includes('INVULNERABLE')) return 'INVULNERABLE'
   if (has(unit, 'DARK_CLOAK')) return 'DARK_CLOAK'
+  if (amount <= 5 && has(unit, 'HARD_METAL_BODY', game)) return 'HARD_METAL_BODY'
   if (amount <= 3 && has(unit, 'METAL_BODY')) return 'METAL_BODY'
   return null
 }
@@ -68,7 +71,7 @@ export function effectAnchor(game, target) {
   return unit && unitAnchor(unit)
 }
 
-export function damageValue(game, victim, amount, protection = victim.position && unitProtection(victim, amount)) {
+export function damageValue(game, victim, amount, protection = victim.position && unitProtection(victim, amount, game)) {
   if (amount <= 0) return 0
   const unit = victim.position && victim
   let value = amount
@@ -76,9 +79,15 @@ export function damageValue(game, victim, amount, protection = victim.position &
     const reduction = victim.units.reduce((total, ally) => total + (ally.position.row === 'front' &&
       canUseAbilities(ally) ? cards[ally.card].frontLeaderArmor ?? 0 : 0), 0)
     value = Math.max(0, amount - (victim.leaderArmor ?? 0) - (victim.temporaryArmor ?? 0) - reduction)
+    const weapon = victim.weapon && cards[victim.weapon.card]
+    const seat = game.players.indexOf(victim)
+    if (weapon?.leaderMetalOwnTurn && seat === game.active) {
+      const threshold = hardMetalActive(game, seat) ? 5 : 3
+      if (value > 0 && value <= threshold) value = 1
+    }
   }
   if (protection === 'INVULNERABLE' || protection === 'DARK_CLOAK') value = 0
-  else if (protection === 'METAL_BODY') value = 1
+  else if (protection === 'METAL_BODY' || protection === 'HARD_METAL_BODY') value = 1
   else if (unit && (has(unit, 'VULNERABLE') || allUnits(game).some(otherUnit =>
     canUseAbilities(otherUnit) && cards[otherUnit.card].doubleDamageAura))) value *= 2
   if (unit && value > 0 && unit.oneDamageTurn === game.turn && canUseAbilities(unit)) value = 1
@@ -89,7 +98,7 @@ export function damage(game, target, amount, source) {
   if (amount <= 0) return 0
   const victim = target.kind === 'unit' ? findUnit(game, target.id) : game.players[target.seat]
   if (!victim) return 0
-  const protection = victim.position && unitProtection(victim, amount)
+  const protection = victim.position && unitProtection(victim, amount, game)
   const value = damageValue(game, victim, amount, protection)
   victim.hp -= value
   const unit = target.kind === 'unit' && victim
@@ -257,6 +266,8 @@ export function resolution(game) {
   }
 
   function sweep() {
+    fourth.reconcileControl()
+    syncBadgeStates(game)
     for (const unit of allUnits(game)) {
       if (unit.hp <= 0) continue
       const auraHp = aurasFor(game, unit, 'hpAura').reduce((total, { aura, provider }) =>
@@ -281,9 +292,10 @@ export function resolution(game) {
       for (const ally of game.players[unit.owner].units) trigger(ally, 'ON_ALLY_DEATH', unitTarget(unit.id))
       for (const enemy of game.players[other(unit.owner)].units) trigger(enemy, 'ON_ENEMY_DEATH', unitTarget(unit.id))
     }
+    if (dead.length) { fourth.reconcileControl(); syncBadgeStates(game) }
   }
 
-  function summon(seat, instance, position, chosen, choice, triggersSummon = false, effectPosition, cost, stats) {
+  function summon(seat, instance, position, chosen, choice, triggersSummon = false, effectPosition, cost, stats, handChoice) {
     const definition = cards[instance.card]
     const player = game.players[seat]
     const attack = stats?.attack ?? entryPower(definition, player, 'attack').value
@@ -302,12 +314,13 @@ export function resolution(game) {
     if (stats?.extraAbilities) unit.extraAbilities = structuredClone(stats.extraAbilities)
     if (stats?.createdByAction) unit.createdByAction = stats.createdByAction
     player.units.push(unit)
+    fourth.entered(unit)
     if (definition.apathy) game.players[other(seat)].tension = 0
     emit(game, 'summon', definition.name + 'を召喚', { seat, id: unit.id, position, card: unit.card,
       ...(cost !== undefined ? { played: true, cost } : {}),
     })
     if (triggersSummon) {
-      trigger(unit, 'ON_SUMMON', chosen, { position: effectPosition, summonedTerrain: terrainAt(game, seat, position) })
+      trigger(unit, 'ON_SUMMON', chosen, { position: effectPosition, choice, handChoice, summonedTerrain: terrainAt(game, seat, position) })
       if (definition.fortune) fortune(definition.fortune, { seat, source: unit, chosen, choice })
     }
     third.enter(unit)
@@ -331,6 +344,7 @@ export function resolution(game) {
     weapon.durability -= amount
     if (weapon.durability > 0) return
     player.weapon = null
+    ;(player.brokenWeapons ??= []).push(weapon.card)
     player.graveyard.push({ id: weapon.id, card: weapon.card })
     emit(game, 'weaponBreak', displayName(weapon) + 'が壊れた', { seat, card: weapon.card })
     trigger(weapon, 'ON_WEAPON_BREAK')
@@ -340,8 +354,8 @@ export function resolution(game) {
     const player = game.players[seat]
     const card = cards[instance.card]
     wearWeapon(seat, player.weapon?.durability ?? 0)
-    const attack = entryPower(card, player, 'attack').value
-    player.weapon = { ...instance, owner: seat, attack, durability: card.hp }
+    const attack = entryPower(card, player, 'attack').value + (instance.bonusAttack ?? 0)
+    player.weapon = { ...instance, owner: seat, attack, durability: card.hp + (instance.bonusHp ?? 0) }
     for (const [label, amount] of Object.entries(entryModifiers(card, player, 'attack'))) recordPower(player.weapon, 'attack', label, amount)
     emit(game, 'equip', card.name + 'を装備', { seat, card: card.id, id: instance.id,
       ...(context.played ? { played: true, cost: context.cost } : {}),
@@ -691,7 +705,7 @@ export function resolution(game) {
         effect.hp += effect.scaleHp || effect.scaleHpOnly ? value : 0
       }
     }
-    if (third.apply(effect, context)) return
+    if (third.apply(effect, context) || fourth.apply(effect, context)) return
     switch (effect.id) {
       case 'draw':
         context.lastDrew = player.deck[0]?.card
@@ -902,6 +916,7 @@ export function resolution(game) {
       case 'wearWeapon': wearWeapon(effect.enemy ? enemy : seat, effect.amount); break
       case 'awakening':
         player.awakenedLeader = true
+        delete player.skillOverride
         equip(seat, createInstance(game, effect.weapon))
         emit(game, 'ability', '語り手の奥義が「黒薔薇の焔嵐」に変化', { seat })
         break
@@ -1024,13 +1039,16 @@ export function resolution(game) {
         }
         break
       case 'tension': gainTension(seat, effect.amount); break
-      case 'leaderPower':
-        player.leaderAttack += effect.amount
+      case 'leaderPower': {
+        const amount = effect.amount + awakeningBonus(effect.boost, skillUses)
+        player.leaderAttack += amount
         recordPower(player, 'leaderAttack', powerSource(context), effect.amount, true)
+        recordPower(player, 'leaderAttack', names.SKILL_BOOST, awakeningBonus(effect.boost, skillUses), true)
         player.leaderPierce ||= effect.pierce
         player.leaderNeighbors ||= effect.neighbors
-        emit(game, 'ability', '味方リーダーの攻撃力+' + effect.amount, { seat })
+        emit(game, 'ability', '味方リーダーの攻撃力+' + amount, { seat })
         break
+      }
       case 'leaderArmor': {
         const amount = effect.amount + awakeningBonus(effect.boost, skillUses)
         const key = effect.temporary ? 'temporaryArmor' : 'leaderArmor'
@@ -1155,8 +1173,11 @@ export function resolution(game) {
 
   const third = stageEffects(game, { emit, enqueue, trigger, damage: dealDamage, createInstance, addCard, addToHand,
     summon, applyEffect, applyTo, pick, shuffle, random, sweep })
+  const fourth = fourthEffects(game, { emit, enqueue, applyEffect, applyTo, createInstance, addToHand,
+    addCard, summon, pick, shuffle, gainTension, afterMove: third.afterMove })
   return { enqueue, trigger, summon, equip, wearWeapon, addCard, fortune, gainTension, settle, returnBorrowed, decide, redirectTarget,
-    damage: dealDamage, recoverScheduled: third.recoverScheduled }
+    damage: dealDamage, recoverScheduled: third.recoverScheduled,
+    cardPlayed: fourth.played, endBadges: fourth.end }
 }
 
 const effectToDamage = ({ amount }) => ({ id: 'damage', amount })

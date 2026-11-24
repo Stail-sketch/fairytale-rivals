@@ -126,7 +126,7 @@ async function driveBattle() {
     expect(query('#catalog-detail').textContent.includes('赤ずきんの型'), '生成カードの入手元を表示')
     filter('job', '')
     filter('kind', '')
-    for (const [source, count] of [['basic', 86], ['standard', 287], ['set-2', 100], ['set-3', 100]]) {
+    for (const [source, count] of [['basic', 86], ['standard', 287], ['set-2', 100], ['set-3', 100], ['set-4', 100]]) {
       filter('source', source)
       expect(query('#catalog-count').textContent === count + '件', 'パック別の絞り込み ' + source)
     }
@@ -187,6 +187,18 @@ async function driveBattle() {
     click('#catalog-detail .related-card [data-term=SKILL_BOOST]')
     expect(query('.term-dialog[open] h2')?.textContent === '覚醒', '関連カードの効果文からも用語説明を開く')
     click('.term-dialog button')
+    search.value = 'しんりゅう'
+    search.dispatchEvent(new Event('input', { bubbles: true }))
+    expect(shownCards().map(card => card.id).join() === 'FT-0664', '第4弾の原作名で検索できる')
+    expect(query('#catalog-detail').querySelectorAll('.related-card').length === 4, '4つの願いの説明を確認できる')
+    search.value = 'からくりエッグ'
+    search.dispatchEvent(new Event('input', { bubbles: true }))
+    click('#catalog-detail [data-term=STORY_BADGE]')
+    expect(query('.term-dialog[open] h2')?.textContent === '物語の刻印', '刻印の用語ポップアップを開ける')
+    click('.term-dialog button')
+    search.value = 'グレイナル'
+    search.dispatchEvent(new Event('input', { bubbles: true }))
+    expect(query('#catalog-detail .related-card').textContent.includes('黎明竜の守護装具'), '奥義を変える関連カードを確認できる')
     click('[data-library-tab=skills]')
     expect(document.querySelectorAll('.catalog-skill').length === 7, '7人の奥義一覧が表示される')
     expect(query('.catalog-skill .related-cards')?.textContent.includes('紅葉の一打'), '奥義一覧で生成するカードを確認できる')
@@ -594,6 +606,10 @@ async function driveBattle() {
     deckFilter('query', 'まじゅつし')
     expect(document.querySelectorAll('[data-deck-add]').length === 1 && query('[data-deck-add=FT-0516]'),
       'デッキ編集でも第3弾の原作名とレアリティが使える')
+    deckFilter('pack', 'set-4')
+    deckFilter('query', 'てつのさそり')
+    expect(document.querySelectorAll('[data-deck-add]').length === 1 && query('[data-deck-add=FT-0618]'),
+      'デッキ編集でも第4弾の原作名・レアリティ・収録を併用できる')
     deckFilter('pack', 'set-2')
     deckFilter('rarity', '')
     deckFilter('query', 'くみひもこぞう')
@@ -806,7 +822,8 @@ test('Chromiumでカード閲覧、デッキの複数保存と選択、手札交
   const directory = await mkdtemp(join(temp, 'fairytale-test-'))
   try {
     const page = join(directory, 'e2e.html')
-    const after = 'await (' + driveBattle.toString() + ')()'
+    // The bootstrap embeds every artwork; keep it out of Chromium's DOM dump after the test finishes.
+    const after = 'try { await (' + driveBattle.toString() + ')() } finally { document.querySelectorAll("script").forEach(node => node.remove()) }'
     const html = await standalone(after)
     await writeFile(page, html, 'utf8')
     const { stdout } = await run(binary, [

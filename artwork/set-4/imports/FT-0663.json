@@ -1,0 +1,12 @@
+{
+  "id": "FT-0663",
+  "original": "artwork/set-4/card-FT-0663.png",
+  "delivery": "apps/web/assets/card-FT-0663.webp",
+  "width": 1254,
+  "height": 1254,
+  "sha256": "7565236bc7434ad5ffd206528be8732d40608bca7061eaf3e46d9fd7812bcc49",
+  "deliverySha256": "d2f83153314b3b3ba3326193fa969f47adb93ace7dbd7d7a6b69c1f9086b045c",
+  "generationFile": "exec-3b0f5bb9-8d9f-4487-ab30-76d2795094ca.png",
+  "generator": "image_gen",
+  "review": "visual-approved"
+}

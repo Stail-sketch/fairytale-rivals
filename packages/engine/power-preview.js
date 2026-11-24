@@ -2,6 +2,7 @@ import { cards, names } from '../cards/index.js'
 import { amountFrom, damageAllowed, damagePower, damageValue, effectCondition, findUnit } from './effects.js'
 import { addModifier, awakeningBonus, breakdown, entryPower, powerChanges } from './power.js'
 import { attackBreakdown, attackValue, aurasFor } from './targeting.js'
+import { badgeAttack, badgeMatches } from './badges.js'
 
 const scaleLabels = {
   tension: '物語の熱量', enemyUnits: '敵ユニット数', otherAllies: '他の味方ユニット数',
@@ -57,6 +58,27 @@ function effectRows(game, effect, context, group) {
     row(label, damagePower(game, { amount: base, boost: effect.id === 'damage' ? effect.boost : undefined },
       skillUses, { ...context, scaling }), group, suffix)
   switch (effect.id) {
+    case 'fourth': {
+      const player = game.players[context.seat], enemy = game.players[1 - context.seat]
+      switch (effect.operation) {
+        case 'behindDamage': return [row('ダメージ', measure(1, 0, { label: '最大MPが相手以下', amount: player.maxMp <= enemy.maxMp ? 2 : 0 }), group)]
+        case 'refundArrow': return [damage(effect.amount, 'ダメージ')]
+        case 'boostDraw':
+        case 'bothBoostDraw': return [row('ドロー枚数', measure(1, skillUses), group, '枚')]
+        case 'boostBuff': return [row('攻撃力の変化', measure(1, skillUses), group), row('HPの変化', measure(1, skillUses), group)]
+        case 'dragonHere': return [row('召喚するユニットのMP', measure(1, skillUses), group)]
+        case 'slimeScatter': return [row('合計ダメージ', measure(2, 0, { label: '他の露珠の一族', amount:
+          player.units.filter(unit => unit.id !== context.source?.id && cards[unit.card].family === 'slime').length }), group)]
+        case 'dragonBurst': {
+          if (player.handCount > player.hand.length) return []
+          return [row('ダメージ', measure(1, 0, { label: '他の場・手札の竜鱗の一族 ×3', amount: 3 *
+            [...player.units, ...player.hand].filter(instance => instance.id !== context.source?.id && instance.id !== context.handInstance && cards[instance.card].family === 'dragon').length }), group)]
+        }
+        case 'dragonWrath': return [row('ダメージ', damagePower(game, { amount: Math.max(0, ...player.units
+          .filter(unit => cards[unit.card].family === 'dragon').map(unit => attackValue(game, unit))) }, skillUses, context), group)]
+        default: return []
+      }
+    }
     case 'damage':
     case 'hitAndSummon':
     case 'hitSpawn':
@@ -99,7 +121,7 @@ function effectRows(game, effect, context, group) {
         ...(hp.value || hp.modifiers.length ? [row(effect.id === 'buffWeapon' ? '耐久の変化' : 'HPの変化', hp, group)] : []),
       ]
     }
-    case 'leaderPower': return [row('リーダー攻撃力の上昇', measure(amount, 0), group)]
+    case 'leaderPower': return [row('リーダー攻撃力の上昇', measure(amount, boost), group)]
     case 'leaderArmor': return [row('被ダメージの軽減量', measure(amount, boost), group)]
     case 'spellBonus': return [row('特技ダメージの上昇', measure(amount, 0), group)]
     case 'duelTop': return [row('勝負時のダメージ', measure(amount, boost), group)]
@@ -123,10 +145,20 @@ function effectRows(game, effect, context, group) {
   }
 }
 
-function entryRows(card, player) {
+function entryRows(card, player, handInstance) {
   if (!['unit', 'weapon'].includes(card.kind)) return []
-  return [row('攻撃力', entryPower(card, player, 'attack')),
-    ...(card.kind === 'unit' ? [row('最大HP', entryPower(card, player, 'hp'))] : [])]
+  const attack = entryPower(card, player, 'attack'), hp = entryPower(card, player, 'hp')
+  const attackBonuses = Object.fromEntries(attack.modifiers.map(modifier => [modifier.label, modifier.amount]))
+  const instance = player.hand?.find(instance => instance.id === handInstance)
+  if (instance?.bonusAttack) { addModifier(attackBonuses, '手札での強化', instance.bonusAttack); attack.value += instance.bonusAttack }
+  attack.value += badgeAttack(player, card, attackBonuses)
+  const hpBonuses = Object.fromEntries(hp.modifiers.map(modifier => [modifier.label, modifier.amount]))
+  for (const badge of player.badges ?? []) if (!badge.event && badgeMatches(badge, card)) {
+    addModifier(hpBonuses, '物語の刻印 · ' + cards[badge.card].name, badge.hp ?? 0)
+    hp.value += badge.hp ?? 0
+  }
+  return [row('攻撃力', breakdown(attack.base, attack.value, attackBonuses)),
+    ...(card.kind === 'unit' ? [row('最大HP', breakdown(hp.base, hp.value, hpBonuses))] : [])]
     .filter(stat => stat.modifiers.length)
 }
 
@@ -135,6 +167,9 @@ export function boardPowerRows(game, unit) {
   const hpBonuses = powerChanges(unit, 'maxHp')
   for (const { aura, provider } of aurasFor(game, unit, 'hpAura')) {
     addModifier(hpBonuses, cards[provider.card].name, aura.amount + awakeningBonus(aura.boost, game.players[provider.owner].skillUses))
+  }
+  for (const badge of game.players[unit.owner].badges ?? []) if (!badge.event && badgeMatches(badge, cards[unit.card])) {
+    addModifier(hpBonuses, '物語の刻印 · ' + cards[badge.card].name, badge.hp ?? 0)
   }
   const hp = row('最大HP', breakdown(cards[unit.card].hp, unit.maxHp, hpBonuses))
   return [attack, hp].filter(stat => stat.modifiers.length)
@@ -150,8 +185,10 @@ export function definitionPowerRows(game, seat, definition, options = {}) {
   const { source, chosen, choice, cost, handInstance, skill = false } = options
   const spell = definition.kind === 'spell'
   const context = { seat, source, chosen, choice, cost, handInstance, spell, beforePlay: !source, skillUses: player.skillUses + Number(skill) }
-  const numbers = !source ? entryRows(definition, player) : definition.kind === 'weapon' ?
-    [row('武器の攻撃力', breakdown(definition.attack, source.attack, powerChanges(source, 'attack')))]
+  const weaponBonuses = source && definition.kind === 'weapon' ? powerChanges(source, 'attack') : {}
+  const weaponBadge = source && definition.kind === 'weapon' ? badgeAttack(player, definition, weaponBonuses) : 0
+  const numbers = !source ? entryRows(definition, player, handInstance) : definition.kind === 'weapon' ?
+    [row('武器の攻撃力', breakdown(definition.attack, source.attack + weaponBadge, weaponBonuses))]
       .filter(stat => stat.modifiers.length) : boardPowerRows(game, source)
   const effects = source ? [] : definition.effects
   const direct = definition.choice ? optionsRows(game, definition.choice, context, names.CHOICE) :
@@ -176,6 +213,10 @@ export function targetDamagePreview(game, seat, definition, target, { choice, co
     if (!publicConditions.has(first.when[0])) return undefined
     if (effectCondition(game, ...first.when, context)) break
     first = first.otherwise?.[0]
+  }
+  if (first?.id === 'fourth' && ['behindDamage', 'refundArrow'].includes(first.operation)) {
+    first = { id: 'damage', amount: first.operation === 'behindDamage' ?
+      (game.players[seat].maxMp <= game.players[1 - seat].maxMp ? 3 : 1) : first.amount, to: 'chosen' }
   }
   if (!first || first.to !== 'chosen' && !['hitSpawn', 'hitAndSummon'].includes(first.id) ||
       !['damage', 'hitSpawn', 'hitAndSummon'].includes(first.id) || first.randomTargets || first.filter) return undefined

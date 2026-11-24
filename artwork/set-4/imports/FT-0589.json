@@ -1,0 +1,12 @@
+{
+  "id": "FT-0589",
+  "original": "artwork/set-4/card-FT-0589.png",
+  "delivery": "apps/web/assets/card-FT-0589.webp",
+  "width": 1254,
+  "height": 1254,
+  "sha256": "0388f8a8cb7dd3554b178f9eaab646f9c1d29abf7b7dceae9f42accd20214d91",
+  "deliverySha256": "d701eff4c9b366238d92d709a3ed6ca0963c23d94b42d328ca50860c51063514",
+  "generationFile": "exec-48dd56ab-2996-4609-bbae-994d9d7cbd80.png",
+  "generator": "image_gen",
+  "review": "visual-approved"
+}

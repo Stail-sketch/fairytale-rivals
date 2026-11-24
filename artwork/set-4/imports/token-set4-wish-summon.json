@@ -1,0 +1,12 @@
+{
+  "id": "token-set4-wish-summon",
+  "original": "artwork/set-4/card-token-set4-wish-summon.png",
+  "delivery": "apps/web/assets/card-token-set4-wish-summon.webp",
+  "width": 1254,
+  "height": 1254,
+  "sha256": "8c0cae47208e9c1b8735d7fdf90b6e3e71cc7f01f148e80bbb868d6439d8a37f",
+  "deliverySha256": "cd9f864d2c70676cba9bdd4404407e738d230c3e08b7b7c5ad3f6521671df986",
+  "generationFile": "exec-a0d739c4-fcba-4648-8eca-12e4f12f024f.png",
+  "generator": "image_gen",
+  "review": "visual-approved"
+}

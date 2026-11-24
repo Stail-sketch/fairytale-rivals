@@ -1,0 +1,12 @@
+{
+  "id": "token-set4-dawn-regalia",
+  "original": "artwork/set-4/card-token-set4-dawn-regalia.png",
+  "delivery": "apps/web/assets/card-token-set4-dawn-regalia.webp",
+  "width": 1254,
+  "height": 1254,
+  "sha256": "e258fc79cdb439c4cf22d1318a80309196087b4e1a1db0b125aef7301f2e6668",
+  "deliverySha256": "097f9d5b35a89943f0fb36fa1151db7cb4214ff6c8d516d540e612ded2c7fd85",
+  "generationFile": "exec-844c32ad-c412-4d31-bf66-81e7021ea14b.png",
+  "generator": "image_gen",
+  "review": "visual-approved"
+}

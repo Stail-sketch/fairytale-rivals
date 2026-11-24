@@ -4,6 +4,7 @@ import { standardNeutral } from './sets/standard-neutral.js'
 import { standardJobs } from './sets/standard-jobs.js'
 import { secondCards } from './sets/second.js'
 import { thirdCards } from './sets/third.js'
+import { fourthCards } from './sets/fourth.js'
 
 export const adaptedId = number => 'FT-' + String(number).padStart(4, '0')
 
@@ -45,5 +46,5 @@ export function defineSet({ units, spells, weapons }) {
 export function adaptedCards() {
   const syntax = { trigger, when, hit, mend, grow, key, remove, draw, heat, summon, power, temporary, martial, tool, option, placed }
   return [...[basicCards(syntax), standardNeutral(syntax), standardJobs(syntax), secondCards(syntax)].flatMap(defineSet),
-    ...thirdCards(define, syntax)]
+    ...thirdCards(define, syntax), ...fourthCards()]
 }

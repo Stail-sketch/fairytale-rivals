@@ -5,7 +5,7 @@ export { arenaCpuLevel } from './cpu-level.js'
 export const arenaVersion = 1
 export const rarityLabels = { common: 'ノーマル', rare: 'レア', superRare: 'スーパーレア', legendary: 'レジェンド' }
 export const rarityRanges = { common: [12, 17], rare: [8, 12], superRare: [3, 5], legendary: [1, 3] }
-export const arenaPool = catalog.filter(card => ['basic', 'standard', 'set-2', 'set-3'].includes(card.packId))
+export const arenaPool = catalog.filter(card => ['basic', 'standard', 'set-2', 'set-3', 'set-4'].includes(card.packId))
 export const doors = {
   class: { name: '語り手の扉', text: '選んだクラスの専用カードが出やすい', icon: '✦', match: (c, leader) => c.classId === leader },
   unit: { name: '仲間の扉', text: 'ユニットが出やすい', icon: '♟', match: c => c.kind === 'unit' },

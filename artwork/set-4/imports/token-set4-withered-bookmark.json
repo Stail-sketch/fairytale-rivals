@@ -1,0 +1,12 @@
+{
+  "id": "token-set4-withered-bookmark",
+  "original": "artwork/set-4/card-token-set4-withered-bookmark.png",
+  "delivery": "apps/web/assets/card-token-set4-withered-bookmark.webp",
+  "width": 1254,
+  "height": 1254,
+  "sha256": "f5b7d14b7443986a8b584031783137bdf9ad899ab50180f5e22680b9704646c7",
+  "deliverySha256": "c05124dd2df84d9e92efdfb3226108b7217bb27602a90d5065fee2c48b043161",
+  "generationFile": "exec-bcaf9c3d-5275-49e4-8fa9-1aa39ba90a96.png",
+  "generator": "image_gen",
+  "review": "visual-approved"
+}

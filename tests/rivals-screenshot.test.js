@@ -18,7 +18,7 @@ test('スクショ照合は各枠を数え、同じカードの2枚目と空き�
       for (let col = Math.round(x); col < Math.round(x + w); col++) data.set(color, (row * width + col) * 4)
     }
   }
-  assert.equal(byId.size, 573)
+  assert.equal(byId.size, 673)
   assert.equal(samples.length, byId.size * gridSize ** 2 * 3)
   const ids = exampleRivalsDeck.deck.slice(0, 28)
   for (const [index, id] of ids.entries()) {

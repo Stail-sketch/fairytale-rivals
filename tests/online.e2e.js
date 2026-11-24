@@ -3,6 +3,8 @@ import { once } from 'node:events'
 import test from 'node:test'
 import { starterLineup } from '../packages/cards/decks.js'
 import { createDevServer } from '../scripts/dev-server.js'
+import { catalog } from '../packages/cards/index.js'
+import { chooseCpuAction } from '../packages/cpu/index.js'
 
 async function roomClient(t) {
   let origin = process.env.FAIRYTALE_SERVER_URL
@@ -35,6 +37,45 @@ async function roomClient(t) {
     join: id => request('/' + id + '/join', { method: 'POST', body: starterLineup('priest', false) }),
   }
 }
+
+test('第4弾を通信対戦で使用し、刻印と公開情報を両側に同期する', { timeout: 30000 }, async t => {
+  const api = await roomClient(t)
+  const deck = [...catalog.filter(card => card.packId === 'set-4' && card.classId === 'neutral').slice(0, 20),
+    ...catalog.filter(card => card.packId === 'set-4' && card.classId === 'mage')].map(card => card.id)
+  const lineup = { leader: 'mage', deck }
+  const created = await api.request('', { method: 'POST', body: lineup })
+  assert.equal(created.status, 201)
+  const host = created.data
+  t.after(() => api.leave(host).catch(() => undefined)) // Local server cleanup may already have closed the listener.
+  const joined = await api.request('/' + host.id + '/join', { method: 'POST', body: lineup })
+  assert.equal(joined.status, 201)
+  const guest = joined.data
+  const first = (await api.state(host)).data
+  const clients = first.seat === 0 ? [host, guest] : [guest, host]
+  let version = 1
+  for (const client of clients) {
+    const response = await api.act(client, version, { type: 'mulligan', replace: [] })
+    assert.equal(response.status, 200)
+    version = response.data.version
+  }
+  for (let step = 0; step < 160; step++) {
+    const state = (await api.state(clients[0])).data
+    const seat = state.view.active
+    const active = seat === 0 ? state : (await api.state(clients[1])).data
+    assert.notEqual(active.view.phase, 'finished', '刻印を使うまで対戦が続く')
+    const response = await api.act(clients[seat], version, chooseCpuAction(active.view, seat))
+    assert.equal(response.status, 200, JSON.stringify(response.data))
+    version = response.data.version
+    if (!response.data.view.players.some(player => player.badges.length)) continue
+    const remote = (await api.state(clients[1 - seat])).data
+    assert.equal(remote.version, version)
+    assert.deepEqual(remote.view.players.map(player => player.badges), response.data.view.players.map(player => player.badges))
+    assert(remote.view.events.some(event => event.type === 'badge'))
+    assert.deepEqual(remote.view.players[seat].hand, [])
+    return
+  }
+  assert.fail('第4弾の刻印を通信対戦で発動できる')
+})
 
 test('招待URLの二人だけで対戦を進め、手札を分離し、同じ操作の再送を防ぐ', async t => {
   const api = await roomClient(t)

@@ -9,6 +9,7 @@ export const names = Object.freeze({
   FORTUNE: '運命の分岐', FORTUNE_CHOOSE: '未来視', FORTUNE_BOTH: '未来の統合', CHOICE: '分岐',
   VULNERABLE: '被ダメージ2倍', UNTARGETABLE: '効果の対象外',
   DARK_CLOAK: '宵衣', RESIST_SPELL: '特技ダメージ無効', SUPER_PIERCE: '貫きの奔流',
+  STORY_BADGE: '物語の刻印', HARD_METAL_BODY: '鋼の身（強化）',
 })
 
 export const terrains = Object.freeze({
@@ -24,4 +25,3 @@ export const orbNames = Object.freeze({
 export const species = Object.freeze([
   '幻獣族', '付喪族', '精霊族', '魔族', '菓子族', '機巧族', '不死族', '竜族', '水棲族', '夢幻族',
 ])
-

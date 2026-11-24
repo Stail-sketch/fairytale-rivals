@@ -3,6 +3,8 @@ import { createInstance, damageValue, displayName, draw, effectAnchor, emit, fin
 import { leaderTarget, other, positions, rules, samePosition, sameTarget, unitTarget } from './rules.js'
 import { allUnits, attackLimit, attackOptions, attackValue, at, canUseAbilities, effectTargets, has, leaderPower, openPositions, opposingApathy } from './targeting.js'
 import { orbCards, terrainAt, terrainSpaces } from './terrain.js'
+import { fourthSkills } from '../cards/sets/fourth.js'
+import { badgeDiscount } from './badges.js'
 
 export { rules, positions, samePosition, sameTarget, unitTarget, leaderTarget } from './rules.js'
 export { attackValue, leaderPower } from './targeting.js'
@@ -12,7 +14,7 @@ const awakenedSkill = Object.freeze({
   place: { side: 'enemy' }, effects: [{ id: 'damage', amount: 5, to: 'enemyRow' },
     { id: 'damage', amount: 5, to: 'enemyLeader' }],
 })
-export const playerSkill = player => player.awakenedLeader ? awakenedSkill : leaders[player.leader].skill
+export const playerSkill = player => fourthSkills[player.skillOverride] ?? (player.awakenedLeader ? awakenedSkill : leaders[player.leader].skill)
 
 const allowed = () => ({ enabled: true })
 const denied = reason => ({ enabled: false, reason })
@@ -50,7 +52,7 @@ export function createGame({ seed, format = 'constructed', lineups = [{ leader: 
       leaderAttack: 0, leaderPierce: false, leaderAttacked: false, leaderArmor: 0,
       focused: false, skillUses: 0, deck: deck.map(card => createInstance(game, card)), hand: [], graveyard: [], units: [],
       fallen: [], weapon: null, leaderStrikes: 0, leaderAttackTotal: 0, focusCount: 0,
-      spellsUsed: 0, temporaryArmor: 0, terrain: {}, unitsMoved: 0,
+      spellsUsed: 0, temporaryArmor: 0, terrain: {}, unitsMoved: 0, badges: [], brokenWeapons: [],
     }
     shuffle(game, player.deck)
     game.players.push(player)
@@ -79,7 +81,8 @@ function legalDefinition(game, seat, definition, unit = false) {
   const player = game.players[seat]
   const extra = unit && definition.terrainPlace ? terrainSpaces(game, seat, definition.terrainPlace) : []
   const handChoices = definition.handSelection ? player.hand.filter(instance =>
-    instance.id !== definition.handInstance && (!definition.handKind || cards[instance.card].kind === definition.handKind))
+    instance.id !== definition.handInstance && (!definition.handKind || cards[instance.card].kind === definition.handKind) &&
+    (!definition.handFamily || cards[instance.card].family === definition.handFamily))
     .map(instance => instance.id) : undefined
   if (definition.requiresHandSelection && !handChoices?.length) return denied('選べる手札がありません')
   const fortuneChoice = definition.fortune && !player.bothFortunesThisTurn && player.fortune !== 'both' &&
@@ -88,7 +91,9 @@ function legalDefinition(game, seat, definition, unit = false) {
     columns: summonColumns ? [0, 1, 2] : undefined,
     extraPositions: extra.length ? extra : definition.extraPlacement && spaces.length > 1 ? spaces : undefined,
     handChoices,
-    choices: (definition.choice ?? (fortuneChoice ? definition.fortune : null))?.map(option => option.label) }
+    choices: definition.wishChoices && player.fortune !== 'both' && !player.bothFortunesThisTurn ?
+      ['叡智の泉', '竜の招き', '竜の祝福', '秘めごとの頁'] :
+      (definition.choice ?? (fortuneChoice ? definition.fortune : null))?.map(option => option.label) }
 }
 
 export function playCost(game, seat, instance) {
@@ -105,10 +110,14 @@ export function playCost(game, seat, instance) {
   const spellTax = card.kind === 'spell' && player.spellTaxThrough >= game.turn ? (player.spellTax ?? 0) : 0
   const baseCost = card.cost - (instance.discount ?? 0) - (card.boost?.cost ?? 0) * player.skillUses
   const conditionDiscount = (card.spellCountDiscount ? player.spellsUsed : 0) +
+    (card.fallenFamilyDiscount ? player.fallen.filter(id => cards[id].family === card.fallenFamilyDiscount).length : 0) +
+    (card.boardFamilyDiscount ? player.units.filter(unit => cards[unit.card].family === card.boardFamilyDiscount).length : 0) +
     (card.fallenDiscount ? player.fallen.length : 0) +
     (card.leaderPowerDiscount && leaderPower(game, seat) >= card.leaderPowerDiscount.threshold ? card.leaderPowerDiscount.amount : 0)
   return Math.max(0, baseCost - (player.turnDiscount ?? 0) -
-    (card.tensionDiscount ? player.tension : 0) - handDiscount - spellDiscount - unitDiscount - familyDiscount - conditionDiscount + taxes + spellTax)
+    (card.tensionDiscount ? player.tension : 0) - handDiscount - spellDiscount - unitDiscount - familyDiscount - conditionDiscount -
+    badgeDiscount(player, card) - (card.kind === 'unit' ? player.units.filter(unit => canUseAbilities(unit) &&
+      cards[unit.card].handFamilyAura && cards[unit.card].handFamilyAura === card.family).length : 0) + taxes + spellTax)
 }
 
 export function legalPlay(game, seat, id) {
@@ -212,7 +221,7 @@ export function legalSkill(game, seat) {
   if (player.blockSkillThrough >= game.turn) return denied('このターンは奥義を使えません')
   if (player.tension < rules.maxTension) return denied('熱量が3必要です')
   const skill = playerSkill(player)
-  if (skill.effects.some(effect => effect.id === 'summon') && !openPositions(game, seat).length) {
+  if (skill.effects.some(effect => effect.id === 'summon' || effect.id === 'fourth' && effect.operation === 'mummy') && !openPositions(game, seat).length) {
     return denied('空いているマスがありません')
   }
   return legalDefinition(game, seat, skill)
@@ -356,7 +365,7 @@ function play(game, seat, action, resolver) {
   if (card.kind === 'unit') {
     player.nextUnitDiscount = 0
     resolver.summon(seat, instance, action.position, action.target, action.choice, true,
-      action.column === undefined ? action.extraPosition : { column: action.column }, cost)
+      action.column === undefined ? action.extraPosition : { column: action.column }, cost, undefined, action.handChoice)
   } else if (card.kind === 'weapon') {
     resolver.equip(seat, instance, context)
   } else {
@@ -385,6 +394,7 @@ function play(game, seat, action, resolver) {
 function finishPlay(game, seat, action, cardId, cost, copied, resolver) {
   const player = game.players[seat]
   const card = cards[cardId]
+  resolver.cardPlayed(seat, cardId)
   if (card.keywords.includes('CHEER') && !card.cheerFirst) resolver.gainTension(seat, 1)
   if (card.kind === 'spell') {
     for (const unit of player.units) {
@@ -454,9 +464,12 @@ function finishAttack(game, action, resolver) {
   const { power, noRetaliation } = combatStats(game, attacker, action.target)
   const result = combat(game, resolver, unitTarget(attacker.id), action.target, power,
     has(attacker, 'PIERCE'), noRetaliation,
-    has(attacker, 'SUPER_PIERCE'))
+    has(attacker, 'SUPER_PIERCE'), canUseAbilities(attacker) && cards[attacker.card].neighborAttack)
   if (result?.dealt > 0) resolver.trigger(attacker, 'ON_DEAL_DAMAGE', action.target, result)
   if (result?.killed) resolver.trigger(attacker, 'ON_KILL', action.target, result)
+  if (result?.killed && cards[attacker.card].family === 'dragon') {
+    for (const ally of game.players[attacker.owner].units) if (canUseAbilities(ally) && cards[ally.card].dragonKillHeat) resolver.gainTension(attacker.owner, 1)
+  }
   const weapon = game.players[attacker.owner].weapon
   if (weapon && action.target.kind === 'leader') resolver.trigger(weapon, 'ON_ALLY_LEADER_HIT', unitTarget(attacker.id))
 }
@@ -525,6 +538,7 @@ export function dispatch(game, actor, rawAction) {
         break
       }
       case 'end':
+        resolver.endBadges(actor)
         for (const unit of player.units) resolver.trigger(unit, 'ON_TURN_END')
         for (const side of next.players) for (const unit of side.units) resolver.trigger(unit, 'ON_ANY_TURN_END')
         resolver.settle()
@@ -550,7 +564,7 @@ export function dispatch(game, actor, rawAction) {
           delete unit.temporaryPower
         }
         resolver.returnBorrowed(actor)
-        for (const unit of player.units) {
+        for (const unit of allUnits(next)) {
           if (unit.statuses.includes('POISON')) resolver.damage(unitTarget(unit.id), 1)
         }
         resolver.settle()

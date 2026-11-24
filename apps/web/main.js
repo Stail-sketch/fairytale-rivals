@@ -1,4 +1,4 @@
-import { cardCost, cards, leaders, names } from '../../packages/cards/index.js'
+import { cardCost, cards, familyNames, leaders, names } from '../../packages/cards/index.js'
 import { cpuLineup, createDeckCollection, starterDecks, starterLineup } from '../../packages/cards/decks.js'
 import { chooseCpuAction } from '../../packages/cpu/index.js'
 import { leaderTarget, samePosition, sameTarget, unitTarget } from '../../packages/engine/index.js'
@@ -319,6 +319,7 @@ function leaderPanel(seat, enemy, events) {
     </div>
     ${fortune ? `<div class="fortune-badge" data-fortune-state="${fortune.state}">
       ${termLink(fortune.term)}<small>${fortune.duration}</small></div>` : ''}
+    ${player.badges?.length ? `<button class="story-badge-summary" type="button" data-inspect-badges="${seat}" aria-haspopup="dialog">✦ 物語の刻印 <strong>${player.badges.length}</strong></button>` : ''}
   </aside>`
 }
 
@@ -418,6 +419,7 @@ function skillTarget(skill) {
   if (skill.target === 'enemy') return '敵リーダーか敵ユニット1体'
   if (skill.effects.some(effect => effect.to === 'allies')) return '味方リーダーと味方ユニット全員'
   if (skill.effects.some(effect => effect.id === 'summon')) return '味方陣の空きマス'
+  if (skill.effects.some(effect => effect.id === 'fourth' && effect.operation === 'mummy')) return '味方陣の空きマス'
   if (skill.effects.some(effect => effect.id === 'leaderPower')) return '味方リーダー'
   return '自分の手札'
 }
@@ -453,7 +455,7 @@ function cardDetail(card, cost = card.cost, node, action) {
     <div class="inspector-art"><img src="${art(card.artId)}" alt=""></div>
     <div class="inspector-copy">
       <h2>${escape(card.name)}</h2>
-      <small>${card.classId === 'neutral' ? '共通' : leaders[card.classId].job} · ${type}${card.species ? ' · ' + escape(card.species) : ''} · ${escape(sourceLabels[card.packId] ?? '')}</small>
+      <small>${card.classId === 'neutral' ? '共通' : leaders[card.classId].job} · ${type}${card.species ? ' · ' + escape(card.species) : ''}${familyNames[card.family] ? ' · ' + familyNames[card.family] : ''} · ${escape(sourceLabels[card.packId] ?? '')}</small>
       <div class="inspector-stats"><span class="inspector-stat inspector-cost">${cost} MP</span>${stats}</div>
       <p class="inspector-effect">${termText(card.description || '効果なし')}</p>
       ${powerDetails(power)}
@@ -473,6 +475,15 @@ function defaultDetail(target) {
 
 function detailPanel() {
   return `<aside class="detail-panel" id="detail" tabindex="-1" aria-label="カードと奥義の詳細"${selected ? ' data-inspecting="true"' : ''}>${defaultDetail()}</aside>`
+}
+
+function badgeDetails(seat, labelled = false) {
+  const badges = view.players[seat].badges ?? []
+  const counts = new Map()
+  for (const badge of badges) counts.set(badge.card, (counts.get(badge.card) ?? 0) + 1)
+  return `<div class="inspector-copy"><h2${labelled ? ' id="battle-card-title"' : ''}>物語の刻印 · ${badges.length}</h2>
+    <p>${termText('発動元が場を離れても続く、物語の刻印です。同じ刻印は重複します。')}</p>
+    ${[...counts].map(([id, count]) => `<article class="active-story-badge"><img src="${art(cards[id].artId)}" alt=""><div><strong>${escape(cards[id].name)} ×${count}</strong><p>${termText(cards[id].description)}</p></div></article>`).join('')}</div>`
 }
 
 const logCard = event => event && cards[event.card ?? event.source?.card]
@@ -1497,6 +1508,11 @@ app.addEventListener('click', event => {
   const node = event.target.closest('button')
   if (!node) return
   if (handleArenaButton(node)) return
+  if (node.dataset.inspectBadges !== undefined) {
+    const seat = Number(node.dataset.inspectBadges)
+    openBattleDetail(badgeDetails(seat, true), () => app.querySelector(`[data-inspect-badges="${seat}"]`))
+    return
+  }
   const card = inspectableCard(node)
   if (event.detail > 0 && card && performance.now() < ignoreCardClickUntil) {
     ignoreCardClickUntil = 0
@@ -1637,12 +1653,12 @@ function showMulliganReturns(destination) {
   if (replacements.size) battleAudio.play('draw')
 }
 
-const inspectSelector = '[data-hand], [data-unit], [data-terrain], [data-leader], [data-inspect-weapon], [data-inspect-skill], [data-op="skill"], #skill-description'
+const inspectSelector = '[data-hand], [data-unit], [data-terrain], [data-leader], [data-inspect-weapon], [data-inspect-skill], [data-inspect-badges], [data-op="skill"], #skill-description'
 
 function inspectNode(node) {
   const panel = app.querySelector('#detail')
   if (!panel || !node) return
-  const { hand, unit, slot, leader, terrain, inspectWeapon, inspectSkill } = node.dataset
+  const { hand, unit, slot, leader, terrain, inspectWeapon, inspectSkill, inspectBadges } = node.dataset
   const weapon = view.players[Number(inspectWeapon)]?.weapon
   const card = cards[weapon?.card ?? node.dataset.card]
   if (card) {
@@ -1653,6 +1669,9 @@ function inspectNode(node) {
     panel.innerHTML = `<div class="inspector-copy"><h2>${escape(terrainName(terrain))}</h2>
       <p class="inspector-effect">${escape(terrainText[terrain] ?? '6色の種晶で特殊勝利')}</p></div>`
     lastInspection = `[data-slot="${slot}"][data-terrain]`
+  } else if (inspectBadges !== undefined) {
+    panel.innerHTML = badgeDetails(Number(inspectBadges))
+    lastInspection = `[data-inspect-badges="${inspectBadges}"]`
   } else if (inspectSkill !== undefined) {
     panel.innerHTML = skillDetail(Number(inspectSkill))
     lastInspection = `[data-inspect-skill="${inspectSkill}"]`

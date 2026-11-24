@@ -12,8 +12,13 @@ export type TerrainPlacement = {
 export type Target = { kind: 'leader'; seat: Seat } | { kind: 'unit'; id: number }
 export type TargetRule = 'enemy' | 'enemyUnit' | 'ally' | 'allyUnit' | 'anyUnit' | 'anyCharacter'
 export type Status = 'POISON' | 'SILENCE' | 'INVULNERABLE'
+export type StoryBadge = {
+  id?: number; card?: string; family?: 'slime' | 'dragon' | 'undead' | 'adventurer'; metal?: boolean;
+  attack?: number; hp?: number; discount?: number; keyword?: Keyword; amount?: number;
+  event?: 'weaponRust' | 'heal' | 'damage' | 'mp' | 'tension' | 'endBuff'
+}
 export type Keyword = 'CHARGE' | 'GUARD' | 'AIM' | 'PIERCE' | 'DOUBLE_ATTACK' | 'STEALTH' | 'METAL_BODY' | 'CHEER'
-  | 'FINISHER' | 'SUPER_PIERCE' | 'VULNERABLE' | 'UNTARGETABLE' | 'DARK_CLOAK' | 'RESIST_SPELL'
+  | 'FINISHER' | 'SUPER_PIERCE' | 'VULNERABLE' | 'UNTARGETABLE' | 'DARK_CLOAK' | 'RESIST_SPELL' | 'HARD_METAL_BODY'
 export type Trigger = 'ON_SUMMON' | 'ON_DEATH' | 'ON_ATTACK' | 'TENSION_LINK' | 'SKILL_LINK'
   | 'ON_ALLY_SPELL' | 'ON_ALLY_HEAL' | 'ON_TURN_START' | 'ON_TURN_END' | 'ON_ANY_TURN_END'
   | 'ON_COMBAT' | 'ON_LEADER_ATTACK' | 'ON_LEADER_KILL' | 'ON_DEAL_DAMAGE' | 'ON_KILL' | 'ON_WEAPON_BREAK'
@@ -29,6 +34,8 @@ export type EffectTarget = 'chosen' | 'self' | 'ownLeader' | 'enemyLeader' | 'al
   | 'alignedAlly' | 'enemyOpposite' | 'crossEnemy' | 'justAhead' | 'ownFrontNeighbor' | 'neighborOfTarget' | 'adjacentToTarget'
 export type EffectCondition = readonly [kind: string, value: string | number | boolean]
 export type Effect = (
+  | { id: 'fourth'; operation: string; [parameter: string]: unknown }
+  | { id: 'storyBadge'; badge: StoryBadge }
   | { id: 'damage'; amount: number; to: EffectTarget; boost?: number }
   | { id: 'heal'; amount: number; to: EffectTarget }
   | { id: 'buff'; attack: number; hp: number; to: EffectTarget; boost?: number }
@@ -88,13 +95,15 @@ export type Card = {
   choice: readonly Choice[] | null; fortune?: readonly Choice[];
   targetFilter?: Record<string, string | number | boolean>; place?: { side: 'own' | 'enemy'; empty?: boolean };
   terrainPlace?: TerrainPlacement; handSelection?: boolean; requiresHandSelection?: boolean; handKind?: Card['kind'];
+  handFamily?: string; badge?: StoryBadge; wishChoices?: boolean;
   family?: 'adventurer' | 'slime' | 'undead' | 'dragon'; extraPlacement?: boolean; useSummonColumn?: boolean;
 }
-export type Instance = { id: number; card: string; discount?: number }
+export type Instance = { id: number; card: string; discount?: number; bonusAttack?: number; bonusHp?: number }
 export type Unit = Instance & {
   owner: Seat; position: Position; attack: number; hp: number; maxHp: number;
   attacks: number; revealed: boolean; statuses: Status[]
   grants?: Keyword[]; extraAbilities?: Ability[];
+  badgeKeywords?: Keyword[]; badgeHp?: number; boundTo?: { source: number; owner: Seat; position: Position };
 }
 export type Weapon = Instance & { owner: Seat; attack: number; durability: number }
 export type Player = {
@@ -106,6 +115,7 @@ export type Player = {
   fortune?: 'choose' | 'both'; awakenedLeader?: boolean;
   terrain?: Partial<Record<`${Row}:${Column}`, TerrainId>>; unitsMoved?: number; phoenix?: boolean;
   knightBuff?: number; healReversedThrough?: number; nextTurnCards?: string[];
+  badges?: StoryBadge[]; brokenWeapons?: string[]; skillOverride?: 'dragonGuide' | 'deadAwakening' | 'dragonBlessing';
 }
 export type Action =
   | { type: 'mulligan'; replace: number[] }

@@ -1,0 +1,12 @@
+{
+  "id": "FT-0595",
+  "original": "artwork/set-4/card-FT-0595.png",
+  "delivery": "apps/web/assets/card-FT-0595.webp",
+  "width": 1254,
+  "height": 1254,
+  "sha256": "61fae521f28fae251628e5aa0b695ea42b47d4ac160c1b24ac194db55d44f130",
+  "deliverySha256": "dc56f8182f07bb6268c2b2ff4da360f4df13d6fff7db93d729487223b8614133",
+  "generationFile": "exec-c9281255-75bd-4cc1-ae34-99e3c212c37d.png",
+  "generator": "image_gen",
+  "review": "visual-approved"
+}
