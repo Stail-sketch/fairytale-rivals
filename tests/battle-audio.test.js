@@ -48,3 +48,20 @@ test('7人に固有の奥義演出があり、覚醒と短い演出にも対応�
   assert.equal(motifs.size, 7)
   assert.equal(skillTheme({ name: '黒薔薇の焔嵐', seat: 0 }, { leader: 'swordsman', awakenedLeader: true }, 0).motif, 'rosefire')
 })
+
+test('熱量SEは通常上昇と最大到達で音型を変え、消音時は鳴らさない', t => {
+  const tones=[]
+  const gain=()=>({gain:{value:0,setTargetAtTime(){},cancelScheduledValues(){},setValueAtTime(){},exponentialRampToValueAtTime(){}},connect(){return this}})
+  class FakeContext {
+    currentTime=0; state='running'; destination={}
+    createGain(){return gain()}
+    createOscillator(){const tone={frequency:{value:0},connect(){return this},start(){tones.push(this.frequency.value)},stop(){}};return tone}
+  }
+  const original=globalThis.AudioContext
+  globalThis.AudioContext=FakeContext
+  t.after(()=>{if(original===undefined)delete globalThis.AudioContext;else globalThis.AudioContext=original})
+  const audio=createBattleAudio();audio.unlock();audio.play('focus-charge')
+  const charge=[...tones];tones.length=0;audio.play('focus-ready')
+  assert(charge.length>=4);assert(tones.length>charge.length);assert(Math.max(...tones)>Math.max(...charge))
+  tones.length=0;audio.toggle();audio.play('focus-ready');assert.equal(tones.length,0)
+})

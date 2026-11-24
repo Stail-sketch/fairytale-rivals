@@ -12,6 +12,10 @@ const phrases = {
   'turn-out': [[494, 0, .14, .34, 'triangle'], [330, .095, .21, .38, 'triangle']],
   spell: [[450, 0, .11], [690, .035, .12]],
   terrain: [[245, 0, .09], [490, .03, .13]],
+  'focus-charge': [[196, 0, .18, .34, 'triangle'], [294, .055, .20, .32, 'triangle'],
+    [440, .12, .24, .36, 'triangle'], [659, .20, .27, .30], [880, .26, .22, .12]],
+  'focus-ready': [[196, 0, .20, .32, 'triangle'], [392, .07, .23, .34, 'triangle'],
+    [587, .14, .26, .33, 'triangle'], [784, .22, .40, .38, 'triangle'], [1175, .25, .49, .22], [1568, .30, .46, .14]],
   finish: [[147, 0, .24], [294, .04, .29], [440, .13, .30]],
   phoenix: [[196, 0, .40], [294, .10, .36], [392, .22, .36], [523, .38, .40], [784, .52, .42]],
   'opening-page': [[180, 0, .11, .17, 'triangle'], [260, .05, .13, .13, 'triangle'], [390, .12, .12, .10]],
@@ -141,7 +145,7 @@ export function createBattleAudio() {
         source.start()
         return
       }
-      if (cue === 'turn-in') music?.duck()
+      if (cue === 'turn-in' || cue === 'focus-charge' || cue === 'focus-ready') music?.duck()
       for (const [frequency, delay, duration, level = .22, wave = 'sine'] of phrases[cue]) {
         const at = context.currentTime + delay
         const tone = context.createOscillator()

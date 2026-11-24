@@ -22,6 +22,7 @@ import { isLobbyCode, normalizeRoomId, visibleLobbyCode } from '../../packages/o
 import { arenaCpuLevel, autoDraft, draftAction, rarityLabels } from '../../packages/arena/index.js'
 import { arenaDetails, arenaDraftScreen, arenaMenu, arenaSeed, createArenaStore, localDraftView } from './arena.js'
 import { battleOpening, openingTiming } from './battle-opening.js'
+import { createMusicLibrary } from './music-library.js'
 
 const app = document.querySelector('#app')
 const announcer = document.querySelector('#announcer')
@@ -45,6 +46,9 @@ deckCollection.initialize(initialDecks)
 const initialDeckIds = new Set(initialDecks.map(deck => deck.id))
 const deckEditor = createDeckEditor(deckCollection)
 const battleAudio = createBattleAudio()
+const musicLibrary = createMusicLibrary({ art, volume: () => battleAudio.volume('bgm'),
+  setVolume: value => battleAudio.setVolume('bgm', value),
+  onOpen: () => battleAudio.setScene('off'), onClose: () => syncBattleMusic() })
 const arenaStore = createArenaStore(deckStorage)
 let showArena = null
 let arenaChoice = null
@@ -122,6 +126,7 @@ function titlebar(mixerOpen) {
       <button type="button" data-op="sound" class="icon-button sound-button" aria-pressed="${battleAudio.enabled}">効果音</button>
       <button type="button" data-op="audio-mixer" class="icon-button" aria-expanded="${Boolean(mixerOpen)}" aria-controls="audio-mixer">音量</button>
       <button type="button" data-op="rules" class="icon-button">ルール</button>
+      ${!inMatch() ? '<button type="button" data-op="music" class="icon-button">音楽室 ♪</button>' : ''}
       ${inMatch() ? `<button type="button" data-op="home" class="icon-button">${arenaBattle ? '保存して中断' : 'タイトル'}</button>` : ''}
     </div>${audioControls(mixerOpen)}</header>`
 }
@@ -199,6 +204,7 @@ function home() {
         <button class="secondary browse-cards" type="button" data-op="arena-open">物語の闘技場</button>
         <button class="secondary browse-cards" type="button" data-op="library">カードライブラリ</button>
         <button class="secondary browse-cards" type="button" data-op="decks">デッキ編集</button>
+        <button class="secondary browse-cards" type="button" data-op="music">音楽ライブラリ ♪</button>
       </div>
     </section>
   </main>`
@@ -669,6 +675,8 @@ function playResourceMotion() {
   }
   if (view.phase !== 'battle') return
   const events = view.events.filter(event => event.seq > eventFloor)
+  const heat = events.findLast(event => event.type === 'focus')
+  if (heat) battleAudio.play(heat.value >= 3 ? 'focus-ready' : 'focus-charge')
   const turn = events.findLast(event => event.type === 'turn')
   if (turn) {
     app.querySelector(`[data-mp="${turn.seat}"]`)?.classList.add('mp-refresh')
@@ -907,6 +915,7 @@ function rulesModal() {
 }
 
 function syncBattleMusic() {
+  if (musicLibrary.isOpen) return battleAudio.setScene('off')
   if (!view || roomConnection === 'closed') return battleAudio.setScene(showArena || roomArena ? 'arena' : showDecks || showLibrary ? 'deck' : 'menu')
   if (opening?.stage === 'draw') return battleAudio.setScene('off')
   if (view.phase === 'mulligan') return battleAudio.setScene('battle', view.bgmId)
@@ -1628,6 +1637,7 @@ app.addEventListener('click', event => {
   if (choice !== undefined) completeSelection({ choice: Number(choice) })
   switch (op) {
     case 'library': showLibrary = true; render('.library-view'); break
+    case 'music': if (!inMatch()) musicLibrary.open(); break
     case 'close-library': showLibrary = false; render('[data-op="library"]'); break
     case 'decks': deckEditor.open(); showDecks = true; render('.deck-view'); break
     case 'close-decks': showDecks = false; render('[data-op="decks"]'); break
