@@ -68,4 +68,3 @@ GameConductorの一覧値と混ぜて独自の強さに調整しない。
 - ローカルCloudflare Workerでの通信・ロビー・闘技場試験7件が成功。
 - `npm run build:pages` が成功し、`dist` と `dist-pages` を生成。
 - 公開版・公開GitHubへの反映は[マスター仕様の公開前の権利確認](fourth-pack-rights-review.md)の扱いが確認できるまで保留。
-
