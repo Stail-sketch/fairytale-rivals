@@ -76,6 +76,8 @@ test('刻印は発動元の退場後も継続し、重複、能力封じ、解�
   resolution(game).settle()
   assert.equal(unit(game, slime).maxHp, cards['FT-0013'].hp + 2)
   assert.equal(game.players[0].badges.length, 2)
+  const fang = put(game, 'FT-0576', 0, back(1))
+  assert.equal(unit(game, fang).maxHp, cards['FT-0576'].hp + 2, '露牙の小獣も露珠の一族として刻印を受ける')
   const resolver = resolution(game)
   resolver.enqueue([{ id: 'fourth', operation: 'eraseBadge' }], { seat: 1 }); resolver.settle()
   assert.equal(game.players[0].badges.length, 1)

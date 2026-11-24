@@ -25,7 +25,7 @@ export const fourthMetadata = [
     "rarity": "common",
     "packId": "set-4",
     "species": "精霊族",
-    "family": null,
+    "family": "slime",
     "sourceReference": "dqrdb:831"
   },
   {

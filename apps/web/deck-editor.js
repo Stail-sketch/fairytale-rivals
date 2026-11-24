@@ -2,7 +2,7 @@ import { cards, catalog, familyNames, leaders } from '../../packages/cards/index
 import { rules } from '../../packages/engine/index.js'
 import { starterLineup } from '../../packages/cards/decks.js'
 import { createCardSearch } from './card-search.js'
-import { rarityOptions, sourceLabels } from './library.js'
+import { byFamily, familyOptions, matchesFamily, rarityOptions, sourceLabels } from './library.js'
 import { createScreenshotImport } from './rivals-import.js'
 import { openDeckOverview } from './deck-overview.js'
 import { termText } from './card-terms.js'
@@ -13,6 +13,7 @@ const byCost = (a, b) => a.cost - b.cost || a.name.localeCompare(b.name, 'ja')
 const kinds = { unit: 'ユニット', spell: '特技', weapon: '武器' }
 const kindOrder = Object.keys(kinds)
 const byKind = (a, b) => kindOrder.indexOf(a.kind) - kindOrder.indexOf(b.kind) || byCost(a, b)
+const compareOrder = order => order === 'family' ? byFamily : order === 'kind' ? byKind : byCost
 const available = catalog.filter(card => card.packId !== 'generated')
 const searchCards = createCardSearch(available)
 
@@ -45,6 +46,7 @@ export function createDeckEditor(collection) {
   let pack = ''
   let rarity = ''
   let kind = ''
+  let family = ''
   let order = 'cost'
   let message = ''
   let listMessage = ''
@@ -58,7 +60,7 @@ export function createDeckEditor(collection) {
   function edit(deck) {
     baseline = deck
     draft = { ...deck }
-    query = pack = rarity = kind = message = ''
+    query = pack = rarity = kind = family = message = ''
     order = 'cost'
     screen = 'edit'
   }
@@ -108,6 +110,7 @@ export function createDeckEditor(collection) {
           <div class="library-filters deck-filters">
             <label>検索<input type="search" data-deck-filter="query" value="${escape(query)}" placeholder="カード名・原作名・効果"></label>
             <label>レアリティ<select data-deck-filter="rarity">${rarityOptions(rarity)}</select></label>
+            <label>一族<select data-deck-filter="family">${familyOptions(family)}</select></label>
             <label>収録<select data-deck-filter="pack"><option value="">すべて</option>
               ${Object.entries(sourceLabels).filter(([id]) => id !== 'generated').map(([id, title]) =>
                 `<option value="${id}" ${id === pack ? 'selected' : ''}>${title}</option>`).join('')}</select></label>
@@ -117,6 +120,7 @@ export function createDeckEditor(collection) {
             <label>並び順<select data-deck-filter="order">
               <option value="cost" ${order === 'cost' ? 'selected' : ''}>MP順</option>
               <option value="kind" ${order === 'kind' ? 'selected' : ''}>種類順</option>
+              <option value="family" ${order === 'family' ? 'selected' : ''}>一族順</option>
             </select></label>
           </div>
           <div class="deck-scroll deck-pool" id="deck-pool"></div>
@@ -156,9 +160,9 @@ export function createDeckEditor(collection) {
     const { leader, deck } = draft
     const counts = new Map()
     for (const id of deck) counts.set(id, (counts.get(id) ?? 0) + 1)
-    const compare = order === 'kind' ? byKind : byCost
+    const compare = compareOrder(order)
     const candidates = searchCards(query, card => (card.classId === 'neutral' || card.classId === leader)
-      && (!pack || card.packId === pack) && (!rarity || card.rarity === rarity) && (!kind || card.kind === kind)).sort(compare)
+      && (!pack || card.packId === pack) && (!rarity || card.rarity === rarity) && (!kind || card.kind === kind) && matchesFamily(card, family)).sort(compare)
     const list = app.querySelector('#deck-list')
     const pool = app.querySelector('#deck-pool')
     const listPosition = list.scrollTop
@@ -229,6 +233,7 @@ export function createDeckEditor(collection) {
       if (field.dataset.deckFilter === 'rarity') rarity = field.value
       if (field.dataset.deckFilter === 'query') query = field.value
       if (field.dataset.deckFilter === 'kind') kind = field.value
+      if (field.dataset.deckFilter === 'family') family = field.value
       if (field.dataset.deckFilter === 'order') {
         order = field.value
         app.querySelector('#deck-list').scrollTop = 0
@@ -277,7 +282,7 @@ export function createDeckEditor(collection) {
       })) return true
       if (deckOverview || op === 'deck-overview' && screen === 'edit') {
         const deck = deckOverview ? collection.get(deckOverview) : draft
-        openDeckOverview(app.querySelector('.deck-view'), deck, node, art, escape, !deckOverview && order === 'kind' ? byKind : byCost)
+        openDeckOverview(app.querySelector('.deck-view'), deck, node, art, escape, !deckOverview ? compareOrder(order) : byCost)
       } else if (deckPage !== undefined) {
         page += Number(deckPage)
         listMessage = ''

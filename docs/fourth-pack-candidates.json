@@ -75,7 +75,10 @@
       "testStatus": "tested",
       "artStatus": "generated",
       "nameStatus": "adopted",
-      "creativeReference": "fourth-pack-creative.json#FT-0576"
+      "creativeReference": "fourth-pack-creative.json#FT-0576",
+      "archiveFamilies": [
+        "スライム系"
+      ]
     },
     {
       "ftId": "FT-0577",

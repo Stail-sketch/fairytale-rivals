@@ -10,13 +10,18 @@ export const sourceLabels = {
 }
 const catalogByCost = [...catalog].sort((a, b) => a.cost - b.cost)
 const searchCards = createCardSearch(catalogByCost, card => [card.id, jobLabel(card.classId), card.origin])
-const state = { tab: 'cards', query: '', job: '', kind: '', rarity: '', source: '', selected: null }
+const state = { tab: 'cards', query: '', job: '', kind: '', rarity: '', source: '', family: '', order: 'cost', selected: null }
 
 function options(items, selected) {
   return items.map(([value, label]) => `<option value="${value}" ${value === selected ? 'selected' : ''}>${label}</option>`).join('')
 }
 
 export const rarityOptions = selected => options([['', 'すべて'], ...Object.entries(rarityLabels)], selected)
+export const familyOptions = selected => options([['', 'すべて'], ...Object.entries(familyNames), ['none', '一族なし']], selected)
+export const matchesFamily = (card, family) => !family || (family === 'none' ? !card.family : card.family === family)
+const familyOrder = Object.keys(familyNames)
+const familyRank = card => familyOrder.includes(card.family) ? familyOrder.indexOf(card.family) : familyOrder.length
+export const byFamily = (a, b) => familyRank(a) - familyRank(b) || a.cost - b.cost || a.name.localeCompare(b.name, 'ja')
 
 function cardGrid(cardsToShow, art) {
   return cardsToShow.map(card => `<button class="catalog-card" type="button" data-library-card="${card.id}"
@@ -47,9 +52,10 @@ function cardDetails(card, art) {
 }
 
 function matches() {
-  return searchCards(state.query, card =>
+  const results = searchCards(state.query, card =>
     (!state.job || card.classId === state.job) && (!state.kind || card.kind === state.kind) &&
-    (!state.rarity || card.rarity === state.rarity) && (!state.source || card.packId === state.source))
+    (!state.rarity || card.rarity === state.rarity) && (!state.source || card.packId === state.source) && matchesFamily(card, state.family))
+  return state.order === 'family' ? results.sort(byFamily) : results
 }
 
 function skills(art) {
@@ -75,8 +81,10 @@ export function library(art) {
       <label class="library-search">検索<input type="search" data-library-filter="query" placeholder="カード名・原作名・効果"></label>
       <label>職業<select data-library-filter="job">${options([['', 'すべて'], ['neutral', '共通'], ...Object.entries(leaders).map(([id, leader]) => [id, leader.job])], state.job)}</select></label>
       <label>種類<select data-library-filter="kind">${options([['', 'すべて'], ['unit', 'ユニット'], ['spell', '特技'], ['weapon', '武器']], state.kind)}</select></label>
+      <label>一族<select data-library-filter="family">${familyOptions(state.family)}</select></label>
       <label>レアリティ<select data-library-filter="rarity">${rarityOptions(state.rarity)}</select></label>
       <label>収録<select data-library-filter="source">${options([['', 'すべて'], ...Object.entries(sourceLabels)], state.source)}</select></label>
+      <label>並び順<select data-library-filter="order">${options([['cost', 'MP順'], ['family', '一族順']], state.order)}</select></label>
     </div>
     <p class="catalog-count" id="catalog-count" aria-live="polite"></p>
     <div class="library-content">

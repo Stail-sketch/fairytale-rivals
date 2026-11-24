@@ -643,6 +643,8 @@ dialog li, dialog p { font-size: 14px; line-height: 1.7; color: #d8e0e1; margin-
 .library-tabs [aria-pressed="true"] { color: var(--gold); border-color: #d5ad67; background: #4a3826; }
 .library-filters { display: grid; grid-template-columns: minmax(164px, 2fr) repeat(4, minmax(108px, 1fr)); gap: 10px; padding: 9px 11px 12px; background: #111f30e6; border: 1px solid #85704f; border-radius: 7px; }
 .library-filters label { display: grid; gap: 4px; font-size: 11px; color: var(--gold); }
+.library-filters:not(.deck-filters) { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.library-search { grid-column: 1 / -1; }
 .library-filters input, .library-filters select { width: 100%; min-width: 0; padding: 7px 8px; background: #091623; color: var(--text); border: 1px solid #647383; border-radius: 4px; font: inherit; font-size: 13px; }
 .library-filters input:focus-visible { outline: 2px solid #ebd69d; outline-offset: 2px; }
 .deck-view { background-image: linear-gradient(#111c2bbc, #0d1725 620px), var(--library-scene); }
@@ -686,7 +688,7 @@ dialog li, dialog p { font-size: 14px; line-height: 1.7; color: #d8e0e1; margin-
 .deck-columns section { min-width: 0; min-height: 0; border: 1px solid #8b744f; border-radius: 7px; background: #111f30ed; }
 .deck-columns h2 { display: flex; align-items: center; justify-content: space-between; margin: 0; padding: 11px 12px 9px; color: var(--gold); font-size: 15px; }
 #deck-size, #deck-pool-size { font-variant-numeric: tabular-nums; font-size: 13px; }
-.deck-filters { grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 0 11px 11px; gap: 8px; border: 0; background: transparent; }
+.deck-filters { grid-template-columns: repeat(3, minmax(0, 1fr)); padding: 0 11px 11px; gap: 8px; border: 0; background: transparent; }
 .deck-filters label:first-child { grid-column: 1 / -1; }
 #deck-size.over-limit { color: #ffaf9b; }
 .deck-scroll { height: clamp(280px, 53vh, 600px); overflow: auto; scrollbar-color: #807153 #111f30; border-top: 1px solid var(--line); }
@@ -762,10 +764,11 @@ dialog li, dialog p { font-size: 14px; line-height: 1.7; color: #d8e0e1; margin-
 @media (max-width: 720px) {
   body:has(.library-view:not(.deck-view)) { min-width: 0; }
   body:has(.deck-grid, .deck-empty) { min-width: 0; }
-  .library-filters:not(.deck-filters) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .library-filters:not(.deck-filters) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .library-search { grid-column: 1 / -1; }
 }
 @media (max-width: 540px) {
+  .library-filters:not(.deck-filters) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .deck-grid { grid-template-columns: minmax(0, 1fr); }
   .library-view:not(.deck-view) { padding-inline: 12px; }
   .library-heading h1 { font-size: clamp(18px, 6vw, 26px); letter-spacing: .035em; }

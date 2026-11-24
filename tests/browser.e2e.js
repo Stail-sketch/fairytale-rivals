@@ -132,6 +132,18 @@ async function driveBattle() {
     }
     filter('source', '')
     const shownCards = () => [...document.querySelectorAll('[data-library-card]')].map(button => cards[button.dataset.libraryCard])
+    for (const family of ['slime', 'dragon', 'undead', 'adventurer', 'none']) {
+      filter('family', family)
+      const expected = catalog.filter(card => family === 'none' ? !card.family : card.family === family)
+      expect(shownCards().length === expected.length && shownCards().every(card =>
+        family === 'none' ? !card.family : card.family === family), '所属する一族だけに絞り込む ' + family)
+    }
+    filter('family', '')
+    filter('order', 'family')
+    const familyOrder = ['slime', 'dragon', 'undead', 'adventurer']
+    const rank = card => familyOrder.includes(card.family) ? familyOrder.indexOf(card.family) : 4
+    expect(shownCards().every((card, index, rows) => !index || rank(rows[index - 1]) <= rank(card)), '一族順で並び替える')
+    filter('order', 'cost')
     for (const rarity of ['common', 'rare', 'superRare', 'legendary', 'unlabeled']) {
       filter('rarity', rarity)
       const shown = shownCards()
@@ -610,6 +622,23 @@ async function driveBattle() {
     deckFilter('query', 'てつのさそり')
     expect(document.querySelectorAll('[data-deck-add]').length === 1 && query('[data-deck-add=FT-0618]'),
       'デッキ編集でも第4弾の原作名・レアリティ・収録を併用できる')
+    deckFilter('family', 'slime')
+    expect(query('[data-deck-add=FT-0618]') === null, '効果文で言及する一族ではなく、カード自身の所属で絞る')
+    deckFilter('query', 'はねスライム')
+    deckFilter('rarity', 'common')
+    // This deck is a mage deck; the fighter-only member remains excluded.
+    expect(!query('[data-deck-add=FT-0626]'), '一族で絞っても職業制限を保つ')
+    deckFilter('query', 'スライムファング')
+    expect(query('[data-deck-add=FT-0576]'), '原作名・収録・レアリティ・一族で検索できる')
+    deckFilter('family', 'dragon')
+    expect(!query('[data-deck-add]'), '所属が違うカードを除外する')
+    deckFilter('query', '')
+    deckFilter('family', '')
+    deckFilter('rarity', '')
+    deckFilter('order', 'family')
+    const deckCandidates = [...document.querySelectorAll('[data-deck-add]')].map(button => cards[button.dataset.deckAdd])
+    expect(deckCandidates.every((card, index, rows) => !index || rank(rows[index - 1]) <= rank(card)), 'デッキ候補も一族順で並ぶ')
+    deckFilter('order', 'cost')
     deckFilter('pack', 'set-2')
     deckFilter('rarity', '')
     deckFilter('query', 'くみひもこぞう')
