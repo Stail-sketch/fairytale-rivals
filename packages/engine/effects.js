@@ -400,6 +400,19 @@ export function resolution(game) {
     const { seat, mode, instances } = pending
     const player = game.players[seat]
     delete game.pending
+    if (mode === 'discardHand') {
+      const instance = instances[index]
+      const handIndex = player.hand.findIndex(value => value.id === instance.id)
+      if (handIndex !== -1) {
+        player.graveyard.push(...player.hand.splice(handIndex, 1))
+        emit(game, 'discard', cards[instance.card].name + 'を破棄', { seat, card: instance.card })
+        if (cards[instance.card].returnAfterDiscard) third.schedule(seat, instance.card)
+      }
+      if (pending.remaining > 1 && player.hand.length) {
+        game.pending = { seat, mode, remaining: pending.remaining - 1, instances: [...player.hand],
+          labels: player.hand.map(item => cards[item.card].name) }
+      }
+    }
     if (mode === 'topOrBottom') {
       if (index === 1) player.deck.push(...instances)
       else player.deck.unshift(...instances)
@@ -755,13 +768,13 @@ export function resolution(game) {
       }
       case 'peek': {
         const mode = effect.mode
-        const instances = mode === 'handToDeck' ? player.hand :
+        const instances = mode === 'handToDeck' || mode === 'discardHand' ? [...player.hand] :
           mode === 'usedSpellToDeck' ? (player.spellLog ?? []).filter(card => !orbCards.includes(card)).map(card => ({ card })) :
             player.deck.splice(0, effect.amount ?? 2)
         if (instances.length) {
           const labels = mode === 'topOrBottom' ? ['山札の一番上に戻す', '山札の一番下に移動'] :
             instances.map(instance => cards[instance.card].name)
-          game.pending = { seat, mode, instances, labels }
+          game.pending = { seat, mode, instances, labels, ...(mode === 'discardHand' ? { remaining: effect.amount } : {}) }
         }
         break
       }

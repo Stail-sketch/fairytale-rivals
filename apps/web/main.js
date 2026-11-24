@@ -21,11 +21,13 @@ import { fortuneStatus } from './fortune-status.js'
 import { isLobbyCode, normalizeRoomId, visibleLobbyCode } from '../../packages/online-match/lobby.js'
 import { arenaCpuLevel, autoDraft, draftAction, rarityLabels } from '../../packages/arena/index.js'
 import { arenaDetails, arenaDraftScreen, arenaMenu, arenaSeed, createArenaStore, localDraftView } from './arena.js'
+import { battleOpening, openingTiming } from './battle-opening.js'
 
 const app = document.querySelector('#app')
 const announcer = document.querySelector('#announcer')
 const art = id => globalThis.fairytaleImages?.[id + '.webp'] ?? new URL('./assets/' + id + '.webp', import.meta.url).href
-const seatName = seat => seat === 0 ? '先攻' : '後攻'
+const seatName = seat => seat === (view?.firstSeat ?? 0) ? '先攻' : '後攻'
+const drawFirstSeat = () => crypto.getRandomValues(new Uint8Array(1))[0] & 1
 const rowName = row => row === 'front' ? names.FRONT_ROW : names.BACK_ROW
 const classIds = ['warrior', 'mage', 'fighter', 'priest', 'merchant', 'seer', 'swordsman']
 const initialLeaders = ['mage', 'priest']
@@ -75,6 +77,9 @@ let resigned = null
 let cpuTimer = null
 let cpuMoves = 0
 let presentation = null
+let opening = null
+const openingSeen = new Set()
+const openingTimers = new Set()
 let presentationTimer = null
 let handPress = null
 let ignoreCardClickUntil = 0
@@ -114,11 +119,11 @@ function titlebar(mixerOpen) {
   return `<header class="topbar"><div class="brand"><span class="brand-mark" aria-hidden="true">✦</span>
     <span>童話戦記<small>PROJECT FAIRYTALE RIVALS</small></span></div>
     <div class="top-actions"><span class="local-label">${showArena || arenaBattle || roomArena ? '物語の闘技場' : { cpu: 'CPU対戦', local: 'ローカル対戦', friend: 'フレンド対戦' }[mode]}</span>
-      ${view ? `<button type="button" data-op="sound" class="icon-button sound-button" aria-pressed="${battleAudio.enabled}">効果音</button>
-        <button type="button" data-op="audio-mixer" class="icon-button" aria-expanded="${Boolean(mixerOpen)}" aria-controls="audio-mixer">音量</button>` : ''}
+      <button type="button" data-op="sound" class="icon-button sound-button" aria-pressed="${battleAudio.enabled}">効果音</button>
+      <button type="button" data-op="audio-mixer" class="icon-button" aria-expanded="${Boolean(mixerOpen)}" aria-controls="audio-mixer">音量</button>
       <button type="button" data-op="rules" class="icon-button">ルール</button>
       ${inMatch() ? `<button type="button" data-op="home" class="icon-button">${arenaBattle ? '保存して中断' : 'タイトル'}</button>` : ''}
-    </div>${view ? audioControls(mixerOpen) : ''}</header>`
+    </div>${audioControls(mixerOpen)}</header>`
 }
 
 function availableDecks(seat) {
@@ -651,7 +656,7 @@ function showActionPreview(node) {
 }
 
 function playResourceMotion() {
-  if (!view || animatedView === view) return
+  if (!view || opening || animatedView === view) return
   const previous = animatedView
   animatedView = view
   const dealing = app.querySelector('[data-deal-seat]')
@@ -902,20 +907,62 @@ function rulesModal() {
 }
 
 function syncBattleMusic() {
-  if (!view || view.phase === 'mulligan' || roomConnection === 'closed') return battleAudio.setScene('off')
+  if (!view || roomConnection === 'closed') return battleAudio.setScene(showArena || roomArena ? 'arena' : showDecks || showLibrary ? 'deck' : 'menu')
+  if (opening?.stage === 'draw') return battleAudio.setScene('off')
+  if (view.phase === 'mulligan') return battleAudio.setScene('battle', view.bgmId)
   if (view.phase === 'finished' && !presentation) {
     const seat = room ? roomSeat : solo() ? 0 : view.winner
     return battleAudio.setScene(view.winner === 'draw' ? 'draw' : view.winner === seat ? 'victory' : 'defeat')
   }
-  battleAudio.setScene(view.players.some(player => player.hp <= 8) ? 'danger' : 'battle')
+  battleAudio.setScene(view.players.some(player => player.hp <= 8) ? 'danger' : 'battle', view.bgmId)
+}
+
+function cancelOpening() {
+  for (const timer of openingTimers) clearTimeout(timer)
+  openingTimers.clear()
+  opening = null
+}
+
+function ensureOpening() {
+  if (!view || view.phase !== 'mulligan' || roomConnection === 'closed') { cancelOpening(); return }
+  const id = view.matchId
+  if (!id || opening?.id === id) return
+  if (opening) cancelOpening()
+  let seen = openingSeen.has(id)
+  try { seen ||= sessionStorage.getItem('fairytale-opening.' + id) === 'seen' } catch { /* Optional storage. */ }
+  if (seen) return
+  openingSeen.add(id)
+  try { sessionStorage.setItem('fairytale-opening.' + id, 'seen') } catch { /* Optional storage. */ }
+  opening = { id, stage: 'draw', short: reducedMotion() }
+  const timing = openingTiming(opening.short)
+  battleAudio.play('opening-page')
+  battleAudio.play('opening-suspense')
+  const schedule = (callback, delay) => {
+    const timer = setTimeout(() => { openingTimers.delete(timer); callback() }, delay)
+    openingTimers.add(timer)
+  }
+  schedule(() => {
+    if (opening?.id !== id || view?.matchId !== id) return
+    opening.stage = 'result'
+    render()
+    battleAudio.play('opening-result')
+    announcer.textContent = 'あなたは' + seatName(room ? roomSeat : 0) + 'です。'
+  }, timing.reveal)
+  schedule(() => {
+    if (opening?.id !== id || view?.matchId !== id) return
+    cancelOpening()
+    render('[data-replace], [data-op="mulligan"]')
+    scheduleCpu()
+  }, timing.finish)
 }
 
 function render(focusOn = null) {
+  ensureOpening()
   const scroll = app.querySelector('.events')?.scrollTop
   const mixerOpen = Boolean(app.querySelector('.audio-mixer:not([hidden])'))
   const volumeFocus = document.activeElement?.dataset.volume
   const arenaDraft = roomArena?.draft ?? (arenaStore.run ? localDraftView(arenaStore) : null)
-  const surface = showArena === 'draft' && !view && arenaDraft ? arenaDraftScreen(arenaDraft, art, arenaChoice,
+  const surface = opening ? battleOpening(view, opening, room ? roomSeat : 0, art) : showArena === 'draft' && !view && arenaDraft ? arenaDraftScreen(arenaDraft, art, arenaChoice,
       feedback || (!room ? arenaStore.issue : ''), Boolean(room), Boolean(room && (roomBusy || roomConnection !== 'connected')))
     : !inMatch() ? (showArena === 'menu' ? arenaMenu(arenaStore, feedback) : showDecks ? deckEditor.view(art, escape) : showLibrary ? library(art) : home())
     : !view ? roomLobby() : view.phase === 'finished' && !presentation ? results() :
@@ -965,7 +1012,7 @@ function startArenaBattle() {
   arenaBattle = true
   if (run.match && !run.settled) match = createLocalMatch(run.match.config, run.match.game)
   else {
-    const config = { seed: arenaSeed(), format: 'arena', arenaCpu: arenaCpuLevel(run.wins), lineups: [
+    const config = { seed: arenaSeed(), firstSeat: drawFirstSeat(), format: 'arena', arenaCpu: arenaCpuLevel(run.wins), lineups: [
       { leader: run.draft.leader, deck: [...run.draft.deck] },
       autoDraft(arenaSeed(), run.draft.schedule, run.wins),
     ] }
@@ -1073,7 +1120,7 @@ app.addEventListener('focusin', event => {
 })
 
 function scheduleCpu() {
-  if (!cpuTurn() || presentation || cpuTimer !== null) return
+  if (!cpuTurn() || presentation || opening || cpuTimer !== null) return
   const currentMatch = match
   cpuTimer = setTimeout(() => {
     cpuTimer = null
@@ -1254,6 +1301,7 @@ async function sendRoomAction(action) {
 }
 
 function execute(action, actor = solo() ? 0 : view.active) {
+  if (opening) return false
   if (presentation || roomLocked()) return false
   if (room) {
     sendRoomAction(action)
@@ -1358,6 +1406,7 @@ async function copyRoomField(selector, label) {
 }
 
 function returnHome() {
+  cancelOpening()
   clearTimeout(cpuTimer)
   clearTimeout(presentationTimer)
   cpuTimer = presentationTimer = presentation = null
@@ -1598,6 +1647,7 @@ app.addEventListener('click', event => {
       }
       match = createLocalMatch({
         seed: crypto.getRandomValues(new Uint32Array(1))[0],
+        firstSeat: solo() ? drawFirstSeat() : 0,
         lineups: [battleLineup(0), battleLineup(1)],
       })
       eventFloor = 0
@@ -1799,8 +1849,9 @@ document.addEventListener('keydown', event => {
 })
 
 const saved = savedRoom(invite)
+document.addEventListener('click', battleAudio.unlock, { capture: true })
+document.addEventListener('keydown', event => { if (!event.repeat) battleAudio.unlock() }, { capture: true })
 if (saved && onlineAvailable()) {
-  document.addEventListener('click', battleAudio.unlock, { once: true, capture: true })
   openRoom(saved)
 } else render()
 

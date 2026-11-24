@@ -140,7 +140,7 @@ test('戦闘の予測は軽減と反撃を反映し、前衛防護と攻撃前�
   const blessing = project(game, 0).legal.attack[attacker.id].forecasts.find(info => info.target.id === beetle.id)
   const blessed = act(game, { type: 'attack', id: attacker.id, target: target(beetle.id) })
   const returnHit = blessed.events.findLast(event => event.type === 'damage' && event.target.id === attacker.id)
-  assert.equal(blessing.retaliation, blessing.hp)
+  assert.equal(blessing.retaliation, beetle.hp)
   assert.equal(blessing.retaliation, returnHit.value)
 })
 

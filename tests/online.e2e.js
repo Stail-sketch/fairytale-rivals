@@ -92,6 +92,9 @@ test('招待URLの二人だけで対戦を進め、手札を分離し、同じ�
   assert.notEqual(host.token, guest.token)
   assert.equal((await api.join(host.id)).status, 409)
   const states = [(await hostWaiting).data, (await api.state(guest)).data]
+  assert.equal(states[0].view.bgmId, states[1].view.bgmId)
+  assert.equal(states[0].view.matchId, states[1].view.matchId)
+  assert.match(states[0].view.matchId, /^[a-f0-9-]{36}$/)
   assert.deepEqual(states.map(state => state.version), [1, 1])
   for (const state of states) {
     const { seat, view } = state

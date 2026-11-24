@@ -1,8 +1,10 @@
 import { attackValue, createGame, dispatch, leaderPower, legalAttack, legalFocus, legalLeaderAttack, legalPlay, legalSkill, playerSkill, rules } from '../engine/index.js'
+import { matchPresentation } from '../cards/battle-music.js'
 
 export function project(game, viewer) {
   return {
-    phase: game.phase, active: game.active, turn: game.turn, winner: game.winner,
+    phase: game.phase, active: game.active, firstSeat: game.firstSeat ?? 0, turn: game.turn, winner: game.winner,
+    matchId: game.matchId, bgmId: game.bgmId,
     specialVictory: game.specialVictory,
     decisionSeat: game.pending?.seat ?? null,
     pending: game.pending && viewer === game.pending.seat ? {
@@ -44,6 +46,9 @@ export function project(game, viewer) {
 
 export function createLocalMatch(config, savedGame) {
   let game = savedGame ? structuredClone(savedGame) : createGame(config)
+  const presentation = matchPresentation(config, game)
+  Object.assign(game, presentation)
+  const storedConfig = { ...config, ...presentation }
   return {
     view: (viewer = null) => structuredClone(project(game, viewer)),
     act(actor, action) {
@@ -53,9 +58,9 @@ export function createLocalMatch(config, savedGame) {
       const events = result.ok ? game.events.slice(first).filter(event => event.privateTo === undefined) : []
       return { ok: result.ok, issue: result.issue, events: structuredClone(events) }
     },
-    exportReplay: () => structuredClone({ version: 1, ruleset: rules.id, config, history: game.history }),
+    exportReplay: () => structuredClone({ version: 1, ruleset: rules.id, config: storedConfig, history: game.history }),
     // Trusted server storage only; never send this unprojected state to a player.
-    exportState: () => structuredClone({ config, game }),
+    exportState: () => structuredClone({ config: storedConfig, game }),
   }
 }
 

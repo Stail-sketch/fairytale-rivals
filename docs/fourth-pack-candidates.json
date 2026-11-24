@@ -1717,7 +1717,7 @@
         "attack": 0,
         "hp": 0,
         "classId": "fighter",
-        "kind": "unit",
+        "kind": "spell",
         "rarity": "superRare"
       },
       "crossReference": "gameconductor:595",

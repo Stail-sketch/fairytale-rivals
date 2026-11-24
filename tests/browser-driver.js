@@ -89,6 +89,12 @@ export async function browserControl(t, directory) {
         await wait(selector)
         await evaluate(`document.querySelector(${JSON.stringify(selector)})?.click()`)
       },
+      async tap(selector) {
+        await wait(selector)
+        const { x, y } = await evaluate(`(() => {const r=document.querySelector(${JSON.stringify(selector)}).getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2}})()`)
+        await command('Input.dispatchMouseEvent', { type: 'mousePressed', button: 'left', clickCount: 1, x, y }, sessionId)
+        await command('Input.dispatchMouseEvent', { type: 'mouseReleased', button: 'left', clickCount: 1, x, y }, sessionId)
+      },
     }
   }
 }

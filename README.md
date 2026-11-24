@@ -4,9 +4,11 @@ PCブラウザで遊べる横型カードバトル。タイトルから「CPU対
 
 **既存公開版：[Cloudflare版の童話戦記](https://fairytale-rivals.pages.dev/)**
 
-第4弾のコード・画像・テスト・公開用ビルドはローカルで完成。今回の公開反映は[公開前の権利確認](docs/fourth-pack-rights-review.md)が未完了のため保留しています。[第4弾の実装記録](docs/fourth-pack-release.md) · [原画114枚の一覧](artwork/set-4/index.html)
+第4弾はユーザーの明示指示によりGitHubへ公開し、Cloudflareへ反映済みです（2026-11-25）。[権利確認の記録](docs/fourth-pack-rights-review.md)は継続して管理します。[第4弾の実装記録](docs/fourth-pack-release.md) · [原画114枚の一覧](artwork/set-4/index.html)
 
 開発ソースは引き続き [Stail-sketch/fairytale-rivals](https://github.com/Stail-sketch/fairytale-rivals) で管理します。
+
+ユーザー制作のBGM10曲（メニュー・デッキ編集・闘技場・対戦7曲）を収録。対戦開始は本と札による先攻・後攻の発表から入り、選曲したBGMを手札交換・戦闘へ続けます。CPU戦の先攻・後攻は抽選されます。
 
 ## プレイ
 

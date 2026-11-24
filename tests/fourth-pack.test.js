@@ -55,6 +55,7 @@ test('第4弾100種類を使い、次のターンまで効果を解決できる'
     assert(check.enabled, check.reason)
     game = run(game, { type: 'play', id, position: check.positions?.[0], target: check.targets?.[0],
       choice: check.choices ? 0 : undefined, handChoice: check.handChoices?.[0], column: check.columns?.[0] })
+    while (game.pending) game = run(game, { type: 'decide', choice: 0 })
     assert(!game.players[0].hand.some(instance => instance.id === id))
     for (let i = 0; i < 2 && game.phase === 'battle'; i++) game = run(game, { type: 'end' })
     for (const player of game.players) {

@@ -1,0 +1,96 @@
+{
+  "source": "User-provided original BGM",
+  "conversion": "Vorbis quality 5, 44.1kHz stereo; no cuts, tempo changes or loudness processing",
+  "tracks": [
+    {
+      "id": "menu",
+      "sourceName": "メニュー.wav",
+      "file": "bgm-menu.ogg",
+      "duration": 143.96,
+      "sourceSha256": "1e9007970031f105388470e73113e95ec01bffdbb5870b27dfb62e93dd6d611c",
+      "deliverySha256": "43a4132a81a3f9c1ceb0cc805f67f1b0a27c414d9331d77bdaeb0660b8faedc5",
+      "bytes": 2634342
+    },
+    {
+      "id": "deck",
+      "sourceName": "デッキ編集.wav",
+      "file": "bgm-deck.ogg",
+      "duration": 182.08,
+      "sourceSha256": "fa478acf44c5cb916e57a2c1f2fbe0d8d4829da01e04e7d906c987b4a4a3f6ce",
+      "deliverySha256": "cddbd9b15ca7bd1ab80ad6664905efd3da246ec29db002efdaecf67d88da7909",
+      "bytes": 3255254
+    },
+    {
+      "id": "arena",
+      "sourceName": "闘技場関係.wav",
+      "file": "bgm-arena.ogg",
+      "duration": 128.36,
+      "sourceSha256": "86f68e06216fef5cbd9f71b6238891c85895874ebf0950c50da69c131ddee953",
+      "deliverySha256": "502734d9f1fbca992d7b024843719036278b1b1cff93e48ff723efffda5a5ead",
+      "bytes": 2481660
+    },
+    {
+      "id": "warrior",
+      "sourceName": "勇者.wav",
+      "file": "bgm-warrior.ogg",
+      "duration": 169.6,
+      "sourceSha256": "371d04358a812cad28db20f08914af459447a2633792df06c61b72a9d0dda4b3",
+      "deliverySha256": "4d86e04d19a322bd70eb17b94b6703aec858dfb3dbec28f0d5e019c1c60686eb",
+      "bytes": 3108938
+    },
+    {
+      "id": "mage",
+      "sourceName": "魔法使い.wav",
+      "file": "bgm-mage.ogg",
+      "duration": 180.0,
+      "sourceSha256": "286054fbe8192c996faeb87c948a47ed8b98098cedb3b8a87082074f96479e0c",
+      "deliverySha256": "bcaf4681652fad290e959fab837c2b5c20835ae013ab7df7687fc96bc42ee106",
+      "bytes": 3344241
+    },
+    {
+      "id": "fighter",
+      "sourceName": "格闘.wav",
+      "file": "bgm-fighter.ogg",
+      "duration": 199.96,
+      "sourceSha256": "cec2f12fb88350a816ba47b344dfb53d0e019263e282d7eb62feadfc12007872",
+      "deliverySha256": "fd399df43fc2c13dcef6a84104edd78254b800761ff4cf820166a5b23fc68786",
+      "bytes": 3718378
+    },
+    {
+      "id": "priest",
+      "sourceName": "賢者.wav",
+      "file": "bgm-priest.ogg",
+      "duration": 180.44,
+      "sourceSha256": "48c47f1fac26be0a7740c56b68597522805d1a2ceb06147397f9b00acb32ee30",
+      "deliverySha256": "b793704c27360c5388f6053bdfa1d59e6dbcb87a4895a58855a1228b5c55cc7d",
+      "bytes": 3352785
+    },
+    {
+      "id": "merchant",
+      "sourceName": "商人.wav",
+      "file": "bgm-merchant.ogg",
+      "duration": 179.2,
+      "sourceSha256": "349ee8efa74cd784ed39b9ea0bd786fdf5d4b3f87e95e087844600b1979ff4d5",
+      "deliverySha256": "82655cb7b569ba36b8cd5adc54a51268b5bcf1ec143156c1c68350b36d5447b8",
+      "bytes": 3434342
+    },
+    {
+      "id": "seer",
+      "sourceName": "占い.wav",
+      "file": "bgm-seer.ogg",
+      "duration": 181.4,
+      "sourceSha256": "517984df882e09eff739ebd51a88011e47a8034ba3bd67b0264366ce483164ba",
+      "deliverySha256": "c29ea70ef147ee640579da59cc79223f81743e365d6f4b4a48be0a2d54a48c44",
+      "bytes": 3316984
+    },
+    {
+      "id": "swordsman",
+      "sourceName": "魔剣士.wav",
+      "file": "bgm-swordsman.ogg",
+      "duration": 180.36,
+      "sourceSha256": "e94e7a1f583f377a5aba30b45fd1b5e2f71deef1cf70ef577c4a728fd8ea7f64",
+      "deliverySha256": "d96bcd75e58c788218394ac6e9b7b888176afee64fb11b3d5028cd821737ffaf",
+      "bytes": 3332165
+    }
+  ]
+}

@@ -1520,3 +1520,29 @@ body:has(.deck-overview[open]) { overflow: hidden; }
 .active-story-badge img { width: 58px; height: 58px; object-fit: cover; border-radius: 6px; }
 .active-story-badge p { margin: .3rem 0; font-size: .85rem; line-height: 1.6; }
 .related-skill { padding: .7rem; border: 1px solid #a3c5e855; border-radius: 7px; margin: .5rem 0; }
+/* Match opening: confirmed initiative, a turning storybook, and two dealing cards. */
+.battle-opening { position: relative; isolation: isolate; min-height: calc(100dvh - 60px); overflow: hidden; display: grid; align-content: center; padding: 38px 24px 100px; background: radial-gradient(ellipse at center,#b28b3c33,transparent 64%),linear-gradient(#08121bcc,#0b1522e8),url('assets/battle-hall.webp') center/cover; }
+.opening-caption,.opening-bottom { text-align:center; color:#edce91; letter-spacing:.22em; }
+.opening-caption { font:clamp(18px,2.8vw,32px)/1.5 var(--serif); margin:0 0 38px; animation:opening-enter .5s both; }
+.opening-leaders { display:grid; grid-template-columns:1fr 1fr; gap:clamp(150px,23vw,370px); width:min(1050px,100%); margin:auto; }
+.opening-leader { position:relative; text-align:center; color:var(--opening-accent); animation:opening-enter .55s both; }
+.opening-leader>img { height:clamp(160px,30vh,300px); max-width:100%; aspect-ratio:4/5; object-fit:cover; border-radius:50% 50% 12px 12px; border:2px solid var(--opening-accent); box-shadow:0 0 55px color-mix(in srgb,var(--opening-accent) 30%,transparent); }
+.opening-leader h1 { color:#fff4db; font:clamp(17px,2vw,28px)/1.4 var(--serif); margin:6px -14px; }
+.opening-leader small { display:block; margin-top:12px; }
+.opening-sigil { display:block; font-size:30px; margin-top:-25px; position:relative; text-shadow:0 2px 9px #000; }
+.opening-role { --deal-x:135px; position:absolute; left:50%; bottom:-70px; min-width:105px; border:2px solid #edc67e; border-radius:8px; padding:13px 18px; font:700 24px/1.2 var(--serif); color:#f8dfab; background:linear-gradient(130deg,#503b19,#141b29); box-shadow:0 0 30px #e8b75044; transform:translate(calc(-50% + var(--deal-x)),-20px) rotateY(180deg); }
+.opening-side-1 .opening-role { --deal-x:-135px; }
+.opening-role.revealed { animation:opening-deal .65s ease both; }
+.opening-book { position:absolute; width:230px; height:155px; left:50%; top:48%; transform:translate(-50%,-50%); perspective:700px; filter:drop-shadow(0 5px 30px #dab46e66); }
+.opening-cover,.opening-page { position:absolute; inset:0; border:2px solid #b69351; border-radius:7px; background:linear-gradient(125deg,#57422a,#181827 70%); }
+.opening-cover { transform-origin:left; z-index:3; animation:opening-cover 1.05s ease both; }
+.opening-page { display:grid; place-items:center; width:50%; background:linear-gradient(100deg,#f8e7bf,#cfb788); color:#9b7535; font-size:48px; border-color:#ae8c50; }
+.opening-page-right { left:50%; }
+.opening-vs { position:absolute; inset:0; display:grid; place-items:center; z-index:4; font:700 24px var(--serif); color:#684a25; animation:opening-enter .9s both; }
+[data-opening-stage=result] .opening-cover { animation:none; transform:rotateY(-165deg); opacity:.15; }
+.opening-bottom { margin:115px 0 0; font-size:13px; }
+.opening-short * { animation-duration:.22s!important; }
+@keyframes opening-enter { from { opacity:0; translate:0 16px; } to { opacity:1; translate:0 0; } }
+@keyframes opening-cover { from { transform:rotateY(0); } to { transform:rotateY(-165deg); opacity:.15; } }
+@keyframes opening-deal { from { transform:translate(calc(-50% + var(--deal-x)),-20px) rotateY(180deg); } to { transform:translate(-50%,0) rotateY(0); } }
+@media(max-width:650px) { .battle-opening{padding-inline:14px}.opening-leaders{gap:64px}.opening-book{width:110px;height:85px;top:42%}.opening-role{--deal-x:45px;min-width:72px;padding:10px;font-size:20px}.opening-side-1 .opening-role{--deal-x:-45px}.opening-leader h1{font-size:16px}.opening-caption{margin-bottom:25px} }

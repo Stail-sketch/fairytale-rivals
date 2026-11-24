@@ -29,6 +29,8 @@ async function executable() {
 }
 
 async function driveBattle() {
+  // This deterministic UI test drives timers manually. Real streaming audio is tested separately.
+  globalThis.AudioContext = globalThis.webkitAudioContext = undefined
   document.body.dataset.e2e = 'running'
   window.addEventListener('error', event => { document.body.dataset.runtimeError = event.message })
   function expect(condition, message) {
@@ -50,8 +52,8 @@ async function driveBattle() {
   }
   function completePresentation() {
     let beats = 0
-    while (query('.battle-presentation')) {
-      expect(++beats <= 3, '演出が自動で終わる')
+    while (query('.battle-presentation, .battle-opening')) {
+      expect(++beats <= 40, '演出が自動で終わる（音楽フェードの後処理も実行）')
       advanceTimer()
     }
   }
@@ -221,6 +223,7 @@ async function driveBattle() {
     const random = crypto.getRandomValues.bind(crypto)
     const useBattleSeed = seed => {
       crypto.getRandomValues = output => {
+        if (output instanceof Uint8Array && output.length === 1) { output[0] = 0; return output }
         if (!(output instanceof Uint32Array) || output.length !== 1) return random(output)
         output[0] = seed
         return output
@@ -240,7 +243,7 @@ async function driveBattle() {
     secondLeader.value = 'mage'
     secondLeader.dispatchEvent(new Event('change', { bubbles: true }))
     click('[data-op=start]')
-    expect(document.querySelectorAll('[data-replace].initial-deal').length === 3, '初期手札を1枚ずつ配る')
+    expect(document.querySelectorAll('[data-replace].initial-deal').length === 3, '開始演出の後に初期手札を1枚ずつ配る')
     click('[data-replace]')
     expect(query('[data-replace][aria-pressed=true]'), '交換カードの選択')
     click('[data-replace][aria-pressed=true]')
@@ -1145,7 +1148,7 @@ test('静的公開版でロビーIDから合流し、対戦・再接続・再戦
   await waitForRoom(host, '#invite-url')
   const invite = await host.evaluate('document.querySelector("#invite-url").value')
   assert.equal(new URL(invite).pathname, new URL(url).pathname)
-  assert.equal(new URL(invite).searchParams.get('transport'), 'peer')
+  assert.equal(new URL(invite).searchParams.get('transport'), new URL(url).searchParams.get('transport'))
 
   const code = await host.evaluate('document.querySelector("#lobby-id").value')
   await guest.navigate(url)

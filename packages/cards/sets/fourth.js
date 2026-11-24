@@ -64,7 +64,7 @@ const definitions = {
   613: ['物語の刻印：夜継ぎの一族の味方ユニットに奇襲を付与。', badge({ family: 'undead', keyword: 'CHARGE' })],
   614: ['退場した夜継ぎの一族の味方1体につき、コスト-1。', { fallenFamilyDiscount: 'undead' }],
   615: ['1枚引く。相手の手札に同じ特技を1枚加える。', spell(draw(), { ...generate('FT-0615'), enemy: true })],
-  616: ['登場時、2枚引いた後、手札を2枚捨てる。', enter(draw(2), { id: 'discard', amount: 2 })],
+  616: ['登場時、2枚引いた後、手札を2枚選んで捨てる。', enter(draw(2), { id: 'peek', mode: 'discardHand', amount: 2 })],
   617: ['敵ユニット全員に被ダメージ2倍を付与。', spell(grant('VULNERABLE', 'enemyUnits'))],
   618: ['物語の刻印：露珠の一族の味方ユニットのHP+1。', badge({ family: 'slime', hp: 1 })],
   619: ['物語の刻印：露珠の一族の味方ユニットは特技ダメージを受けない。', badge({ family: 'slime', keyword: 'RESIST_SPELL' })],

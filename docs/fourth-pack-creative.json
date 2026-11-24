@@ -1569,7 +1569,7 @@
       "referenceId": "dqrdb:787",
       "sourceName": "必中拳",
       "classId": "fighter",
-      "kind": "unit",
+      "kind": "spell",
       "name": "露珠合わせの必中掌",
       "nameStatus": "adopted",
       "appearanceSpecies": null,

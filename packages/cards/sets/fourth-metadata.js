@@ -805,7 +805,7 @@ export const fourthMetadata = [
     "attack": 0,
     "hp": 0,
     "classId": "fighter",
-    "kind": "unit",
+    "kind": "spell",
     "rarity": "superRare",
     "packId": "set-4",
     "species": null,

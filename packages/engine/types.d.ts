@@ -141,11 +141,12 @@ export type Event = {
   privateTo?: Seat; terrain?: TerrainId | null
 }
 export type Game = {
-  phase: 'mulligan' | 'battle' | 'finished'; active: Seat; turn: number;
+  phase: 'mulligan' | 'battle' | 'finished'; active: Seat; firstSeat?: Seat; turn: number;
+  matchId?: string; bgmId?: string;
   winner: Seat | 'draw' | null; specialVictory?: Seat; seed: number; rng: number; nextId: number;
   players: [Player, Player]; exiled: Instance[]; events: Event[];
   history: { actor: Seat; action: Action }[];
-  pending?: { seat: Seat; mode: string; labels: string[]; instances: Instance[] };
+  pending?: { seat: Seat; mode: string; labels: string[]; instances: Instance[]; remaining?: number };
 }
 export type LegalAction = {
   enabled: boolean; reason?: string; positions?: BoardPosition[]; targets?: Target[];

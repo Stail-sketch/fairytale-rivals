@@ -1,6 +1,6 @@
 import { impactSamples } from './battle-impact-sounds.js'
 import { createInstruments } from './battle-instruments.js'
-import { createBattleMusic } from './battle-music.js'
+import { createSceneMusic } from './scene-music.js'
 
 const soundKey = 'fairytale-battle-sound'
 const volumeKey = 'fairytale-audio-volume.'
@@ -14,6 +14,9 @@ const phrases = {
   terrain: [[245, 0, .09], [490, .03, .13]],
   finish: [[147, 0, .24], [294, .04, .29], [440, .13, .30]],
   phoenix: [[196, 0, .40], [294, .10, .36], [392, .22, .36], [523, .38, .40], [784, .52, .42]],
+  'opening-page': [[180, 0, .11, .17, 'triangle'], [260, .05, .13, .13, 'triangle'], [390, .12, .12, .10]],
+  'opening-suspense': [[147, 0, .22, .15, 'triangle'], [220, .10, .24, .15, 'triangle'], [294, .21, .25, .17, 'triangle']],
+  'opening-result': [[523, 0, .18, .30, 'triangle'], [659, .07, .20, .30, 'triangle'], [784, .14, .32, .32, 'triangle'], [1047, .14, .36, .14]],
 }
 
 const skillPhrases = {
@@ -35,6 +38,7 @@ export function createBattleAudio() {
   let music
   let skillNote
   let scene = 'off'
+  let bgmId
   const output = {}
   const buffers = new Map()
   const volume = { ...defaults }
@@ -70,13 +74,13 @@ export function createBattleAudio() {
           output[channel].gain.value = gains[channel] * (channel === 'se' && muted ? 0 : volume[channel]) / 100
           output[channel].connect(context.destination)
         }
-        music = createBattleMusic(context, output.bgm)
+        music = createSceneMusic(context, output.bgm)
         skillNote = createInstruments(context, output.se)
       }
       if (context.state === 'suspended') context.resume().catch(() => {})
       if (volume.bgm) {
+        music.set(scene, bgmId)
         music.prepare()
-        music.set(scene)
       }
     } catch { /* Audio availability does not affect play. */ }
   }
@@ -101,10 +105,11 @@ export function createBattleAudio() {
       unlock()
       updateVolume(channel)
     },
-    setScene(next) {
+    setScene(next, trackId) {
       scene = next
-      if (volume.bgm) music?.set(scene)
-      else if (next !== 'battle' && next !== 'danger') music?.set('off')
+      bgmId = trackId
+      if (volume.bgm) music?.set(scene, bgmId)
+      else music?.set('off')
     },
     playSkill(style) {
       if (context?.state !== 'running') return

@@ -35,20 +35,21 @@ export function deckIssue(deck, leader, format = 'constructed') {
   return null
 }
 
-export function createGame({ seed, format = 'constructed', lineups = [{ leader: 'warrior' }, { leader: 'mage' }] }) {
+export function createGame({ seed, firstSeat = 0, format = 'constructed', lineups = [{ leader: 'warrior' }, { leader: 'mage' }] }) {
+  if (firstSeat !== 0 && firstSeat !== 1) throw new Error('先攻の席が不正です')
   if (!['constructed', 'arena'].includes(format)) throw new Error('未知の対戦形式です')
   if (lineups.length !== 2 || !Number.isInteger(seed) || seed < 0 || seed > 0xffffffff) {
     throw new Error('対戦には2人のリーダーと32ビットのシードが必要です')
   }
   const game = {
-    phase: 'mulligan', active: 0, turn: 0, winner: null, seed, rng: seed,
+    phase: 'mulligan', active: 0, firstSeat, turn: 0, winner: null, seed, rng: seed,
     nextId: 1, players: [], exiled: [], events: [], history: [],
   }
   for (const [seat, { leader, deck = prototypeDeck }] of lineups.entries()) {
     const issue = deckIssue(deck, leader, format)
     if (issue) throw new Error(issue)
     const player = {
-      leader, hp: rules.leaderHp, mp: 0, maxMp: 0, tension: rules.initialTension[seat],
+      leader, hp: rules.leaderHp, mp: 0, maxMp: 0, tension: rules.initialTension[seat === firstSeat ? 0 : 1],
       leaderAttack: 0, leaderPierce: false, leaderAttacked: false, leaderArmor: 0,
       focused: false, skillUses: 0, deck: deck.map(card => createInstance(game, card)), hand: [], graveyard: [], units: [],
       fallen: [], weapon: null, leaderStrikes: 0, leaderAttackTotal: 0, focusCount: 0,
@@ -56,7 +57,7 @@ export function createGame({ seed, format = 'constructed', lineups = [{ leader: 
     }
     shuffle(game, player.deck)
     game.players.push(player)
-    player.hand = player.deck.splice(0, rules.initialHand[seat])
+    player.hand = player.deck.splice(0, rules.initialHand[seat === firstSeat ? 0 : 1])
   }
   return game
 }
@@ -194,7 +195,7 @@ function describeAttack(game, seat, attacker, preview) {
     const source = attacker ?? player
     const hp = defender.hp - damage
     const retaliation = target.kind === 'unit' && !noRetaliation ?
-      damageValue(game, source, attackValue(game, { ...defender, hp })) : 0
+      damageValue(game, source, attackValue(game, defender)) : 0
     return { target, damage, retaliation, hp: Math.max(0, hp),
       attackerHp: Math.max(0, source.hp - retaliation) }
   })
@@ -310,7 +311,7 @@ function beginTurn(game, seat, resolver) {
     unit.attacks = 0
     unit.statuses = unit.statuses.filter(status => status !== 'INVULNERABLE')
   }
-  emit(game, 'turn', (seat === 0 ? '先攻' : '後攻') + 'のターン', { seat })
+  emit(game, 'turn', (seat === (game.firstSeat ?? 0) ? '先攻' : '後攻') + 'のターン', { seat })
   resolver.recoverScheduled(seat)
   if (rules.firstTurnDraw || game.turn > 1) draw(game, seat, 1)
   for (const unit of player.units) resolver.trigger(unit, 'ON_TURN_START')
@@ -321,7 +322,7 @@ function checkWinner(game) {
   if (!lost.some(Boolean) && game.specialVictory === undefined) return false
   game.phase = 'finished'
   game.winner = game.specialVictory ?? (lost.every(Boolean) ? 'draw' : lost[0] ? 1 : 0)
-  emit(game, 'finish', game.winner === 'draw' ? '引き分け' : (game.winner === 0 ? '先攻' : '後攻') + 'の勝利')
+  emit(game, 'finish', game.winner === 'draw' ? '引き分け' : (game.winner === (game.firstSeat ?? 0) ? '先攻' : '後攻') + 'の勝利')
   return true
 }
 
@@ -335,11 +336,11 @@ function mulligan(game, seat, replace, resolver) {
   })
   player.deck.push(...returned)
   shuffle(game, player.deck)
-  emit(game, 'mulligan', (seat === 0 ? '先攻' : '後攻') + 'が手札を確定', { seat })
+  emit(game, 'mulligan', (seat === (game.firstSeat ?? 0) ? '先攻' : '後攻') + 'が手札を確定', { seat })
   if (seat === 0) game.active = 1
   else {
     game.phase = 'battle'
-    beginTurn(game, 0, resolver)
+    beginTurn(game, game.firstSeat ?? 0, resolver)
   }
 }
 
@@ -418,8 +419,10 @@ function combat(game, resolver, from, target, power, pierce, noRetaliation = fal
     ? at(game, defender.owner, { row: 'back', column: defender.position.column }) : null
   const overflow = defender ? Math.max(0, power - defender.hp) : 0
   const source = effectAnchor(game, from)
+  // Combat damage is simultaneous: HP-based attack must be captured before either hit.
+  const retaliation = defender && !noRetaliation ? attackValue(game, defender) : 0
   const dealt = resolver.damage(target, power, source)
-  if (defender && !noRetaliation) resolver.damage(from, attackValue(game, defender), effectAnchor(game, target))
+  if (defender && !noRetaliation) resolver.damage(from, retaliation, effectAnchor(game, target))
   if (behind) resolver.damage(unitTarget(behind.id), power, source)
   if (neighbors && defender) for (const victim of game.players[defender.owner].units) {
     if (victim.position.row === defender.position.row && Math.abs(victim.position.column - defender.position.column) === 1) {
