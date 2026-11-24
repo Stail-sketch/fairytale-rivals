@@ -91,6 +91,24 @@
       "sourceSha256": "e94e7a1f583f377a5aba30b45fd1b5e2f71deef1cf70ef577c4a728fd8ea7f64",
       "deliverySha256": "d96bcd75e58c788218394ac6e9b7b888176afee64fb11b3d5028cd821737ffaf",
       "bytes": 3332165
+    },
+    {
+      "id": "victory",
+      "sourceName": "勝利.wav",
+      "file": "bgm-victory.ogg",
+      "duration": 29.6,
+      "sourceSha256": "d91c077083a6ee982d6f5d2d4ee804477257313b9749b014239a252b14fa990b",
+      "deliverySha256": "3dd163c0d78e8129b481c1ca5e026e301ee9e349927b880a4cd70d5354745fc9",
+      "bytes": 570610
+    },
+    {
+      "id": "defeat",
+      "sourceName": "敗北.wav",
+      "file": "bgm-defeat.ogg",
+      "duration": 34.92,
+      "sourceSha256": "3359d41293a3c82ac0b02df76f645d58578ab605c2f7802d7ef319071cd07164",
+      "deliverySha256": "47ca14fa14b9197f3041c83a739dcf83f9cb9ac8170dc725c97c6555d974a117",
+      "bytes": 570590
     }
   ]
 }

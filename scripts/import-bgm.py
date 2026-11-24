@@ -1,4 +1,4 @@
-"""Encode the user's ten WAV tracks without changing their musical content."""
+"""Encode user-provided WAV tracks without changing their musical content."""
 import argparse
 import hashlib
 import json
@@ -9,11 +9,14 @@ import wave
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('source', type=Path)
 parser.add_argument('--ffmpeg', required=True)
+parser.add_argument('--results-only', action='store_true', help='Import victory and defeat tracks only')
 args = parser.parse_args()
 root = Path(__file__).resolve().parent.parent
 tracks = {'menu': 'メニュー', 'deck': 'デッキ編集', 'arena': '闘技場関係',
           'warrior': '勇者', 'mage': '魔法使い', 'fighter': '格闘', 'priest': '賢者',
           'merchant': '商人', 'seer': '占い', 'swordsman': '魔剣士'}
+if args.results_only:
+    tracks = {'victory': '勝利', 'defeat': '敗北'}
 records = []
 for track_id, title in tracks.items():
     source = args.source / (title + '.wav')
@@ -29,6 +32,10 @@ for track_id, title in tracks.items():
     print(track_id, round(duration, 1), output.stat().st_size, flush=True)
 folder = root / 'artwork/audio'
 folder.mkdir(exist_ok=True)
+manifest = folder / 'bgm-manifest.json'
+existing = json.loads(manifest.read_text(encoding='utf-8'))['tracks'] if manifest.exists() else []
+merged = {track['id']: track for track in existing}
+merged.update({track['id']: track for track in records})
 (folder / 'bgm-manifest.json').write_text(json.dumps({'source': 'User-provided original BGM',
     'conversion': 'Vorbis quality 5, 44.1kHz stereo; no cuts, tempo changes or loudness processing',
-    'tracks': records}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    'tracks': list(merged.values())}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')

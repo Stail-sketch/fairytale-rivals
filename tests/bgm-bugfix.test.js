@@ -77,4 +77,11 @@ test('同じ対戦曲は再描画とピンチで作り直さず、画面切替�
  music.set('battle','priest');music.set('battle','priest');music.set('danger','priest');assert.equal(audios.length,1)
  music.set('deck');assert.equal(audios.length,2);t.mock.timers.tick(650);assert(audios[0].cleared)
  music.set('off');t.mock.timers.tick(650);assert(audios[1].cleared)
+ for(const result of ['victory','defeat']){
+  music.set(result);const track=audios.at(-1)
+  assert.equal(track.loop,false);assert(track.url.endsWith('bgm-'+result+'.ogg'))
+  track.ended=true;track.paused=true
+  music.prepare();music.set(result);assert.equal(track.plays,1,'結果音源の終了後は再生し直さない')
+ }
+ music.set('off');t.mock.timers.tick(650)
 })

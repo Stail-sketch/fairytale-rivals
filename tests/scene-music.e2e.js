@@ -9,7 +9,7 @@ import { browserControl, eventually } from './browser-driver.js'
 import { bgmFiles } from '../apps/web/scene-music.js'
 import manifest from '../artwork/audio/bgm-manifest.json' with { type:'json' }
 
-test('実音源10曲を再生でき、抽選発表から手札交換と対戦まで同じ曲を継続する', {timeout:60000}, async t=>{
+test('実音源12曲を再生でき、抽選発表から手札交換と対戦まで同じ曲を継続する', {timeout:60000}, async t=>{
  const server=createDevServer();server.listen(0,'127.0.0.1');await once(server,'listening')
  t.after(()=>{server.closeAllConnections();return new Promise(resolve=>server.close(resolve))})
  const temp=await realpath(tmpdir()),directory=await mkdtemp(join(temp,'fairytale-music-'))
@@ -59,7 +59,7 @@ test('実音源10曲を再生でき、抽選発表から手札交換と対戦ま
  assert.deepEqual(page.errors(),[])
 })
 
-test('音楽室で全10曲の選択・停止・シーク・曲送り・音量変更と通常BGMへの復帰ができる', {timeout:45000}, async t=>{
+test('音楽室で全12曲の選択・停止・シーク・曲送り・音量変更と通常BGMへの復帰ができる', {timeout:45000}, async t=>{
  const server=createDevServer();server.listen(0,'127.0.0.1');await once(server,'listening')
  t.after(()=>{server.closeAllConnections();return new Promise(resolve=>server.close(resolve))})
  const temp=await realpath(tmpdir()),directory=await mkdtemp(join(temp,'fairytale-music-room-'))
@@ -69,7 +69,7 @@ test('音楽室で全10曲の選択・停止・シーク・曲送り・音量変
  await page.viewport(1440,1000);await page.navigate(origin);await page.wait('[data-op=music]')
  await page.evaluate(`(()=>{const Native=window.Audio;window.__songs=[];window.Audio=function(url){const a=new Native(url);window.__songs.push(a);return a}})()`)
  await page.tap('[data-op=music]');await page.wait('.music-library[open]')
- assert.equal(await page.evaluate('document.querySelectorAll("[data-music-track]").length'),10)
+ assert.equal(await page.evaluate('document.querySelectorAll("[data-music-track]").length'),12)
  await page.tap('[data-music-track=priest]')
  await eventually(()=>page.evaluate('document.querySelector(".music-library audio").currentTime>.1'),'音楽室の実再生')
  assert(await page.evaluate('document.querySelector(".music-library audio").dataset.track==="priest"'))
@@ -89,6 +89,14 @@ test('音楽室で全10曲の選択・停止・シーク・曲送り・音量変
  await page.click('[data-music-close]')
  await eventually(()=>page.evaluate('window.__songs.at(-1)?.src.endsWith("bgm-menu.ogg")&&window.__songs.at(-1)?.currentTime>.1'),'音楽室を閉じてメニューBGMに戻る')
  await eventually(()=>page.evaluate('document.querySelector(".music-library audio").paused&&!document.querySelector(".music-library audio").hasAttribute("src")'),'音楽室の終了処理で音源を解放')
+ await page.viewport(1440,1000)
  await page.tap('[data-op=music]');await page.click('[data-music-track=arena]');await page.click('[data-music-close]')
+ await page.tap('[data-op=music]')
+ for(const result of ['victory','defeat']){
+  await page.click('[data-music-track='+result+']')
+  await eventually(()=>page.evaluate('document.querySelector(".music-library audio").currentTime>.1'),'結果曲の実再生: '+result)
+  assert.equal(await page.evaluate('document.querySelector(".music-library audio").dataset.track'),result)
+ }
+ await page.click('[data-music-close]')
  assert.deepEqual(page.errors(),[])
 })

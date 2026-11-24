@@ -7,12 +7,14 @@ export const musicTracks = [
   {id:'deck', title:'綴られる戦略', subtitle:'デッキ編集・カードライブラリ', art:'battle-hall'},
   {id:'arena', title:'運命の三つの扉', subtitle:'闘技場・ピック', art:'battle-hall'},
   ...Object.entries(leaders).map(([id,leader])=>({id,title:leader.name,subtitle:leader.job+'のテーマ',art:id})),
+  {id:'victory',title:'勝利',subtitle:'対戦結果・勝利',art:'battle-hall'},
+  {id:'defeat',title:'敗北',subtitle:'対戦結果・敗北',art:'battle-hall'},
 ]
 
 export function createMusicLibrary({art, volume, setVolume, onOpen, onClose}) {
   const dialog=document.createElement('dialog')
   dialog.className='music-library';dialog.setAttribute('aria-labelledby','music-library-title')
-  dialog.innerHTML=`<header class="music-library-heading"><div><small>FAIRYTALE SOUND COLLECTION</small><h1 id="music-library-title">物語の音楽室</h1><p>全10曲。好きな物語を、好きなだけ。</p></div><button class="secondary" data-music-close aria-label="音楽ライブラリを閉じる">閉じる ×</button></header>
+  dialog.innerHTML=`<header class="music-library-heading"><div><small>FAIRYTALE SOUND COLLECTION</small><h1 id="music-library-title">物語の音楽室</h1><p>全${musicTracks.length}曲。好きな物語を、好きなだけ。</p></div><button class="secondary" data-music-close aria-label="音楽ライブラリを閉じる">閉じる ×</button></header>
     <div class="music-library-layout"><section class="music-now"><div class="music-cover"><img alt=""><span class="music-disc" aria-hidden="true">♪</span></div><small class="music-now-category"></small><h2></h2><audio controls preload="metadata" aria-label="選択した楽曲の再生・一時停止・再生位置・音量"></audio><div class="music-transport"><button class="secondary" data-music-prev aria-label="前の曲">‹ 前の曲</button><button class="secondary" data-music-next aria-label="次の曲">次の曲 ›</button></div><label class="music-repeat"><input type="checkbox" data-music-loop checked> この曲をリピート</label><p class="music-status" role="status">曲を選ぶと再生します。</p></section>
     <section class="music-tracklist" aria-label="収録曲">${musicTracks.map((track,index)=>`<button data-music-track="${track.id}" aria-pressed="false"><span class="music-track-number">${String(index+1).padStart(2,'0')}</span><img src="${art(track.art)}" alt="" loading="lazy"><span><strong>${escapeText(track.title)}</strong><small>${escapeText(track.subtitle)}</small></span><span class="music-track-indicator" aria-hidden="true">▶</span></button>`).join('')}</section></div>`
   document.body.append(dialog)
@@ -69,7 +71,7 @@ export function createMusicLibrary({art, volume, setVolume, onOpen, onClose}) {
     if(button.hasAttribute('data-music-next'))select(index+1)
   })
   dialog.querySelector('[data-music-loop]').addEventListener('change',event=>audio.loop=event.target.checked)
-  dialog.addEventListener('close',()=>{++request;release();dialog.classList.remove('is-playing');onClose();if(focusBack?.isConnected)focusBack.focus()})
+  dialog.addEventListener('close',()=>{if(dialog.open)return;++request;release();dialog.classList.remove('is-playing');onClose();if(focusBack?.isConnected)focusBack.focus()})
   return {
     get isOpen(){return dialog.open},
     open(){if(dialog.open)return;focusBack=document.activeElement;dialog.showModal();onOpen();audio.volume=volume()/100;select(index,false);dialog.querySelector('[data-music-close]').focus()},
