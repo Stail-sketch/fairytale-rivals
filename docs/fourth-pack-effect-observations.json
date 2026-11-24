@@ -1,0 +1,702 @@
+{
+  "status": "observations-only-not-final-rulings",
+  "records": [
+    {
+      "id": "FT-0575",
+      "sourceName": "ミノーン",
+      "url": "https://gameconductor.com/dqrivals/c/d/635",
+      "effect": "攻撃時：前後にいる味方ユニットのHP+1",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0576",
+      "sourceName": "スライムファング",
+      "url": "https://gameconductor.com/dqrivals/c/d/575",
+      "effect": "召喚時:スライム系の味方ユニット1体の攻撃力+1",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0577",
+      "sourceName": "シャーマン",
+      "url": "https://gameconductor.com/dqrivals/c/d/597",
+      "effect": "パワフルバッジ：ゾンビ系のユニットカードを使う度敵リーダーの武器の攻撃力-1",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0578",
+      "sourceName": "マヒャドフライ",
+      "url": "https://gameconductor.com/dqrivals/c/d/637",
+      "effect": "敵リーダーにダメージを与えた時相手の手札にうまのふんを加える。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0579",
+      "sourceName": "ドロル",
+      "url": "https://gameconductor.com/dqrivals/c/d/576",
+      "effect": null,
+      "status": "missing-effect"
+    },
+    {
+      "id": "FT-0580",
+      "sourceName": "はなカワセミ",
+      "url": "https://gameconductor.com/dqrivals/c/d/577",
+      "effect": "パワフルバッジ：スライム系のユニットカードを使う度味方リーダーのHPを1回復",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0581",
+      "sourceName": "まものつかい",
+      "url": "https://gameconductor.com/dqrivals/c/d/598",
+      "effect": "死亡時:自分のデッキからパワフルバッジを持つユニットを1枚引く",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0582",
+      "sourceName": "どくどくゾンビ",
+      "url": "https://gameconductor.com/dqrivals/c/d/602",
+      "effect": "召喚時：ゾンビ系の味方ユニット1体を+1/+1",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0583",
+      "sourceName": "ホミロン軍曹",
+      "url": "https://gameconductor.com/dqrivals/c/d/606",
+      "effect": "召喚時：合計2ダメージを正面のランダムな敵マスに割り振る。このユニットを除くスライム系の味方ユニットの数分ダメージ+1",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0584",
+      "sourceName": "エビルマスター",
+      "url": "https://gameconductor.com/dqrivals/c/d/638",
+      "effect": "召喚時：自分のデッキからスライム系、ドラゴン系、ゾンビ系のいずれか1枚を引く",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0585",
+      "sourceName": "パペットマン",
+      "url": "https://gameconductor.com/dqrivals/c/d/639",
+      "effect": "召喚時：最大MPが1減る",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0586",
+      "sourceName": "ブラッドレディ",
+      "url": "https://gameconductor.com/dqrivals/c/d/599",
+      "effect": "召喚時：ユニット1体に2ダメージ",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0587",
+      "sourceName": "どくろ大臣",
+      "url": "https://gameconductor.com/dqrivals/c/d/579",
+      "effect": "死亡時:コスト2以下のランダムなゾンビ系の味方ユニット1体をこのマスに復活させる",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0588",
+      "sourceName": "マーマンダイン",
+      "url": "https://gameconductor.com/dqrivals/c/d/578",
+      "effect": "パワフルバッジ：ドラゴン系のユニットカードを使う度敵リーダーに1ダメージ",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0589",
+      "sourceName": "もりもりスライム",
+      "url": "https://gameconductor.com/dqrivals/c/d/603",
+      "effect": "召喚時：1/1のスライムを2体出す。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0590",
+      "sourceName": "妖魔軍王ブギー",
+      "url": "https://gameconductor.com/dqrivals/c/d/645",
+      "effect": "召喚時：敵の冒険者1体をこのユニットが場にいる間+2/+2して味方にする",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0591",
+      "sourceName": "ベビーゴイル",
+      "url": "https://gameconductor.com/dqrivals/c/d/640",
+      "effect": "召喚時：お互いのデッキにランダムな2コストの特技カードを3枚加える",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0592",
+      "sourceName": "ぶっちズキーニャ",
+      "url": "https://gameconductor.com/dqrivals/c/d/600",
+      "effect": "貫通、召喚時：自分の場にある地形の数分攻撃力+1",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0593",
+      "sourceName": "コドラ",
+      "url": "https://gameconductor.com/dqrivals/c/d/604",
+      "effect": "召喚時：このターン中次に使うドラゴン系のユニットカードのコスト-2",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0594",
+      "sourceName": "カーディナルナイト",
+      "url": "https://gameconductor.com/dqrivals/c/d/605",
+      "effect": "召喚時：敵リーダーが持つパワフルバッジの効果をランダムで１つ消す",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0595",
+      "sourceName": "ハッスルじじい",
+      "url": "https://gameconductor.com/dqrivals/c/d/644",
+      "effect": "パワフルバッジ：冒険者の味方ユニットを+1/+1",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0596",
+      "sourceName": "オルゴ・デミーラ",
+      "url": "https://gameconductor.com/dqrivals/c/d/633",
+      "effect": "死亡時：オルゴ・デミーラは第2形態に変身して自分の手札に加わる",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0597",
+      "sourceName": "エステラ",
+      "url": "https://gameconductor.com/dqrivals/c/d/646",
+      "effect": "対戦中に死亡したドラゴン系の味方ユニットの数だけ攻撃力が上がる。\r\n自分のターン開始時攻撃力が5以上なら竜化の術を使用する。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0598",
+      "sourceName": "スライムダーク",
+      "url": "https://gameconductor.com/dqrivals/c/d/641",
+      "effect": null,
+      "status": "missing-effect"
+    },
+    {
+      "id": "FT-0599",
+      "sourceName": "ヘルシーサー",
+      "url": "https://gameconductor.com/dqrivals/c/d/596",
+      "effect": "召喚時:地形マスにいる全ての味方ユニットを+1/+1",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0600",
+      "sourceName": "マザーウッド",
+      "url": "https://gameconductor.com/dqrivals/c/d/601",
+      "effect": "テンションリンク：前後にいる味方ユニットに速攻を付与する。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0601",
+      "sourceName": "屍騎軍王ゾルデ",
+      "url": "https://gameconductor.com/dqrivals/c/d/647",
+      "effect": "自分のターン終了時、このユニットの前後に2/2の屍騎軍王ゾルデ・影を出す。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0602",
+      "sourceName": "ジャックポッター",
+      "url": "https://gameconductor.com/dqrivals/c/d/642",
+      "effect": "召喚時：両プレイヤーはカードを1枚引く。スキルブースト：+1枚",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0603",
+      "sourceName": "ブラックドラゴン",
+      "url": "https://gameconductor.com/dqrivals/c/d/580",
+      "effect": "召喚時:ランダムな敵ユニット1体に1ダメージ。このカードを除く自分の場と手札にいるドラゴン系の数の3倍分与えるダメージが増える。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0604",
+      "sourceName": "レジェンドウルフ",
+      "url": "https://gameconductor.com/dqrivals/c/d/643",
+      "effect": null,
+      "status": "missing-effect"
+    },
+    {
+      "id": "FT-0605",
+      "status": "missing-reference"
+    },
+    {
+      "id": "FT-0606",
+      "sourceName": "ことだまつかい",
+      "url": "https://gameconductor.com/dqrivals/c/d/651",
+      "effect": "死亡時：お互いのリーダーに2ダメージ",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0607",
+      "sourceName": "ガスト",
+      "url": "https://gameconductor.com/dqrivals/c/d/608",
+      "effect": "パワフルバッジ：ゾンビ系の味方ユニットのHP+1",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0608",
+      "sourceName": "剣豪の闘志",
+      "url": "https://gameconductor.com/dqrivals/c/d/607",
+      "effect": "このターン中味方リーダーの攻撃力+2。スキルブースト：攻撃力+1",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0609",
+      "sourceName": "剣の錬成",
+      "url": "https://gameconductor.com/dqrivals/c/d/581",
+      "effect": "この対戦中に壊れた自分の武器カードからランダムな1枚を手札に加えそれを+1/+1する。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0610",
+      "sourceName": "ゾンビマスター",
+      "url": "https://gameconductor.com/dqrivals/c/d/609",
+      "effect": "召喚時：ゾンビ系の味方ユニット1体に「死亡時：このカードを手札に加える」を付与する。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0611",
+      "sourceName": "ヘルオーディン",
+      "url": "https://gameconductor.com/dqrivals/c/d/593",
+      "effect": "におうだち、パワフルバッジ：ゾンビ系の味方ユニットは貫通を得る。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0612",
+      "sourceName": "大怨霊マアモン",
+      "url": "https://gameconductor.com/dqrivals/c/d/649",
+      "effect": "対戦中に死亡したゾンビ系の味方ユニットの数だけコスト-1",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0613",
+      "sourceName": "黒騎士レオコーン",
+      "url": "https://gameconductor.com/dqrivals/c/d/610",
+      "effect": "パワフルバッジ：ゾンビ系の味方ユニットは速攻を得る",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0614",
+      "sourceName": "じごくのサーベル",
+      "url": "https://gameconductor.com/dqrivals/c/d/650",
+      "effect": "対戦中に死亡したゾンビ系の味方ユニットの数だけコスト-1",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0615",
+      "sourceName": "まほうの小ビン",
+      "url": "https://gameconductor.com/dqrivals/c/d/594",
+      "effect": "カードを1枚引く。相手の手札にまほうの小ビンを1枚加える。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0616",
+      "sourceName": "だんごスライム",
+      "url": "https://gameconductor.com/dqrivals/c/d/611",
+      "effect": "召喚時：カードを2枚引く。その後手札を2枚捨てる",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0617",
+      "sourceName": "ルカナン",
+      "url": "https://gameconductor.com/dqrivals/c/d/582",
+      "effect": "全ての敵ユニットに「受けるダメージ2倍」を付与する",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0618",
+      "sourceName": "てつのさそり",
+      "url": "https://gameconductor.com/dqrivals/c/d/612",
+      "effect": "パワフルバッジ：スライム系の味方ユニットのHP+1",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0619",
+      "sourceName": "闇の司祭",
+      "url": "https://gameconductor.com/dqrivals/c/d/653",
+      "effect": "パワフルバッジ：スライム系の味方ユニットは特技ダメージを受けない",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0620",
+      "sourceName": "魔力の奔流",
+      "url": "https://gameconductor.com/dqrivals/c/d/654",
+      "effect": "カードを1枚引く。スキルブースト：+1枚",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0621",
+      "sourceName": "まどうスライム",
+      "url": "https://gameconductor.com/dqrivals/c/d/614",
+      "effect": "特技ダメージ+1。自分が特技を使う度ランダムなスライム系のユニットカードを手札に1枚加える。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0622",
+      "sourceName": "スライム呼び",
+      "url": "https://gameconductor.com/dqrivals/c/d/652",
+      "effect": "縦一列の空きマスに1/1のスライムを出す。\r\nスキルブースト：コスト-1",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0623",
+      "sourceName": "ダークキング",
+      "url": "https://gameconductor.com/dqrivals/c/d/655",
+      "effect": "召喚時：このユニットを除くスライム系の味方ユニット全てを手札に戻す。\r\nスライム系のユニットがいたマスに闇のクリスタルを出す。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0624",
+      "sourceName": "スライムの心",
+      "url": "https://gameconductor.com/dqrivals/c/d/613",
+      "effect": "ユニット1体を1/1のスライムに変える。スライム系の味方ユニットの数分コスト-1",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0625",
+      "sourceName": "スライムフィーバー",
+      "url": "https://gameconductor.com/dqrivals/c/d/583",
+      "effect": "自分の手札にある全ての特技カードをランダムなスライム系のユニットカードに変える。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0626",
+      "sourceName": "はねスライム",
+      "url": "https://gameconductor.com/dqrivals/c/d/656",
+      "effect": "召喚時：スライム系の味方ユニット1体手札に戻す。\r\nその後2回攻撃を得る。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0627",
+      "sourceName": "スライムホイッスル",
+      "url": "https://gameconductor.com/dqrivals/c/d/657",
+      "effect": "自分のデッキからスライム系のユニットカードをランダムに2枚手札に加える。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0628",
+      "sourceName": "せいけん爆撃",
+      "url": "https://gameconductor.com/dqrivals/c/d/616",
+      "effect": "前列にいるユニット1体に7ダメージ",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0629",
+      "sourceName": "いしのツメ",
+      "url": "https://gameconductor.com/dqrivals/c/d/615",
+      "effect": "スライム系の味方ユニットが場に出る度このターン中攻撃力+1を得る",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0630",
+      "sourceName": "キラーエイプ",
+      "url": "https://gameconductor.com/dqrivals/c/d/584",
+      "effect": "パワフルバッジ：スライム系の味方ユニットの攻撃力+1",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0631",
+      "sourceName": "エンゼルスライム",
+      "url": "https://gameconductor.com/dqrivals/c/d/658",
+      "effect": "召喚時：自分のデッキの上から3枚のカードを公開する。\r\nその中にあるスライム系のユニットカードを全て手札に加え、残りのカードを捨てる。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0632",
+      "sourceName": "必中拳",
+      "url": "https://gameconductor.com/dqrivals/c/d/595",
+      "effect": "ユニット1体に4ダメージを与える。スライム系の味方ユニットの数分コスト-1。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0633",
+      "sourceName": "ドンガラドン",
+      "url": "https://gameconductor.com/dqrivals/c/d/617",
+      "effect": "パワフルバッジ：スライム系のユニットカードを使う度味方リーダーのテンション+1",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0634",
+      "sourceName": "グランスライム",
+      "url": "https://gameconductor.com/dqrivals/c/d/585",
+      "effect": "このユニットを除くスライム系の味方ユニット全てを+1/+1。\r\n自分の手札にあるスライム系のユニットカードのコスト-1。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0635",
+      "sourceName": "リンリン",
+      "url": "https://gameconductor.com/dqrivals/c/d/619",
+      "effect": "死亡時：ランダムなコスト1のドラゴン系ユニット1体をこのマスに出す。スキルブースト：ユニットのコスト+1",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0636",
+      "sourceName": "スクルト",
+      "url": "https://gameconductor.com/dqrivals/c/d/618",
+      "effect": "縦一列にいる全てのユニットのHP+2",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0637",
+      "sourceName": "竜のうろこ",
+      "url": "https://gameconductor.com/dqrivals/c/d/662",
+      "effect": "ユニット1体を+1/+2。対象がドラゴン系のユニットの場合カードを1枚引く。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0638",
+      "sourceName": "ダックスビル",
+      "url": "https://gameconductor.com/dqrivals/c/d/661",
+      "effect": "パワフルバッジ：ドラゴン系の味方ユニットのHP+1",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0639",
+      "sourceName": "しっぷうのレイピア",
+      "url": "https://gameconductor.com/dqrivals/c/d/659",
+      "effect": "この武器が壊れた時ランダムなドラゴン系のユニットカードを手札に1枚加える",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0640",
+      "sourceName": "たつのこナイト",
+      "url": "https://gameconductor.com/dqrivals/c/d/630",
+      "effect": "パワフルバッジ：自分の手札にあるドラゴン系のユニットカードのコスト-1。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0641",
+      "sourceName": "グレイナル",
+      "url": "https://gameconductor.com/dqrivals/c/d/634",
+      "effect": "召喚時：竜戦士の装具を手札に加える。ドラゴン系の味方ユニットが攻撃して敵ユニットを倒す度味方リーダーのテンション+1",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0642",
+      "sourceName": "冷たい笑み",
+      "url": "https://gameconductor.com/dqrivals/c/d/660",
+      "effect": "お互いの全てのユニットの攻撃力をHPと同じ値にする",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0643",
+      "sourceName": "精霊の矢",
+      "url": "https://gameconductor.com/dqrivals/c/d/586",
+      "effect": "ユニット1体に3ダメージを与える。\r\nこの特技で対象が死亡した場合、味方リーダーのMPがこのカードのコスト分回復する。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0644",
+      "sourceName": "ドラゴンバゲージ",
+      "url": "https://gameconductor.com/dqrivals/c/d/620",
+      "effect": "におうだち、自分のターン終了時味方リーダーのテンション+1",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0645",
+      "sourceName": "メタルの巻物",
+      "url": "https://gameconductor.com/dqrivals/c/d/663",
+      "effect": "メタルボディもしくはハードメタルボディを持つランダムなカードを手札に1枚加える。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0646",
+      "sourceName": "メタルのそろばん",
+      "url": "https://gameconductor.com/dqrivals/c/d/623",
+      "effect": "メタルボディ、相手のターン中この武器のメタルボディは効果を失う",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0647",
+      "sourceName": "からくりエッグ",
+      "url": "https://gameconductor.com/dqrivals/c/d/622",
+      "effect": "パワフルバッジ：メタルボディもしくはハードメタルボディを持つ味方ユニットと武器の攻撃力+1",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0648",
+      "sourceName": "メタルブラザーズ",
+      "url": "https://gameconductor.com/dqrivals/c/d/621",
+      "effect": "メタルボディ、死亡時：メタルスライムを手札に2枚加える。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0649",
+      "sourceName": "てっこうまじん",
+      "url": "https://gameconductor.com/dqrivals/c/d/632",
+      "effect": "味方が持つメタルボディはハードメタルボディに強化される",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0650",
+      "sourceName": "覚醒の巻物",
+      "url": "https://gameconductor.com/dqrivals/c/d/587",
+      "effect": "ユニット1体に貫通、におうだち、+1/+1を付与する。\r\nスキルブースト:+1/+1",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0651",
+      "sourceName": "痛みわけの杖",
+      "url": "https://gameconductor.com/dqrivals/c/d/664",
+      "effect": "お互いの全てのユニットに3ダメージ",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0652",
+      "sourceName": "デュランダル",
+      "url": "https://gameconductor.com/dqrivals/c/d/666",
+      "effect": "パワフルバッジ：自分の手札にあるメタルボディもしくはハードメタルボディを持つユニットカードと武器のカードのコスト-1",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0653",
+      "sourceName": "スペクタクルショー",
+      "url": "https://gameconductor.com/dqrivals/c/d/665",
+      "effect": "縦1列にいる全てのユニットをメタルボディもしくはハードメタルボディを持つランダムなユニットに変身させる。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0654",
+      "sourceName": "ダイヤモンドスライム",
+      "url": "https://gameconductor.com/dqrivals/c/d/667",
+      "effect": "ハードメタルボディ。召喚時：自分のデッキからメタルボディを持つユニットカードか武器カードを各コストから1枚ずつ手札に加える。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0655",
+      "sourceName": "いっかく竜",
+      "url": "https://gameconductor.com/dqrivals/c/d/669",
+      "effect": "召喚時：味方リーダーのテンションスキルを竜の導きに変える",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0656",
+      "sourceName": "魂の写し身",
+      "url": "https://gameconductor.com/dqrivals/c/d/624",
+      "effect": "ユニット1体を選ぶ。そのユニットと同じカード2枚を自分のデッキに混ぜる。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0657",
+      "sourceName": "竜の逆鱗",
+      "url": "https://gameconductor.com/dqrivals/c/d/592",
+      "effect": "ランダムな敵ユニット1体にドラゴン系の味方ユニットの中で最も高い攻撃力と同じダメージを与える",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0658",
+      "sourceName": "力のタロット",
+      "url": "https://gameconductor.com/dqrivals/c/d/668",
+      "effect": "占い：①全ての味方ユニットの攻撃力+1、②ランダムな味方ユニット1体を+3/+2",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0659",
+      "sourceName": "バルンバ",
+      "url": "https://gameconductor.com/dqrivals/c/d/589",
+      "effect": "パワフルバッジ：ドラゴン系の味方ユニットはにおうだちを得る",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0660",
+      "sourceName": "竜の胎動",
+      "url": "https://gameconductor.com/dqrivals/c/d/588",
+      "effect": "ランダムなドラゴン系のユニットカードを手札に2枚加える",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0661",
+      "sourceName": "ソルジャーブル",
+      "url": "https://gameconductor.com/dqrivals/c/d/625",
+      "effect": "パワフルバッジ：ドラゴン系の味方ユニットの攻撃力+1",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0662",
+      "sourceName": "キースドラゴン",
+      "url": "https://gameconductor.com/dqrivals/c/d/670",
+      "effect": "占い：①味方リーダーのHPを5回復、②正面にいる全ての敵ユニットに2ダメージ",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0663",
+      "sourceName": "だいまどう",
+      "url": "https://gameconductor.com/dqrivals/c/d/626",
+      "effect": "特技ダメージ+1、召喚時：自分の手札にドラゴン系のユニットカードがある場合運命の輪を手札に1枚加える。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0664",
+      "sourceName": "しんりゅう",
+      "url": "https://gameconductor.com/dqrivals/c/d/590",
+      "effect": "召喚時:願い事を１つかなえてくれる。\r\n味方リーダーが超必中モードの場合全ての願い事をかなえてくれる。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0665",
+      "sourceName": "悪鬼丸",
+      "url": "https://gameconductor.com/dqrivals/c/d/673",
+      "effect": "召喚時：味方リーダーのテンションスキルを死者の目覚めに変える",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0666",
+      "sourceName": "死への誘い",
+      "url": "https://gameconductor.com/dqrivals/c/d/591",
+      "effect": "攻撃力1以下のユニット1体を死亡させる。\r\nスキルブースト:攻撃力+1",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0667",
+      "sourceName": "冥府の門",
+      "url": "https://gameconductor.com/dqrivals/c/d/671",
+      "effect": "1/2のアンデッドマンを2体出す。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0668",
+      "sourceName": "猛毒の霧",
+      "url": "https://gameconductor.com/dqrivals/c/d/672",
+      "effect": "お互いの全てのユニットを毒にする",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0669",
+      "sourceName": "デビルウィザード",
+      "url": "https://gameconductor.com/dqrivals/c/d/627",
+      "effect": "パワフルバッジ：ゾンビ系の味方ユニットの攻撃力+1",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0670",
+      "sourceName": "死者の魂",
+      "url": "https://gameconductor.com/dqrivals/c/d/674",
+      "effect": "最大MPが1増える。3/3のミイラおとこを出す。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0671",
+      "sourceName": "亡者の執念",
+      "url": "https://gameconductor.com/dqrivals/c/d/628",
+      "effect": "全ての味方ユニットに「死亡時：1/2のアンデッドマンを1体出す」を付与する。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0672",
+      "sourceName": "バラモスブロス",
+      "url": "https://gameconductor.com/dqrivals/c/d/631",
+      "effect": "パワフルバッジ：ゾンビ系のユニットカードを使う度味方リーダーのMPが1回復",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0673",
+      "sourceName": "アスラ王",
+      "url": "https://gameconductor.com/dqrivals/c/d/629",
+      "effect": "召喚時：自分のデッキからコストが1番高いゾンビ系のユニットカードを手札に1枚加える。そのカードのコストを-5。",
+      "status": "observed-not-image-verified"
+    },
+    {
+      "id": "FT-0674",
+      "sourceName": "暗黒皇帝ガナサダイ",
+      "url": "https://gameconductor.com/dqrivals/c/d/675",
+      "effect": "パワフルバッジ：自分のターン終了時ゾンビ系の味方ユニットを+1/+1",
+      "status": "observed-not-image-verified"
+    }
+  ]
+}
