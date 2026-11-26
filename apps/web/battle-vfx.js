@@ -163,7 +163,7 @@ export function mountBattleVfx(app,scene,phase,resolveAnchor){
   if(hasSummon){layer.dataset.vfxTier=scene.summonTier;if(scene.summonTier==='legendary')layer.classList.add('vfx-legendary-summon')}
   const canvas=document.createElement('canvas');canvas.className='battle-vfx-canvas';layer.append(canvas);grid.append(layer)
   const ctx=canvas.getContext('2d');if(!ctx){layer.remove();return null}
-  const life=phase==='approach'?scene.approachMs+40:scene.strike?.legend?680:scene.bursts.some(b=>b.style==='summon'&&summonTier(b.card)==='legendary')?850:480
+  const life=phase==='approach'?scene.approachMs+40:scene.bursts.some(b=>b.style==='summon'&&summonTier(b.card)==='legendary')?850:480
   const start=performance.now();preloadBattleVfx()
   function paint(now){
     if(!layer.isConnected)return

@@ -89,7 +89,6 @@ const signature = id => [...id].reduce((n,ch)=>(Math.imul(n,31)+ch.charCodeAt(0)
 function profile(id,method,color,accent,glyph){
   const hash=signature(id)
   return Object.freeze({ id,method,color,accent,glyph,seed:hash,phase:hash%360,spokes:5+hash%5,
-    travelMs:melee.has(method)?215:heavy.has(method)?340:285,
     impactCue:['blade','dagger','axe','claw','shadow'].includes(method)?'slash':method==='hammer'?'blow':'arcane',
     voice:method==='music'?'bell':['petal','wave','jelly','ribbon'].includes(method)?'harp':heavy.has(method)?'horn':melee.has(method)?'viola':'bell',
   })

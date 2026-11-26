@@ -21,6 +21,22 @@ test('全レジェンドユニットと生成形態へカードIDごとの攻撃
  assert.notEqual(legendaryAttacks['FT-0596'].color,legendaryAttacks['token-set4-aul-act-four'].color)
  assert(Object.values(legendaryAttacks).every(profile=>Object.isFrozen(profile)))
 })
+test('全レジェンドと変身リーダーの攻撃が通常攻撃と同じ時間で命中する',t=>{
+ const old=globalThis.matchMedia;globalThis.matchMedia=()=>({matches:false});t.after(()=>{if(old===undefined)delete globalThis.matchMedia;else globalThis.matchMedia=old})
+ const position={row:'front',column:0}
+ for(const card of ['brass-squire',...Object.keys(legendaryAttacks)]){
+  const players=[{leader:'warrior',hp:25,units:[{id:1,owner:0,card,position}]},{leader:'mage',hp:25,units:[]}]
+  const view={phase:'battle',players}
+  const event={type:'attack',seat:0,id:1,target:{kind:'leader',seat:1}}
+  for(const cpu of [false,true]){
+   const scene=planBattlePresentation(view,view,[event],cpu)
+   assert.equal(scene.approachMs,135,card);assert.equal(scene.revealMs,0,card)
+  }
+ }
+ const view={phase:'battle',players:[{leader:'warrior',hp:25,units:[],awakenedLeader:true},{leader:'mage',hp:25,units:[]}]}
+ assert.equal(planBattlePresentation(view,view,[{type:'leaderAttack',seat:0,target:{kind:'leader',seat:1}}],false).approachMs,135)
+})
+
 test('一般ユニットをレジェンド扱いせず、変身リーダーは黒薔薇を使う',()=>{
  assert.equal(attackProfile({players:[{units:[{id:1,card:'brass-squire'}]}]},{type:'attack',seat:0,id:1}),null)
  assert.equal(attackProfile({players:[{units:[],awakenedLeader:true}]},{type:'leaderAttack',seat:0}).method,'vine')

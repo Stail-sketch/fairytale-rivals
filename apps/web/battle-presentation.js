@@ -115,7 +115,7 @@ export function planBattlePresentation(before, after, events, cpu) {
     sources: [...sources.values()], targets: [...targets.values()], links: [...links.values()],
     caption: events.find(event => event.triggered)?.text,
     revealMs: reduced ? (card || skill ? 145 : 0) : skill ? 445 : card ? (tier === 'legendary' ? (cpu ? 650 : 600) : cpu ? 395 : 285) : 0,
-    approachMs: reduced ? 60 : skill ? 205 : chained ? 230 : landing ? tier === 'legendary' ? 430 : tier === 'major' ? 300 : 162 : strike ? legend?.travelMs ?? 135 : 125,
+    approachMs: reduced ? 60 : skill ? 205 : chained ? 230 : landing ? tier === 'legendary' ? 430 : tier === 'major' ? 300 : 162 : strike ? 135 : 125,
     finishMs: phoenix ? (reduced ? 440 : 1350) : reduced ? 210 : 540,
   }
 }
