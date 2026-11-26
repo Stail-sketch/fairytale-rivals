@@ -19,6 +19,11 @@ export function roomSnapshot(room, player) {
   return {
     version: room.version, phase: 'playing', seat: player.seat, view,
     last: room.last, resigned: room.resigned,
+    ...([room.host, room.guest].some(p => p?.name) ? { players: [room.host, room.guest].sort((a,b) => a.seat-b.seat).map(p => p.name ?? (p === room.host ? 'ホスト' : 'ゲスト')) } : {}),
+    ...(room.online ? { online: { mode: room.online.mode, deadline: room.deadline,
+      players: [room.host, room.guest].sort((a,b) => a.seat-b.seat).map(p => p.name),
+      result: room.online.result?.find(p => p.id === player.profileId),
+    } } : {}),
     ...(room.lobby && room.resultVersion !== undefined ? {
       result: { rematch: Boolean(player.rematch), opponentRematch: Boolean((player === room.host ? room.guest : room.host).rematch) },
     } : {}),

@@ -1,6 +1,7 @@
 import { BattleRoom, readRoomBody } from './room.js'
 import { lobbyCode, normalizeRoomId } from '../packages/online-match/lobby.js'
 export { BattleRoom }
+export { Matchmaking } from './matchmaking.js'
 
 const route = /^\/api\/rooms(?:\/([a-z0-9]+)(?:\/(join|actions))?)?$/
 export const reply = (status, data) => new Response(data === undefined ? null : JSON.stringify(data), {
@@ -11,6 +12,9 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url)
     if (!url.pathname.startsWith('/api/')) return env.ASSETS.fetch(request)
+    if (['/api/players', '/api/players/me', '/api/matchmaking'].includes(url.pathname)) {
+      return env.MATCHMAKING.get(env.MATCHMAKING.idFromName('global-v1')).fetch(request)
+    }
     const match = route.exec(url.pathname)
     if (!match) return reply(404, { issue: 'この操作は利用できません。' })
     const [, id] = match

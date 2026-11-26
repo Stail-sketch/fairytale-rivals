@@ -7,6 +7,12 @@ const codePattern = /^[abcdefghjklmnpqrstuvwxyz23456789]{8}$/
 const legacyPattern = /^[0-9a-f]{32}$/
 
 export const roomError = (status, message) => Object.assign(new Error(message), { status })
+export function validatedPlayerName(value) {
+  if (typeof value !== 'string') throw roomError(400, 'プレイヤー名を入力してください。')
+  const name = value.normalize('NFC').trim()
+  if (!name || [...name].length > 20 || /[\p{Cc}\p{Cf}]/u.test(name)) throw roomError(400, '名前は制御文字を含まない1～20文字で入力してください。')
+  return name
+}
 export const isLobbyCode = id => codePattern.test(id ?? '')
 
 export function normalizeRoomId(value) {
@@ -30,6 +36,7 @@ export function validatedLineup(data) {
 
 export function lobbySnapshot(room, player) {
   const member = entry => ({ joined: Boolean(entry), ready: Boolean(entry?.lineup), leader: entry?.lineup?.leader,
+    ...(entry?.name ? { name: entry.name } : {}),
     ...(room.arena && entry ? { picked: entry.draft.deck.length, complete: entry.draft.stage === 'complete' } : {}) })
   return { role: player === room.host ? 'host' : 'guest', host: member(room.host), guest: member(room.guest) }
 }

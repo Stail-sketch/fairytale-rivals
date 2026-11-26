@@ -1,6 +1,6 @@
 import { createLocalMatch } from '../packages/local-match/index.js'
 import { initializeArena, joinArena } from '../packages/online-match/arena.js'
-import { leaveRoom, roomError, startRoomMatch, updateRoom, validatedLineup } from '../packages/online-match/lobby.js'
+import { leaveRoom, roomError, startRoomMatch, updateRoom, validatedLineup, validatedPlayerName } from '../packages/online-match/lobby.js'
 import { roomSnapshot } from '../packages/online-match/room-snapshot.js'
 
 const missing = 'この対戦部屋は終了したか、見つかりません。'
@@ -49,8 +49,9 @@ export async function readRoomBody(request) {
 
 // One serialized, persistently stored room per Durable Object. No process-local global room map.
 export class BattleRoom {
-  constructor(ctx) {
+  constructor(ctx, env) {
     this.ctx = ctx
+    this.env = env
     this.waiters = new Set()
     this.ready = ctx.blockConcurrencyWhile(async () => {
       const stored = await ctx.storage.get('room')
@@ -63,7 +64,7 @@ export class BattleRoom {
     room.expires = room.touched + (room.match && !room.finished ? 120 : 30) * minute
     await this.ctx.storage.transaction(async storage => {
       await storage.put('room', encode(room))
-      await storage.setAlarm(room.expires)
+      await storage.setAlarm(room.online && !room.finished ? Math.min(room.expires, room.deadline) : room.expires)
     })
     this.room = room
     if (changed) for (const send of [...this.waiters]) send()
@@ -105,10 +106,20 @@ export class BattleRoom {
 
   async handle(request, data) {
     const url = new URL(request.url)
+    if (url.pathname.startsWith('/create-match/') && request.method === 'POST') {
+      if (this.room) return reply(200, { ok: true })
+      const m = data.matchmaking
+      const [host, guest] = m.players.map(p => ({ profileId: p.id, token: p.roomToken, name: p.name, seat: p.seat, lineup: validatedLineup(p.lineup) }))
+      const room = { host, guest, lobby: false, version: 0, online: { id: m.id, mode: m.mode },
+        deadline: Date.now() + 90_000,
+        match: createLocalMatch({ seed: m.seed, lineups: [host, guest].sort((a,b) => a.seat-b.seat).map(p => p.lineup) }) }
+      await this.commit(room, false)
+      return reply(201, { ok: true })
+    }
     if (url.pathname.startsWith('/create/') && request.method === 'POST') {
       if (this.room && this.room.expires > Date.now()) throw roomError(409, '部屋がすでに存在します。')
       const lobby = data.lobby === true
-      const room = { lobby, host: { token: token(), lineup: lobby ? null : validatedLineup(data) }, guest: null, version: 0 }
+      const room = { lobby, host: { token: token(), lineup: lobby ? null : validatedLineup(data), ...(data.name === undefined ? {} : { name: validatedPlayerName(data.name) }) }, guest: null, version: 0 }
       if (data.arena === true) initializeArena(room, random()[1])
       await this.commit(room, false)
       return reply(201, { id: url.pathname.slice('/create/'.length), token: room.host.token })
@@ -119,7 +130,7 @@ export class BattleRoom {
     if (operation === 'join' && request.method === 'POST') {
       const lineup = room.lobby ? null : validatedLineup(data)
       if (room.guest) throw roomError(409, 'この部屋にはすでに2人が参加しています。')
-      room.guest = { token: token(), lineup }
+      room.guest = { token: token(), lineup, ...(data.name === undefined ? {} : { name: validatedPlayerName(data.name) }) }
       joinArena(room, random()[1])
       if (!room.lobby) startRoomMatch(room, ...random())
       room.version++
@@ -144,7 +155,10 @@ export class BattleRoom {
       return reply(204)
     }
     if (operation === 'actions' && request.method === 'POST') {
+      const turn = room.match?.view(player.seat)
       room.last = updateRoom(room, player, data.version, data.action, random)
+      const next = room.match?.view(player.seat)
+      if (room.online && (turn?.active !== next?.active || turn?.turn !== next?.turn || turn?.decisionSeat !== next?.decisionSeat || turn?.phase !== next?.phase)) room.deadline = Date.now() + 90_000
       room.version++
       await this.commit(room)
       return reply(200, roomSnapshot(room, player))
@@ -158,7 +172,18 @@ export class BattleRoom {
       const data = request.method === 'POST' ? await readRoomBody(request) : null
       // Never hold the concurrency gate while waiting for the opponent's next action.
       const response = await this.ctx.blockConcurrencyWhile(async () => {
-        try { return await this.handle(request, data) }
+        try {
+          await this.expireTurn()
+          await this.settleResult()
+          const result = await this.handle(request, data)
+          await this.settleResult()
+          // Include the persisted rating receipt in the response to the finishing action.
+          if (this.room?.online && this.room.finished && result instanceof Response && result.status === 200) {
+            const auth = request.headers.get('authorization')
+            if (auth) return this.snapshot(auth)
+          }
+          return result
+        }
         catch (error) {
           if (!error.status) console.error('Room request failed:', error.message)
           return reply(error.status ?? 500, { issue: error.status ? error.message : '対戦通信に失敗しました。' })
@@ -174,10 +199,42 @@ export class BattleRoom {
   async alarm() {
     await this.ready
     await this.ctx.blockConcurrencyWhile(async () => {
-      if (this.room?.expires > Date.now()) return this.ctx.storage.setAlarm(this.room.expires)
+      await this.expireTurn()
+      await this.settleResult()
+      if (this.room?.online && this.room.finished && !this.room.online.result) return
+      if (this.room?.expires > Date.now()) return this.ctx.storage.setAlarm(this.room.online && !this.room.finished ? Math.min(this.room.expires, this.room.deadline) : this.room.expires)
       await this.ctx.storage.deleteAll()
       this.room = null
       for (const send of [...this.waiters]) send()
     })
+  }
+
+  async expireTurn() {
+    const room = this.room
+    if (!room?.online || room.finished || room.deadline > Date.now()) return
+    const view = room.match.view(0)
+    room.resigned = view.decisionSeat ?? view.active
+    room.finished = true
+    room.version++
+    room.last = undefined
+    await this.commit(room)
+  }
+
+  async settleResult() {
+    const room = this.room
+    if (!room?.online || !room.finished || room.online.result) return
+    const winner = room.resigned === undefined ? room.match.view(0).winner : 1 - room.resigned
+    try {
+      const response = await this.env.MATCHMAKING.get(this.env.MATCHMAKING.idFromName('global-v1')).fetch(new Request('https://internal/internal/result', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: room.online.id, winner }),
+      }))
+      if (!response.ok) throw new Error('settlement pending')
+      room.online.result = await response.json()
+      room.version++
+      await this.commit(room)
+    } catch {
+      // Keep the durable result for an idempotent retry; never trust a client win report.
+      await this.ctx.storage.setAlarm(Date.now() + 5000)
+    }
   }
 }

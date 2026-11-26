@@ -1653,3 +1653,11 @@ button.history-action-head:hover strong { color:#ffe2a7; text-decoration:underli
 .vfx-legendary-summon::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at center,transparent 32%,#070b1b52); animation:vfx-summon-shade .43s ease both; }
 @keyframes vfx-summon-shade { from { opacity:0; } 35%,80% { opacity:1; } to { opacity:0; } }
 @media(prefers-reduced-motion:reduce) { .battle-vfx-layer { display:none; } }
+.player-profile { max-width: 580px; margin: 16px auto; padding: 14px 18px; border: 1px solid #a88b53; border-radius: 12px; background: #101d2be8; text-align: left; }
+.player-profile label { display: block; color: #f0d59d; margin-bottom: 6px; }
+.player-profile input { min-width: 0; flex: 1; padding: 10px; color: #fff; background: #0b1420; border: 1px solid #5c6981; border-radius: 6px; }
+.player-profile p { margin: 9px 0 5px; color: #f0d59d; }
+.player-profile small { color: #bbc8d7; line-height: 1.5; }
+.mode-switch { flex-wrap: wrap; }
+.online-clock { padding: 7px 12px; color: #ffe3a3; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.online-result { color: #ffe3a3; font-size: 1.2rem; }

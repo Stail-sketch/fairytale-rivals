@@ -59,9 +59,9 @@ async function request(path, { method = 'GET', body, token, signal, timeout = 12
   return result
 }
 
-export function enterRoom(id, lineup, lobby = false, arena = false) {
+export function enterRoom(id, lineup, lobby = false, arena = false, name) {
   if (directRoom()) return enterPeerRoom(id, lineup, lobby, arena)
-  return request(id ? `${base}/${id}/join` : base, { method: 'POST', body: lobby ? { lobby: true, arena } : lineup })
+  return request(id ? `${base}/${id}/join` : base, { method: 'POST', body: lobby ? { lobby: true, arena, name } : { ...lineup, name } })
 }
 
 export function connectRoom(session, update, connection) {

@@ -10,7 +10,7 @@
     "run_worker_first": ["/api/*"]
   },
   "durable_objects": {
-    "bindings": [{ "name": "ROOMS", "class_name": "BattleRoom" }]
+    "bindings": [{ "name": "ROOMS", "class_name": "BattleRoom" }, { "name": "MATCHMAKING", "class_name": "Matchmaking" }]
   },
-  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["BattleRoom"] }]
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["BattleRoom"] }, { "tag": "v2", "new_sqlite_classes": ["Matchmaking"] }]
 }
