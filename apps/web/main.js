@@ -26,6 +26,7 @@ import { preloadBattleVfx } from './battle-vfx.js'
 import { createBattleHistory, renderBattleLog, renderRecentHistory } from './battle-history.js'
 import { createMusicLibrary } from './music-library.js'
 import { createPlayerProfile } from './player-profile.js'
+import { menuHome, menuPreparation, menuSearch, menuShell } from './menu-ui.js'
 
 const app = document.querySelector('#app')
 const announcer = document.querySelector('#announcer')
@@ -60,6 +61,10 @@ let roomPlayerNames = null
 let searching = false
 let searchTimer = null
 let profileBusy = false
+let showProfile = false
+let pickerOpen = false
+let menuPage = new URLSearchParams(location.search).has('room') ? 'battle' : 'home'
+let searchSince = Date.now()
 let showArena = null
 let arenaChoice = null
 let arenaBattle = false
@@ -131,8 +136,9 @@ function audioControls(open) {
 }
 
 function titlebar(mixerOpen) {
-  return `<header class="topbar"><div class="brand"><span class="brand-mark" aria-hidden="true">✦</span>
+  return `<header class="topbar${!view ? ' menu-topbar' : ''}"><div class="brand"><span class="brand-mark" aria-hidden="true">✦</span>
     <span>童話戦記<small>PROJECT FAIRYTALE RIVALS</small></span></div>
+    ${!view ? `<button class="profile-chip" data-op="profile" ${room || searching ? 'disabled' : ''}><img src="${art(selectedLeaders[0])}" alt=""><span>${escape(playerProfile.profile?.name ?? '名前を設定')}<small>${playerProfile.profile ? playerProfile.profile.rank + ' · ' + playerProfile.profile.rating + ' RP' : 'ゲストプレイヤー'}</small></span><b aria-hidden="true">✎</b></button>` : ''}
     <div class="top-actions"><span class="local-label">${showArena || arenaBattle || roomArena ? '物語の闘技場' : { cpu: 'CPU対戦', local: 'ローカル対戦', friend: 'フレンド対戦', ranked: 'ランクマッチ', free: 'フリーマッチ' }[mode]}</span>
       <button type="button" data-op="sound" class="icon-button sound-button" aria-pressed="${battleAudio.enabled}">効果音</button>
       <button type="button" data-op="audio-mixer" class="icon-button" aria-expanded="${Boolean(mixerOpen)}" aria-controls="audio-mixer">音量</button>
@@ -181,97 +187,57 @@ function chooseLeader(seat, locked = false) {
     </div>`
 }
 
+function selectedMenuDeck() {
+  const leader = selectedLeaders[0]
+  const custom = chosenDeck(0)
+  return custom ?? { name: mode === 'local' ? '基本デッキ' : starterDecks[leader]?.name ?? '基本デッキ', ...battleLineup(0) }
+}
+
 function home() {
+  const props = { art, leader: selectedLeaders[0], deck: selectedMenuDeck(), profile: playerProfile.profile, feedback }
+  if (searching) return menuSearch({ ...props, mode, since: searchSince })
+  if (menuPage === 'home' && !invite) return menuHome(props)
   const friend = mode === 'friend'
-  const ready = !friend || onlineAvailable()
   const legacyInvite = invite && !isLobbyCode(invite)
-  const start = publicMatch() ? '対戦相手を探す' : friend ? (invite ? (legacyInvite ? '対戦に参加' : 'ロビーに参加') : 'ロビーを作る') : solo() ? 'CPUと対戦する' : '対戦を始める'
-  return `<main class="splash${friend ? ' friend-home' : ''}">
-    <section class="intro" aria-labelledby="game-title">
-      ${['stail-sketch.github.io', 'fairytale-rivals.kamuikamui350.workers.dev'].includes(location.hostname) ? `<aside class="hosting-migration">
-        <strong>Cloudflare版を公開しました</strong>
-        <p>フレンド対戦は新しいURLをご利用ください。保存済みデッキは「デッキ編集」で書き出してから、新しい画面で引き継げます。</p>
-        <a class="secondary" href="https://fairytale-rivals.pages.dev/" target="_blank" rel="noopener">新しいURLで開く ↗</a>
-      </aside>` : ''}
-      <div class="title-ornament" aria-hidden="true">◆ <span>✦</span> ◆</div>
-      <h1 id="game-title">童話戦記</h1>
-      <p class="subtitle">PROJECT FAIRYTALE RIVALS</p>
-      <p class="tagline">物語をめくれ。運命を書き換えろ。</p>
-      <section class="player-profile" aria-label="プレイヤー設定">
-        <form id="player-name-form"><label for="player-name">プレイヤー名</label>
-          <div class="invite-share"><input id="player-name" name="name" value="${escape(playerProfile.profile?.name ?? '')}" maxlength="40" placeholder="名前を入力（20文字まで）" required ${profileBusy || searching || roomBusy ? 'disabled' : ''}>
-            <button class="secondary" ${profileBusy || searching || roomBusy ? 'disabled' : ''}>${profileBusy ? '保存中…' : '名前を保存'}</button></div></form>
-        <p data-player-rank>${playerProfile.profile ? `${escape(playerProfile.profile.rank)} · ${playerProfile.profile.rating} RP · ${playerProfile.profile.wins}勝 ${playerProfile.profile.losses}敗 ${playerProfile.profile.draws}分` : 'オンライン対戦を始める前に名前を保存してください。'}</p>
-        <small>名前を変えても保存済みデッキはそのままです。成績はこのブラウザーの認証情報で管理します。</small>
-      </section>
-      <div class="mode-switch" aria-label="対戦形式">
-        <button class="secondary" data-mode="ranked" aria-pressed="${mode === 'ranked'}">ランクマッチ</button>
-        <button class="secondary" data-mode="free" aria-pressed="${mode === 'free'}">フリーマッチ</button>
-        <button class="secondary" data-mode="cpu" aria-pressed="${solo()}">CPU対戦</button>
-        <button class="secondary" data-mode="local" aria-pressed="${mode === 'local'}">同じPCで2人</button>
-        <button class="secondary" data-mode="friend" aria-pressed="${friend}">フレンド対戦</button>
-      </div>
-      ${!friend || legacyInvite ? `<div class="lineups${friend || publicMatch() ? ' single-lineup' : ''}">${chooseLeader(0, searching || roomBusy)}${friend || publicMatch() ? '' : `<span class="versus">VS</span>${chooseLeader(1)}`}</div>` : ''}
-      ${!friend ? `<p class="room-status" role="status">${escape(feedback || (searching ? '対戦相手を探しています。この画面でお待ちください。' : publicMatch() ? mode === 'ranked' ? '近いレートの相手を探します。勝敗でRPが変動します。手札交換・各ターン90秒。' : 'ランクが変わらない気軽な対戦です。手札交換・各ターン90秒。' : ''))}</p>` : ''}
-      ${friend ? `<p class="room-status" role="status">${escape(feedback || (ready
-        ? invite ? '招待された部屋に参加できます。' : 'ロビーを作るか、友達のロビーIDを入力してください。'
-        : 'フレンド対戦は対戦サーバーのURLから開いてください。'))}</p>` : ''}
-      ${searching ? '<button class="secondary" data-op="cancel-search">検索をキャンセル</button>' : `<button class="primary start" data-op="start" ${!ready || roomBusy || profileBusy ? 'disabled' : ''}>${roomBusy ? '接続中…' : start} <span aria-hidden="true">›</span></button>`}
-      ${friend && !invite ? `<form class="lobby-join" id="lobby-join">
-        <label for="lobby-id-input">ロビーID</label>
-        <div class="invite-share"><input id="lobby-id-input" name="lobby" placeholder="XXXX-XXXX" value="${escape(lobbyInput)}" maxlength="40" autocomplete="off" autocapitalize="characters" spellcheck="false" required>
-          <button type="submit" class="secondary" ${!ready || roomBusy ? 'disabled' : ''}>ロビーIDで参加</button></div>
-      </form>` : ''}
-      <div class="title-tools">
-        <button class="secondary browse-cards" type="button" data-op="arena-open" ${searching ? 'disabled' : ''}>物語の闘技場</button>
-        <button class="secondary browse-cards" type="button" data-op="library" ${searching ? 'disabled' : ''}>カードライブラリ</button>
-        <button class="secondary browse-cards" type="button" data-op="decks" ${searching ? 'disabled' : ''}>デッキ編集</button>
-        <button class="secondary browse-cards" type="button" data-op="music" ${searching ? 'disabled' : ''}>音楽ライブラリ ♪</button>
-      </div>
-    </section>
-  </main>`
+  const ready = !(friend || publicMatch()) || onlineAvailable()
+  const friendJoin = !invite ? `<form class="lobby-join" id="lobby-join"><label for="lobby-id-input">ロビーIDで合流</label>
+    <div class="invite-share"><input id="lobby-id-input" name="lobby" placeholder="XXXX-XXXX" value="${escape(lobbyInput)}" maxlength="40" autocomplete="off" autocapitalize="characters" spellcheck="false" required>
+    <button type="submit" class="secondary" ${!ready || roomBusy ? 'disabled' : ''}>ロビーIDで参加</button></div></form>` : ''
+  return menuPreparation({ ...props, mode, chooseLeader, ready, busy: roomBusy || profileBusy, friendJoin, legacyInvite, pickerOpen,
+    startLabel: publicMatch() ? '対戦相手を探す' : friend ? invite ? legacyInvite ? '対戦に参加' : 'ロビーに参加' : 'ロビーを作る' : solo() ? 'CPUと対戦する' : '対戦を始める' })
 }
 
 function roomLobby() {
-  const closed = roomConnection === 'closed'
-  const lobby = !closed && roomLobbyState
-  const host = !lobby || lobby.role === 'host'
-  const mine = lobby && lobby[lobby.role]
+  const closed = roomConnection === 'closed', lobby = !closed && roomLobbyState
+  const ownRole = lobby?.role ?? 'host', host = ownRole === 'host', mine = lobby?.[ownRole]
   const locked = roomBusy || roomConnection !== 'connected'
-  const status = !lobby ? '友達の参加を待っています。' :
-    !lobby.guest.joined ? 'ロビーIDを友達に伝えてください。' :
-      lobby.host.ready && lobby.guest.ready ? '二人の準備ができました。' : 'デッキを選び、準備OKを押してください。'
-  return `<main class="ceremony"><section class="modal room-lobby">
-    <h1>${roomArena ? 'フレンド闘技場ロビー' : 'フレンド対戦ロビー'}</h1>
-    <p class="room-status" role="status">${escape(feedback || (roomConnection === 'connected'
-      ? status : '対戦サーバーに接続しています。'))}</p>
-    ${closed ? '' : `${isLobbyCode(room.id) ? `<label for="lobby-id">ロビーID</label>
-      <div class="invite-share lobby-code"><input id="lobby-id" value="${visibleLobbyCode(room.id)}" readonly>
-        <button type="button" class="secondary" data-op="copy-lobby-id">IDをコピー</button></div>` : ''}
-      <label for="invite-url">招待URL</label>
-      <div class="invite-share"><input id="invite-url" value="${escape(inviteUrl(room.id))}" readonly>
-        <button class="secondary" data-op="copy-invite">URLをコピー</button></div>
-      ${['localhost', '127.0.0.1', '[::1]'].includes(location.hostname) ? '<p class="local-invite">このPC内で試遊できる招待URLです。</p>' : ''}
-      <p class="room-copy-status" role="status"></p>`}
-    ${lobby ? `<div class="lobby-members" aria-label="参加者">
-      ${['host', 'guest'].map(role => {
-        const member = lobby[role]
-        return `<div class="lobby-member" data-lobby-member="${role}" data-ready="${member.ready}">
-          <strong>${escape(member.name ?? (role === 'host' ? 'ホスト' : 'ゲスト'))}${role === lobby.role ? '（あなた）' : ''}</strong>
-          <span>${member.joined ? member.ready ? '準備OK' : roomArena ? `ピック ${member.picked} / 30枚` : 'デッキ選択中' : '参加待ち'}</span>
-          ${member.leader ? `<small>${escape(leaders[member.leader].name)}</small>` : ''}</div>`
-      }).join('')}
-      </div>
-      ${roomArena ? `<div class="arena-lobby-summary"><p>今回の配分：${Object.entries(roomArena.draft.allocation).map(([key, n]) => `${rarityLabels[key]} ${n}枚`).join(' · ')}</p>
-        <button class="secondary" data-op="arena-friend-pick"${locked ? ' disabled' : ''}>${mine.complete ? 'ピックしたデッキを見る' : 'ピックを始める・続ける'}</button>
-        ${host ? `<button class="secondary" data-op="arena-reset"${locked ? ' disabled' : ''}>二人のピックを作り直す</button>` : ''}</div>` : `<div class="lineups single-lineup">${chooseLeader(0, mine.ready || locked)}</div>`}
-      <div class="lobby-actions">
-        <button class="secondary" data-op="lobby-ready"${locked || (roomArena && !mine.complete) ? ' disabled' : ''}>${mine.ready ? '準備を解除' : '準備OK'}</button>
-        ${host ? `<button class="primary" data-op="lobby-start"${locked || !lobby.host.ready || !lobby.guest.ready ? ' disabled' : ''}>対戦開始</button>` :
-          (mine.ready ? '<small>ホストの開始を待っています。</small>' : '')}
-      </div>` : ''}
-    <button class="secondary" data-op="home" ${roomBusy ? 'disabled' : ''}>${closed ? 'タイトルへ' : host ? 'ロビーを閉じる' : 'ロビーを退出'}</button>
-  </section></main>`
+  const status = closed ? 'このロビーは閉じられました。' : !lobby?.guest.joined ? 'ロビーIDを伝えて、友達を招待しましょう。' : lobby.host.ready && lobby.guest.ready ? '二人の準備ができました。対戦を始めましょう。' : 'デッキを選び、準備OKを押してください。'
+  const member = role => {
+    const own = role === ownRole, data = lobby?.[role] ?? { joined: own, ready: false }
+    const leaderId = own && !data.ready ? selectedLeaders[0] : data.leader
+    const leader = leaders[leaderId]
+    return `<section class="lobby-member lobby-station" data-lobby-member="${role}" data-ready="${data.ready}">
+      <div class="lobby-station-art">${leader ? `<img src="${art(leaderId)}" alt="${leader.name}">` : '<span class="empty-player" aria-hidden="true">✧</span>'}</div>
+      <div class="lobby-station-body"><small class="menu-eyebrow">${own ? 'YOU' : 'FRIEND'}</small><h2>${escape(data.name ?? (own ? playerProfile.profile?.name ?? 'あなた' : data.joined ? 'フレンド' : '参加を待っています'))}</h2>
+      <p>${own ? 'あなた' : data.joined ? 'フレンド' : 'ロビーIDで合流できます'}</p>${leader ? `<p>${leader.sigil} ${leader.job}</p>` : ''}
+      ${own && !roomArena ? `<p class="lobby-deck-name">${escape(selectedMenuDeck().name)}</p>` : ''}
+      <span class="lobby-ready-badge">${data.joined ? data.ready ? '✓ 準備OK' : roomArena ? `ピック ${data.picked ?? 0} / 30` : 'デッキ選択中' : '参加待ち'}</span>
+      ${own && lobby && !roomArena ? `<details class="lineup-picker" ${pickerOpen ? 'open' : ''}><summary>デッキを変更</summary>${chooseLeader(0, data.ready || locked)}</details>` : ''}</div></section>`
+  }
+  return menuShell(`<section class="friend-room room-lobby"><header class="menu-page-heading"><div><small class="menu-eyebrow">FRIEND LOBBY</small><h1>${roomArena ? 'フレンド闘技場' : 'フレンドロビー'}</h1></div><button class="secondary" data-op="home" ${roomBusy ? 'disabled' : ''}>${closed ? 'ホームへ' : '退出'}</button></header>
+    ${closed ? '' : `<div class="room-sharing">${isLobbyCode(room.id) ? `<div class="invite-share lobby-code"><label for="lobby-id">ロビーID</label><input id="lobby-id" value="${visibleLobbyCode(room.id)}" readonly><button class="secondary" data-op="copy-lobby-id">コピー</button></div>` : ''}<button class="secondary" data-op="copy-invite">招待URLをコピー</button><details class="invite-url-details"><summary>招待URLを表示</summary><div class="invite-share"><input id="invite-url" value="${escape(inviteUrl(room.id))}" readonly aria-label="招待URL"></div></details></div><p class="room-copy-status" role="status"></p>`}
+    <p class="room-status" role="status">${escape(feedback || (locked && !closed ? '対戦サーバーに接続しています…' : status))}</p>
+    ${closed ? '' : `<div class="lobby-members">${member(ownRole)}<span class="lobby-versus" aria-hidden="true">VS</span>${member(host ? 'guest' : 'host')}</div>`}
+    ${lobby && roomArena ? `<div class="arena-lobby-summary"><p>今回の配分：${Object.entries(roomArena.draft.allocation).map(([key,n])=>`${rarityLabels[key]} ${n}枚`).join(' · ')}</p><button class="secondary" data-op="arena-friend-pick" ${locked ? 'disabled' : ''}>${mine.complete ? 'ピックしたデッキを見る' : 'ピックを始める・続ける'}</button>${host ? `<button class="secondary" data-op="arena-reset" ${locked ? 'disabled' : ''}>二人のピックを作り直す</button>` : ''}</div>` : ''}
+    ${lobby ? `<div class="lobby-actions"><button class="secondary lobby-ready-button" data-op="lobby-ready" ${locked || (roomArena && !mine.complete) ? 'disabled' : ''}>${mine.ready ? '準備を解除' : '準備OK'}</button>${host ? `<button class="primary menu-primary" data-op="lobby-start" ${locked || !lobby.host.ready || !lobby.guest.ready ? 'disabled' : ''}>対戦開始 <span aria-hidden="true">›</span></button>` : `<p>${mine.ready ? 'ホストの対戦開始を待っています。' : '準備ができたら、準備OKを押しましょう。'}</p>`}</div>` : ''}
+  </section>`, 'battle', true)
+}
+
+function profileModal() {
+  if (!showProfile) return ''
+  return `<dialog class="menu-dialog" id="profile-dialog" aria-labelledby="profile-title"><div class="menu-dialog-heading"><div><small class="menu-eyebrow">PLAYER PROFILE</small><h2 id="profile-title">${playerProfile.registered ? 'プロフィール' : '名前を決めよう'}</h2></div><button class="secondary" data-op="close-profile" aria-label="閉じる" ${profileBusy ? 'disabled' : ''}>×</button></div>
+    <p>あなたの名前で、新しい物語を始めましょう。</p><form id="player-name-form"><label for="player-name">プレイヤー名</label><div class="invite-share"><input id="player-name" name="name" value="${escape(playerProfile.profile?.name ?? '')}" maxlength="40" placeholder="20文字まで" required ${profileBusy ? 'disabled' : ''}><button class="primary" ${profileBusy ? 'disabled' : ''}>${profileBusy ? '保存中…' : '保存する'}</button></div></form>
+    <p class="menu-feedback" role="status">${escape(feedback)}</p><small>名前を変えても保存済みデッキ・ランクは引き継がれます。成績はこのブラウザーの認証情報で管理します。</small></dialog>`
 }
 
 function cardFace(card, full = false, cost = card.cost) {
@@ -1001,7 +967,7 @@ function render(focusOn = null) {
     : !inMatch() ? (showArena === 'menu' ? arenaMenu(arenaStore, feedback) : showDecks ? deckEditor.view(art, escape) : showLibrary ? library(art) : home())
     : !view ? roomLobby() : view.phase === 'finished' && !presentation ? results() :
     view.phase === 'mulligan' ? mulligan() : battlefield()
-  app.innerHTML = titlebar(mixerOpen) + surface + rulesModal()
+  app.innerHTML = titlebar(mixerOpen) + surface + rulesModal() + profileModal()
   syncBattleMusic()
   if (lastInspection && !selected) {
     const node = app.querySelector(lastInspection)
@@ -1018,6 +984,11 @@ function render(focusOn = null) {
   }
   if (showLibrary) refreshLibrary(app, art)
   if (showDecks) deckEditor.refresh(app, art)
+  if (showProfile) {
+    const dialog = app.querySelector('#profile-dialog')
+    dialog.showModal()
+    dialog.addEventListener('cancel', event => { event.preventDefault(); if (!profileBusy) { showProfile = false; feedback = ''; render('[data-op="profile"]') } })
+  }
   if (showRules) {
     const dialog = document.querySelector('#rules-dialog')
     dialog.showModal()
@@ -1313,9 +1284,9 @@ async function savePlayerName(name) {
   profileBusy = true
   feedback = ''
   render()
-  try { await playerProfile.saveName(name); feedback = '名前を保存しました。' }
+  try { await playerProfile.saveName(name); feedback = '名前を保存しました。'; showProfile = false }
   catch (error) { feedback = error.message }
-  finally { profileBusy = false; render('#player-name') }
+  finally { profileBusy = false; render(showProfile ? '#player-name' : '[data-op="profile"]') }
 }
 
 function acceptSearch(data) {
@@ -1326,6 +1297,7 @@ function acceptSearch(data) {
     feedback = ''
     if (room?.id === data.session.id) return true
     showRules = showLibrary = showDecks = false
+    showProfile = false
     showArena = null
     musicLibrary.close()
     openRoom(data.session)
@@ -1346,7 +1318,7 @@ async function pollSearch() {
 
 async function startPublicMatch() {
   if (searching || roomBusy) return
-  if (!playerProfile.registered) { feedback = '先にプレイヤー名を入力して保存してください。'; render('#player-name'); return }
+  if (!playerProfile.registered) { showProfile = true; feedback = 'オンライン対戦で使う名前を保存してください。'; render('#player-name'); return }
   roomBusy = true
   feedback = ''
   render()
@@ -1354,6 +1326,7 @@ async function startPublicMatch() {
     const data = await playerProfile.queue('POST', { mode, lineup: battleLineup(0) })
     if (acceptSearch(data)) return
     searching = true
+    searchSince = data.since ?? Date.now()
     searchTimer = setTimeout(pollSearch, 2000)
   } catch (error) { feedback = error.message }
   finally { roomBusy = false; if (!room) render() }
@@ -1512,6 +1485,8 @@ async function copyRoomField(selector, label) {
     await navigator.clipboard.writeText(input.value)
     status.textContent = label + 'をコピーしました。'
   } catch {
+    const details = input.closest('details')
+    if (details) details.open = true
     input.focus()
     input.select()
     status.textContent = '選択した' + label + 'をコピーして送ってください。'
@@ -1527,6 +1502,8 @@ function returnHome() {
   if (invite) forgetRoom(invite)
   match = view = selected = room = invite = roomSeat = resigned = null
   roomLobbyState = roomResult = null
+  menuPage = 'home'
+  showProfile = false
   onlineMatch = null
   roomPlayerNames = null
   roomArena = null
@@ -1544,7 +1521,7 @@ function returnHome() {
   feedback = ''
   replacements.clear()
   render('[data-op="start"]')
-  if (playerProfile.registered) void playerProfile.refresh().then(() => { if (!inMatch()) render() }).catch(() => {})
+  if (playerProfile.registered) void playerProfile.refresh().then(() => { if (!inMatch() && !showProfile) render() }).catch(() => {})
 }
 
 async function leaveMatch() {
@@ -1571,6 +1548,8 @@ async function leaveMatch() {
 }
 
 app.addEventListener('change', event => {
+  const picker = event.target.closest('.lineup-picker')
+  if (picker) pickerOpen = picker.open
   if (showDecks && deckEditor.importField(app, art, escape, event.target, render, 'change')) return
   if (showDecks && event.target.matches('select[data-deck-filter]')) {
     deckEditor.filter(app, art, event.target)
@@ -1582,6 +1561,7 @@ app.addEventListener('change', event => {
   }
   if (event.target.matches('select[data-match-deck]')) {
     selectedDecks[Number(event.target.dataset.matchDeck)] = event.target.value
+    render('#' + event.target.id)
     return
   }
   const select = event.target.closest('select[data-seat]')
@@ -1735,6 +1715,7 @@ app.addEventListener('click', event => {
   }
   if (nextMode && !inMatch() && !roomBusy && !searching) {
     mode = nextMode
+    menuPage = 'battle'
     feedback = ''
     render('[data-mode="' + mode + '"]')
     return
@@ -1749,6 +1730,15 @@ app.addEventListener('click', event => {
   if (slot || leader !== undefined) hit(node)
   if (choice !== undefined) completeSelection({ choice: Number(choice) })
   switch (op) {
+    case 'profile': if (!inMatch() && !searching) { showProfile = true; feedback = ''; render('#player-name') } break
+    case 'close-profile': if (!profileBusy) { showProfile = false; feedback = ''; render('[data-op="profile"]') } break
+    case 'menu-home':
+      if (!inMatch() && !searching && !roomBusy) { menuPage = 'home'; pickerOpen = false; showLibrary = showDecks = false; showArena = null; feedback = ''; render('[data-op="prepare"]') }
+      break
+    case 'prepare':
+    case 'pick-lineup':
+      if (!inMatch() && !searching && !roomBusy) { menuPage = 'battle'; pickerOpen = op === 'pick-lineup'; feedback = ''; render(pickerOpen ? '#leader-0' : '[data-op="start"]') }
+      break
     case 'library': showLibrary = true; render('.library-view'); break
     case 'music': if (!inMatch()) musicLibrary.open(); break
     case 'close-library': showLibrary = false; render('[data-op="library"]'); break
@@ -1977,6 +1967,8 @@ preloadBattleVfx()
 setInterval(() => {
   const clock = app.querySelector('.online-clock')
   if (clock && onlineMatch?.deadline) clock.textContent = `残り ${Math.max(0, Math.ceil((onlineMatch.deadline - Date.now()) / 1000))} 秒`
+  const searchClock = app.querySelector('[data-search-since]')
+  if (searchClock) { const seconds = Math.max(0, Math.floor((Date.now() - Number(searchClock.dataset.searchSince)) / 1000)); searchClock.textContent = `待機時間 ${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2,'0')}` }
 }, 250)
 const saved = savedRoom(invite)
 document.addEventListener('click', battleAudio.unlock, { capture: true })
@@ -1989,8 +1981,8 @@ if (saved && onlineAvailable()) {
     void playerProfile.queue().then(data => {
       if (inMatch() || searching || roomBusy) return
       if (acceptSearch(data)) return
-      if (data.phase === 'searching') { mode = data.mode; searching = true; searchTimer = setTimeout(pollSearch, 2000) }
-      render()
+      if (data.phase === 'searching') { mode = data.mode; menuPage = 'battle'; searchSince = data.since; searching = true; searchTimer = setTimeout(pollSearch, 2000) }
+      if (!showProfile) render()
     }).catch(() => {})
   }
 }

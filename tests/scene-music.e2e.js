@@ -16,7 +16,7 @@ test('実音源12曲を再生でき、抽選発表から手札交換と対戦ま
  const open=await browserControl(t,directory)
  t.after(async()=>{const p=await realpath(directory);if(dirname(p)!==temp)throw new Error('Unexpected directory');await rm(p,{recursive:true,force:true,maxRetries:5,retryDelay:200})})
  const page=await open(),origin=process.env.FAIRYTALE_SERVER_URL ?? 'http://127.0.0.1:'+server.address().port
- await page.viewport(1600,1000);await page.navigate(origin);await page.wait('[data-op=start]')
+ await page.viewport(1600,1000);await page.navigate(origin);await page.wait('[data-op=prepare]')
  await page.evaluate(`(()=>{const Native=window.Audio;window.__songs=[];window.Audio=function(url){const a=new Native(url);window.__songs.push(a);return a}})()`)
  await page.tap('[data-op=audio-mixer]')
  await eventually(()=>page.evaluate('window.__songs.at(-1)?.currentTime > .1'),'メニュー曲の実再生')
@@ -29,7 +29,7 @@ test('実音源12曲を再生でき、抽選発表から手札交換と対戦ま
  await eventually(()=>page.evaluate('window.__songs.at(-1)?.src.endsWith("bgm-arena.ogg")'),'闘技場曲へ切替')
  // A new page keeps this test independent of arena draft state and verifies both initiative outcomes.
  for(const firstSeat of [0,1]){
-  const p=await open();await p.viewport(1600,1000);await p.navigate(origin);await p.wait('[data-op=start]')
+  const p=await open();await p.viewport(1600,1000);await p.navigate(origin);await p.click('[data-op=prepare]');await p.wait('[data-op=start]')
   await p.evaluate(`(()=>{const Native=window.Audio;window.__songs=[];window.Audio=function(url){const a=new Native(url);window.__songs.push(a);return a};const random=crypto.getRandomValues.bind(crypto);crypto.getRandomValues=a=>{if(a instanceof Uint8Array&&a.length===1){a[0]=${firstSeat};return a}return random(a)}})()`)
   if(firstSeat===1) await p.evaluate('(()=>{const native=setTimeout;window.setTimeout=(fn,ms,...args)=>native(fn,ms===3250?8000:ms,...args)})()')
   await p.tap('[data-op=start]');await p.wait('[data-opening-stage=draw]')

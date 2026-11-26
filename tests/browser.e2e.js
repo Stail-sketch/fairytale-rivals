@@ -58,6 +58,8 @@ async function driveBattle() {
     }
   }
   const click = (selector, settle = true) => {
+    // Start from the new home before choosing a battle format.
+    if (selector.includes('data-mode=') && !query(selector)) query('[data-op=prepare]').click()
     const node = query(selector)
     expect(node && !node.disabled, '押せない: ' + selector)
     node.click()
@@ -230,6 +232,7 @@ async function driveBattle() {
       }
     }
     useBattleSeed(87)
+    click('[data-op=prepare]')
     expect(document.querySelectorAll('#leader-0 option').length === 7, '7人から選択')
     const firstLeader = query('#leader-0')
     firstLeader.value = 'seer'
@@ -717,6 +720,7 @@ async function driveBattle() {
       globalThis.fairytaleImages['card-FT-0039.webp'], '編集カードを対戦中に召喚して専用絵を表示する')
 
     click('[data-op=home]')
+    click('[data-op=prepare]')
     setLeader(0, 'warrior')
     click('[data-op=decks]')
     click('[data-op=new-deck]')
@@ -793,6 +797,7 @@ async function driveBattle() {
     click('[data-deck-delete=legacy-mage]')
     expect(!query('[data-deck-open=legacy-mage]') && !createDeckCollection(storage).get('legacy-mage'), '旧デッキも削除後に復活しない')
     click('[data-op=close-decks]')
+    click('[data-op=prepare]')
     expect(!query('#match-deck-0'), '選択中のデッキを削除すると基本デッキに戻る')
     const beast = starterLineup('swordsman', false)
     beast.deck = beast.deck.map(id => id === 'crossroads' ? 'FT-0243' : id)
@@ -844,7 +849,7 @@ async function driveBattle() {
     document.body.dataset.e2e = 'pass'
   } catch (error) {
     document.body.dataset.e2e = 'fail'
-    document.body.dataset.e2eError = error.message
+    document.body.dataset.e2eError = error.stack ?? error.message
   }
 }
 
@@ -1008,6 +1013,7 @@ test('別々のChromiumセッションで招待URLから参加し、対戦と再
   await eventually(() => host.evaluate('document.querySelector("#deck-list-status")?.textContent.includes("1件のデッキを引き継ぎました")'), 'デッキファイルの読み込み')
   assert.equal(await host.evaluate('Array.from(document.querySelectorAll(".saved-deck strong")).some(node => node.textContent === "引き継いだ森の守り")'), true)
   await host.click('[data-op=close-decks]')
+  await host.click('[data-op=prepare]')
   await host.click('[data-mode=friend]')
   await host.evaluate(`{
     const send = window.fetch
@@ -1027,6 +1033,7 @@ test('別々のChromiumセッションで招待URLから参加し、対戦と再
   const invite = await host.evaluate('document.querySelector("#invite-url").value')
   await guest.viewport(390, 844)
   await guest.navigate(new URL(invite).origin + '/')
+  await guest.click('[data-op=prepare]')
   await guest.click('[data-mode=friend]')
   await guest.evaluate(`document.querySelector('#lobby-id-input').value = ${JSON.stringify(code.toLowerCase())}`)
   await guest.click('#lobby-join button')
@@ -1143,6 +1150,7 @@ test('静的公開版でロビーIDから合流し、対戦・再接続・再戦
     }
   }
   await host.navigate(url)
+  await host.click('[data-op=prepare]')
   await host.click('[data-mode=friend]')
   await host.click('[data-op=start]:enabled')
   await waitForRoom(host, '#invite-url')
@@ -1152,6 +1160,7 @@ test('静的公開版でロビーIDから合流し、対戦・再接続・再戦
 
   const code = await host.evaluate('document.querySelector("#lobby-id").value')
   await guest.navigate(url)
+  await guest.click('[data-op=prepare]')
   await guest.click('[data-mode=friend]')
   await guest.evaluate(`document.querySelector('#lobby-id-input').value = ${JSON.stringify(code)}`)
   await guest.click('#lobby-join button')

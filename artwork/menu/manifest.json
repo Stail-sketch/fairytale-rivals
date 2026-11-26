@@ -1,0 +1,9 @@
+{
+  "asset": "moonlit-library.webp",
+  "delivery": "apps/web/assets/menu-library.webp",
+  "created": "2026-11-27",
+  "tool": "built-in image_gen.imagegen",
+  "purpose": "Background for the approved home, preparation and friend lobby design. UI, text, rank badges and buttons are rendered independently in HTML/CSS/SVG.",
+  "source": "exec-20494247-660b-457c-90be-cbc83807f7c6.png",
+  "prompt": "Create a production-quality wide landscape background illustration for a Japanese anime fantasy collectible card game menu titled Fairytale Rivals. BACKGROUND ONLY, no text, no typography, no logos, no interface, no people, no characters, no cards. A luxurious enchanted gothic storybook library at midnight: tall carved bookcases around the sides with gold engraved old books, elegant narrow gothic arches, a luminous enormous blue stained glass window in the center back, curved ornamental bronze clockwork framing some architecture, a few pink and violet petals and tiny golden dust motes, moonlit deep indigo and navy stone floor. Painterly high-end 2D anime fantasy environment, finely detailed materials, luminous yet restrained, sophisticated warm antique gold and cool violet-blue lighting. Composition for a 16:9 desktop game menu: most ornate bookshelf details at outer left and outer right, the center and lower middle are darker and comparatively quiet to support UI overlays. Front view into room, symmetrical-ish, clear perspective depth, no extreme lens. No massive glaring lights, keep overall dark midnight blue so ivory text overlays will read. Full bleed image, no borders."
+}

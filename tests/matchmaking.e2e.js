@@ -16,11 +16,11 @@ test('別ブラウザーで名前を保存し、デッキを保ったままラ�
  const origin=process.env.FAIRYTALE_SERVER_URL??'http://127.0.0.1:'+server.address().port
  const a=await open(),b=await open()
  for(const [i,p] of [a,b].entries()){
-  await p.viewport(1440,1000);await p.navigate(origin);await p.wait('#player-name')
+  await p.viewport(1440,1000);await p.navigate(origin);await p.click('[data-op=profile]');await p.wait('#player-name')
   await p.evaluate(`(async()=>{const {createDeckCollection,starterLineup}=await import('/packages/cards/decks.js');const storage={keys:()=>Object.keys(localStorage),getItem:k=>localStorage.getItem(k),setItem:(k,v)=>localStorage.setItem(k,v),removeItem:k=>localStorage.removeItem(k)};const decks=createDeckCollection(storage);decks.save({name:'既存デッキ${i}',...starterLineup('mage')});window.__decksBefore=decks.backup();document.querySelector('#player-name').value='試験の語り手${i}';document.querySelector('#player-name-form').requestSubmit()})()`)
   await eventually(()=>p.evaluate('JSON.parse(localStorage.getItem("fairytale-player-v1")??"null")?.profile?.name'),'名前保存')
   assert(await p.evaluate(`(async()=>{const {createDeckCollection}=await import('/packages/cards/decks.js');return createDeckCollection({keys:()=>Object.keys(localStorage),getItem:k=>localStorage.getItem(k),setItem:(k,v)=>localStorage.setItem(k,v)}).backup()===window.__decksBefore})()`),'名前保存でデッキ不変')
-  await p.click('[data-mode=ranked]');await p.click('[data-op=start]')
+  await p.click('[data-op=prepare]');await p.click('[data-mode=ranked]');await p.click('[data-op=start]')
  }
  await a.wait('.mulligan');await b.wait('.mulligan')
  const reload=await a.evaluate('location.href');await a.navigate(reload);await a.wait('.mulligan')
@@ -34,9 +34,9 @@ test('別ブラウザーで名前を保存し、デッキを保ったままラ�
  await a.evaluate(`(async()=>{const id=new URLSearchParams(location.search).get('room');const saved=JSON.parse(sessionStorage.getItem('fairytale-room.'+id));await fetch('/api/rooms/'+id,{method:'DELETE',headers:{Authorization:'Bearer '+saved.token}})})()`)
  await a.wait('.online-result');await b.wait('.online-result')
  await eventually(()=>b.evaluate('document.querySelector(".online-result").textContent.includes("1016")'),'勝者のレート表示')
- await a.click('[data-op=home]');await a.wait('#player-name')
- assert.match(await a.evaluate('document.querySelector("[data-player-rank]").textContent'),/984/)
- await a.click('[data-mode=free]');await a.click('[data-op=start]');await a.wait('[data-op=cancel-search]')
+ await a.click('[data-op=home]');await a.wait('[data-player-rank]')
+ assert.match(await a.evaluate('document.querySelector(".rank-points").textContent'),/984/)
+ await a.click('[data-op=prepare]');await a.click('[data-mode=free]');await a.click('[data-op=start]');await a.wait('[data-op=cancel-search]')
  await a.click('[data-op=cancel-search]');await a.wait('[data-op=start]')
  await a.capture(new URL('../../work/matchmaking-home.png',import.meta.url).pathname.replace(/^\/([A-Z]:)/,'$1'))
  assert.deepEqual(a.errors(),[]);assert.deepEqual(b.errors(),[])
