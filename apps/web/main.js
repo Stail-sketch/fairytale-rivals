@@ -555,12 +555,13 @@ function highlightLogEvent(seq) {
   }
 }
 
-function inspectLogCard(seq) {
+function inspectLogCard(seq, origin) {
   const event = battleHistory.event(seq)
   const card = logCard(event)
   highlightLogEvent(seq)
   if (!card) return
-  openCardDetail(card, event.cost, () => app.querySelector(`[data-log-event="${seq}"]`) ?? app.querySelector('.battle-log summary'))
+  openCardDetail(card, event.cost, () => origin?.isConnected ? origin :
+    [...app.querySelectorAll(`[data-log-event="${seq}"]`)].find(node => node.getClientRects().length) ?? app.querySelector('.battle-log summary'))
 }
 
 function liveCardDetails(node) {
@@ -1598,7 +1599,7 @@ app.addEventListener('click', event => {
   }
   if ((presentation || roomLocked()) && node.closest('.battle-grid, .tray, .mulligan')) return
   if (node.dataset.logEvent !== undefined) {
-    inspectLogCard(Number(node.dataset.logEvent))
+    inspectLogCard(Number(node.dataset.logEvent), node)
     return
   }
   const { op, hand, replace, slot, leader, choice, mode: nextMode, libraryCard, libraryTab } = node.dataset

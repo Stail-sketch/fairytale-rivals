@@ -47,6 +47,7 @@ test('履歴を画像とターンで読み、カード詳細・用語・展開�
  assert.equal(await page.evaluate('document.querySelector("#detail h2").textContent'),cards['ember-whelp'].name)
  await page.click('.recent-history [data-log-card=ember-whelp]');await page.wait('.battle-card-dialog[open]')
  await page.click('.battle-card-dialog [data-term=CHARGE]');await page.wait('.term-dialog[open]');await page.click('.term-dialog button');await page.click('.battle-card-dialog form button')
+ assert(await page.evaluate('Boolean(document.activeElement.closest(".recent-history"))'),'詳細を閉じると選択した履歴にフォーカスが戻る')
  await page.click('.battle-log>summary');await page.wait('.battle-log[open] .history-turn')
  assert.equal(await page.evaluate('document.querySelectorAll(".history-turn").length'),4)
  assert(await page.evaluate('document.querySelector(".events").textContent.includes("3ダメージ")'))
