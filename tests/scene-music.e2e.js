@@ -49,9 +49,12 @@ test('実音源12曲を再生でき、抽選発表から手札交換と対戦ま
   assert.equal(await p.evaluate('document.querySelectorAll("[data-replace]").length'),firstSeat===0?3:4)
   await eventually(()=>p.evaluate('window.__songs.at(-1)?.currentTime>.05'),'対戦曲の実再生')
   const song=await p.evaluate('({src:window.__songs.at(-1).src,n:window.__songs.length,time:window.__songs.at(-1).currentTime})')
+  const scene=song.src.match(/bgm-([\w]+)\.ogg/)[1]
+  assert.equal(await p.evaluate('document.querySelector(".ceremony").dataset.bgmScene'),scene,'手札交換の背景を対戦曲に合わせる')
   await p.click('[data-op=mulligan]');await p.wait('.battle')
   assert.equal(await p.evaluate('window.__songs.length'),song.n)
   assert.equal(await p.evaluate('window.__songs.at(-1).src'),song.src)
+  assert.equal(await p.evaluate('document.querySelector(".battle").dataset.bgmScene'),scene,'手札交換から同じ曲と背景を引き継ぐ')
   assert(await p.evaluate('window.__songs.at(-1).currentTime')>=song.time)
   await p.capture(new URL('../../work/bgm-battle-'+firstSeat+'.png',import.meta.url).pathname.replace(/^\/([A-Z]:)/,'$1'))
   assert.deepEqual(p.errors(),[])

@@ -1,0 +1,49 @@
+{
+  "generator": "built-in image_gen",
+  "use": "Match scenery chosen by bgmId; original character themes preserved",
+  "conversion": "Original PNG archived unchanged; delivery WebP resized to 1600px wide with Pillow quality 83 method 6",
+  "assets": [
+    {
+      "id": "warrior",
+      "source": "exec-22df0260-3467-4a02-9b75-f132efb6152c.png",
+      "delivery": "apps/web/assets/battle-scene-warrior.webp",
+      "prompt": "Use case: stylized-concept. Asset type: production wide 16:9 fantasy card-battle game environment background for the original Japanese game Fairytale Rivals. Painterly high-end Japanese fantasy game concept art, richly textured architecture and nature, controlled cinematic lighting. Single uninterrupted LANDSCAPE environment, no panels. Camera at courtyard height, symmetrical perspective with a wide OPEN CALM EMPTY CENTER and a broad uncluttered lower-center stone or earth ground; the middle 60% will be covered by a card battle board so concentrate distinctive set dressing along the outer 20% edges and upper third. Deep atmospheric depth, exquisitely detailed scenery, soft lower contrast central area, readable restrained lighting. No people, creatures, character portraits, weapons, cards, playing board, UI, lettering, text, logos or watermarks. Scene: Leon's brass-and-trumpet heroic Puss in Boots theme: a noble golden sunset castle courtyard with ivory stone arches and crimson pennants at the far outer edges, warm amber light, valor and lively resolve. No cat or characters."
+    },
+    {
+      "id": "mage",
+      "source": "exec-7520dc73-b8a6-4123-91fb-e6b7353e912b.png",
+      "delivery": "apps/web/assets/battle-scene-mage.webp",
+      "prompt": "Use case: stylized-concept. Asset type: production wide 16:9 fantasy card-battle game environment background for the original Japanese game Fairytale Rivals. Painterly high-end Japanese fantasy game concept art, richly textured architecture and nature, controlled cinematic lighting. Single uninterrupted LANDSCAPE environment, no panels. Camera at courtyard height, symmetrical perspective with a wide OPEN CALM EMPTY CENTER and a broad uncluttered lower-center stone or earth ground; the middle 60% will be covered by a card battle board so concentrate distinctive set dressing along the outer 20% edges and upper third. Deep atmospheric depth, exquisitely detailed scenery, soft lower contrast central area, readable restrained lighting. No people, creatures, character portraits, weapons, cards, playing board, UI, lettering, text, logos or watermarks. Scene: Alice's nimble harpsichord Wonderland theme: a dreamlike moonlit library courtyard, curved book towers and delicate clockwork arches at the outer edges, suspended tiny golden clock fragments, violet and indigo twilight, curious mischievous enchantment."
+    },
+    {
+      "id": "fighter",
+      "source": "exec-0d91d0c7-6204-48ca-8ce0-bc0f0d1cc143.png",
+      "delivery": "apps/web/assets/battle-scene-fighter.webp",
+      "prompt": "Use case: stylized-concept. Asset type: production wide 16:9 fantasy card-battle game environment background for the original Japanese game Fairytale Rivals. Painterly high-end Japanese fantasy game concept art, richly textured architecture and nature, controlled cinematic lighting. Single uninterrupted LANDSCAPE environment, no panels. Camera at courtyard height, symmetrical perspective with a wide OPEN CALM EMPTY CENTER and a broad uncluttered lower-center stone or earth ground; the middle 60% will be covered by a card battle board so concentrate distinctive set dressing along the outer 20% edges and upper third. Deep atmospheric depth, exquisitely detailed scenery, soft lower contrast central area, readable restrained lighting. No people, creatures, character portraits, weapons, cards, playing board, UI, lettering, text, logos or watermarks. Scene: Rou's fast violin Little Red Riding Hood theme: a dramatic deep emerald woodland trail, tall dark trees framing both edges, a few vivid crimson leaves, shafts of warm late-afternoon light, windswept tension and nimble energy."
+    },
+    {
+      "id": "priest",
+      "source": "exec-d456d222-429d-4b4a-a9b4-5d187bd8e34d.png",
+      "delivery": "apps/web/assets/battle-scene-priest.webp",
+      "prompt": "Use case: stylized-concept. Asset type: production wide 16:9 fantasy card-battle game environment background for the original Japanese game Fairytale Rivals. Painterly high-end Japanese fantasy game concept art, richly textured architecture and nature, controlled cinematic lighting. Single uninterrupted LANDSCAPE environment, no panels. Camera at courtyard height, symmetrical perspective with a wide OPEN CALM EMPTY CENTER and a broad uncluttered lower-center stone or earth ground; the middle 60% will be covered by a card battle board so concentrate distinctive set dressing along the outer 20% edges and upper third. Deep atmospheric depth, exquisitely detailed scenery, soft lower contrast central area, readable restrained lighting. No people, creatures, character portraits, weapons, cards, playing board, UI, lettering, text, logos or watermarks. Scene: Aurora's clear gentle harp Sleeping Beauty theme: a tranquil ancient rose garden courtyard, ivory castle arches entwined with soft pink blossoms at both outer edges, still reflecting water, pearl dawn light, dusty rose and sage green, graceful healing magic."
+    },
+    {
+      "id": "merchant",
+      "source": "exec-d8a29e04-baf3-4e0e-aad4-59a17c13f1a7.png",
+      "delivery": "apps/web/assets/battle-scene-merchant.webp",
+      "prompt": "Use case: stylized-concept. Asset type: production wide 16:9 fantasy card-battle game environment background for the original Japanese game Fairytale Rivals. Painterly high-end Japanese fantasy game concept art, richly textured architecture and nature, controlled cinematic lighting. Single uninterrupted LANDSCAPE environment, no panels. Camera at courtyard height, symmetrical perspective with a wide OPEN CALM EMPTY CENTER and a broad uncluttered lower-center stone or earth ground; the middle 60% will be covered by a card battle board so concentrate distinctive set dressing along the outer 20% edges and upper third. Deep atmospheric depth, exquisitely detailed scenery, soft lower contrast central area, readable restrained lighting. No people, creatures, character portraits, weapons, cards, playing board, UI, lettering, text, logos or watermarks. Scene: Jack's playful clarinet Jack and the Beanstalk theme: a magnificent sky garden trading terrace, enormous curling emerald beanstalks climbing the far sides toward clouds, brass lanterns and tiny distant golden rooftops, turquoise sky and honey light, adventurous clever optimism."
+    },
+    {
+      "id": "seer",
+      "source": "exec-b70e1f8a-06e2-495f-a4fe-4037a9ea66cf.png",
+      "delivery": "apps/web/assets/battle-scene-seer.webp",
+      "prompt": "Use case: stylized-concept. Asset type: production wide 16:9 fantasy card-battle game environment background for the original Japanese game Fairytale Rivals. Painterly high-end Japanese fantasy game concept art, richly textured architecture and nature, controlled cinematic lighting. Single uninterrupted LANDSCAPE environment, no panels. Camera at courtyard height, symmetrical perspective with a wide OPEN CALM EMPTY CENTER and a broad uncluttered lower-center stone or earth ground; the middle 60% will be covered by a card battle board so concentrate distinctive set dressing along the outer 20% edges and upper third. Deep atmospheric depth, exquisitely detailed scenery, soft lower contrast central area, readable restrained lighting. No people, creatures, character portraits, weapons, cards, playing board, UI, lettering, text, logos or watermarks. Scene: Snow's crystalline celesta Snow White theme: a midnight crystal conservatory, silver mirror arches and blue glass trees framing the edges, a distant crescent moon over a still misty path, ice blue and midnight navy, hushed starlit mystery."
+    },
+    {
+      "id": "swordsman",
+      "source": "exec-6aa1b913-31f2-428c-bec3-b272bb922167.png",
+      "delivery": "apps/web/assets/battle-scene-swordsman.webp",
+      "prompt": "Use case: stylized-concept. Asset type: production wide 16:9 fantasy card-battle game environment background for the original Japanese game Fairytale Rivals. Painterly high-end Japanese fantasy game concept art, richly textured architecture and nature, controlled cinematic lighting. Single uninterrupted LANDSCAPE environment, no panels. Camera at courtyard height, symmetrical perspective with a wide OPEN CALM EMPTY CENTER and a broad uncluttered lower-center stone or earth ground; the middle 60% will be covered by a card battle board so concentrate distinctive set dressing along the outer 20% edges and upper third. Deep atmospheric depth, exquisitely detailed scenery, soft lower contrast central area, readable restrained lighting. No people, creatures, character portraits, weapons, cards, playing board, UI, lettering, text, logos or watermarks. Scene: Valdo's dark slow pipe-organ Beauty and the Beast theme: an imposing ruined gothic castle courtyard, black rose vines and dark crimson roses framing the far edges, cathedral windows glowing wine-red in a deep violet night, solemn cursed grandeur, beautiful ominous melancholy."
+    }
+  ]
+}

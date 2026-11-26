@@ -29,6 +29,7 @@ import { createPlayerProfile } from './player-profile.js'
 import { menuHome, menuPreparation, menuSearch, menuShell } from './menu-ui.js'
 import { depthEnabled, depthPreviewAvailable, standingUnit, toggleBattleDepth } from './battle-depth.js'
 import { showEmblemGuide, showEmblemInfo } from './battle-emblems.js'
+import { preloadBattleScenery, sceneryAttributes } from './battle-scenery.js'
 
 const app = document.querySelector('#app')
 const announcer = document.querySelector('#announcer')
@@ -814,7 +815,7 @@ function battlefield() {
   const events = animatedView === view ? [] : view.events.filter(event => event.seq > eventFloor)
   const latestAction = view.events.findLast(event => event.seq > eventFloor
     && event.privateTo === undefined && !['handAdded', 'mulligan', 'turn'].includes(event.type))
-  return `<main class="battle${reducedMotion() ? ' short-motion' : ''}${depthEnabled() ? ' battle-depth' : ''}" style="--ally-light:${leaders[view.players[own].leader].accent};--enemy-light:${leaders[view.players[enemy].leader].accent}" tabindex="-1">
+  return `<main class="battle${reducedMotion() ? ' short-motion' : ''}${depthEnabled() ? ' battle-depth' : ''}" ${sceneryAttributes(view.bgmId,art,`--ally-light:${leaders[view.players[own].leader].accent};--enemy-light:${leaders[view.players[enemy].leader].accent}`)} tabindex="-1">
     <div class="battle-layout"><div class="battle-core">
     <div class="battle-heading"><span>${previewDemo ? 'ローカル試遊 · 両陣営を手動操作' : '綴りの大競技会'}</span><span class="turn-label">第 ${view.turn} ターン</span><div class="battle-tools"><button class="icon-button" data-op="depth" aria-pressed="${depthEnabled()}">立体盤面</button>${depthEnabled() ? '<button class="icon-button" data-op="emblem-guide">効果マーク</button>' : ''}<button class="icon-button" data-op="motion" aria-pressed="${reducedMotion()}" ${matchMedia('(prefers-reduced-motion: reduce)').matches ? 'disabled title="端末の設定に合わせて短縮しています"' : ''}>短い演出</button>${battleLog()}</div></div>
     <div class="battle-grid" data-active-side="${view.active === own ? 'ally' : 'enemy'}" aria-label="対戦盤面">
@@ -848,12 +849,12 @@ function battlefield() {
 }
 
 function mulligan() {
-  if (waitingForFriend()) return `<main class="ceremony"><section class="modal mulligan">
+  if (waitingForFriend()) return `<main class="ceremony" ${sceneryAttributes(view.bgmId,art)}><section class="modal mulligan">
     <h1>手札交換</h1><p role="status">${escape(feedback || '相手の手札交換を待っています。')}</p>
   </section></main>`
   const player = view.players[view.active]
   const size = player.hand.length
-  return `<main class="ceremony"><section class="modal mulligan">
+  return `<main class="ceremony" ${sceneryAttributes(view.bgmId,art)}><section class="modal mulligan">
     <p class="modal-kicker">${seatName(view.active)} · ${leaders[player.leader].name}</p>
     <h1>手札交換</h1><p>引き直すカードを選んでください。</p>
     <span class="mulligan-pile" title="山札 残り${player.deckCount}枚">▤ <span>山札</span></span>
@@ -974,6 +975,7 @@ function ensureOpening() {
 
 function render(focusOn = null) {
   if (view) battleHistory.update(view)
+  if (view) preloadBattleScenery(view.bgmId,art)
   ensureOpening()
   const scroll = app.querySelector('.events')?.scrollTop
   const oldLog = app.querySelector('.events')
@@ -1458,6 +1460,25 @@ function execute(action, actor = solo() ? 0 : view.active) {
   return true
 }
 
+function refreshAttackSelection() {
+  if (!depthEnabled() || !selected || !['attack','leaderAttack'].includes(selected.type) || !app.querySelector('.battle-depth')) return false
+  // Keep the painted cards and their hit areas stable while choosing an attacker.
+  clearAttackPreview()
+  for (const node of app.querySelectorAll('.slot, .leader-target')) {
+    const isLeader = node.dataset.leader !== undefined
+    const target = isLeader ? leaderTarget(Number(node.dataset.leader)) : unitTarget(Number(node.dataset.unit))
+    node.classList.toggle('targetable',targetEnabled(target))
+    node.classList.toggle('chosen',isLeader ? selected.type === 'leaderAttack' && Number(node.dataset.leader) === view.active : selected.type === 'attack' && Number(node.dataset.unit) === selected.id)
+  }
+  for (const node of app.querySelectorAll('.hand-card.chosen')) node.classList.remove('chosen')
+  app.querySelector('.selection-bar').outerHTML = selectionBar()
+  const node = app.querySelector(selected.type === 'attack' ? `[data-unit="${selected.id}"]` : `[data-leader="${view.active}"]`)
+  if (node === document.activeElement) inspectNode(node)
+  else node?.focus({preventScroll:true})
+  announcer.textContent = instruction()
+  return true
+}
+
 function select(type, id, drawUi = true) {
   if (!view.legal) return
   const legal = type === 'skill' || type === 'leaderAttack' ? view.legal[type] : view.legal[type][id]
@@ -1472,6 +1493,7 @@ function select(type, id, drawUi = true) {
     return
   }
   if (feedback) announcer.textContent = feedback
+  if (drawUi && refreshAttackSelection()) return
   if (drawUi) render(type === 'play' ? '[data-hand="' + id + '"]' :
     type === 'attack' ? '[data-unit="' + id + '"]' :
       type === 'leaderAttack' ? '[data-leader="' + view.active + '"]' : '[data-op="skill"]')

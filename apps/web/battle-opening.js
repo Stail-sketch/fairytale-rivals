@@ -1,11 +1,12 @@
 import { leaders } from '../../packages/cards/index.js'
 import { escapeText } from './card-terms.js'
+import { sceneryAttributes } from './battle-scenery.js'
 
 export const openingTiming = short => short ? { reveal: 260, finish: 850 } : { reveal: 1450, finish: 3250 }
 
 export function battleOpening(view, opening, ownSeat, art) {
   const seats = [ownSeat, 1 - ownSeat], revealed = opening.stage === 'result'
-  return `<main class="battle-opening ceremony${opening.short ? ' opening-short' : ''}" data-opening-stage="${opening.stage}" aria-label="先攻・後攻の発表">
+  return `<main class="battle-opening ceremony${opening.short ? ' opening-short' : ''}" ${revealed ? sceneryAttributes(view.bgmId,art) : ''} data-opening-stage="${opening.stage}" aria-label="先攻・後攻の発表">
     <div class="opening-atmosphere" aria-hidden="true"><div class="opening-orbit"></div><div class="opening-orbit orbit-inner"></div>${Array.from({length:18},(_,i)=>`<i style="--i:${i};--x:${(i*37+11)%100}%;--y:${(i*23+7)%90}%"></i>`).join('')}</div>
     <header class="opening-heading"><small>THE STORY BEGINS</small><p class="opening-caption" role="status">${revealed ? '運命は、ここに記された' : '運命の頁が開く'}</p><span>✧ ─────── ✦ ─────── ✧</span></header>
     <div class="opening-leaders">${seats.map((seat,side)=>{

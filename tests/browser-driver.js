@@ -85,6 +85,7 @@ export async function browserControl(t, directory) {
       },
       viewport: (width, height) => command('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile: false }, sessionId),
       navigate: url => command('Page.navigate', { url }, sessionId),
+      mouse: params => command('Input.dispatchMouseEvent', params, sessionId),
       async click(selector) {
         await wait(selector)
         await evaluate(`document.querySelector(${JSON.stringify(selector)})?.click()`)
