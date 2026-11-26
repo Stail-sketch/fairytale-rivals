@@ -138,7 +138,7 @@ function titlebar(mixerOpen) {
       <button type="button" data-op="audio-mixer" class="icon-button" aria-expanded="${Boolean(mixerOpen)}" aria-controls="audio-mixer">音量</button>
       <button type="button" data-op="rules" class="icon-button">ルール</button>
       ${onlineMatch && view?.phase !== 'finished' ? '<span class="online-clock" role="timer" aria-label="操作の残り時間"></span>' : ''}
-      ${!inMatch() ? '<button type="button" data-op="music" class="icon-button">音楽室 ♪</button>' : ''}
+      ${!inMatch() ? `<button type="button" data-op="music" class="icon-button" ${searching ? 'disabled' : ''}>音楽室 ♪</button>` : ''}
       ${inMatch() ? `<button type="button" data-op="home" class="icon-button">${arenaBattle ? '保存して中断' : 'タイトル'}</button>` : ''}
     </div>${audioControls(mixerOpen)}</header>`
 }
@@ -223,10 +223,10 @@ function home() {
           <button type="submit" class="secondary" ${!ready || roomBusy ? 'disabled' : ''}>ロビーIDで参加</button></div>
       </form>` : ''}
       <div class="title-tools">
-        <button class="secondary browse-cards" type="button" data-op="arena-open">物語の闘技場</button>
-        <button class="secondary browse-cards" type="button" data-op="library">カードライブラリ</button>
-        <button class="secondary browse-cards" type="button" data-op="decks">デッキ編集</button>
-        <button class="secondary browse-cards" type="button" data-op="music">音楽ライブラリ ♪</button>
+        <button class="secondary browse-cards" type="button" data-op="arena-open" ${searching ? 'disabled' : ''}>物語の闘技場</button>
+        <button class="secondary browse-cards" type="button" data-op="library" ${searching ? 'disabled' : ''}>カードライブラリ</button>
+        <button class="secondary browse-cards" type="button" data-op="decks" ${searching ? 'disabled' : ''}>デッキ編集</button>
+        <button class="secondary browse-cards" type="button" data-op="music" ${searching ? 'disabled' : ''}>音楽ライブラリ ♪</button>
       </div>
     </section>
   </main>`
@@ -1277,7 +1277,9 @@ function receiveRoom(update) {
   roomResult = update.result ?? null
   roomSeat = update.seat
   resigned = update.resigned ?? null
-  if (view && sequential && update.last) {
+  // A persisted rating receipt advances the room version too; keep the final hit animation.
+  const rankedFinish = view?.phase === 'battle' && update.view?.phase === 'finished' && update.online?.result && update.last?.events?.some(event => event.type === 'finish')
+  if (view && (sequential || rankedFinish) && update.last) {
     const { seat, type, events } = update.last
     presentAction(update.view, { type }, events, seat !== roomSeat)
     return
@@ -1323,6 +1325,9 @@ function acceptSearch(data) {
     roomBusy = false
     feedback = ''
     if (room?.id === data.session.id) return true
+    showRules = showLibrary = showDecks = false
+    showArena = null
+    musicLibrary.close()
     openRoom(data.session)
     return true
   }
@@ -1705,6 +1710,7 @@ app.addEventListener('click', event => {
     return
   }
   const { op, hand, replace, slot, leader, choice, mode: nextMode, libraryCard, libraryTab } = node.dataset
+  if (searching && ['arena-open', 'library', 'decks', 'music'].includes(op)) return
   if (node.dataset.decision !== undefined) {
     execute({ type: 'decide', choice: Number(node.dataset.decision) })
     return

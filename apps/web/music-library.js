@@ -74,6 +74,7 @@ export function createMusicLibrary({art, volume, setVolume, onOpen, onClose}) {
   dialog.addEventListener('close',()=>{if(dialog.open)return;++request;release();dialog.classList.remove('is-playing');onClose();if(focusBack?.isConnected)focusBack.focus()})
   return {
     get isOpen(){return dialog.open},
+    close(){if(dialog.open)dialog.close()},
     open(){if(dialog.open)return;focusBack=document.activeElement;dialog.showModal();onOpen();audio.volume=volume()/100;select(index,false);dialog.querySelector('[data-music-close]').focus()},
   }
 }
