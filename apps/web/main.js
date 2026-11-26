@@ -22,6 +22,7 @@ import { isLobbyCode, normalizeRoomId, visibleLobbyCode } from '../../packages/o
 import { arenaCpuLevel, autoDraft, draftAction, rarityLabels } from '../../packages/arena/index.js'
 import { arenaDetails, arenaDraftScreen, arenaMenu, arenaSeed, createArenaStore, localDraftView } from './arena.js'
 import { battleOpening, openingTiming } from './battle-opening.js'
+import { preloadBattleVfx } from './battle-vfx.js'
 import { createBattleHistory, renderBattleLog, renderRecentHistory } from './battle-history.js'
 import { createMusicLibrary } from './music-library.js'
 
@@ -1150,6 +1151,7 @@ function scheduleCpu() {
 function showBattleImpact(scene) {
   const pan = positionBattleImpact(app, scene)
   if (scene.impactCue) battleAudio.play(scene.impactCue, pan)
+  if (scene.strike?.legend && !scene.reduced && scene.impactCue !== 'guard') battleAudio.playLegendStrike(scene.strike.legend)
 }
 
 function finishAction(action, impact = null) {
@@ -1193,6 +1195,7 @@ function playPresentation(scene, next, action) {
 }
 
 function presentAction(next, action, events, opponent) {
+  if (['play', 'attack', 'leaderAttack', 'skill'].includes(action.type)) turnNotice = null
   battleHistory.mark(next.matchId, events, action, opponent ? 1 - battleSeat() : battleSeat())
   eventFloor = view.events.at(-1)?.seq ?? 0
   selected = null
@@ -1867,6 +1870,7 @@ document.addEventListener('keydown', event => {
   }
 })
 
+preloadBattleVfx()
 const saved = savedRoom(invite)
 document.addEventListener('click', battleAudio.unlock, { capture: true })
 document.addEventListener('keydown', event => { if (!event.repeat) battleAudio.unlock() }, { capture: true })

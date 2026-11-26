@@ -1647,3 +1647,9 @@ button.history-action-head:hover strong { color:#ffe2a7; text-decoration:underli
 .history-footnote { margin:10px 4px 2px; color:#8296a9; font-size:10px; line-height:1.6; }
 @media(min-width:1160px) { .recent-history { grid-column:1; grid-row:1; width:100%; margin:0; position:sticky; top:12px; }.battle-core { grid-row:1; }.detail-panel { grid-row:1; } }
 @media(max-width:760px) { .history-action-copy>strong { font-size:13px; }.battle-log .events { position:fixed; top:100px; right:12px; left:12px; width:auto; max-height:calc(100dvh - 125px); } }
+/* Lightweight CC0 sprites and card-specific Canvas effects. No layer captures input. */
+.battle-vfx-layer { position:absolute; inset:0; z-index:7; overflow:hidden; pointer-events:none; }
+.battle-vfx-canvas { position:absolute; inset:0; display:block; width:100%; height:100%; pointer-events:none; mix-blend-mode:screen; }
+.vfx-legendary-summon::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at center,transparent 32%,#070b1b52); animation:vfx-summon-shade .43s ease both; }
+@keyframes vfx-summon-shade { from { opacity:0; } 35%,80% { opacity:1; } to { opacity:0; } }
+@media(prefers-reduced-motion:reduce) { .battle-vfx-layer { display:none; } }

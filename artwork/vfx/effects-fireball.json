@@ -1,0 +1,185 @@
+{
+  "frames": {
+    "effects-fireball-00": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 437,
+        "h": 331
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 437,
+        "h": 331
+      },
+      "sourceSize": {
+        "w": 437,
+        "h": 331
+      },
+      "pivot": {
+        "x": 0.4989,
+        "y": 0.4985
+      },
+      "duration": 83
+    },
+    "effects-fireball-01": {
+      "frame": {
+        "x": 437,
+        "y": 0,
+        "w": 437,
+        "h": 331
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 437,
+        "h": 331
+      },
+      "sourceSize": {
+        "w": 437,
+        "h": 331
+      },
+      "pivot": {
+        "x": 0.4989,
+        "y": 0.4985
+      },
+      "duration": 83
+    },
+    "effects-fireball-02": {
+      "frame": {
+        "x": 874,
+        "y": 0,
+        "w": 437,
+        "h": 331
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 437,
+        "h": 331
+      },
+      "sourceSize": {
+        "w": 437,
+        "h": 331
+      },
+      "pivot": {
+        "x": 0.4989,
+        "y": 0.4985
+      },
+      "duration": 83
+    },
+    "effects-fireball-03": {
+      "frame": {
+        "x": 1311,
+        "y": 0,
+        "w": 437,
+        "h": 331
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 437,
+        "h": 331
+      },
+      "sourceSize": {
+        "w": 437,
+        "h": 331
+      },
+      "pivot": {
+        "x": 0.4989,
+        "y": 0.4985
+      },
+      "duration": 83
+    },
+    "effects-fireball-04": {
+      "frame": {
+        "x": 1748,
+        "y": 0,
+        "w": 437,
+        "h": 331
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 437,
+        "h": 331
+      },
+      "sourceSize": {
+        "w": 437,
+        "h": 331
+      },
+      "pivot": {
+        "x": 0.4989,
+        "y": 0.4985
+      },
+      "duration": 83
+    },
+    "effects-fireball-05": {
+      "frame": {
+        "x": 2185,
+        "y": 0,
+        "w": 437,
+        "h": 331
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 437,
+        "h": 331
+      },
+      "sourceSize": {
+        "w": 437,
+        "h": 331
+      },
+      "pivot": {
+        "x": 0.4989,
+        "y": 0.4985
+      },
+      "duration": 83
+    }
+  },
+  "animations": {
+    "effects-fireball": [
+      "effects-fireball-00",
+      "effects-fireball-01",
+      "effects-fireball-02",
+      "effects-fireball-03",
+      "effects-fireball-04",
+      "effects-fireball-05"
+    ]
+  },
+  "meta": {
+    "app": "https://spritecanvas.com",
+    "image": "effects-fireball.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 2622,
+      "h": 331
+    },
+    "scale": "1",
+    "cell": {
+      "w": 437,
+      "h": 331
+    },
+    "fps": 12,
+    "loop": false,
+    "pivot_px": [
+      218,
+      165
+    ],
+    "license": "CC0-1.0"
+  }
+}

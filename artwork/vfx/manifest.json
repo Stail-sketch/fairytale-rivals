@@ -1,0 +1,115 @@
+{
+  "verifiedOn": "2026-11-26",
+  "assets": [
+    {
+      "file": "vfx-sword-slash.webp",
+      "creator": "SpriteCanvas",
+      "source": "https://spritecanvas.com/free-sprite-sheets/effects/",
+      "download": "https://spritecanvas.com/free/effects.zip",
+      "license": "CC0-1.0",
+      "sourceMember": "effects/effects-sword-slash.png",
+      "sourceSha256": "3900b4078efbd74f71373bddccc05c253ae6dcd560fb45101e49c85424b91d9d",
+      "outputSha256": "fc9a6415651eaa9f0fb6ccd3e8865bb50bc36dcdf41b36370b145243d001ab35",
+      "conversion": "PNG to WebP quality 90; original frame bounds and alpha preserved"
+    },
+    {
+      "file": "vfx-hit-spark.webp",
+      "creator": "SpriteCanvas",
+      "source": "https://spritecanvas.com/free-sprite-sheets/effects/",
+      "download": "https://spritecanvas.com/free/effects.zip",
+      "license": "CC0-1.0",
+      "sourceMember": "effects/effects-hit-spark.png",
+      "sourceSha256": "fed45e71ccd0e92590f5319751f89c63fdc21fb31e7c7bf31a9c8db159aa8b06",
+      "outputSha256": "8ead64283599a4a20fcc51a1b4974e088cdb2304ad62ba2aa9086a5174535386",
+      "conversion": "PNG to WebP quality 90; original frame bounds and alpha preserved"
+    },
+    {
+      "file": "vfx-fireball.webp",
+      "creator": "SpriteCanvas",
+      "source": "https://spritecanvas.com/free-sprite-sheets/effects/",
+      "download": "https://spritecanvas.com/free/effects.zip",
+      "license": "CC0-1.0",
+      "sourceMember": "effects/effects-fireball.png",
+      "sourceSha256": "949357812b25f89e628c0453b04ddf45cc006340ce842a5a9503b2438d66f4c0",
+      "outputSha256": "3dd2faae4ffceb5c8e59f440d099bc9de891945236f0509569e9b6cfd7e1cc1c",
+      "conversion": "PNG to WebP quality 90; original frame bounds and alpha preserved"
+    },
+    {
+      "file": "vfx-lightning.webp",
+      "creator": "SpriteCanvas",
+      "source": "https://spritecanvas.com/free-sprite-sheets/effects/",
+      "download": "https://spritecanvas.com/free/effects.zip",
+      "license": "CC0-1.0",
+      "sourceMember": "effects/effects-lightning.png",
+      "sourceSha256": "124f1c8ecaaf354ef892a99653a55203c22c23c1478833c3503f84b3539793ec",
+      "outputSha256": "e0399483aafe22f56f3a9e91cdcc373238cafdf4dd35833dd9f23e0c19bc83ed",
+      "conversion": "PNG to WebP quality 90; original frame bounds and alpha preserved"
+    },
+    {
+      "file": "vfx-explosion.webp",
+      "creator": "SpriteCanvas",
+      "source": "https://spritecanvas.com/free-sprite-sheets/effects/",
+      "download": "https://spritecanvas.com/free/effects.zip",
+      "license": "CC0-1.0",
+      "sourceMember": "effects/effects-explosion.png",
+      "sourceSha256": "261527b8861843996272070e955e2ea4e2ab77418346d4d128c664fe131aaa47",
+      "outputSha256": "935436535d7de380f21528ae7730dbb94ab3aec450d3c8595720234ba64a9858",
+      "conversion": "PNG to WebP quality 90; original frame bounds and alpha preserved"
+    },
+    {
+      "file": "vfx-ice-burst.webp",
+      "creator": "SpriteCanvas",
+      "source": "https://spritecanvas.com/free-sprite-sheets/effects/",
+      "download": "https://spritecanvas.com/free/effects.zip",
+      "license": "CC0-1.0",
+      "sourceMember": "effects/effects-ice-burst.png",
+      "sourceSha256": "e71e1dbfe42b5cf4eb97f324970a45af27863df3ab9fa6d5ab7d29273a827024",
+      "outputSha256": "729b713ff804eb43fa4dc9efff3ee42adab83acbef77996590f72408ea1fe242",
+      "conversion": "PNG to WebP quality 90; original frame bounds and alpha preserved"
+    },
+    {
+      "file": "vfx-particle-circle-02.webp",
+      "creator": "Kenney Vleugels",
+      "source": "https://kenney.nl/assets/particle-pack",
+      "download": "https://opengameart.org/sites/default/files/kenney_particlePack.zip",
+      "license": "CC0-1.0",
+      "sourceMember": "PNG/circle_02.png",
+      "sourceSha256": "697e6fa5948cc35cc779ae0b22995f5b17f0e02746406d05ec8548921e82ad1b",
+      "outputSha256": "b106d6e2d9c9b128a3d539c95fa42e783c086a887e14055da919870072bb5d7c",
+      "conversion": "White-on-black light mask to white luminance alpha; resized to 256px; lossless WebP"
+    },
+    {
+      "file": "vfx-particle-light-03.webp",
+      "creator": "Kenney Vleugels",
+      "source": "https://kenney.nl/assets/particle-pack",
+      "download": "https://opengameart.org/sites/default/files/kenney_particlePack.zip",
+      "license": "CC0-1.0",
+      "sourceMember": "PNG/light_03.png",
+      "sourceSha256": "adbef8446fe55f8a5ad1fe8423e2683f8102bca792164c95f276ab77abefeb5f",
+      "outputSha256": "9ee4c5bee49f30fe1e095ff4f493f69c673c67ea4bb24a4f32bd3b5fc930bca1",
+      "conversion": "White-on-black light mask to white luminance alpha; resized to 256px; lossless WebP"
+    },
+    {
+      "file": "vfx-particle-star-06.webp",
+      "creator": "Kenney Vleugels",
+      "source": "https://kenney.nl/assets/particle-pack",
+      "download": "https://opengameart.org/sites/default/files/kenney_particlePack.zip",
+      "license": "CC0-1.0",
+      "sourceMember": "PNG/star_06.png",
+      "sourceSha256": "4b55a5f4e03ab541b3d6b81a1b0f41c1e30f700144e1fcf204e4bec31fa1ae73",
+      "outputSha256": "54229c1f3ed679087f8f560db17e77b0748be4df417f2d5380d02e7891479a08",
+      "conversion": "White-on-black light mask to white luminance alpha; resized to 256px; lossless WebP"
+    },
+    {
+      "file": "vfx-particle-twirl-02.webp",
+      "creator": "Kenney Vleugels",
+      "source": "https://kenney.nl/assets/particle-pack",
+      "download": "https://opengameart.org/sites/default/files/kenney_particlePack.zip",
+      "license": "CC0-1.0",
+      "sourceMember": "PNG/twirl_02.png",
+      "sourceSha256": "e74be64a75891e88188f4f8e3726835d796837972ab0571d7de88086d7df8ac0",
+      "outputSha256": "d7d6d478b50be71df0c910f9905812ae7973e1177488790fd04bb40d91ce8def",
+      "conversion": "White-on-black light mask to white luminance alpha; resized to 256px; lossless WebP"
+    }
+  ]
+}

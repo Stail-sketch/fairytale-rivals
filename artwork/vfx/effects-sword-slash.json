@@ -1,0 +1,185 @@
+{
+  "frames": {
+    "effects-sword-slash-00": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 339,
+        "h": 368
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 339,
+        "h": 368
+      },
+      "sourceSize": {
+        "w": 339,
+        "h": 368
+      },
+      "pivot": {
+        "x": 0.4985,
+        "y": 0.5
+      },
+      "duration": 83
+    },
+    "effects-sword-slash-01": {
+      "frame": {
+        "x": 339,
+        "y": 0,
+        "w": 339,
+        "h": 368
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 339,
+        "h": 368
+      },
+      "sourceSize": {
+        "w": 339,
+        "h": 368
+      },
+      "pivot": {
+        "x": 0.4985,
+        "y": 0.5
+      },
+      "duration": 83
+    },
+    "effects-sword-slash-02": {
+      "frame": {
+        "x": 678,
+        "y": 0,
+        "w": 339,
+        "h": 368
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 339,
+        "h": 368
+      },
+      "sourceSize": {
+        "w": 339,
+        "h": 368
+      },
+      "pivot": {
+        "x": 0.4985,
+        "y": 0.5
+      },
+      "duration": 83
+    },
+    "effects-sword-slash-03": {
+      "frame": {
+        "x": 1017,
+        "y": 0,
+        "w": 339,
+        "h": 368
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 339,
+        "h": 368
+      },
+      "sourceSize": {
+        "w": 339,
+        "h": 368
+      },
+      "pivot": {
+        "x": 0.4985,
+        "y": 0.5
+      },
+      "duration": 83
+    },
+    "effects-sword-slash-04": {
+      "frame": {
+        "x": 1356,
+        "y": 0,
+        "w": 339,
+        "h": 368
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 339,
+        "h": 368
+      },
+      "sourceSize": {
+        "w": 339,
+        "h": 368
+      },
+      "pivot": {
+        "x": 0.4985,
+        "y": 0.5
+      },
+      "duration": 83
+    },
+    "effects-sword-slash-05": {
+      "frame": {
+        "x": 1695,
+        "y": 0,
+        "w": 339,
+        "h": 368
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 339,
+        "h": 368
+      },
+      "sourceSize": {
+        "w": 339,
+        "h": 368
+      },
+      "pivot": {
+        "x": 0.4985,
+        "y": 0.5
+      },
+      "duration": 83
+    }
+  },
+  "animations": {
+    "effects-sword-slash": [
+      "effects-sword-slash-00",
+      "effects-sword-slash-01",
+      "effects-sword-slash-02",
+      "effects-sword-slash-03",
+      "effects-sword-slash-04",
+      "effects-sword-slash-05"
+    ]
+  },
+  "meta": {
+    "app": "https://spritecanvas.com",
+    "image": "effects-sword-slash.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 2034,
+      "h": 368
+    },
+    "scale": "1",
+    "cell": {
+      "w": 339,
+      "h": 368
+    },
+    "fps": 12,
+    "loop": false,
+    "pivot_px": [
+      169,
+      184
+    ],
+    "license": "CC0-1.0"
+  }
+}

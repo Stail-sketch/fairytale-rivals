@@ -1,4 +1,6 @@
 import { cards } from '../../packages/cards/index.js'
+import { attackProfile, summonTier } from './legendary-attacks.js'
+import { mountBattleVfx } from './battle-vfx.js'
 import { skillPresentation, skillProjectile, skillTheme } from './battle-skill-presentation.js'
 
 const outcomes = new Set(['damage', 'heal', 'ability', 'death', 'summon', 'transform', 'move', 'exile', 'withdraw', 'equip', 'terrain', 'terrainTrigger'])
@@ -58,7 +60,9 @@ export function planBattlePresentation(before, after, events, cpu) {
   const decisive = after.phase === 'finished'
   const phoenix = events.some(event => event.type === 'specialVictory')
   const attack = events.find(event => event.type === 'attack' || event.type === 'leaderAttack')
-  const style = attack && attackStyle(before, attack)
+  const legend = attackProfile(before, attack)
+  const tier = summonTier(card)
+  const style = attack && (legend?.impactCue ?? attackStyle(before, attack))
   let strike
   const motions = events.filter(event => event.type === 'move').slice(0, 6)
   const terrain = new Map()
@@ -83,7 +87,7 @@ export function planBattlePresentation(before, after, events, cpu) {
       event.type === 'heal' ? 'heal' : event.type === 'summon' ? 'summon' :
         event.type === 'equip' ? 'equip' : (event.type === 'terrain' || event.type === 'terrainTrigger') && 'terrain'
     const fromSkill = skill && from?.kind === 'leader' && from.seat === skill.seat && !from.card
-    if (impact) impacts.set(key + '/' + impact, { to, style: impact, motif: fromSkill ? skill.motif : undefined })
+    if (impact) impacts.set(key + '/' + impact, { to, style: impact, card: cards[event.card], motif: fromSkill ? skill.motif : undefined })
     else if (fromSkill && skill.motif === 'lightning' && event.type === 'ability') {
       impacts.set(key + '/equip', { to, style: 'equip', motif: skill.motif })
     }
@@ -92,7 +96,7 @@ export function planBattlePresentation(before, after, events, cpu) {
     const from = attack.type === 'leaderAttack' ? leaderAnchor(attack.seat) : anchorFor({ kind: 'unit', id: attack.id }, before, after)
     const to = anchorFor(attack.target, before, after)
     if (from && to) {
-      strike = { from, to, style }
+      strike = { from, to, style, legend }
       sources.set(anchorKey(from), from)
       links.set(anchorKey(from) + '>' + anchorKey(to), { ...strike, tone: 'strike', order: 0 })
     }
@@ -105,13 +109,13 @@ export function planBattlePresentation(before, after, events, cpu) {
   if (!firstImpact && strike) bursts.push({ to: strike.to, style })
   const sound = firstImpact ?? bursts[0]
   return {
-    card, cost: play?.cost, skill, landing, strike, decisive, phoenix, winner: after.specialVictory, motions, before, reduced,
+    card, summonTier: tier, cost: play?.cost, skill, landing, strike, decisive, phoenix, winner: after.specialVictory, motions, before, reduced,
     terrain: [...terrain.values()],
     bursts, sound, impactCue: sound?.style ?? (card?.kind === 'spell' ? 'spell' : null),
     sources: [...sources.values()], targets: [...targets.values()], links: [...links.values()],
     caption: events.find(event => event.triggered)?.text,
-    revealMs: reduced ? (card || skill ? 145 : 0) : skill ? 445 : card ? (cpu ? 395 : 285) : 0,
-    approachMs: reduced ? 60 : skill ? 205 : chained ? 230 : landing ? 162 : strike ? 135 : 125,
+    revealMs: reduced ? (card || skill ? 145 : 0) : skill ? 445 : card ? (tier === 'legendary' ? (cpu ? 650 : 600) : cpu ? 395 : 285) : 0,
+    approachMs: reduced ? 60 : skill ? 205 : chained ? 230 : landing ? tier === 'legendary' ? 430 : tier === 'major' ? 300 : 162 : strike ? legend?.travelMs ?? 135 : 125,
     finishMs: phoenix ? (reduced ? 440 : 1350) : reduced ? 210 : 540,
   }
 }
@@ -221,6 +225,7 @@ export function positionPresentation(app, presentation) {
   const paths = app.querySelector('.effect-paths')
   const origin = paths.getBoundingClientRect()
   for (const { from, to, tone, order, style } of scene.links.slice(0, 18)) {
+    if (tone === 'strike' && scene.strike?.legend) continue
     const source = anchorNode(app, from)
     const target = anchorNode(app, to)
     if (!source || !target) continue
@@ -239,6 +244,7 @@ export function positionPresentation(app, presentation) {
     paths.append(path)
   }
   if (scene.strike) windUp(app, scene.strike, scene.approachMs)
+  mountBattleVfx(app, scene, 'approach', anchor => anchorNode(app, anchor))
 }
 
 function windUp(app, { from, to, style }, duration) {
@@ -316,5 +322,6 @@ export function positionBattleImpact(app, scene) {
   }
   layer.addEventListener('animationend', event => { if (event.target === layer) layer.remove() })
   grid.append(layer)
+  mountBattleVfx(app, scene, 'impact', anchor => anchorNode(app, anchor))
   return Math.max(-1, Math.min(1, pan))
 }

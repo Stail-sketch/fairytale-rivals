@@ -1,0 +1,185 @@
+{
+  "frames": {
+    "effects-ice-burst-00": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 388,
+        "h": 343
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 388,
+        "h": 343
+      },
+      "sourceSize": {
+        "w": 388,
+        "h": 343
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.4985
+      },
+      "duration": 83
+    },
+    "effects-ice-burst-01": {
+      "frame": {
+        "x": 388,
+        "y": 0,
+        "w": 388,
+        "h": 343
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 388,
+        "h": 343
+      },
+      "sourceSize": {
+        "w": 388,
+        "h": 343
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.4985
+      },
+      "duration": 83
+    },
+    "effects-ice-burst-02": {
+      "frame": {
+        "x": 776,
+        "y": 0,
+        "w": 388,
+        "h": 343
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 388,
+        "h": 343
+      },
+      "sourceSize": {
+        "w": 388,
+        "h": 343
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.4985
+      },
+      "duration": 83
+    },
+    "effects-ice-burst-03": {
+      "frame": {
+        "x": 1164,
+        "y": 0,
+        "w": 388,
+        "h": 343
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 388,
+        "h": 343
+      },
+      "sourceSize": {
+        "w": 388,
+        "h": 343
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.4985
+      },
+      "duration": 83
+    },
+    "effects-ice-burst-04": {
+      "frame": {
+        "x": 1552,
+        "y": 0,
+        "w": 388,
+        "h": 343
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 388,
+        "h": 343
+      },
+      "sourceSize": {
+        "w": 388,
+        "h": 343
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.4985
+      },
+      "duration": 83
+    },
+    "effects-ice-burst-05": {
+      "frame": {
+        "x": 1940,
+        "y": 0,
+        "w": 388,
+        "h": 343
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 388,
+        "h": 343
+      },
+      "sourceSize": {
+        "w": 388,
+        "h": 343
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.4985
+      },
+      "duration": 83
+    }
+  },
+  "animations": {
+    "effects-ice-burst": [
+      "effects-ice-burst-00",
+      "effects-ice-burst-01",
+      "effects-ice-burst-02",
+      "effects-ice-burst-03",
+      "effects-ice-burst-04",
+      "effects-ice-burst-05"
+    ]
+  },
+  "meta": {
+    "app": "https://spritecanvas.com",
+    "image": "effects-ice-burst.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 2328,
+      "h": 343
+    },
+    "scale": "1",
+    "cell": {
+      "w": 388,
+      "h": 343
+    },
+    "fps": 12,
+    "loop": false,
+    "pivot_px": [
+      194,
+      171
+    ],
+    "license": "CC0-1.0"
+  }
+}

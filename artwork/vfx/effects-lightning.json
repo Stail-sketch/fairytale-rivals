@@ -1,0 +1,185 @@
+{
+  "frames": {
+    "effects-lightning-00": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 391,
+        "h": 368
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 391,
+        "h": 368
+      },
+      "sourceSize": {
+        "w": 391,
+        "h": 368
+      },
+      "pivot": {
+        "x": 0.4987,
+        "y": 0.5
+      },
+      "duration": 83
+    },
+    "effects-lightning-01": {
+      "frame": {
+        "x": 391,
+        "y": 0,
+        "w": 391,
+        "h": 368
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 391,
+        "h": 368
+      },
+      "sourceSize": {
+        "w": 391,
+        "h": 368
+      },
+      "pivot": {
+        "x": 0.4987,
+        "y": 0.5
+      },
+      "duration": 83
+    },
+    "effects-lightning-02": {
+      "frame": {
+        "x": 782,
+        "y": 0,
+        "w": 391,
+        "h": 368
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 391,
+        "h": 368
+      },
+      "sourceSize": {
+        "w": 391,
+        "h": 368
+      },
+      "pivot": {
+        "x": 0.4987,
+        "y": 0.5
+      },
+      "duration": 83
+    },
+    "effects-lightning-03": {
+      "frame": {
+        "x": 1173,
+        "y": 0,
+        "w": 391,
+        "h": 368
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 391,
+        "h": 368
+      },
+      "sourceSize": {
+        "w": 391,
+        "h": 368
+      },
+      "pivot": {
+        "x": 0.4987,
+        "y": 0.5
+      },
+      "duration": 83
+    },
+    "effects-lightning-04": {
+      "frame": {
+        "x": 1564,
+        "y": 0,
+        "w": 391,
+        "h": 368
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 391,
+        "h": 368
+      },
+      "sourceSize": {
+        "w": 391,
+        "h": 368
+      },
+      "pivot": {
+        "x": 0.4987,
+        "y": 0.5
+      },
+      "duration": 83
+    },
+    "effects-lightning-05": {
+      "frame": {
+        "x": 1955,
+        "y": 0,
+        "w": 391,
+        "h": 368
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 391,
+        "h": 368
+      },
+      "sourceSize": {
+        "w": 391,
+        "h": 368
+      },
+      "pivot": {
+        "x": 0.4987,
+        "y": 0.5
+      },
+      "duration": 83
+    }
+  },
+  "animations": {
+    "effects-lightning": [
+      "effects-lightning-00",
+      "effects-lightning-01",
+      "effects-lightning-02",
+      "effects-lightning-03",
+      "effects-lightning-04",
+      "effects-lightning-05"
+    ]
+  },
+  "meta": {
+    "app": "https://spritecanvas.com",
+    "image": "effects-lightning.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 2346,
+      "h": 368
+    },
+    "scale": "1",
+    "cell": {
+      "w": 391,
+      "h": 368
+    },
+    "fps": 12,
+    "loop": false,
+    "pivot_px": [
+      195,
+      184
+    ],
+    "license": "CC0-1.0"
+  }
+}

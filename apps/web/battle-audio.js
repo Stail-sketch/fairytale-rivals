@@ -115,6 +115,13 @@ export function createBattleAudio() {
       if (volume.bgm) music?.set(scene, bgmId)
       else music?.set('off')
     },
+    playLegendStrike(profile) {
+      if (context?.state !== 'running' || !enabled() || !profile) return
+      const at = context.currentTime + .008
+      const pitch = 48 + profile.seed % 12
+      skillNote(profile.voice, pitch, at, .21, .38)
+      skillNote('bell', pitch + 19, at + .055, .18, .18)
+    },
     playSkill(style) {
       if (context?.state !== 'running') return
       music?.duck()

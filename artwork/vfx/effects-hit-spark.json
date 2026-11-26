@@ -1,0 +1,185 @@
+{
+  "frames": {
+    "effects-hit-spark-00": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 393,
+        "h": 368
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 393,
+        "h": 368
+      },
+      "sourceSize": {
+        "w": 393,
+        "h": 368
+      },
+      "pivot": {
+        "x": 0.4987,
+        "y": 0.5
+      },
+      "duration": 83
+    },
+    "effects-hit-spark-01": {
+      "frame": {
+        "x": 393,
+        "y": 0,
+        "w": 393,
+        "h": 368
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 393,
+        "h": 368
+      },
+      "sourceSize": {
+        "w": 393,
+        "h": 368
+      },
+      "pivot": {
+        "x": 0.4987,
+        "y": 0.5
+      },
+      "duration": 83
+    },
+    "effects-hit-spark-02": {
+      "frame": {
+        "x": 786,
+        "y": 0,
+        "w": 393,
+        "h": 368
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 393,
+        "h": 368
+      },
+      "sourceSize": {
+        "w": 393,
+        "h": 368
+      },
+      "pivot": {
+        "x": 0.4987,
+        "y": 0.5
+      },
+      "duration": 83
+    },
+    "effects-hit-spark-03": {
+      "frame": {
+        "x": 1179,
+        "y": 0,
+        "w": 393,
+        "h": 368
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 393,
+        "h": 368
+      },
+      "sourceSize": {
+        "w": 393,
+        "h": 368
+      },
+      "pivot": {
+        "x": 0.4987,
+        "y": 0.5
+      },
+      "duration": 83
+    },
+    "effects-hit-spark-04": {
+      "frame": {
+        "x": 1572,
+        "y": 0,
+        "w": 393,
+        "h": 368
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 393,
+        "h": 368
+      },
+      "sourceSize": {
+        "w": 393,
+        "h": 368
+      },
+      "pivot": {
+        "x": 0.4987,
+        "y": 0.5
+      },
+      "duration": 83
+    },
+    "effects-hit-spark-05": {
+      "frame": {
+        "x": 1965,
+        "y": 0,
+        "w": 393,
+        "h": 368
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 393,
+        "h": 368
+      },
+      "sourceSize": {
+        "w": 393,
+        "h": 368
+      },
+      "pivot": {
+        "x": 0.4987,
+        "y": 0.5
+      },
+      "duration": 83
+    }
+  },
+  "animations": {
+    "effects-hit-spark": [
+      "effects-hit-spark-00",
+      "effects-hit-spark-01",
+      "effects-hit-spark-02",
+      "effects-hit-spark-03",
+      "effects-hit-spark-04",
+      "effects-hit-spark-05"
+    ]
+  },
+  "meta": {
+    "app": "https://spritecanvas.com",
+    "image": "effects-hit-spark.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 2358,
+      "h": 368
+    },
+    "scale": "1",
+    "cell": {
+      "w": 393,
+      "h": 368
+    },
+    "fps": 12,
+    "loop": false,
+    "pivot_px": [
+      196,
+      184
+    ],
+    "license": "CC0-1.0"
+  }
+}
