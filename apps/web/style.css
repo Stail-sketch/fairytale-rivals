@@ -1603,3 +1603,45 @@ body:has(.deck-overview[open]) { overflow: hidden; }
   body:has(.battle-opening,.music-library[open]) :is(.brand small,.local-label) { display:none; }
 }
 html:has(.music-library[open]),body:has(.music-library[open]) { overflow:hidden; }
+/* Public battle history: stable center board, recent actions in the unused left wing. */
+.recent-history { max-width:1240px; margin:18px auto 0; padding:12px; border:1px solid #8c775348; border-radius:9px; background:#0f1b2bd9; }
+.recent-history>header { border-bottom:1px solid #9e85523d; padding:0 2px 11px; margin-bottom:10px; }
+.recent-history>header>span { font-size:8px; color:#c5aa77; letter-spacing:.2em; }
+.recent-history h2 { font:700 17px var(--serif); color:#efddb5; margin:4px 0; }
+.recent-history>header>small { color:#9baebd; font-size:10px; }
+.recent-history-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:9px; }
+.history-action { padding:10px; border:1px solid #8ca7c334; border-left:3px solid #8d9eb0; border-radius:7px; background:linear-gradient(120deg,#2535488c,#111e30); text-align:left; min-width:0; }
+.history-action.history-own { border-left-color:#74b8e9; }
+.history-action.history-enemy { border-left-color:#de8e98; }
+.history-action-head { width:100%; display:flex; align-items:flex-start; gap:10px; border:0; background:none; color:inherit; padding:0; text-align:left; min-width:0; }
+button.history-action-head { border-radius:4px; }
+button.history-action-head:hover strong { color:#ffe2a7; text-decoration:underline; text-underline-offset:3px; }
+.history-action-head>img,.history-symbol { flex-shrink:0; width:48px; height:54px; object-fit:cover; border:1px solid #c9ad7155; border-radius:5px; background:#182b3c; }
+.history-symbol { display:grid; place-items:center; color:#dab878; font-size:25px; }
+.history-action-copy { flex:1; min-width:0; }
+.history-action-copy>small { display:block; font-size:10px; color:#a4b3c5; margin-bottom:5px; line-height:1.4; }
+.history-own .history-action-copy b { color:#a0d7ff; }.history-enemy .history-action-copy b { color:#ffb5bb; }
+.history-action-copy>strong { display:block; font:700 15px/1.45 var(--serif); color:#f3e4c5; overflow-wrap:anywhere; }
+.history-target { display:block; font-size:11px; color:#bdcadd; margin-top:4px; line-height:1.5; overflow-wrap:anywhere; }
+.history-outcomes { display:flex; flex-wrap:wrap; gap:4px; margin-top:8px; }
+.history-chip { padding:3px 6px; border-radius:4px; border:1px solid #8aa4c33b; background:#213147; color:#c5d4e3; font-size:10px; line-height:1.4; font-variant-numeric:tabular-nums; }
+.chip-damage { color:#ffb3ac; border-color:#f28d7b55; background:#522b324d; }.chip-heal { color:#acf0bf; border-color:#86d49c55; background:#1b4b3b4d; }.chip-death,.chip-discard { color:#c7bddf; }.chip-badge,.chip-ability { color:#ebcf8e; border-color:#b99a5655; }.chip-guard { color:#a9d9f8; }
+.history-compact { padding:9px; }.history-compact .history-action-head { gap:7px; }.history-compact .history-action-head>img,.history-compact .history-symbol { width:39px; height:46px; }.history-compact .history-action-copy>strong { font-size:13px; }.history-compact .history-action-copy>small { font-size:9px; }.history-compact .history-target { font-size:10px; }.history-compact .history-chip { font-size:9px; padding:2px 5px; }
+.history-empty { padding:13px 3px; color:#97aaba; font-size:12px; line-height:1.8; margin:0; }
+.history-count { display:inline-block; padding:1px 5px; margin-left:4px; border-radius:4px; background:#c7a76d26; color:#eed29b; font:10px sans-serif; }
+.battle-log .events { z-index:40; width:min(510px,calc(100vw - 30px)); max-height:min(68dvh,650px); margin-top:8px; padding:0 10px 10px; border-color:#b69a62; background:#101b2bfa; box-shadow:0 18px 65px #000a; text-align:left; scrollbar-gutter:stable; }
+.history-guide { position:sticky; top:0; z-index:1; padding:12px 4px; background:#101b2b; border-bottom:1px solid #64748555; font-size:10px; color:#b7c7d8; }
+.history-turn { margin-top:9px; border:1px solid #9cb6d52e; border-radius:7px; overflow:hidden; }
+.history-turn>summary { display:flex; justify-content:space-between; gap:10px; cursor:pointer; padding:11px 12px; background:#26364a; color:#ead4ab; }
+.history-turn>summary::before { content:'▸'; color:#baa176; }.history-turn[open]>summary::before { content:'▾'; }.history-turn>summary strong { flex:1; font-size:12px; }.history-turn>summary small { font-size:10px; color:#a6b7c8; }
+.history-turn-body { display:grid; gap:8px; padding:9px; }
+.history-action-details { margin-top:8px; border-top:1px solid #778fa735; padding-top:5px; }
+.history-action-details>summary { font-size:10px; color:#a9bdcf; padding:4px 0; cursor:pointer; }
+.history-action-details ol { list-style:none; padding:4px 0 0; margin:0; }
+.battle-log .events .history-event { padding:6px 0; border-bottom:1px solid #4254693b; font-size:11px; line-height:1.6; color:#c3d3e1; }
+.history-event .log-card { color:inherit; text-decoration:none; font-size:inherit; line-height:inherit; }
+.history-event .log-card:hover { text-decoration:underline; }
+.battle-log .events .event-damage { color:#f9b6af; }.battle-log .events .event-heal { color:#a0e8b3; }.battle-log .events .event-ability { color:#e9cc8a; }
+.history-footnote { margin:10px 4px 2px; color:#8296a9; font-size:10px; line-height:1.6; }
+@media(min-width:1160px) { .recent-history { grid-column:1; grid-row:1; width:100%; margin:0; position:sticky; top:12px; max-height:calc(100dvh - 95px); overflow:auto; }.recent-history-list { grid-template-columns:minmax(0,1fr); }.battle-core { grid-row:1; }.detail-panel { grid-row:1; } }
+@media(max-width:760px) { .recent-history { margin-top:12px; }.recent-history-list { grid-template-columns:repeat(2,minmax(0,1fr)); }.history-action-copy>strong { font-size:13px; }.battle-log .events { position:fixed; top:100px; right:12px; left:12px; width:auto; max-height:calc(100dvh - 125px); } }

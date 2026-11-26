@@ -22,6 +22,7 @@ import { isLobbyCode, normalizeRoomId, visibleLobbyCode } from '../../packages/o
 import { arenaCpuLevel, autoDraft, draftAction, rarityLabels } from '../../packages/arena/index.js'
 import { arenaDetails, arenaDraftScreen, arenaMenu, arenaSeed, createArenaStore, localDraftView } from './arena.js'
 import { battleOpening, openingTiming } from './battle-opening.js'
+import { createBattleHistory, renderBattleLog, renderRecentHistory } from './battle-history.js'
 import { createMusicLibrary } from './music-library.js'
 
 const app = document.querySelector('#app')
@@ -46,6 +47,7 @@ deckCollection.initialize(initialDecks)
 const initialDeckIds = new Set(initialDecks.map(deck => deck.id))
 const deckEditor = createDeckEditor(deckCollection)
 const battleAudio = createBattleAudio()
+const battleHistory = createBattleHistory()
 const musicLibrary = createMusicLibrary({ art, volume: () => battleAudio.volume('bgm'),
   setVolume: value => battleAudio.setVolume('bgm', value),
   onOpen: () => battleAudio.setScene('off'), onClose: () => syncBattleMusic() })
@@ -497,22 +499,14 @@ function badgeDetails(seat, labelled = false) {
     ${[...counts].map(([id, count]) => `<article class="active-story-badge"><img src="${art(cards[id].artId)}" alt=""><div><strong>${escape(cards[id].name)} ×${count}</strong><p>${termText(cards[id].description)}</p></div></article>`).join('')}</div>`
 }
 
-const logCard = event => event && cards[event.card ?? event.source?.card]
+const logCard = event => battleHistory.card(event)
+const historyOptions = () => ({ art, ownSeat: room ? roomSeat : solo() ? 0 : null, firstSeat: view.firstSeat ?? 0 })
 
 function battleLog() {
-  const publicEvents = view.events.filter(event => event.privateTo === undefined && event.type !== 'handAdded')
-  const last = publicEvents.slice(-64).reverse()
-  const lastPlay = publicEvents.findLast(event => event.played)
-  if (lastPlay && !last.includes(lastPlay)) last.push(lastPlay)
-  const open = app.querySelector('.battle-log')?.open
-  return `<details class="battle-log"${open ? ' open' : ''}>
-    <summary class="icon-button">対戦記録</summary>
-    <ol class="events">${last.map(event => {
-      const card = logCard(event)
-      const located = event.position || event.destination || event.source?.position || event.target?.kind === 'leader'
-      return `<li>${card || located ? `<button type="button" class="log-card" data-log-event="${event.seq}" ${card ? `data-log-card="${card.id}" title="${escape(card.name)}の詳細を開く"` : 'title="盤面の位置を示す"'}>${escape(event.text)}</button>` : escape(event.text)}</li>`
-    }).join('')}</ol>
-  </details>`
+  const previous = app.querySelector('.battle-log')
+  const turnState = new Map([...previous?.querySelectorAll('[data-log-turn]') ?? []].map(node => [node.dataset.logTurn, node.open]))
+  const expandedActions = new Set([...previous?.querySelectorAll('[data-log-action][open]') ?? []].map(node => node.dataset.logAction))
+  return renderBattleLog(battleHistory.turns(view), { ...historyOptions(), open: previous?.open, turnState, expandedActions })
 }
 
 function openCardDetail(card, cost, focusBack, details = [], power = []) {
@@ -550,7 +544,7 @@ function openBattleDetail(content, focusBack) {
 
 function highlightLogEvent(seq) {
   for (const node of app.querySelectorAll('.log-location')) node.classList.remove('log-location')
-  const event = view?.events.find(event => event.seq === seq && event.privateTo === undefined)
+  const event = battleHistory.event(seq)
   if (!event) return
   for (const anchor of [event.source, event.destination ?? (event.position ? event : event.target)]) {
     if (anchor?.position) {
@@ -562,7 +556,7 @@ function highlightLogEvent(seq) {
 }
 
 function inspectLogCard(seq) {
-  const event = view.events.find(event => event.seq === seq && event.privateTo === undefined)
+  const event = battleHistory.event(seq)
   const card = logCard(event)
   highlightLogEvent(seq)
   if (!card) return
@@ -827,7 +821,7 @@ function battlefield() {
         <button class="primary end" data-op="end" ${canEndTurn() ? '' : 'disabled'}>ターン終了 <span aria-hidden="true">›</span></button>
       </div>
     </section>
-    </div>${detailPanel()}</div>
+    </div>${renderRecentHistory(battleHistory.turns(view), historyOptions())}${detailPanel()}</div>
     <dialog id="end-turn-dialog" class="end-turn-dialog" role="alertdialog" aria-labelledby="end-turn-title"
       aria-describedby="end-turn-description end-turn-options">
       <h2 id="end-turn-title">まだ行動できます</h2>
@@ -966,8 +960,13 @@ function ensureOpening() {
 }
 
 function render(focusOn = null) {
+  if (view) battleHistory.update(view)
   ensureOpening()
   const scroll = app.querySelector('.events')?.scrollTop
+  const oldLog = app.querySelector('.events')
+  const anchor = scroll > 0 && [...oldLog.querySelectorAll('[data-history-action]')].find(node =>
+    node.getBoundingClientRect().bottom > oldLog.getBoundingClientRect().top + 45)
+  const anchorOffset = anchor && anchor.getBoundingClientRect().top - oldLog.getBoundingClientRect().top
   const mixerOpen = Boolean(app.querySelector('.audio-mixer:not([hidden])'))
   const volumeFocus = document.activeElement?.dataset.volume
   const arenaDraft = roomArena?.draft ?? (arenaStore.run ? localDraftView(arenaStore) : null)
@@ -987,6 +986,10 @@ function render(focusOn = null) {
   renderTurnNotice()
   const events = app.querySelector('.events')
   if (events && scroll) events.scrollTop = scroll
+  if (events && anchor) {
+    const preserved = events.querySelector(`[data-history-action="${anchor.dataset.historyAction}"]`)
+    if (preserved) events.scrollTop += preserved.getBoundingClientRect().top - events.getBoundingClientRect().top - anchorOffset
+  }
   if (showLibrary) refreshLibrary(app, art)
   if (showDecks) deckEditor.refresh(app, art)
   if (showRules) {
@@ -1185,6 +1188,7 @@ function playPresentation(scene, next, action) {
 }
 
 function presentAction(next, action, events, opponent) {
+  battleHistory.mark(next.matchId, events, action, opponent ? 1 - battleSeat() : battleSeat())
   eventFloor = view.events.at(-1)?.seq ?? 0
   selected = null
   feedback = ''
@@ -1713,7 +1717,7 @@ function showMulliganReturns(destination) {
   if (replacements.size) battleAudio.play('draw')
 }
 
-const inspectSelector = '[data-hand], [data-unit], [data-terrain], [data-leader], [data-inspect-weapon], [data-inspect-skill], [data-inspect-badges], [data-op="skill"], #skill-description'
+const inspectSelector = '[data-log-event][data-card], [data-hand], [data-unit], [data-terrain], [data-leader], [data-inspect-weapon], [data-inspect-skill], [data-inspect-badges], [data-op="skill"], #skill-description'
 
 function inspectNode(node) {
   const panel = app.querySelector('#detail')
@@ -1723,7 +1727,7 @@ function inspectNode(node) {
   const card = cards[weapon?.card ?? node.dataset.card]
   if (card) {
     panel.innerHTML = cardDetail(card, node.dataset.cost === undefined ? undefined : Number(node.dataset.cost), node)
-    lastInspection = weapon ? `[data-inspect-weapon="${inspectWeapon}"]` :
+    lastInspection = node.dataset.logEvent !== undefined ? `[data-log-event="${node.dataset.logEvent}"][data-card]` : weapon ? `[data-inspect-weapon="${inspectWeapon}"]` :
       hand !== undefined ? `[data-hand="${hand}"]` : `[data-unit="${unit}"]`
   } else if (terrain) {
     panel.innerHTML = `<div class="inspector-copy"><h2>${escape(terrainName(terrain))}</h2>
