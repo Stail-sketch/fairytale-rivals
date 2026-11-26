@@ -70,7 +70,7 @@ export function statusVisuals(view, previous, seat, unit, card, events, detailed
   const target = unit ? unitTarget(unit.id) : leaderTarget(seat)
   const fresh = previous !== view && events.length > 0
   const blocked = fresh ? new Set(events.filter(event => event.protection && sameTarget(event.target, target)).map(event => event.protection)) : new Set()
-  if (!states.length && !other && !blocked.size) return { cls: '', markup: '', labels: [] }
+  if (!states.length && !other && !blocked.size) return { cls: '', markup: '', badgeMarkup: '', fieldMarkup: '', labels: [] }
   const activated = id => fresh && !oldStates.some(([key, active]) => key === id && active)
   const burst = blocked.has('INVULNERABLE') || blocked.has('SPELL_WARD') || blocked.has('RESIST_SPELL') ||
     timed.some(([id]) => activated(id)) ||
@@ -84,11 +84,13 @@ export function statusVisuals(view, previous, seat, unit, card, events, detailed
       title="${escapeText(describe([id, active, state]))}">${icons[id]}</span>`
   ).join('')
   const guard = states.some(([id, active]) => id === 'GUARD' && active)
+  const badgeMarkup = `<span class="ability-badges"${detailed ? ' aria-label="効果マーク"' : ' aria-hidden="true"'}>${badges}
+      ${other ? `<span class="ability-badge" title="${escapeText(other)}">✦</span>` : ''}</span>`
+  const fieldMarkup = timed.length || burst ? `<span class="defense-field${burst ? ' defense-burst' : ''}" aria-hidden="true"></span>` : ''
   return {
     cls: [timed.length && 'protected-now', guard && 'guard-active'].filter(Boolean).join(' '),
     labels: [...states.map(describe), ...(other ? [other] : [])],
-    markup: `<span class="ability-badges"${detailed ? ' aria-label="効果マーク"' : ' aria-hidden="true"'}>${badges}
-      ${other ? `<span class="ability-badge" title="${escapeText(other)}">✦</span>` : ''}</span>
-      ${timed.length || burst ? `<span class="defense-field${burst ? ' defense-burst' : ''}" aria-hidden="true"></span>` : ''}`,
+    badgeMarkup, fieldMarkup,
+    markup: badgeMarkup + fieldMarkup,
   }
 }

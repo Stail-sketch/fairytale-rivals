@@ -355,9 +355,9 @@ function square(seat, row, column, events) {
     ${unit ? `data-unit="${unit.id}" data-card="${unit.card}" style="--unit-lane:${column}" draggable="${Boolean(ready)}" aria-keyshortcuts="I"
       ${inspectionOnly ? 'aria-haspopup="dialog"' : ''}` : ''}
     aria-label="${label}${stageLabel ? ' · ' + stageLabel : ''}" title="${escape(tooltip + (stageLabel ? '｜' + stageLabel + ' · ' + (terrainText[stage] ?? '六色で特殊勝利') : ''))}">
-    ${unit ? `${depthEnabled() ? standingUnit(card,art,seat !== battleSeat(),unit.id) : `<img src="${art(card.artId)}" alt="">`}<span class="board-name">${card.name}</span>${display.markup}
+    ${unit ? `${depthEnabled() ? standingUnit(card,art,seat !== battleSeat(),unit.id) : `<img src="${art(card.artId)}" alt="">`}<span class="board-name">${card.name}</span>${depthEnabled() ? display.fieldMarkup : display.markup}
       ${ready ? '<span class="ready-mark" aria-label="攻撃可能">⚔</span>' : ''}
-      <span class="unit-stats"><span class="${attack !== card.attack ? 'changed-stat' : ''}" title="攻撃力">${attack}</span><span class="${unit.hp < unit.maxHp ? 'wounded-stat' : ''}" title="HP">${unit.hp}</span></span>` :
+      ${depthEnabled() ? '<span class="unit-hud">' : ''}<span class="unit-stats"><span class="${attack !== card.attack ? 'changed-stat' : ''}" title="攻撃力">${attack}</span><span class="${unit.hp < unit.maxHp ? 'wounded-stat' : ''}" title="HP">${unit.hp}</span></span>${depthEnabled() ? display.badgeMarkup + '</span>' : ''}` :
       stageLabel ? '' : `<span class="empty-symbol" aria-hidden="true">${playable ? '+' : '◇'}</span>`}${flash.label}
     ${stageLabel ? `<span class="slot-stage" aria-hidden="true">${stageLabel}</span>` : ''}
   </button>`

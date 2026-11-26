@@ -15,12 +15,16 @@ function fixture() {
 }
 test('付与された攻撃能力と毒・能力封じを分け、無効な能力を灰色用の状態で表示する',()=>{
  const {unit,show}=fixture()
- unit.grants=['PIERCE','DOUBLE_ATTACK','AIM'];unit.statuses=['SILENCE','POISON']
- const output=show()
- for(const id of ['PIERCE','DOUBLE_ATTACK','AIM','GUARD'])assert(output.markup.includes(`data-ability="${id}" data-active="false"`))
- for(const id of ['SILENCE','POISON'])assert(output.markup.includes(`data-ability="${id}" data-active="true"`))
- assert.match(output.markup,/data-granted="true"/)
- assert(output.labels.some(label=>label.includes('能力封じ中')))
+ unit.statuses=['SILENCE']
+ for(const id of ['PIERCE','DOUBLE_ATTACK','AIM']) {
+  unit.grants=[id]
+  const output=show()
+  for(const disabled of [id,'GUARD'])assert(output.markup.includes(`data-ability="${disabled}" data-active="false"`))
+  assert.match(output.markup,/data-granted="true"/)
+  assert(output.labels.some(label=>label.includes('能力封じ中')))
+ }
+ unit.grants=[];unit.statuses=['SILENCE','POISON']
+ for(const id of ['SILENCE','POISON'])assert(show().markup.includes(`data-ability="${id}" data-active="true"`))
 })
 test('期限付きの防護と後衛で無効な騎士の誓いを区別する',()=>{
  const {view,unit,show}=fixture()
@@ -41,7 +45,7 @@ test('被弾によるHP減少を強化マークにせず、攻撃力・最大HP�
 test('多数の能力でも表示数を抑え、残りの能力をまとめて読める',()=>{
  const states=['GUARD','PIERCE','DOUBLE_ATTACK','AIM','CHARGE','STEALTH','METAL_BODY','POISON'].map(id=>[id,true,'有効',false])
  const markup=renderEmblems(states,{grants:[]})
- assert.equal((markup.match(/data-status-info=/g)??[]).length,6)
+ assert.equal((markup.match(/data-status-info=/g)??[]).length,3)
  assert.match(markup,/data-status-info="ALL"/)
  assert(markup.includes('騎士の誓い：有効'))
 })

@@ -34,7 +34,9 @@ const order = id => priority(id) < 0 ? 20 : priority(id)
 
 export function renderEmblems(states, unit) {
   const sorted = [...states].sort((a,b)=>order(a[0])-order(b[0]))
-  const visible = sorted.slice(0, sorted.length > 6 ? 5 : 6)
+  // Unit emblems share the narrow space between attack and HP; keep the full list in the popup.
+  const limit = unit ? 3 : 6
+  const visible = sorted.slice(0, sorted.length > limit ? limit-1 : limit)
   const badges = visible.map(([id,active,state,pulse])=>{
     const timed = id === 'INVULNERABLE' || id === 'SPELL_WARD'
     const granted = unit && [...(unit.grants ?? []),...(unit.badgeKeywords ?? [])].includes(id)

@@ -25,6 +25,13 @@ test('ローカルの立体盤面で実際に攻撃・召喚・ターン交代�
  assert.equal(await p.evaluate('document.querySelectorAll("[data-unit-art=cutout]").length'),0)
  assert.equal(await p.evaluate('document.querySelectorAll("[data-unit-art=portrait]").length'),8)
  const capture=name=>p.capture(new URL('../../work/depth-'+name+'.png',import.meta.url).pathname.replace(/^\/([A-Z]:)/,'$1'))
+ const checkEmblemLayer=async()=>{
+  const marks=await p.evaluate(`([...document.querySelectorAll('.slot .effect-emblem')].map(mark=>{const slot=mark.closest('.slot'),r=mark.getBoundingClientRect(),attack=slot.querySelector('.unit-stats span:first-child').getBoundingClientRect(),hp=slot.querySelector('.unit-stats span:last-child').getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return {between:r.left>=attack.right-.5&&r.right<=hp.left+.5,visible:hit?.closest('[data-status-info]')===mark,hud:mark.closest('.unit-hud')===slot.querySelector('.unit-hud')};}))`)
+  assert(marks.length>0)
+  assert(marks.every(m=>m.between),'マークは攻撃力とHPの間に収まる')
+  assert(marks.every(m=>m.visible&&m.hud),'マークをイラストの前面に表示してクリックできる')
+ }
+ await checkEmblemLayer()
  await capture('board')
  const rarity=await p.evaluate('({common:getComputedStyle(document.querySelector("[data-slot=\\"0:front:0\\"] .standing-art")).borderColor,legend:getComputedStyle(document.querySelector("[data-slot=\\"0:back:1\\"] .standing-art")).borderColor})')
  assert.notEqual(rarity.common,rarity.legend,'レアリティの枠を区別する')
@@ -62,6 +69,15 @@ test('ローカルの立体盤面で実際に攻撃・召喚・ターン交代�
  await p.viewport(1600,1000);await p.click('[data-op=preview-demo]')
  await eventually(()=>p.evaluate('document.querySelector("[data-slot=\\"0:front:0\\"] .unit-stats span:last-child")?.textContent==="3"'),'試遊盤面を初期状態へリセット')
  assert.equal(await p.evaluate('document.querySelector("[data-slot=\\"0:front:0\\"] .unit-stats span:last-child").textContent'),'3')
+ for(const width of [1600,390]) {
+  await p.viewport(width,width===390?844:1000)
+  await p.evaluate(`(async()=>{const {renderEmblems}=await import('/apps/web/battle-emblems.js');document.querySelector('[data-slot="0:front:2"] .ability-badges').innerHTML=renderEmblems(['GUARD','PIERCE','DOUBLE_ATTACK','AIM','CHARGE','STEALTH','METAL_BODY','POISON'].map(id=>[id,true,'有効',false]),{grants:[]})})()`)
+  await checkEmblemLayer()
+  await capture('emblems-'+width)
+  await p.tap('[data-slot="0:front:2"] [data-status-info=ALL]');await p.wait('.emblem-dialog[open]')
+  assert.match(await p.evaluate('document.querySelector(".emblem-dialog").textContent'),/騎士の誓い：有効/)
+  await p.click('.emblem-dialog button')
+ }
  assert(await p.evaluate(`(async()=>{const {createDeckCollection}=await import('/packages/cards/decks.js');return createDeckCollection({keys:()=>Object.keys(localStorage),getItem:k=>localStorage.getItem(k),setItem:(k,v)=>localStorage.setItem(k,v)}).backup()===sessionStorage.getItem('depth-decks-before')})()`),'保存済みデッキは変化しない')
  assert.deepEqual(p.errors(),[])
 })
