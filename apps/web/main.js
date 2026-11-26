@@ -27,6 +27,8 @@ import { createBattleHistory, renderBattleLog, renderRecentHistory } from './bat
 import { createMusicLibrary } from './music-library.js'
 import { createPlayerProfile } from './player-profile.js'
 import { menuHome, menuPreparation, menuSearch, menuShell } from './menu-ui.js'
+import { depthEnabled, depthPreviewAvailable, standingUnit, toggleBattleDepth } from './battle-depth.js'
+import { showEmblemGuide, showEmblemInfo } from './battle-emblems.js'
 
 const app = document.querySelector('#app')
 const announcer = document.querySelector('#announcer')
@@ -104,6 +106,7 @@ let handPress = null
 let ignoreCardClickUntil = 0
 let animatedView = null
 let turnNotice = null
+let previewDemo = false
 
 const solo = () => mode === 'cpu'
 const publicMatch = () => ['ranked', 'free'].includes(mode)
@@ -143,6 +146,7 @@ function titlebar(mixerOpen) {
       <button type="button" data-op="sound" class="icon-button sound-button" aria-pressed="${battleAudio.enabled}">効果音</button>
       <button type="button" data-op="audio-mixer" class="icon-button" aria-expanded="${Boolean(mixerOpen)}" aria-controls="audio-mixer">音量</button>
       <button type="button" data-op="rules" class="icon-button">ルール</button>
+      ${depthPreviewAvailable && !room ? `<button class="icon-button" data-op="preview-demo" ${searching || roomBusy ? 'disabled' : ''}>${previewDemo ? '試遊盤面をリセット' : '試遊盤面を開く'}</button>` : ''}
       ${onlineMatch && view?.phase !== 'finished' ? '<span class="online-clock" role="timer" aria-label="操作の残り時間"></span>' : ''}
       ${!inMatch() ? `<button type="button" data-op="music" class="icon-button" ${searching ? 'disabled' : ''}>音楽室 ♪</button>` : ''}
       ${inMatch() ? `<button type="button" data-op="home" class="icon-button">${arenaBattle ? '保存して中断' : 'タイトル'}</button>` : ''}
@@ -216,7 +220,7 @@ function roomLobby() {
     const own = role === ownRole, data = lobby?.[role] ?? { joined: own, ready: false }
     const leaderId = own && !data.ready ? selectedLeaders[0] : data.leader
     const leader = leaders[leaderId]
-    return `<section class="lobby-member lobby-station" data-lobby-member="${role}" data-ready="${data.ready}">
+    return `<section class="lobby-member lobby-station" ${lobby ? 'data-lobby-member' : 'data-connecting-member'}="${role}" data-ready="${data.ready}">
       <div class="lobby-station-art">${leader ? `<img src="${art(leaderId)}" alt="${leader.name}">` : '<span class="empty-player" aria-hidden="true">✧</span>'}</div>
       <div class="lobby-station-body"><small class="menu-eyebrow">${own ? 'YOU' : 'FRIEND'}</small><h2>${escape(data.name ?? (own ? playerProfile.profile?.name ?? 'あなた' : data.joined ? 'フレンド' : '参加を待っています'))}</h2>
       <p>${own ? 'あなた' : data.joined ? 'フレンド' : 'ロビーIDで合流できます'}</p>${leader ? `<p>${leader.sigil} ${leader.job}</p>` : ''}
@@ -284,7 +288,7 @@ function leaderPanel(seat, enemy, events) {
   const weaponName = weapon ? cards[weapon.card].name : ''
   const target = leaderTarget(seat)
   const flash = flashes(target, events)
-  const status = statusVisuals(view, animatedView, seat, null, null, events)
+  const status = statusVisuals(view, animatedView, seat, null, null, events, depthEnabled())
   const awakened = player.awakenedLeader && events.length > 0 && !animatedView?.players[seat].awakenedLeader
   const current = status.labels
   const ready = !enemy && view.legal?.leaderAttack.enabled
@@ -337,7 +341,7 @@ function square(seat, row, column, events) {
   const target = unit && unitTarget(unit.id)
   const flash = unit || death ? flashes(target ?? unitTarget(death.id), events, unit?.id) : { cls: '', label: '' }
   const card = unit && cards[unit.card]
-  const display = unit && statusVisuals(view, animatedView, seat, unit, card, events)
+  const display = unit && statusVisuals(view, animatedView, seat, unit, card, events, depthEnabled())
   const index = column + 1
   const activeStatuses = display?.labels ?? []
   const classes = [unit ? 'occupied' : 'empty', ready && 'ready', playable && 'targetable', chosenPosition && 'chosen',
@@ -348,10 +352,10 @@ function square(seat, row, column, events) {
   const tooltip = unit ? card.name + '｜' + card.description : label
   return `<button class="slot ${classes.filter(Boolean).join(' ')}" data-slot="${seat}:${row}:${column}"
     ${stageLabel ? `data-terrain="${stage}"` : ''}
-    ${unit ? `data-unit="${unit.id}" data-card="${unit.card}" draggable="${Boolean(ready)}" aria-keyshortcuts="I"
+    ${unit ? `data-unit="${unit.id}" data-card="${unit.card}" style="--unit-lane:${column}" draggable="${Boolean(ready)}" aria-keyshortcuts="I"
       ${inspectionOnly ? 'aria-haspopup="dialog"' : ''}` : ''}
     aria-label="${label}${stageLabel ? ' · ' + stageLabel : ''}" title="${escape(tooltip + (stageLabel ? '｜' + stageLabel + ' · ' + (terrainText[stage] ?? '六色で特殊勝利') : ''))}">
-    ${unit ? `<img src="${art(card.artId)}" alt=""><span class="board-name">${card.name}</span>${display.markup}
+    ${unit ? `${depthEnabled() ? standingUnit(card,art,seat !== battleSeat(),unit.id) : `<img src="${art(card.artId)}" alt="">`}<span class="board-name">${card.name}</span>${display.markup}
       ${ready ? '<span class="ready-mark" aria-label="攻撃可能">⚔</span>' : ''}
       <span class="unit-stats"><span class="${attack !== card.attack ? 'changed-stat' : ''}" title="攻撃力">${attack}</span><span class="${unit.hp < unit.maxHp ? 'wounded-stat' : ''}" title="HP">${unit.hp}</span></span>` :
       stageLabel ? '' : `<span class="empty-symbol" aria-hidden="true">${playable ? '+' : '◇'}</span>`}${flash.label}
@@ -378,7 +382,7 @@ function hand(player) {
       const offset = index - (total - 1) / 2
       return `<button class="hand-card ${selected?.id === instance.id ? 'chosen' : ''} ${legal && !legal.enabled ? 'unaffordable' : ''}"
         style="--tilt:${offset * 2.5}deg;--drop:${Math.abs(offset) * 3}px"
-        data-hand="${instance.id}" data-card="${card.id}" data-cost="${cost}" aria-keyshortcuts="I"
+        data-hand="${instance.id}" data-card="${card.id}" data-cost="${cost}" data-rarity="${card.rarity ?? 'unlabeled'}" aria-keyshortcuts="I"
         draggable="${Boolean(!inspectionOnly && legal?.enabled)}" ${inspectionOnly ? 'aria-haspopup="dialog"' : ''}
         aria-label="${escape(card.name)} MP ${cost}" title="${escape((!inspectionOnly && legal?.reason) || card.description)}">${cardFace(card, false, cost)}</button>`
     }).join('') || '<span class="hand-empty">手札はありません</span>'}
@@ -709,8 +713,25 @@ function renderTurnNotice() {
   notice.style.setProperty('--turn-notice-duration', turnNoticeMs + 'ms')
   notice.style.animationDelay = -elapsed + 'ms'
   notice.addEventListener('animationend', () => notice.remove(), { once: true })
-  anchor.append(notice)
+  if (depthEnabled()) {
+    const container = anchor.closest('.battle-grid')
+    // Keep announcements flat and centered over the projected board, rather than tilting the text.
+    container.append(notice)
+    positionTurnNotice()
+  } else anchor.append(notice)
 }
+
+function positionTurnNotice() {
+  const container = app.querySelector('.battle-grid')
+  const notice = container?.querySelector(':scope > .turn-notice')
+  const board = container?.querySelector('.board')
+  if (!notice || !board) return
+  const bounds = board.getBoundingClientRect(), origin = container.getBoundingClientRect()
+  notice.style.left = bounds.left + bounds.width / 2 - origin.left + 'px'
+  notice.style.top = bounds.top + bounds.height / 2 - origin.top + 'px'
+  notice.style.width = Math.min(bounds.width - 12,560) + 'px'
+}
+window.addEventListener('resize',positionTurnNotice)
 
 function skillControls(own) {
   const player = view.players[own]
@@ -793,9 +814,9 @@ function battlefield() {
   const events = animatedView === view ? [] : view.events.filter(event => event.seq > eventFloor)
   const latestAction = view.events.findLast(event => event.seq > eventFloor
     && event.privateTo === undefined && !['handAdded', 'mulligan', 'turn'].includes(event.type))
-  return `<main class="battle${reducedMotion() ? ' short-motion' : ''}" style="--ally-light:${leaders[view.players[own].leader].accent};--enemy-light:${leaders[view.players[enemy].leader].accent}" tabindex="-1">
+  return `<main class="battle${reducedMotion() ? ' short-motion' : ''}${depthEnabled() ? ' battle-depth' : ''}" style="--ally-light:${leaders[view.players[own].leader].accent};--enemy-light:${leaders[view.players[enemy].leader].accent}" tabindex="-1">
     <div class="battle-layout"><div class="battle-core">
-    <div class="battle-heading"><span>綴りの大競技会</span><span class="turn-label">第 ${view.turn} ターン</span><div class="battle-tools"><button class="icon-button" data-op="motion" aria-pressed="${reducedMotion()}" ${matchMedia('(prefers-reduced-motion: reduce)').matches ? 'disabled title="端末の設定に合わせて短縮しています"' : ''}>短い演出</button>${battleLog()}</div></div>
+    <div class="battle-heading"><span>${previewDemo ? 'ローカル試遊 · 両陣営を手動操作' : '綴りの大競技会'}</span><span class="turn-label">第 ${view.turn} ターン</span><div class="battle-tools"><button class="icon-button" data-op="depth" aria-pressed="${depthEnabled()}">立体盤面</button>${depthEnabled() ? '<button class="icon-button" data-op="emblem-guide">効果マーク</button>' : ''}<button class="icon-button" data-op="motion" aria-pressed="${reducedMotion()}" ${matchMedia('(prefers-reduced-motion: reduce)').matches ? 'disabled title="端末の設定に合わせて短縮しています"' : ''}>短い演出</button>${battleLog()}</div></div>
     <div class="battle-grid" data-active-side="${view.active === own ? 'ally' : 'enemy'}" aria-label="対戦盤面">
       ${leaderPanel(own, false, events)}
       <div class="board">
@@ -1008,6 +1029,32 @@ function render(focusOn = null) {
 function readView() {
   const publicView = match.view()
   return publicView.phase === 'finished' ? publicView : match.view(solo() ? 0 : publicView.active)
+}
+
+async function startDepthPreview() {
+  if (!depthPreviewAvailable || room || searching || roomBusy) return
+  cancelOpening()
+  clearTimeout(cpuTimer)
+  clearTimeout(presentationTimer)
+  cpuTimer = presentationTimer = presentation = null
+  try {
+    const response = await fetch('/api/preview-match', { cache: 'no-store' })
+    if (!response.ok) throw new Error('試遊盤面は npm run dev:preview で起動してください。')
+    const { config, game } = await response.json()
+    mode = 'local'
+    previewDemo = true
+    match = createLocalMatch(config,game)
+    view = readView()
+    showArena = null
+    arenaBattle = false
+    showLibrary = showDecks = showProfile = false
+    selected = lastInspection = turnNotice = null
+    animatedView = view
+    replacements.clear()
+    eventFloor = view.events.at(-1)?.seq ?? 0
+    feedback = ''
+    render('.battle')
+  } catch (error) { feedback = error.message; render() }
 }
 
 function startArenaBattle() {
@@ -1508,6 +1555,7 @@ function returnHome() {
   roomPlayerNames = null
   roomArena = null
   arenaBattle = false
+  previewDemo = false
   showArena = null
   arenaChoice = null
   lobbyInput = ''
@@ -1655,6 +1703,13 @@ app.addEventListener('drop', event => {
 })
 
 app.addEventListener('click', event => {
+  const emblem = event.target.closest('[data-status-info]')
+  if (emblem && depthEnabled()) {
+    event.preventDefault()
+    cancelCardPress()
+    showEmblemInfo(emblem.dataset.statusInfo,emblem.title,emblem.closest('button'))
+    return
+  }
   const node = event.target.closest('button')
   if (!node) return
   if (handleArenaButton(node)) return
@@ -1730,6 +1785,9 @@ app.addEventListener('click', event => {
   if (slot || leader !== undefined) hit(node)
   if (choice !== undefined) completeSelection({ choice: Number(choice) })
   switch (op) {
+    case 'preview-demo': if (!presentation) startDepthPreview(); break
+    case 'emblem-guide': showEmblemGuide(node); break
+    case 'depth': if (!presentation) { toggleBattleDepth(); render('[data-op="depth"]') } break
     case 'profile': if (!inMatch() && !searching) { showProfile = true; feedback = ''; render('#player-name') } break
     case 'close-profile': if (!profileBusy) { showProfile = false; feedback = ''; render('[data-op="profile"]') } break
     case 'menu-home':
@@ -1879,6 +1937,7 @@ function cancelCardPress() {
 
 app.addEventListener('pointerdown', event => {
   if (!event.isPrimary || event.button !== 0) return
+  if (event.target.closest('[data-status-info]')) return
   const node = inspectableCard(event.target)
   if (!node) return
   cancelCardPress()
@@ -1910,6 +1969,7 @@ app.addEventListener('contextmenu', event => {
 
 app.addEventListener('dragstart', event => {
   cancelCardPress()
+  if (event.target.closest('[data-status-info]')) { event.preventDefault(); return }
   if (presentation || roomLocked()) { event.preventDefault(); return }
   const node = event.target.closest('[draggable="true"]')
   if (!node) return
@@ -1986,4 +2046,5 @@ if (saved && onlineAvailable()) {
     }).catch(() => {})
   }
 }
+if (depthPreviewAvailable && new URLSearchParams(location.search).get('demo') === '1' && !saved) void startDepthPreview()
 

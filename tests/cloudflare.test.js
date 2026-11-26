@@ -3,6 +3,11 @@ import test from 'node:test'
 import worker, { BattleRoom } from '../cloudflare/worker.js'
 import { starterLineup, createDeckCollection } from '../packages/cards/decks.js'
 
+test('公開Workerでは開発用の試遊盤面APIを公開しない', async()=>{
+ const response=await worker.fetch(new Request('https://game.example/api/preview-match'),{})
+ assert.equal(response.status,404)
+})
+
 function namespace() {
   const records = new Map()
   const instances = new Map()

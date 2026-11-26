@@ -2,6 +2,7 @@ import { names } from '../../packages/cards/index.js'
 import { canUseAbilities, has, hidden } from '../../packages/engine/targeting.js'
 import { leaderTarget, sameTarget, unitTarget } from '../../packages/engine/rules.js'
 import { escapeText } from './card-terms.js'
+import { emblemIds, renderEmblems } from './battle-emblems.js'
 
 const icons = {
   INVULNERABLE: '✧', SPELL_WARD: '◈', RESIST_SPELL: '◈', DARK_CLOAK: '◆',
@@ -26,12 +27,13 @@ function protectionStates(character, turn) {
   return list
 }
 
-function abilityStates(unit, card, view) {
+function abilityStates(unit, card, view, detailed = false) {
   const list = protectionStates(unit, view.turn)
   const keywords = printedKeywords(unit, card)
   if (has(unit, 'HARD_METAL_BODY', view)) { keywords.delete('METAL_BODY'); keywords.add('HARD_METAL_BODY') }
+  if (detailed && card.healthyAim) keywords.add('AIM')
   for (const id of keywords) {
-    if (!Object.hasOwn(icons, id)) continue
+    if (!(detailed ? emblemIds.has(id) : Object.hasOwn(icons, id)) || list.some(([key])=>key===id)) continue
     const enabled = has(unit, id, view)
     const concealed = id === 'GUARD' && hidden(unit)
     const active = enabled && (id !== 'GUARD' || unit.position.row === 'front' && !concealed) && (id !== 'STEALTH' || !unit.revealed)
@@ -39,27 +41,32 @@ function abilityStates(unit, card, view) {
       id === 'STEALTH' && !active ? '解除済み' : '有効'
     list.push([id, active, state])
   }
+  if (detailed) {
+    for (const id of ['POISON','SILENCE','VULNERABLE']) if (unit.statuses.includes(id) && !list.some(([key])=>key===id)) list.push([id,true,'有効'])
+    const attack = view.players[unit.owner].boardAttack?.[unit.id] ?? unit.attack
+    if (attack !== card.attack || unit.maxHp !== card.hp) list.push(['BUFF',true,`攻撃力 ${card.attack} → ${attack} ／ 最大HP ${card.hp} → ${unit.maxHp}`])
+  }
   return list
 }
 
 function describe([id, , state]) {
-  return (id === 'SPELL_WARD' ? names.RESIST_SPELL : names[id]) + '（' + state + '）'
+  return (id === 'SPELL_WARD' ? names.RESIST_SPELL : id === 'BUFF' ? '能力値の変化' : names[id]) + '（' + state + '）'
 }
 
 export function statusDescriptions(character, view, card) {
   return (card ? abilityStates(character, card, view) : protectionStates(character, view.turn)).map(describe)
 }
 
-export function statusVisuals(view, previous, seat, unit, card, events) {
+export function statusVisuals(view, previous, seat, unit, card, events, detailed = false) {
   const current = unit ?? view.players[seat]
-  const states = unit ? abilityStates(unit, card, view) : protectionStates(current, view.turn)
+  const states = unit ? abilityStates(unit, card, view, detailed) : protectionStates(current, view.turn)
   const other = unit && [...new Set([...unit.statuses, ...(canUseAbilities(unit) ? printedKeywords(unit, card) : [])])]
-    .filter(id => !Object.hasOwn(icons, id)).map(id => names[id]).filter(Boolean).join('・')
+    .filter(id => !(detailed ? emblemIds.has(id) : Object.hasOwn(icons, id))).map(id => names[id]).filter(Boolean).join('・')
   const timed = states.filter(([id]) => id === 'INVULNERABLE' || id === 'SPELL_WARD')
   const priorPlayer = previous?.players[seat]
   const prior = unit ? previous?.players.flatMap(player => player.units).find(value => value.id === unit.id) : priorPlayer
   const oldStates = previous && prior ?
-    (unit && prior.card === unit.card ? abilityStates(prior, card, previous) : protectionStates(prior, previous.turn)) : []
+    (unit && prior.card === unit.card ? abilityStates(prior, card, previous, detailed) : protectionStates(prior, previous.turn)) : []
   const target = unit ? unitTarget(unit.id) : leaderTarget(seat)
   const fresh = previous !== view && events.length > 0
   const blocked = fresh ? new Set(events.filter(event => event.protection && sameTarget(event.target, target)).map(event => event.protection)) : new Set()
@@ -68,17 +75,19 @@ export function statusVisuals(view, previous, seat, unit, card, events) {
   const burst = blocked.has('INVULNERABLE') || blocked.has('SPELL_WARD') || blocked.has('RESIST_SPELL') ||
     timed.some(([id]) => activated(id)) ||
     (fresh && (prior?.spellGuardThrough ?? -1) < current.spellGuardThrough)
-  const badges = states.map(([id, active, state]) => {
+  const pulseStates = states.map(([id, active, state]) => {
     const released = id === 'STEALTH' && fresh && !active && unit.revealed && oldStates.some(([key, on]) => key === id && on)
     const pulse = (active && activated(id)) || blocked.has(id) || released
-    return `<span class="ability-badge${pulse ? ' ability-pulse' : ''}" data-ability="${id}" data-active="${active}"
+    return [id,active,state,pulse]
+  })
+  const badges = detailed ? renderEmblems(pulseStates,unit) : pulseStates.map(([id,active,state,pulse])=>`<span class="ability-badge${pulse ? ' ability-pulse' : ''}" data-ability="${id}" data-active="${active}"
       title="${escapeText(describe([id, active, state]))}">${icons[id]}</span>`
-  }).join('')
+  ).join('')
   const guard = states.some(([id, active]) => id === 'GUARD' && active)
   return {
     cls: [timed.length && 'protected-now', guard && 'guard-active'].filter(Boolean).join(' '),
     labels: [...states.map(describe), ...(other ? [other] : [])],
-    markup: `<span class="ability-badges" aria-hidden="true">${badges}
+    markup: `<span class="ability-badges"${detailed ? ' aria-label="効果マーク"' : ' aria-hidden="true"'}>${badges}
       ${other ? `<span class="ability-badge" title="${escapeText(other)}">✦</span>` : ''}</span>
       ${timed.length || burst ? `<span class="defense-field${burst ? ' defense-burst' : ''}" aria-hidden="true"></span>` : ''}`,
   }

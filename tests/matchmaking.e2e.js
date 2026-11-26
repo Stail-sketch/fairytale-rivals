@@ -27,7 +27,7 @@ test('別ブラウザーで名前を保存し、デッキを保ったままラ�
  const first=await a.evaluate('Boolean(document.querySelector("[data-op=mulligan]"))')?a:b
  const second=first===a?b:a
  await first.click('[data-op=mulligan]');await second.click('[data-op=mulligan]')
- await a.wait('.battle');await b.wait('.battle');await a.wait('.online-clock')
+ await a.wait('.battle-depth');await b.wait('.battle-depth');await a.wait('.online-clock')
  assert.match(await a.evaluate('document.querySelector(".battle").textContent'),/試験の語り手1/)
  await a.capture(new URL('../../work/matchmaking-battle.png',import.meta.url).pathname.replace(/^\/([A-Z]:)/,'$1'))
  // Use the actual authenticated leave endpoint without a browser confirmation dialog.

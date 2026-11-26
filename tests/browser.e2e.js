@@ -369,7 +369,7 @@ async function driveBattle() {
     next(false)
     expect(x('[data-leader="1"]') < x('[data-leader="0"]'), '交代すると操作側が左に回る')
     expect(document.querySelectorAll('[data-hand]').length === 5, 'ドローした手札をすぐ使える')
-    expect(query('.board .turn-notice').textContent === '後攻のターン' && query('.battle-message').textContent === '',
+    expect(query('.battle-grid .turn-notice').textContent === '後攻のターン' && query('.battle-message').textContent === '',
       '手番交代を盤面で知らせ、対戦中のメッセージ欄は占有しない')
     expect(query('#skill-description').textContent === leaders.mage.skill.description &&
       y('#skill-description') > y('[data-op=skill]'), '能力文を奥義ボタンの下に常時表示')
@@ -438,7 +438,7 @@ async function driveBattle() {
     expect(query('[data-op=sound][aria-pressed=false]'), '効果音設定を次の対戦でも保持する')
     expect(query('[data-volume=bgm]').value === '17', 'BGM音量を次の対戦でも保持する')
     click('[data-op=sound]')
-    const incoming = query('.board .turn-notice[data-direction=incoming]')
+    const incoming = query('.battle-grid .turn-notice[data-direction=incoming]')
     const board = query('.board').getBoundingClientRect()
     const notice = incoming?.getBoundingClientRect()
     expect(incoming?.textContent === 'あなたのターン' &&
@@ -454,7 +454,7 @@ async function driveBattle() {
       expect(query('[data-op=end]').disabled && query('.selection-bar span').textContent === 'CPUが行動中', 'CPU中の操作をロック')
       expect(query('.ally-formation [data-slot^="0:"]'), 'CPUターンも自分の盤面が左')
       if (i === 0) {
-        const outgoing = query('.board .turn-notice[data-direction=outgoing]')
+        const outgoing = query('.battle-grid .turn-notice[data-direction=outgoing]')
         const rect = outgoing?.getBoundingClientRect()
         expect(outgoing?.textContent === '相手のターン' &&
           Math.abs(rect.top + rect.height / 2 - (board.top + board.height / 2)) < 2 &&

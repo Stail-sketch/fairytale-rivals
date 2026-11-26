@@ -3,6 +3,7 @@ import { createReadStream, statSync } from 'node:fs'
 import { resolve, extname, relative, isAbsolute, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { developmentWorker } from '../packages/online-match/development-worker.js'
+import { battlePreviewFixture } from './battle-preview.js'
 
 const root = fileURLToPath(new URL('../', import.meta.url))
 const types = {
@@ -15,6 +16,11 @@ export function createDevServer() {
   const server = createServer(async (req, res) => {
     try {
       const url = new URL(req.url, 'http://localhost')
+      if (url.pathname === '/api/preview-match' && req.method === 'GET') {
+        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' })
+        res.end(JSON.stringify(battlePreviewFixture()))
+        return
+      }
       if (url.pathname.startsWith('/api/')) {
         const abort = new AbortController()
         res.once('close', () => abort.abort())

@@ -258,7 +258,8 @@ function windUp(app, { from, to, style }, duration) {
   const x = (end.x - start.x) / length * reach
   const y = (end.y - start.y) / length * reach
   attacker.classList.add('attack-approach')
-  attacker.animate(style === 'arcane' ? [
+  const actor = app.querySelector('.battle-depth') ? attacker.querySelector('.unit-actor') : null
+  ;(actor ?? attacker).animate(style === 'arcane' ? [
     { filter: 'brightness(1)', scale: 1 }, { filter: 'brightness(1.45)', scale: 1.04 },
   ] : [
     { translate: '0px 0px', scale: 1 },

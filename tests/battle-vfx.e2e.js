@@ -35,7 +35,12 @@ test('金の二重召喚陣と斬撃を同期し、竜と剣士を別演出に�
  const p=await open(),origin=process.env.FAIRYTALE_SERVER_URL??'http://127.0.0.1:'+server.address().port
  await p.viewport(1600,1000);await p.navigate(origin);await p.wait('[data-op=arena-open]')
  await p.evaluate('localStorage.setItem("fairytale-rivals.arena.v1",'+JSON.stringify(JSON.stringify(run))+')')
- await p.navigate(origin+'/?vfx-test=1');await p.click('[data-op=arena-open]');await p.click('[data-op=arena-resume]');await p.wait('.battle')
+ await p.navigate(origin+'/?vfx-test=1');await p.click('[data-op=arena-open]');await p.click('[data-op=arena-resume]');await p.wait('.battle-depth')
+ assert.equal(await p.evaluate('Boolean(document.querySelector("[data-op=preview-demo]"))'),false,'通常の対戦には試遊ボタンを表示しない')
+ await p.click('[data-slot="0:front:0"] [data-status-info=PIERCE]');await p.wait('.emblem-dialog[open]')
+ assert.equal(await p.evaluate('document.querySelector("#emblem-dialog-title").textContent'),'穿ちの一撃')
+ await p.click('.emblem-dialog button')
+ assert.equal(await p.evaluate('document.querySelector("[data-slot=\\"0:front:0\\"] .unit-stage").dataset.rarity'),'legendary')
  await p.evaluate(`(()=>{window.__vfxStages=[];new MutationObserver(records=>{for(const record of records)for(const node of record.addedNodes)if(node.nodeType===1&&node.matches('[data-vfx-stage]'))window.__vfxStages.push({...node.dataset})}).observe(document.querySelector('#app'),{childList:true,subtree:true})})()`)
  await p.evaluate(`(async()=>{const {vfxAtlases}=await import('/apps/web/vfx-atlases.js');await Promise.all(Object.values(vfxAtlases).map(a=>{const i=new Image();i.src='/apps/web/assets/'+a.file;return i.decode()}))})()`)
  await p.click('[data-hand][data-card=FT-0140]');await p.click('[data-slot="0:back:1"]')

@@ -19,6 +19,7 @@
     "deploy:cloudflare": "npm run build:pages && wrangler deploy && wrangler pages deploy --cwd cloudflare/pages --branch main",
     "prestart": "node scripts/sync-card-search-names.js",
     "start": "node scripts/dev-server.js",
+    "dev:preview": "node scripts/dev-battle-preview.js",
     "test": "node --test tests/*.test.js",
     "test:e2e": "node --test tests/*.e2e.js"
   },
