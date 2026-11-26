@@ -122,7 +122,7 @@ function actionHtml(group,options,compact=false){
 }
 export function renderBattleLog(turns,options){
   const groups=turns.flatMap(t=>t.groups)
-  return `<details class="battle-log"${options.open?' open':''}><summary class="icon-button">対戦記録 <span class="history-count">${groups.length}</span></summary><div class="events" aria-label="ターン別の対戦記録"><div class="history-guide">最新のターンから表示 · カードを選ぶと詳細を確認</div>${turns.length?[...turns].reverse().map((turn,index)=>{
+  return `<details class="battle-log"${options.open?' open':''} name="battle-history"><summary class="icon-button">対戦記録 <span class="history-count">${groups.length}</span></summary><div class="events" aria-label="ターン別の対戦記録"><div class="history-guide">最新のターンから表示 · カードを選ぶと詳細を確認</div>${turns.length?[...turns].reverse().map((turn,index)=>{
     const title=turn.turn===null?'以前の記録（一部）':turn.turn===0?'対戦準備':`第 ${turn.turn} ターン · ${owner(turn.seat,options.ownSeat,options.firstSeat)}`
     const open=options.turnState?.has(turn.key)?options.turnState.get(turn.key):index===0
     return `<details class="history-turn" data-log-turn="${turn.key}"${open?' open':''}><summary><strong>${title}</strong><small>${turn.groups.length}行動</small></summary><div class="history-turn-body">${[...turn.groups].reverse().map(g=>actionHtml(g,options)).join('')}</div></details>`
@@ -130,5 +130,5 @@ export function renderBattleLog(turns,options){
 }
 export function renderRecentHistory(turns,options){
   const groups=turns.flatMap(t=>t.groups).filter(g=>g.root.played||['attack','leaderAttack','skill','focus'].includes(g.root.type)).slice(-5).reverse()
-  return `<aside class="recent-history" aria-label="直近の行動"><header><span>RECENT ACTIONS</span><h2>直近の行動</h2><small>新しい行動から表示</small></header><div class="recent-history-list">${groups.length?groups.map(g=>actionHtml(g,options,true)).join(''):'<p class="history-empty">カードの使用や攻撃が<br>ここに記録されます。</p>'}</div></aside>`
+  return `<details class="recent-history" name="battle-history"${options.open?' open':''}><summary class="icon-button">直近の行動 <span class="history-count">${groups.length}</span></summary><div class="recent-history-panel"><header><h2>直近の行動</h2><small>最新5件 · カードを選ぶと詳細を確認</small></header><div class="recent-history-list">${groups.length?groups.map(g=>actionHtml(g,options,true)).join(''):'<p class="history-empty">カードの使用や攻撃が<br>ここに記録されます。</p>'}</div></div></details>`
 }

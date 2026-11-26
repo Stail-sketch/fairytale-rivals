@@ -1603,13 +1603,15 @@ body:has(.deck-overview[open]) { overflow: hidden; }
   body:has(.battle-opening,.music-library[open]) :is(.brand small,.local-label) { display:none; }
 }
 html:has(.music-library[open]),body:has(.music-library[open]) { overflow:hidden; }
-/* Public battle history: stable center board, recent actions in the unused left wing. */
-.recent-history { max-width:1240px; margin:18px auto 0; padding:12px; border:1px solid #8c775348; border-radius:9px; background:#0f1b2bd9; }
-.recent-history>header { border-bottom:1px solid #9e85523d; padding:0 2px 11px; margin-bottom:10px; }
-.recent-history>header>span { font-size:8px; color:#c5aa77; letter-spacing:.2em; }
+/* Public battle history: recent actions expand in the original left wing. */
+.recent-history { position:relative; max-width:1240px; margin:18px auto 0; padding:0; border:1px solid #8c775348; border-radius:8px; background:#0f1b2bd9; text-align:left; letter-spacing:normal; }
+.recent-history>summary { cursor:pointer; width:100%; padding:12px; border:0; background:transparent; color:#efddb5; font-size:13px; }
+.recent-history>summary:hover { background:#253548; }
+.recent-history-panel { position:static; width:100%; max-height:calc(100dvh - 180px); overflow:auto; padding:0 10px 10px; border:0; background:transparent; }
+.recent-history-panel>header { border-bottom:1px solid #9e85523d; padding:0 2px 11px; margin-bottom:10px; }
 .recent-history h2 { font:700 17px var(--serif); color:#efddb5; margin:4px 0; }
-.recent-history>header>small { color:#9baebd; font-size:10px; }
-.recent-history-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:9px; }
+.recent-history-panel>header>small { color:#9baebd; font-size:10px; }
+.recent-history-list { display:grid; grid-template-columns:minmax(0,1fr); gap:9px; }
 .history-action { padding:10px; border:1px solid #8ca7c334; border-left:3px solid #8d9eb0; border-radius:7px; background:linear-gradient(120deg,#2535488c,#111e30); text-align:left; min-width:0; }
 .history-action.history-own { border-left-color:#74b8e9; }
 .history-action.history-enemy { border-left-color:#de8e98; }
@@ -1643,5 +1645,5 @@ button.history-action-head:hover strong { color:#ffe2a7; text-decoration:underli
 .history-event .log-card:hover { text-decoration:underline; }
 .battle-log .events .event-damage { color:#f9b6af; }.battle-log .events .event-heal { color:#a0e8b3; }.battle-log .events .event-ability { color:#e9cc8a; }
 .history-footnote { margin:10px 4px 2px; color:#8296a9; font-size:10px; line-height:1.6; }
-@media(min-width:1160px) { .recent-history { grid-column:1; grid-row:1; width:100%; margin:0; position:sticky; top:12px; max-height:calc(100dvh - 95px); overflow:auto; }.recent-history-list { grid-template-columns:minmax(0,1fr); }.battle-core { grid-row:1; }.detail-panel { grid-row:1; } }
-@media(max-width:760px) { .recent-history { margin-top:12px; }.recent-history-list { grid-template-columns:repeat(2,minmax(0,1fr)); }.history-action-copy>strong { font-size:13px; }.battle-log .events { position:fixed; top:100px; right:12px; left:12px; width:auto; max-height:calc(100dvh - 125px); } }
+@media(min-width:1160px) { .recent-history { grid-column:1; grid-row:1; width:100%; margin:0; position:sticky; top:12px; }.battle-core { grid-row:1; }.detail-panel { grid-row:1; } }
+@media(max-width:760px) { .history-action-copy>strong { font-size:13px; }.battle-log .events { position:fixed; top:100px; right:12px; left:12px; width:auto; max-height:calc(100dvh - 125px); } }

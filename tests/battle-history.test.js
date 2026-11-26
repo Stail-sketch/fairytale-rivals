@@ -70,7 +70,7 @@ test('開閉状態を保ち、ログ文言をHTMLとして解釈しない',()=>{
  const events=[event(1,'turn'),event(2,'spell',{played:true,card:'FT-0001'}),event(3,'ability',{text:'<img src=x onerror=alert(1)>'})]
  const turns=groupBattleEvents(events,view(events))
  const html=renderBattleLog(turns,{...options,open:true,turnState:new Map([['1',false]]),expandedActions:new Set(['1-2'])})
- assert.match(html,/<details class="battle-log" open>/);assert.match(html,/data-log-turn="1">/)
+ assert.match(html,/<details class="battle-log" open name="battle-history">/);assert.match(html,/data-log-turn="1">/)
  assert.match(html,/data-log-action="1-2" open/);assert(!html.includes('<img src=x'))
  assert(html.includes('&lt;img'))
 })

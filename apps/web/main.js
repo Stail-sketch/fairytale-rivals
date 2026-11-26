@@ -502,6 +502,10 @@ function badgeDetails(seat, labelled = false) {
 const logCard = event => battleHistory.card(event)
 const historyOptions = () => ({ art, ownSeat: room ? roomSeat : solo() ? 0 : null, firstSeat: view.firstSeat ?? 0 })
 
+function recentHistory() {
+  return renderRecentHistory(battleHistory.turns(view), { ...historyOptions(), open: app.querySelector('.recent-history')?.open })
+}
+
 function battleLog() {
   const previous = app.querySelector('.battle-log')
   const turnState = new Map([...previous?.querySelectorAll('[data-log-turn]') ?? []].map(node => [node.dataset.logTurn, node.open]))
@@ -822,7 +826,7 @@ function battlefield() {
         <button class="primary end" data-op="end" ${canEndTurn() ? '' : 'disabled'}>ターン終了 <span aria-hidden="true">›</span></button>
       </div>
     </section>
-    </div>${renderRecentHistory(battleHistory.turns(view), historyOptions())}${detailPanel()}</div>
+    </div>${recentHistory()}${detailPanel()}</div>
     <dialog id="end-turn-dialog" class="end-turn-dialog" role="alertdialog" aria-labelledby="end-turn-title"
       aria-describedby="end-turn-description end-turn-options">
       <h2 id="end-turn-title">まだ行動できます</h2>
